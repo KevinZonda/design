@@ -1,43 +1,28 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Input, Tag } from '@kvzd-design/gov-uk'
 import './QuickReviewPage.css'
-import {
-  Accordion,
-  Breadcrumbs,
-  Button,
-  Checkboxes,
-  Details,
-  Input,
-  NotificationBanner,
-  Panel,
-  Tabs,
-  Tag,
-  WarningText,
-} from '@kvzd-design/gov-uk'
 import { DocsFooter, DocsHeader } from './DocsChrome'
+import { componentDocs } from './componentRegistry'
 
-const components = [
-  'Accordion', 'Back link', 'Breadcrumbs', 'Button', 'Character count',
-  'Checkboxes', 'Cookie banner', 'Date input', 'Details', 'Error message',
-  'Error summary', 'Exit this page', 'Feedback', 'Fieldset', 'File upload',
-  'Generic header', 'GOV.UK footer', 'GOV.UK header', 'Inset text',
-  'Language navigation', 'Notification banner', 'Pagination', 'Panel',
-  'Password input', 'Phase banner', 'Radios', 'Select', 'Service navigation',
-  'Skip link', 'Summary list', 'Table', 'Tabs', 'Tag', 'Task list',
-  'Text input', 'Textarea', 'Warning text',
-] as const
-
-function slugify(value: string) {
-  return value.toLowerCase().replaceAll('.', '').replaceAll(' ', '-')
+function componentPath(slug: string) {
+  return `/components/${slug}/`
 }
 
 export function QuickReviewPage() {
   const [query, setQuery] = useState('')
-  const [email, setEmail] = useState('')
-  useEffect(() => { document.title = 'Quick Review – KVZD GOV.UK React'; window.scrollTo(0, 0) }, [])
-  const filteredComponents = useMemo(
-    () => components.filter((item) => item.toLowerCase().includes(query.trim().toLowerCase())),
-    [query],
-  )
+
+  useEffect(() => {
+    document.title = 'Quick Review – KVZD GOV.UK React'
+    window.scrollTo(0, 0)
+  }, [])
+
+  const filteredComponents = useMemo(() => {
+    const needle = query.trim().toLowerCase()
+    if (!needle) return componentDocs
+    return componentDocs.filter((component) =>
+      `${component.name} ${component.summary}`.toLowerCase().includes(needle),
+    )
+  }, [query])
 
   return (
     <div className="app-shell govuk-frontend-supported">
@@ -55,93 +40,83 @@ export function QuickReviewPage() {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
+          <p className="side-nav__count" aria-live="polite">
+            Showing {filteredComponents.length} of {componentDocs.length}
+          </p>
           <ul>
             {filteredComponents.map((component) => (
-              <li key={component}><a href={`#${slugify(component)}`}>{component}</a></li>
+              <li key={component.slug}>
+                <a href={`#${component.slug}`}>{component.name}</a>
+              </li>
             ))}
           </ul>
         </aside>
 
         <main id="main-content" className="main-content">
           <div className="eyebrow">React component library</div>
-          <h1 className="govuk-heading-xl">Components</h1>
+          <h1 className="govuk-heading-xl">Quick Review</h1>
           <p className="govuk-body-l intro">
-            Reusable React components for building clear, accessible public services.
-            The API is deliberately small; the behaviour follows GOV.UK Frontend 6.5.0.
+            Review every component in one place. Examples are interactive and use the
+            same source as the individual documentation pages.
           </p>
           <div className="release-note">
             <Tag color="blue">Baseline</Tag>
             <span>Locked to GOV.UK Frontend 6.5.0</span>
-            <span className="release-note__count">37 GOV.UK components covered</span>
+            <span className="release-note__count">{componentDocs.length} components covered</span>
           </div>
 
-          <section className="showcase" aria-labelledby="showcase-title">
-            <div className="section-heading">
-              <div>
-                <p className="section-kicker">Quick preview</p>
-                <h2 className="govuk-heading-l" id="showcase-title">Simple props, production markup</h2>
-              </div>
-              <code>{'<Button type="primary" />'}</code>
-            </div>
-            <div className="showcase__grid">
-              <div className="demo-card" id="button">
-                <h3 className="govuk-heading-m">Button</h3>
-                <p className="govuk-body">Use buttons to help users carry out an action.</p>
-                <div className="demo-row">
-                  <Button type="primary">Save and continue</Button>
-                  <Button type="secondary">Save draft</Button>
-                  <Button danger>Delete</Button>
-                </div>
-              </div>
-              <div className="demo-card" id="text-input">
-                <h3 className="govuk-heading-m">Text input</h3>
-                <Input
-                  label="Email address"
-                  hint="We’ll only use this to contact you about your application."
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-              </div>
-            </div>
-            <Panel id="panel" title="Application complete" className="showcase__panel">
-              Your reference number<br /><strong>HDJ2123F</strong>
-            </Panel>
-
-            <div className="interaction-lab">
-              <h3 className="govuk-heading-m">React-managed interaction</h3>
-              <Tabs
-                items={[
-                  {
-                    key: 'forms',
-                    label: 'Forms',
-                    children: <Checkboxes name="contact" legend="How should we contact you?" options={[{ label: 'Email', value: 'email' }, { label: 'Text message', value: 'text' }, { label: 'Phone call', value: 'phone' }]} />,
-                  },
-                  {
-                    key: 'navigation',
-                    label: 'Navigation',
-                    children: <Breadcrumbs items={[{ label: 'Home', href: '#home' }, { label: 'Passports', href: '#passports' }, { label: 'Renew a passport', current: true }]} />,
-                  },
-                  {
-                    key: 'feedback',
-                    label: 'Feedback',
-                    children: <><NotificationBanner title="Important">Your session will expire in 5 minutes.</NotificationBanner><WarningText>You can be fined if you do not register.</WarningText></>,
-                  },
-                ]}
-              />
-              <Accordion items={[{ key: 'eligibility', heading: 'Eligibility', summary: 'Who can use this service', children: <p className="govuk-body">You can use this service if you are 18 or over and live in the UK.</p> }, { key: 'documents', heading: 'Documents you need', summary: 'Evidence and identity', children: <Details summary="Accepted proof of identity">Passport, driving licence or biometric residence permit.</Details> }]} />
-            </div>
-          </section>
-
           <section className="component-index" aria-labelledby="index-title">
-            <p className="section-kicker">Component index</p>
-            <h2 className="govuk-heading-l" id="index-title">All components</h2>
+            <p className="section-kicker">Jump to a component</p>
+            <h2 className="govuk-heading-l" id="index-title">Component index</h2>
             <ul>
               {filteredComponents.map((component) => (
-                <li key={component}><a href={`#${slugify(component)}`}>{component}</a></li>
+                <li key={component.slug}><a href={`#${component.slug}`}>{component.name}</a></li>
               ))}
             </ul>
+          </section>
+
+          <section className="review-gallery" aria-labelledby="review-gallery-title">
+            <div className="review-gallery__heading">
+              <div>
+                <p className="section-kicker">Live examples</p>
+                <h2 className="govuk-heading-l" id="review-gallery-title">All components</h2>
+              </div>
+              <span aria-live="polite">{filteredComponents.length} shown</span>
+            </div>
+
+            {filteredComponents.length > 0 ? (
+              <div className="review-grid">
+                {filteredComponents.map((component) => (
+                  <article
+                    className={`review-card ${component.wide ? 'review-card--wide' : ''}`.trim()}
+                    id={component.slug}
+                    key={component.slug}
+                  >
+                    <div className="review-card__header">
+                      <div className="review-card__title-row">
+                        <h3 className="govuk-heading-m">{component.name}</h3>
+                        {component.status === 'trial' && <Tag color="blue">Trial</Tag>}
+                      </div>
+                      <p className="govuk-body">{component.summary}</p>
+                    </div>
+                    <div className={`review-card__example example-canvas ${component.wide ? 'example-canvas--wide' : ''}`.trim()}>
+                      {component.example()}
+                    </div>
+                    <div className="review-card__footer">
+                      <a className="govuk-link" href={componentPath(component.slug)}>
+                        View {component.name} documentation
+                      </a>
+                      <a className="govuk-link review-card__top-link" href="#top">Back to top</a>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="review-empty" role="status">
+                <h3 className="govuk-heading-m">No components found</h3>
+                <p className="govuk-body">Try a different component name or description.</p>
+              </div>
+            )}
           </section>
         </main>
       </div>

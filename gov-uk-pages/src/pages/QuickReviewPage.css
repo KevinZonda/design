@@ -1,7 +1,8 @@
 .side-nav { align-self: start; position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow-y: auto; padding-right: 18px; border-right: 1px solid #b1b4b6; }
 .side-nav h2 { margin: 0 0 20px; font-size: 24px; }
-.side-nav .govuk-form-group { margin-bottom: 18px; }
+.side-nav .govuk-form-group { margin-bottom: 12px; }
 .side-nav__search { min-width: 0; width: 100%; height: 40px; }
+.side-nav__count { margin: 0 0 18px; color: #505a5f; font-size: 14px; }
 .side-nav ul, .component-index ul { margin: 0; padding: 0; list-style: none; }
 .side-nav li { margin-bottom: 9px; }
 .side-nav a, .component-index a { color: #1a65a6; font-size: 16px; line-height: 1.35; text-decoration-thickness: 1px; text-underline-offset: 3px; }
@@ -10,34 +11,49 @@
 .intro { max-width: 690px; }
 .release-note { display: flex; align-items: center; gap: 12px; margin: 28px 0 54px; font-weight: 700; }
 .release-note__count { margin-left: auto; color: #505a5f; font-weight: 400; }
-.showcase { padding-top: 35px; border-top: 5px solid #1d70b8; }
-.section-heading { display: flex; align-items: start; justify-content: space-between; gap: 24px; }
-.section-heading code { padding: 9px 12px; color: #0b0c0c; background: #f3f3f3; font: 15px/1.35 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: nowrap; }
-.showcase__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
-.demo-card { padding: 25px; border: 1px solid #b1b4b6; background: #fff; }
-.demo-row { display: flex; align-items: start; flex-wrap: wrap; gap: 15px; }
-.demo-row .govuk-button { margin-bottom: 0; }
-.showcase__panel { margin-top: 24px; }
-.interaction-lab { margin-top: 36px; padding: 30px; border: 1px solid #b1b4b6; background: #f8f8f8; }
-.interaction-lab > .govuk-accordion { margin-bottom: 0; }
-.component-index { margin-top: 64px; padding-top: 35px; border-top: 1px solid #b1b4b6; }
+.component-index { padding: 35px 0 40px; border-top: 5px solid #1d70b8; border-bottom: 1px solid #b1b4b6; }
 .component-index ul { columns: 3; column-gap: 36px; }
-.component-index li { margin-bottom: 14px; break-inside: avoid; }
-.component-index a { font-size: 19px; font-weight: 700; }
+.component-index li { margin-bottom: 12px; break-inside: avoid; }
+.component-index a { font-size: 18px; font-weight: 700; }
+.review-gallery { padding-top: 48px; }
+.review-gallery__heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
+.review-gallery__heading h2 { margin-bottom: 0; }
+.review-gallery__heading > span { margin-bottom: 8px; color: #505a5f; }
+.review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; align-items: start; }
+.review-card { min-width: 0; scroll-margin-top: 20px; border: 1px solid #b1b4b6; background: #fff; box-shadow: 0 3px 0 #d8dde0; }
+.review-card--wide { grid-column: 1 / -1; }
+.review-card:target { outline: 5px solid #ffdd00; outline-offset: 0; }
+.review-card__header { min-height: 128px; padding: 24px 24px 18px; border-top: 5px solid #1d70b8; }
+.review-card--wide .review-card__header { min-height: 0; }
+.review-card__title-row { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
+.review-card__title-row .govuk-heading-m { margin-bottom: 12px; }
+.review-card__title-row .govuk-tag { flex: none; }
+.review-card__header .govuk-body { margin-bottom: 0; color: #505a5f; }
+.review-card__example { min-height: 220px; border-right: 0; border-left: 0; background: #f8f8f8; overflow-x: auto; }
+.review-card--wide .review-card__example { min-height: 160px; }
+.review-card__footer { display: flex; justify-content: space-between; gap: 20px; padding: 18px 24px 20px; }
+.review-card__top-link { flex: none; }
+.review-empty { padding: 30px; border-left: 5px solid #1d70b8; background: #f3f3f3; }
+.review-empty > :last-child { margin-bottom: 0; }
+
+@media (max-width: 1000px) {
+  .review-grid { grid-template-columns: 1fr; }
+  .review-card--wide { grid-column: auto; }
+  .review-card__header { min-height: 0; }
+}
 
 @media (max-width: 800px) {
   .side-nav { position: static; max-height: none; padding: 0 0 24px; border-right: 0; border-bottom: 1px solid #b1b4b6; }
   .side-nav ul { display: none; }
-  .showcase__grid { grid-template-columns: 1fr; }
   .release-note { align-items: flex-start; flex-wrap: wrap; }
   .release-note__count { width: 100%; margin-left: 0; }
-  .interaction-lab { padding: 20px; }
-  .section-heading { display: block; }
-  .section-heading code { display: inline-block; margin-bottom: 24px; white-space: normal; }
   .component-index ul { columns: 2; }
 }
 
 @media (max-width: 480px) {
   .component-index ul { columns: 1; }
-  .demo-card { padding: 20px; }
+  .review-gallery__heading { display: block; }
+  .review-card__header { padding: 20px 20px 16px; }
+  .review-card__footer { display: block; padding: 16px 20px 18px; }
+  .review-card__top-link { display: block; margin-top: 14px; }
 }
