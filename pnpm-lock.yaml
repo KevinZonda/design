@@ -39,11 +39,44 @@ importers:
         specifier: ^8.3.0
         version: 8.3.0(@types/node@24.13.6)(sass@1.104.1)
 
+  gov-uk-extends:
+    devDependencies:
+      '@kvzd-design/gov-uk':
+        specifier: workspace:*
+        version: link:../gov-uk
+      '@types/react':
+        specifier: ^19.2.18
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: ^19.2.7
+        version: 19.3.0(@types/react@19.3.0)
+      '@vitejs/plugin-react':
+        specifier: ^6.1.1
+        version: 6.1.1(vite@8.3.0(@types/node@24.13.6)(sass@1.104.1))
+      oxlint:
+        specifier: ^1.81.0
+        version: 1.83.0
+      react:
+        specifier: ^19.2.8
+        version: 19.3.0
+      react-dom:
+        specifier: ^19.2.8
+        version: 19.3.0(react@19.3.0)
+      typescript:
+        specifier: ~6.0.2
+        version: 6.0.3
+      vite:
+        specifier: ^8.3.0
+        version: 8.3.0(@types/node@24.13.6)(sass@1.104.1)
+
   gov-uk-pages:
     dependencies:
       '@kvzd-design/gov-uk':
         specifier: workspace:*
         version: link:../gov-uk
+      '@kvzd-design/gov-uk-extends':
+        specifier: workspace:*
+        version: link:../gov-uk-extends
       react:
         specifier: ^19.2.8
         version: 19.3.0

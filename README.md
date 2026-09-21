@@ -7,6 +7,8 @@ This repository is a pnpm workspace containing the GOV.UK React component librar
 - `gov-uk` — publishable `@kvzd-design/gov-uk` React component library.
 - `gov-uk-pages` — private Vite documentation website that consumes the library through the workspace.
 
+- `gov-uk-extends` — optional components published as `@kvzd-design/gov-uk-extends`.
+
 ## Development
 
 ```bash

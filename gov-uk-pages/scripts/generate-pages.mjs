@@ -25,4 +25,6 @@ await createEntry('components', 'Components – KVZD GOV.UK React')
 await createEntry('quick-review', 'Quick Review – KVZD GOV.UK React')
 await Promise.all(slugs.map((slug) => createEntry(`components/${slug}`, `${slug.replaceAll('-', ' ')} – KVZD GOV.UK React`)))
 
-console.log(`Generated ${slugs.length + 2} documentation routes.`)
+await createEntry('extra-components', 'Extra Components – KVZD GOV.UK React')
+
+console.log(`Generated ${slugs.length + 3} documentation routes.`)

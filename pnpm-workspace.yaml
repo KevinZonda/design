@@ -1,5 +1,6 @@
 packages:
   - gov-uk
+  - gov-uk-extends
   - gov-uk-pages
 
 allowBuilds:

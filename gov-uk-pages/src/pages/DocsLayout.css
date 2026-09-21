@@ -1,5 +1,6 @@
 .page-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 64px; padding-top: 54px; padding-bottom: 80px; }
 .app-subnav { align-self: start; margin-bottom: 100px; margin-left: 10px; padding-right: 15px; font-size: 16px; line-height: 1.25; }
+.app-subnav__heading { margin-bottom: 15px; }
 .app-subnav__section { margin: 0 0 20px; padding: 0; list-style: none; }
 .app-subnav__section-item { margin-bottom: 5px; padding-top: 5px; padding-bottom: 5px; }
 .app-subnav__section-item--current { margin-left: -14px; padding-left: 10px; border-left: 4px solid #1d70b8; background: #fff; }

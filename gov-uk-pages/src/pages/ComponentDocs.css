@@ -14,11 +14,6 @@
 .component-example { margin-bottom: 55px; }
 .example-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
 .example-heading .govuk-heading-l { margin-bottom: 18px; }
-.example-tabs { display: flex; gap: 2px; border-bottom: 1px solid #b1b4b6; }
-.example-tabs button { padding: 12px 20px 10px; border: 0; border-bottom: 4px solid transparent; color: #1d70b8; background: transparent; font: inherit; font-weight: 700; cursor: pointer; }
-.example-tabs button:hover { color: #003078; background: #f3f2f1; }
-.example-tabs button[aria-selected='true'] { border-bottom-color: #1d70b8; color: #0b0c0c; background: #f3f2f1; }
-.example-tabs button:focus { position: relative; color: #0b0c0c; background: #ffdd00; outline: 3px solid transparent; box-shadow: 0 -2px #ffdd00, 0 4px #0b0c0c; }
 .example-canvas { min-height: 130px; padding: 30px; border: 1px solid #b1b4b6; border-top: 0; background: #fff; }
 .example-canvas > * { position: relative; }
 .example-canvas--wide { padding: 20px; }
@@ -34,6 +29,12 @@
 .component-pagination { margin-top: 65px; padding-top: 25px; border-top: 1px solid #b1b4b6; }
 .example-force-skip-link .govuk-skip-link { position: static; display: inline-block; width: auto; height: auto; margin: 0; clip: auto; clip-path: none; }
 .example-tag-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.extra-components-page { max-width: 880px; }
+.extra-component-example { margin: 32px 0 42px; }
+.extra-component-example__panel { min-height: 130px; padding: 30px; border: 1px solid #b1b4b6; border-top: 0; background: #fff; }
+.extra-component-example__panel .govuk-inset-text { margin-top: 0; margin-bottom: 0; }
+.extra-component-api-title { margin-top: 0; }
+.inline-code { padding: 2px 5px; background: #f3f2f1; font: 0.9em/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; }
 
 @media (max-width: 800px) {
   .official-component-list { grid-template-columns: 1fr; }

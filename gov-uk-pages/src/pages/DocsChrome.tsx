@@ -40,7 +40,7 @@ function DocsSearch() {
   </form>
 }
 
-export function DocsHeader({ current = 'components' }: { current?: 'components' | 'quick-review' }) {
+export function DocsHeader({ current = 'components' }: { current?: 'components' | 'extra-components' | 'quick-review' }) {
   return <>
     <SkipLink href="#main-content" />
     <header className="site-header">
@@ -57,6 +57,7 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
       navigationLabel="Documentation"
       items={[
         { label: 'Components', href: '/components/', current: current === 'components' },
+        { label: 'Extra Components', href: '/extra-components/', current: current === 'extra-components' },
         { label: 'Quick Review', href: '/quick-review/', current: current === 'quick-review' },
         { label: 'Source', href: 'https://github.com/alphagov/govuk-frontend' },
       ]}

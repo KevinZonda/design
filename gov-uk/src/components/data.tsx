@@ -16,7 +16,8 @@ export interface TaskItem { title: ReactNode; href: string; status: ReactNode; h
 export function TaskList({ items }: { items: TaskItem[] }) { return <ul className="govuk-task-list">{items.map((item, index) => <li className="govuk-task-list__item govuk-task-list__item--with-link" key={`${item.href}-${index}`}><div className="govuk-task-list__name-and-hint"><a className="govuk-link govuk-task-list__link" href={item.href} aria-describedby={`task-status-${index}`}>{item.title}</a>{item.hint && <div className="govuk-task-list__hint">{item.hint}</div>}</div><div className="govuk-task-list__status" id={`task-status-${index}`}>{item.statusColor ? <Tag color={item.statusColor}>{item.status}</Tag> : item.status}</div></li>)}</ul> }
 
 export interface TabItem { key: string; label: ReactNode; children: ReactNode }
-export function Tabs({ items, activeKey, defaultActiveKey, onChange }: { items: TabItem[]; activeKey?: string; defaultActiveKey?: string; onChange?: (key: string) => void }) {
+export interface TabsProps { items: TabItem[]; activeKey?: string; defaultActiveKey?: string; onChange?: (key: string) => void }
+export function Tabs({ items, activeKey, defaultActiveKey, onChange }: TabsProps) {
   const [inner, setInner] = useState(defaultActiveKey ?? items[0]?.key); const current = activeKey ?? inner; const id = useId().replaceAll(':', ''); const tabRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
   const select = (key: string) => { if (activeKey === undefined) setInner(key); onChange?.(key) }
   const move = (key: string) => { select(key); tabRefs.current[key]?.focus() }
