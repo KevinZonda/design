@@ -379,15 +379,16 @@ export const componentDocs: ComponentDoc[] = [
     slug: 'tabs', name: 'Tabs',
     summary: 'Let users switch between related sections of content.',
     whenToUse: 'Use when users benefit from comparing a small number of peer sections. Avoid tabs for sequential steps.',
-    howItWorks: 'The selected tab controls a labelled panel. React manages selection without changing the document route.',
+    howItWorks: 'At tablet widths and above, the selected tab controls a labelled panel. On smaller screens the component becomes a table of contents and shows every panel in order.',
     code: `<Tabs items={[{ key: 'past-day', label: 'Past day', children: <Table ... /> }]} />`,
     example: () => <Tabs items={[
       { key: 'past-day', label: 'Past day', children: caseTable('Past day', [{ manager: 'David Francis', opened: 3, closed: 0 }, { manager: 'Paul Farmer', opened: 1, closed: 0 }, { manager: 'Rita Patel', opened: 2, closed: 0 }]) },
       { key: 'past-week', label: 'Past week', children: caseTable('Past week', [{ manager: 'David Francis', opened: 24, closed: 18 }, { manager: 'Paul Farmer', opened: 16, closed: 20 }, { manager: 'Rita Patel', opened: 24, closed: 27 }]) },
       { key: 'past-month', label: 'Past month', children: caseTable('Past month', [{ manager: 'David Francis', opened: 98, closed: 95 }, { manager: 'Paul Farmer', opened: 122, closed: 131 }, { manager: 'Rita Patel', opened: 126, closed: 142 }]) },
-      { key: 'past-year', label: 'Past year', children: <p className="govuk-body">There is no data for this year yet, check back later</p> },
+      { key: 'past-year', label: 'Past year', children: <><h2 className="govuk-heading-l">Past year</h2><p className="govuk-body">There is no data for this year yet, check back later</p></> },
     ]} />,
     api: [items('Tab keys, labels and panel content.'), { name: 'activeKey', type: 'string', description: 'Controlled active tab.' }, { name: 'defaultActiveKey', type: 'string', description: 'Initial active tab.' }, onChange('Called with the selected tab key.')],
+    wide: true,
   },
   {
     slug: 'tag', name: 'Tag',

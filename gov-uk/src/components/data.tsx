@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import type { Key, ReactNode } from 'react'
 import { Tag } from './Tag'
 
@@ -17,11 +17,73 @@ export function TaskList({ items }: { items: TaskItem[] }) { return <ul classNam
 
 export interface TabItem { key: string; label: ReactNode; children: ReactNode }
 export interface TabsProps { items: TabItem[]; activeKey?: string; defaultActiveKey?: string; onChange?: (key: string) => void }
+
+function useTabsEnhanced() {
+  const query = '(min-width: 40.0625em)'
+  const [enhanced, setEnhanced] = useState(() => typeof window !== 'undefined' && window.matchMedia(query).matches)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(query)
+    const update = () => setEnhanced(mediaQuery.matches)
+    update()
+    mediaQuery.addEventListener('change', update)
+    return () => mediaQuery.removeEventListener('change', update)
+  }, [])
+
+  return enhanced
+}
+
 export function Tabs({ items, activeKey, defaultActiveKey, onChange }: TabsProps) {
-  const [inner, setInner] = useState(defaultActiveKey ?? items[0]?.key); const current = activeKey ?? inner; const id = useId().replaceAll(':', ''); const tabRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
+  const enhanced = useTabsEnhanced()
+  const [inner, setInner] = useState(defaultActiveKey ?? items[0]?.key)
+  const current = activeKey ?? inner
+  const id = useId().replaceAll(':', '')
+  const tabRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
   const select = (key: string) => { if (activeKey === undefined) setInner(key); onChange?.(key) }
   const move = (key: string) => { select(key); tabRefs.current[key]?.focus() }
-  return <div className="govuk-tabs"><h2 className="govuk-tabs__title">Contents</h2><ul className="govuk-tabs__list" role="tablist">{items.map((item, index) => { const panelId = `${id}-panel-${item.key}`; const selected = item.key === current; return <li className={`govuk-tabs__list-item ${selected ? 'govuk-tabs__list-item--selected' : ''}`} role="presentation" key={item.key}><a className="govuk-tabs__tab" href={`#${panelId}`} role="tab" id={`${id}-tab-${item.key}`} aria-controls={panelId} aria-selected={selected} tabIndex={selected ? 0 : -1} ref={(node) => { tabRefs.current[item.key] = node }} onClick={(event) => { event.preventDefault(); select(item.key) }} onKeyDown={(event) => { if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return; event.preventDefault(); const offset = event.key === 'ArrowRight' ? 1 : -1; const next = (index + offset + items.length) % items.length; const nextItem = items[next]; if (nextItem) move(nextItem.key) }}>{item.label}</a></li> })}</ul>{items.map((item) => <section className={`govuk-tabs__panel ${item.key !== current ? 'govuk-tabs__panel--hidden' : ''}`} role="tabpanel" id={`${id}-panel-${item.key}`} aria-labelledby={`${id}-tab-${item.key}`} key={item.key} hidden={item.key !== current}>{item.children}</section>)}</div>
+  return <div className="govuk-tabs">
+    <h2 className="govuk-tabs__title">Contents</h2>
+    <ul className="govuk-tabs__list" role={enhanced ? 'tablist' : undefined}>
+      {items.map((item, index) => {
+        const panelId = `${id}-panel-${item.key}`
+        const tabId = `${id}-tab-${item.key}`
+        const selected = item.key === current
+        return <li className={`govuk-tabs__list-item ${enhanced && selected ? 'govuk-tabs__list-item--selected' : ''}`.trim()} role={enhanced ? 'presentation' : undefined} key={item.key}>
+          <a
+            className="govuk-tabs__tab"
+            href={`#${panelId}`}
+            role={enhanced ? 'tab' : undefined}
+            id={enhanced ? tabId : undefined}
+            aria-controls={enhanced ? panelId : undefined}
+            aria-selected={enhanced ? selected : undefined}
+            tabIndex={enhanced ? (selected ? 0 : -1) : undefined}
+            ref={(node) => { tabRefs.current[item.key] = node }}
+            onClick={enhanced ? (event) => { event.preventDefault(); select(item.key) } : undefined}
+            onKeyDown={enhanced ? (event) => {
+              if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
+              event.preventDefault()
+              const offset = event.key === 'ArrowRight' ? 1 : -1
+              const next = (index + offset + items.length) % items.length
+              const nextItem = items[next]
+              if (nextItem) move(nextItem.key)
+            } : undefined}
+          >{item.label}</a>
+        </li>
+      })}
+    </ul>
+    {items.map((item) => {
+      const selected = item.key === current
+      const panelId = `${id}-panel-${item.key}`
+      return <section
+        className={`govuk-tabs__panel ${enhanced && !selected ? 'govuk-tabs__panel--hidden' : ''}`.trim()}
+        role={enhanced ? 'tabpanel' : undefined}
+        id={panelId}
+        aria-labelledby={enhanced ? `${id}-tab-${item.key}` : undefined}
+        key={item.key}
+        hidden={enhanced && !selected}
+      >{item.children}</section>
+    })}
+  </div>
 }
 
 export interface AccordionItem { key: string; heading: ReactNode; summary?: ReactNode; children: ReactNode; expanded?: boolean }
