@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from 'react'
-import { Breadcrumbs, Button, InsetText, Pagination, Table, Tag } from '@kvzd-design/gov-uk'
+import { Breadcrumbs, Button, Pagination, Table, Tag } from '@kvzd-design/gov-uk'
 import { FancyTabs } from '@kvzd-design/gov-uk-extends'
 import { componentBySlug, componentDocs, type ComponentDoc } from './componentRegistry'
 import { DocsFooter, DocsHeader } from './DocsChrome'
@@ -53,8 +53,16 @@ function ExampleBlock({ component }: { component: ComponentDoc }) {
 }
 
 const fancyTabsCode = `<FancyTabs items={[
-  { key: 'preview', label: 'Preview', children: <Preview /> },
-  { key: 'react', label: 'React', children: <Code /> },
+  {
+    key: 'summary',
+    label: 'Summary',
+    children: <p className="govuk-body govuk-!-margin-top-4">Review the application before continuing.</p>,
+  },
+  {
+    key: 'details',
+    label: 'Details',
+    children: <p className="govuk-body govuk-!-margin-top-4">The application contains 3 sections.</p>,
+  },
 ]} />`
 
 function ExtraComponentsPage() {
@@ -70,7 +78,10 @@ function ExtraComponentsPage() {
         <p className="govuk-body">A stronger tab treatment for switching between views such as a live preview and its React source. It has the same interface as the standard <a className="govuk-link" href="/components/tabs/">Tabs</a> component.</p>
         <div className="extra-component-example">
           <FancyTabs items={[
-            { key: 'preview', label: 'Preview', children: <div className="extra-component-example__panel"><InsetText>It can take up to 8 weeks to register a lasting power of attorney.</InsetText></div> },
+            { key: 'preview', label: 'Preview', children: <div className="extra-component-example__panel"><FancyTabs items={[
+              { key: 'summary', label: 'Summary', children: <p className="govuk-body govuk-!-margin-top-4">Review the application before continuing.</p> },
+              { key: 'details', label: 'Details', children: <p className="govuk-body govuk-!-margin-top-4">The application contains 3 sections.</p> },
+            ]} /></div> },
             { key: 'react', label: 'React', children: <pre className="code-block"><code>{fancyTabsCode}</code></pre> },
           ]} />
         </div>

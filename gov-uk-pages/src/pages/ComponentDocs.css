@@ -32,7 +32,6 @@
 .extra-components-page { max-width: 880px; }
 .extra-component-example { margin: 32px 0 42px; }
 .extra-component-example__panel { min-height: 130px; padding: 30px; border: 1px solid #b1b4b6; border-top: 0; background: #fff; }
-.extra-component-example__panel .govuk-inset-text { margin-top: 0; margin-bottom: 0; }
 .extra-component-api-title { margin-top: 0; }
 .inline-code { padding: 2px 5px; background: #f3f2f1; font: 0.9em/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; }
 
