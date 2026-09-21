@@ -1,0 +1,11 @@
+{
+  "name": "@kvzd-design/workspace",
+  "private": true,
+  "scripts": {
+    "build": "pnpm --filter @kvzd-design/gov-uk build && pnpm --filter @kvzd-design/gov-uk-pages build",
+    "build:lib": "pnpm --filter @kvzd-design/gov-uk build",
+    "build:pages": "pnpm --filter @kvzd-design/gov-uk build && pnpm --filter @kvzd-design/gov-uk-pages build",
+    "dev": "pnpm --filter @kvzd-design/gov-uk build && pnpm --filter @kvzd-design/gov-uk-pages dev",
+    "lint": "pnpm -r lint"
+  }
+}

@@ -1,0 +1,71 @@
+@font-face {
+  font-family: 'GDS Transport';
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url('../node_modules/govuk-frontend/dist/govuk/assets/fonts/light-94a07e06a1-v2.woff2') format('woff2'), url('../node_modules/govuk-frontend/dist/govuk/assets/fonts/light-f591b13f7d-v2.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'GDS Transport';
+  font-style: normal;
+  font-weight: 700;
+  font-display: fallback;
+  src: url('../node_modules/govuk-frontend/dist/govuk/assets/fonts/bold-b542beb274-v2.woff2') format('woff2'), url('../node_modules/govuk-frontend/dist/govuk/assets/fonts/bold-affa96571d-v2.woff') format('woff');
+}
+
+/* Keep the selected dot centred when browser zoom produces half pixels. */
+.govuk-radios:not(.govuk-radios--small) .govuk-radios__label::after {
+  top: 22px;
+  left: 22px;
+  transform: translate(-50%, -50%);
+}
+
+.kvzd-generic-header__logo-mark {
+  display: inline-flex;
+  margin-right: 10px;
+  vertical-align: top;
+}
+
+.govuk-feedback {
+  padding: 20px;
+  border-top: 10px solid #1d70b8;
+  background: #f3f3f3;
+}
+
+.govuk-feedback__prompt {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.govuk-feedback__prompt .govuk-button {
+  margin-bottom: 0;
+}
+
+.govuk-feedback__form {
+  max-width: 640px;
+  margin-top: 20px;
+}
+
+.kvzd-surface {
+  padding: 20px;
+  border: 1px solid #8eb8dc;
+  background: #f4f8fb;
+}
+
+/* React owns the GOV.UK service navigation disclosure state. */
+.kvzd-service-navigation__toggle {
+  display: none;
+}
+
+@media (max-width: 40.0525em) {
+  .kvzd-service-navigation__toggle {
+    display: inline-flex;
+  }
+
+  .kvzd-service-navigation__list--closed {
+    display: none;
+  }
+}

@@ -1,0 +1,7 @@
+/* Documentation website globals */
+:root { color: #0b0c0c; background: #fff; font-family: 'GDS Transport', arial, sans-serif; font-synthesis: none; text-rendering: optimizeLegibility; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { min-width: 320px; margin: 0; background: #fff; }
+button, input, select, textarea { font: inherit; }
+#root { min-height: 100vh; }

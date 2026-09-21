@@ -1,0 +1,14 @@
+.page-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 64px; padding-top: 54px; padding-bottom: 80px; }
+.app-subnav { align-self: start; margin-bottom: 100px; margin-left: 10px; padding-right: 15px; font-size: 16px; line-height: 1.25; }
+.app-subnav__section { margin: 0 0 20px; padding: 0; list-style: none; }
+.app-subnav__section-item { margin-bottom: 5px; padding-top: 5px; padding-bottom: 5px; }
+.app-subnav__section-item--current { margin-left: -14px; padding-left: 10px; border-left: 4px solid #1d70b8; background: #fff; }
+.app-subnav__section-item--current .app-subnav__link[aria-current='page'] { font-weight: 700; }
+.app-subnav__link { padding: 2px 0; }
+.main-content { min-width: 0; }
+
+@media (max-width: 800px) {
+  .page-layout { grid-template-columns: 1fr; gap: 35px; padding-top: 36px; }
+  .app-subnav { margin-bottom: 0; margin-left: 0; padding: 0 0 24px; border-bottom: 1px solid #b1b4b6; }
+  .app-subnav__section { display: none; }
+}

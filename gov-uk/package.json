@@ -1,0 +1,41 @@
+{
+  "name": "@kvzd-design/gov-uk",
+  "version": "0.1.0",
+  "description": "React components based on GOV.UK Frontend 6.5.0 with a compact Ant Design-inspired API.",
+  "type": "module",
+  "files": [
+    "dist-lib"
+  ],
+  "main": "./dist-lib/index.js",
+  "module": "./dist-lib/index.js",
+  "types": "./dist-lib/lib.d.ts",
+  "style": "./dist-lib/gov-uk.css",
+  "exports": {
+    ".": {
+      "types": "./dist-lib/lib.d.ts",
+      "import": "./dist-lib/index.js"
+    },
+    "./style.css": "./dist-lib/gov-uk.css"
+  },
+  "scripts": {
+    "build": "vite build --config vite.lib.config.ts && tsc -p tsconfig.lib.json",
+    "lint": "oxlint src"
+  },
+  "dependencies": {
+    "govuk-frontend": "6.5.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  }
+}

@@ -1,0 +1,6 @@
+packages:
+  - gov-uk
+  - gov-uk-pages
+
+allowBuilds:
+  '@parcel/watcher': true
