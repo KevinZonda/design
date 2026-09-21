@@ -28,6 +28,8 @@ export function Breadcrumbs({ items, collapseOnMobile = false, className = '', l
 export interface HeaderProps extends HTMLAttributes<HTMLElement> {
   homepageUrl?: string
   productName?: ReactNode
+  logo?: ReactNode
+  containerClassName?: string
   fullWidth?: boolean
 }
 
@@ -43,14 +45,15 @@ function GovUkLogo() {
   </svg>
 }
 
-export function Header({ className = '', homepageUrl = '//gov.uk', productName, fullWidth = false, ...props }: HeaderProps) {
-  return <div {...props} className={`govuk-header ${className}`.trim()}>
-    <div className={`govuk-header__container ${fullWidth ? 'govuk-header__container--full-width' : 'govuk-width-container'}`}>
+export function Header({ children, className = '', containerClassName = '', homepageUrl = '//gov.uk', logo, productName, fullWidth = false, ...props }: HeaderProps) {
+  return <header {...props} className={`govuk-header ${className}`.trim()} data-module="govuk-header">
+    <div className={`govuk-header__container ${fullWidth ? 'govuk-header__container--full-width' : 'govuk-width-container'} ${containerClassName}`.trim()}>
       <div className="govuk-header__logo">
-        <a href={homepageUrl} className="govuk-header__homepage-link"><GovUkLogo />{productName && <span className="govuk-header__product-name">{productName}</span>}</a>
+        <a href={homepageUrl} className="govuk-header__homepage-link">{logo ?? <GovUkLogo />}{productName && <span className="govuk-header__product-name">{productName}</span>}</a>
       </div>
+      {children}
     </div>
-  </div>
+  </header>
 }
 
 export interface GenericHeaderProps { title: ReactNode; homeHref?: string; logo?: ReactNode; fullWidth?: boolean; className?: string }

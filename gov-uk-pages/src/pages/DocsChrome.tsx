@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ServiceNavigation, SkipLink } from '@kvzd-design/gov-uk'
+import { Header, ServiceNavigation, SkipLink } from '@kvzd-design/gov-uk'
 import { componentDocs } from './componentRegistry'
 import './DocsChrome.css'
 
@@ -43,14 +43,15 @@ function DocsSearch() {
 export function DocsHeader({ current = 'components' }: { current?: 'components' | 'extra-components' | 'quick-review' }) {
   return <>
     <SkipLink href="#main-content" />
-    <header className="site-header">
-      <div className="site-width site-header__inner">
-        <a className="site-brand" href="/components/" aria-label="KVZD Design home"><span className="site-brand__crown" aria-hidden="true">◆</span><span>KVZD Design</span></a>
-        <span className="site-product">GOV.UK React</span>
-        <DocsSearch />
-        <button className="site-menu" type="button">Menu</button>
-      </div>
-    </header>
+    <Header
+      className="docs-header"
+      containerClassName="site-width docs-header__container"
+      homepageUrl="/components/"
+      logo={<span className="docs-brand-mark"><span className="docs-brand-mark__symbol" aria-hidden="true">◆</span><span>KVZD Design</span></span>}
+      productName="GOV.UK React"
+    >
+      <DocsSearch />
+    </Header>
     <ServiceNavigation
       className="docs-service-navigation"
       containerClassName="site-width"
