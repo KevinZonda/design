@@ -27,5 +27,8 @@
   .docs-header .govuk-header__product-name { margin-left: 10px; font-size: 20px; }
   .docs-brand-mark { font-size: 24px; }
   .site-search { display: none; }
+  .docs-service-navigation .govuk-service-navigation__inlining-container { position: relative; }
+  .docs-service-navigation .govuk-service-navigation__container { margin-right: 0; }
+  .docs-service-navigation .version-chip { position: absolute; top: 10px; right: 0; margin-left: 0; }
   .site-footer__inner { min-height: 130px; align-items: start; flex-direction: column; justify-content: center; }
 }
