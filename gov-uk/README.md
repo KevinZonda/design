@@ -55,14 +55,45 @@ plain text.
 ]} />
 ```
 
+### Refs and event handlers
+
+Components forward `ref` to their native element. Form components forward it
+to the input, textarea or select so it can be focused directly. `Button`
+forwards to an anchor when `href` is set and to a button otherwise. Grouped
+fields forward their main `ref` to the fieldset; use `inputRefs` to access a
+specific checkbox, radio or date input. Their `inputProps` pass native handlers
+such as `onBlur` and `onFocus` to each input.
+
+```tsx
+import { useRef } from 'react'
+
+function Example() {
+  const emailRef = useRef<HTMLInputElement>(null)
+  const dayRef = useRef<HTMLInputElement>(null)
+
+  return <>
+    <Input ref={emailRef} label="Email address" name="email" onBlur={validateEmail} />
+    <DateInput inputRefs={{ day: dayRef }} inputProps={{ onBlur: validateDate }} />
+  </>
+}
+```
+
+Stateful components report changes through `onChange` (`Accordion`),
+`onMenuToggle` (`ServiceNavigation`), `onVisibilityChange` (`PasswordInput`),
+`onOpenChange` (`Feedback`) and native `onToggle` (`Details`).
+
 ## Components
 
 Accordion, BackLink, Breadcrumbs, Button, CharacterCount, Checkboxes,
 CookieBanner, DateInput, Details, ErrorMessage, ErrorSummary, ExitThisPage,
-Feedback, Fieldset, FileUpload, Footer, GenericHeader, Header, Hint, Input,
+Feedback, Fieldset, FileUpload, Footer, FooterGovUk, Header, HeaderGovUk, Hint, Input,
 InsetText, Label, LanguageNavigation, NotificationBanner, Pagination, Panel,
 PasswordInput, PhaseBanner, Radios, SearchInput, Select, ServiceNavigation, SkipLink,
 SummaryList, Table, Tabs, Tag, TaskList, Textarea and WarningText.
+
+`Header` and `Footer` provide the generic versions. `HeaderGovUk` and
+`FooterGovUk` compose them with GOV.UK branding and footer wording. Use `Header`
+where older examples used `GenericHeader`.
 
 ## Development
 

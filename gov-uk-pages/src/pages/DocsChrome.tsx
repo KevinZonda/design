@@ -1,6 +1,6 @@
 import { useMemo, useState, type MouseEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Header, SearchInput, ServiceNavigation, SkipLink } from '@kvzd-design/gov-uk'
+import { Footer, HeaderGovUk, SearchInput, ServiceNavigation, SkipLink } from '@kvzd-design/gov-uk'
 import { TagBox } from '@kvzd-design/gov-uk-extends'
 import { componentDocs } from './componentRegistry'
 import { sitePath } from './sitePath'
@@ -48,7 +48,7 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
 
   return <>
     <SkipLink href="#main-content" />
-    <Header
+    <HeaderGovUk
       className="docs-header"
       containerClassName="site-width docs-header__container"
       homepageUrl={sitePath('/components/')}
@@ -56,7 +56,7 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
       productName="GOV.UK React"
     >
       <DocsSearch />
-    </Header>
+    </HeaderGovUk>
     <ServiceNavigation
       className="docs-service-navigation"
       containerClassName="site-width"
@@ -74,5 +74,5 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
 }
 
 export function DocsFooter() {
-  return <footer className="site-footer"><div className="site-width site-footer__inner"><strong>KVZD Design</strong><span>React components based on GOV.UK Frontend 6.5.0</span></div></footer>
+  return <Footer containerClassName="site-width" meta={[{ label: 'KVZD Design', href: sitePath('/components/') }]} description="React components based on GOV.UK Frontend 6.5.0" />
 }

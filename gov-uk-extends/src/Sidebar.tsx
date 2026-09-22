@@ -1,4 +1,4 @@
-import { useId, useState, type ReactNode } from 'react'
+import { forwardRef, useId, useState, type ReactNode } from 'react'
 import { ClickTarget, type IClickBehaviour } from '@kvzd-design/gov-uk'
 
 interface SidebarItemBase {
@@ -23,18 +23,20 @@ export interface SidebarProps {
   collapsible?: boolean
   className?: string
   renderLink?: (item: SidebarLinkItem, options: { className: string; current: boolean }) => ReactNode
+  onExpandChange?: (key: string, expanded: boolean) => void
 }
 
 function containsKey(items: SidebarItem[], key: string | undefined): boolean {
   return key !== undefined && items.some((item) => item.key === key || containsKey(item.children ?? [], key))
 }
 
-function SidebarNode({ item, currentKey, collapsible, depth, renderLink }: {
+function SidebarNode({ item, currentKey, collapsible, depth, renderLink, onExpandChange }: {
   item: SidebarItem
   currentKey?: string
   collapsible: boolean
   depth: number
   renderLink?: SidebarProps['renderLink']
+  onExpandChange?: SidebarProps['onExpandChange']
 }) {
   const childrenId = useId()
   const hasChildren = Boolean(item.children?.length)
@@ -44,7 +46,7 @@ function SidebarNode({ item, currentKey, collapsible, depth, renderLink }: {
   const expanded = !collapsible || (expansion.currentKey === currentKey && expansion.currentInChildren === currentInChildren
     ? expansion.expanded
     : currentInChildren)
-  const toggle = () => setExpansion({ currentKey, currentInChildren, expanded: !expanded })
+  const toggle = () => { const next = !expanded; setExpansion({ currentKey, currentInChildren, expanded: next }); onExpandChange?.(item.key, next) }
 
   const linkClassName = 'kvzd-sidebar__link govuk-link govuk-link--no-visited-state govuk-link--no-underline'
   const toggleLabel = typeof item.label === 'string' ? item.label : 'section'
@@ -68,18 +70,18 @@ function SidebarNode({ item, currentKey, collapsible, depth, renderLink }: {
       />}
     </div>
     {hasChildren && <ul className="kvzd-sidebar__list kvzd-sidebar__list--nested" id={childrenId} hidden={!expanded}>
-      {item.children?.map((child) => <SidebarNode key={child.key} item={child} currentKey={currentKey} collapsible={collapsible} depth={depth + 1} renderLink={renderLink} />)}
+      {item.children?.map((child) => <SidebarNode key={child.key} item={child} currentKey={currentKey} collapsible={collapsible} depth={depth + 1} renderLink={renderLink} onExpandChange={onExpandChange} />)}
     </ul>}
   </li>
 }
 
-export function Sidebar({ heading, items, currentKey, collapsible = false, className = '', renderLink }: SidebarProps) {
+export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar({ heading, items, currentKey, collapsible = false, className = '', renderLink, onExpandChange }, ref) {
   const headingId = useId()
 
-  return <nav className={`kvzd-sidebar ${className}`.trim()} aria-labelledby={headingId}>
+  return <nav ref={ref} className={`kvzd-sidebar ${className}`.trim()} aria-labelledby={headingId}>
     <h2 className="govuk-heading-s kvzd-sidebar__heading" id={headingId}>{heading}</h2>
     <ul className="kvzd-sidebar__list">
-      {items.map((item) => <SidebarNode key={item.key} item={item} currentKey={currentKey} collapsible={collapsible} depth={0} renderLink={renderLink} />)}
+      {items.map((item) => <SidebarNode key={item.key} item={item} currentKey={currentKey} collapsible={collapsible} depth={0} renderLink={renderLink} onExpandChange={onExpandChange} />)}
     </ul>
   </nav>
-}
+})

@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { forwardRef, useId } from 'react'
 import type { ReactNode } from 'react'
 import type { InputProps } from './Input'
 
@@ -17,7 +17,7 @@ const defaultSearchIcon = (
   </svg>
 )
 
-export function SearchInput({
+export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(function SearchInput({
   'aria-describedby': ariaDescribedBy,
   className = '',
   error,
@@ -30,7 +30,7 @@ export function SearchInput({
   status,
   visuallyHiddenLabel = false,
   ...props
-}: SearchInputProps) {
+}, ref) {
   const generatedId = useId()
   const inputId = id ?? `kvzd-search-${generatedId.replaceAll(':', '')}`
   const hasError = Boolean(error) || status === 'error'
@@ -44,6 +44,7 @@ export function SearchInput({
       <div className={`kvzd-search-input__control kvzd-search-input__control--${iconPosition}`}>
         <input
           {...props}
+          ref={ref}
           id={inputId}
           type="search"
           aria-describedby={describedBy || undefined}
@@ -54,4 +55,4 @@ export function SearchInput({
       </div>
     </div>
   )
-}
+})

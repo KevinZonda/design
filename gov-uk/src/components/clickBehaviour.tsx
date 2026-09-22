@@ -1,4 +1,5 @@
-import type { AnchorHTMLAttributes, MouseEventHandler, ReactNode } from 'react'
+import { forwardRef } from 'react'
+import type { AnchorHTMLAttributes, MouseEventHandler, ReactNode, Ref } from 'react'
 
 /** A destination, a click action, or both. The handler may prevent navigation. */
 export interface IClickBehaviour {
@@ -12,12 +13,12 @@ export interface ClickTargetProps extends IClickBehaviour {
   anchorProps?: Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'children' | 'className' | 'href' | 'onClick'>
 }
 
-export function ClickTarget({ href, onClick, children, className, anchorProps }: ClickTargetProps) {
+export const ClickTarget = forwardRef<HTMLAnchorElement | HTMLButtonElement | HTMLSpanElement, ClickTargetProps>(function ClickTarget({ href, onClick, children, className, anchorProps }, ref) {
   if (href !== undefined) {
-    return <a {...anchorProps} className={className} href={href} onClick={(event) => onClick?.(event)}>{children}</a>
+    return <a {...anchorProps} ref={ref as Ref<HTMLAnchorElement>} className={className} href={href} onClick={(event) => onClick?.(event)}>{children}</a>
   }
   if (onClick) {
-    return <button type="button" className={`${className ?? ''} kvzd-clickable-button`.trim()} onClick={(event) => onClick(event)} aria-current={anchorProps?.['aria-current']} aria-describedby={anchorProps?.['aria-describedby']}>{children}</button>
+    return <button ref={ref as Ref<HTMLButtonElement>} type="button" className={`${className ?? ''} kvzd-clickable-button`.trim()} onClick={(event) => onClick(event)} aria-current={anchorProps?.['aria-current']} aria-describedby={anchorProps?.['aria-describedby']}>{children}</button>
   }
-  return <span aria-current={anchorProps?.['aria-current']} aria-describedby={anchorProps?.['aria-describedby']}>{children}</span>
-}
+  return <span ref={ref as Ref<HTMLSpanElement>} aria-current={anchorProps?.['aria-current']} aria-describedby={anchorProps?.['aria-describedby']}>{children}</span>
+})

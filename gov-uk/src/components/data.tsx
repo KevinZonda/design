@@ -1,21 +1,22 @@
-import { useEffect, useId, useRef, useState } from 'react'
-import type { Key, ReactNode } from 'react'
+import { forwardRef, useEffect, useId, useRef, useState } from 'react'
+import type { Key, ReactElement, ReactNode, Ref, RefAttributes } from 'react'
 import { Tag } from './Tag'
 import { ClickTarget, type IClickBehaviour } from './clickBehaviour'
 
 export interface TableColumn<T> { title: ReactNode; dataIndex: keyof T; key?: string; numeric?: boolean; rowHeader?: boolean; render?: (value: T[keyof T], record: T, index: number) => ReactNode }
 export interface TableProps<T> { columns: TableColumn<T>[]; dataSource: T[]; caption?: ReactNode; rowKey?: keyof T | ((record: T) => Key) }
-export function Table<T extends object>({ caption, columns, dataSource, rowKey }: TableProps<T>) {
+const TableWithRef = forwardRef(function Table<T extends object>({ caption, columns, dataSource, rowKey }: TableProps<T>, ref: Ref<HTMLTableElement>) {
   const keyFor = (record: T, index: number) => typeof rowKey === 'function' ? rowKey(record) : rowKey ? String(record[rowKey]) : index
-  return <table className="govuk-table">{caption && <caption className="govuk-table__caption govuk-table__caption--m">{caption}</caption>}<thead className="govuk-table__head"><tr className="govuk-table__row">{columns.map((column) => <th className={`govuk-table__header ${column.numeric ? 'govuk-table__header--numeric' : ''}`} scope="col" key={column.key ?? String(column.dataIndex)}>{column.title}</th>)}</tr></thead><tbody className="govuk-table__body">{dataSource.map((record, rowIndex) => <tr className="govuk-table__row" key={keyFor(record, rowIndex)}>{columns.map((column) => { const value = record[column.dataIndex]; const content = column.render ? column.render(value, record, rowIndex) : String(value ?? ''); const classes = `${column.rowHeader ? 'govuk-table__header' : 'govuk-table__cell'} ${column.numeric ? `${column.rowHeader ? 'govuk-table__header' : 'govuk-table__cell'}--numeric` : ''}`.trim(); return column.rowHeader ? <th className={classes} scope="row" key={column.key ?? String(column.dataIndex)}>{content}</th> : <td className={classes} key={column.key ?? String(column.dataIndex)}>{content}</td> })}</tr>)}</tbody></table>
-}
+  return <table ref={ref} className="govuk-table">{caption && <caption className="govuk-table__caption govuk-table__caption--m">{caption}</caption>}<thead className="govuk-table__head"><tr className="govuk-table__row">{columns.map((column) => <th className={`govuk-table__header ${column.numeric ? 'govuk-table__header--numeric' : ''}`} scope="col" key={column.key ?? String(column.dataIndex)}>{column.title}</th>)}</tr></thead><tbody className="govuk-table__body">{dataSource.map((record, rowIndex) => <tr className="govuk-table__row" key={keyFor(record, rowIndex)}>{columns.map((column) => { const value = record[column.dataIndex]; const content = column.render ? column.render(value, record, rowIndex) : String(value ?? ''); const classes = `${column.rowHeader ? 'govuk-table__header' : 'govuk-table__cell'} ${column.numeric ? `${column.rowHeader ? 'govuk-table__header' : 'govuk-table__cell'}--numeric` : ''}`.trim(); return column.rowHeader ? <th className={classes} scope="row" key={column.key ?? String(column.dataIndex)}>{content}</th> : <td className={classes} key={column.key ?? String(column.dataIndex)}>{content}</td> })}</tr>)}</tbody></table>
+})
+export const Table = TableWithRef as <T extends object>(props: TableProps<T> & RefAttributes<HTMLTableElement>) => ReactElement | null
 
 export interface SummaryAction extends IClickBehaviour { label: ReactNode; visuallyHiddenText?: string }
 export interface SummaryItem { key: ReactNode; value: ReactNode; actions?: SummaryAction[] }
-export function SummaryList({ items, bordered = true }: { items: SummaryItem[]; bordered?: boolean }) { return <dl className={`govuk-summary-list ${bordered ? '' : 'govuk-summary-list--no-border'}`}>{items.map((item, index) => <div className="govuk-summary-list__row" key={index}><dt className="govuk-summary-list__key">{item.key}</dt><dd className="govuk-summary-list__value">{item.value}</dd>{item.actions && <dd className="govuk-summary-list__actions">{item.actions.map((action, actionIndex) => <span key={action.href ?? actionIndex}>{actionIndex > 0 && ' '}<ClickTarget className="govuk-link" href={action.href} onClick={action.onClick}>{action.label}{action.visuallyHiddenText && <span className="govuk-visually-hidden"> {action.visuallyHiddenText}</span>}</ClickTarget></span>)}</dd>}</div>)}</dl> }
+export const SummaryList = forwardRef<HTMLDListElement, { items: SummaryItem[]; bordered?: boolean }>(function SummaryList({ items, bordered = true }, ref) { return <dl ref={ref} className={`govuk-summary-list ${bordered ? '' : 'govuk-summary-list--no-border'}`}>{items.map((item, index) => <div className="govuk-summary-list__row" key={index}><dt className="govuk-summary-list__key">{item.key}</dt><dd className="govuk-summary-list__value">{item.value}</dd>{item.actions && <dd className="govuk-summary-list__actions">{item.actions.map((action, actionIndex) => <span key={action.href ?? actionIndex}>{actionIndex > 0 && ' '}<ClickTarget className="govuk-link" href={action.href} onClick={action.onClick}>{action.label}{action.visuallyHiddenText && <span className="govuk-visually-hidden"> {action.visuallyHiddenText}</span>}</ClickTarget></span>)}</dd>}</div>)}</dl> })
 
 export interface TaskItem extends IClickBehaviour { title: ReactNode; status: ReactNode; hint?: ReactNode; statusColor?: Parameters<typeof Tag>[0]['color'] }
-export function TaskList({ items }: { items: TaskItem[] }) { return <ul className="govuk-task-list">{items.map((item, index) => <li className={`govuk-task-list__item ${item.href !== undefined || item.onClick ? 'govuk-task-list__item--with-link' : ''}`} key={`${item.href ?? ''}-${index}`}><div className="govuk-task-list__name-and-hint"><ClickTarget className="govuk-link govuk-task-list__link" href={item.href} onClick={item.onClick} anchorProps={{ 'aria-describedby': `task-status-${index}` }}>{item.title}</ClickTarget>{item.hint && <div className="govuk-task-list__hint">{item.hint}</div>}</div><div className="govuk-task-list__status" id={`task-status-${index}`}>{item.statusColor ? <Tag color={item.statusColor}>{item.status}</Tag> : item.status}</div></li>)}</ul> }
+export const TaskList = forwardRef<HTMLUListElement, { items: TaskItem[] }>(function TaskList({ items }, ref) { return <ul ref={ref} className="govuk-task-list">{items.map((item, index) => <li className={`govuk-task-list__item ${item.href !== undefined || item.onClick ? 'govuk-task-list__item--with-link' : ''}`} key={`${item.href ?? ''}-${index}`}><div className="govuk-task-list__name-and-hint"><ClickTarget className="govuk-link govuk-task-list__link" href={item.href} onClick={item.onClick} anchorProps={{ 'aria-describedby': `task-status-${index}` }}>{item.title}</ClickTarget>{item.hint && <div className="govuk-task-list__hint">{item.hint}</div>}</div><div className="govuk-task-list__status" id={`task-status-${index}`}>{item.statusColor ? <Tag color={item.statusColor}>{item.status}</Tag> : item.status}</div></li>)}</ul> })
 
 export interface TabItem { key: string; label: ReactNode; children: ReactNode }
 export interface TabsProps { items: TabItem[]; activeKey?: string; defaultActiveKey?: string; onChange?: (key: string) => void }
@@ -35,7 +36,7 @@ function useTabsEnhanced() {
   return enhanced
 }
 
-export function Tabs({ items, activeKey, defaultActiveKey, onChange }: TabsProps) {
+export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs({ items, activeKey, defaultActiveKey, onChange }, ref) {
   const enhanced = useTabsEnhanced()
   const [inner, setInner] = useState(defaultActiveKey ?? items[0]?.key)
   const current = activeKey ?? inner
@@ -43,7 +44,7 @@ export function Tabs({ items, activeKey, defaultActiveKey, onChange }: TabsProps
   const tabRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
   const select = (key: string) => { if (activeKey === undefined) setInner(key); onChange?.(key) }
   const move = (key: string) => { select(key); tabRefs.current[key]?.focus() }
-  return <div className="govuk-tabs">
+  return <div className="govuk-tabs" ref={ref}>
     <h2 className="govuk-tabs__title">Contents</h2>
     <ul className="govuk-tabs__list" role={enhanced ? 'tablist' : undefined}>
       {items.map((item, index) => {
@@ -86,16 +87,20 @@ export function Tabs({ items, activeKey, defaultActiveKey, onChange }: TabsProps
       >{item.children}</section>
     })}
   </div>
-}
+})
 
 export interface AccordionItem { key: string; heading: ReactNode; summary?: ReactNode; children: ReactNode; expanded?: boolean }
-export function Accordion({ items, showAllText = 'Show all sections', hideAllText = 'Hide all sections' }: { items: AccordionItem[]; showAllText?: string; hideAllText?: string }) {
+export interface AccordionProps { items: AccordionItem[]; showAllText?: string; hideAllText?: string; openKeys?: string[]; onChange?: (openKeys: string[]) => void }
+export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Accordion({ items, showAllText = 'Show all sections', hideAllText = 'Hide all sections', openKeys: controlledOpenKeys, onChange }, ref) {
   const accordionId = useId().replaceAll(':', '')
-  const [openKeys, setOpenKeys] = useState(() => items.filter((item) => item.expanded).map((item) => item.key)); const allOpen = openKeys.length === items.length
-  const toggle = (key: string) => setOpenKeys((keys) => keys.includes(key) ? keys.filter((item) => item !== key) : [...keys, key])
-  return <div className="govuk-accordion" id={accordionId}>
+  const [innerOpenKeys, setInnerOpenKeys] = useState(() => items.filter((item) => item.expanded).map((item) => item.key))
+  const openKeys = controlledOpenKeys ?? innerOpenKeys
+  const allOpen = items.every((item) => openKeys.includes(item.key))
+  const update = (next: string[]) => { if (controlledOpenKeys === undefined) setInnerOpenKeys(next); onChange?.(next) }
+  const toggle = (key: string) => update(openKeys.includes(key) ? openKeys.filter((item) => item !== key) : [...openKeys, key])
+  return <div className="govuk-accordion" id={accordionId} ref={ref}>
     <div className="govuk-accordion__controls">
-      <button className="govuk-accordion__show-all" type="button" aria-expanded={allOpen} onClick={() => setOpenKeys(allOpen ? [] : items.map((item) => item.key))}>
+      <button className="govuk-accordion__show-all" type="button" aria-expanded={allOpen} onClick={() => update(allOpen ? [] : items.map((item) => item.key))}>
         <span className={`govuk-accordion-nav__chevron ${allOpen ? '' : 'govuk-accordion-nav__chevron--down'}`} aria-hidden="true" />
         <span className="govuk-accordion__show-all-text">{allOpen ? hideAllText : showAllText}</span>
       </button>
@@ -119,4 +124,4 @@ export function Accordion({ items, showAllText = 'Show all sections', hideAllTex
       </section>
     })}
   </div>
-}
+})

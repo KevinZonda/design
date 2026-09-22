@@ -16,8 +16,9 @@ import {
   Fieldset,
   FileUpload,
   Footer,
-  GenericHeader,
+  FooterGovUk,
   Header,
+  HeaderGovUk,
   InsetText,
   Input,
   LanguageNavigation,
@@ -58,6 +59,7 @@ export interface ComponentDoc {
   api: ApiProp[]
   status?: 'trial'
   wide?: boolean
+  guidanceUrl?: string | null
 }
 
 const text = (name: string, description: string): ApiProp => ({ name, type: 'ReactNode', description })
@@ -93,7 +95,7 @@ export const componentDocs: ComponentDoc[] = [
       { key: 'audience', heading: 'Know your audience', children: <p className="govuk-body">This is the content for Know your audience.</p> },
       { key: 'reading', heading: 'How people read', children: <p className="govuk-body">This is the content for How people read.</p> },
     ]} />,
-    api: [items('Accordion sections with a key, heading, optional summary and content.'), { name: 'showAllText', type: 'string', defaultValue: 'Show all sections', description: 'Label used to expand every section.' }],
+    api: [items('Accordion sections with a key, heading, optional summary and content.'), { name: 'showAllText', type: 'string', defaultValue: 'Show all sections', description: 'Label used to expand every section.' }, { name: 'openKeys', type: 'string[]', description: 'Optional controlled list of expanded section keys.' }, { name: 'onChange', type: '(openKeys: string[]) => void', description: 'Called after a section or the show-all control is toggled.' }, { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Accordion root element.' }],
   },
   {
     slug: 'back-link', name: 'Back link',
@@ -138,7 +140,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'Every checkbox has a visible label. Options may include hint text and conditional content.',
     code: `<Checkboxes name="waste" legend="Which types of waste do you transport?" hint="Select all that apply" defaultValue={['animal']} options={[\n  { label: 'Waste from animal carcasses', value: 'animal' },\n  { label: 'Waste from mines or quarries', value: 'mines' },\n  { label: 'Farm or agricultural waste', value: 'farm' }\n]} />`,
     example: () => <Checkboxes name="waste" legend="Which types of waste do you transport?" hint="Select all that apply" defaultValue={['animal']} options={[{ label: 'Waste from animal carcasses', value: 'animal' }, { label: 'Waste from mines or quarries', value: 'mines' }, { label: 'Farm or agricultural waste', value: 'farm' }]} />,
-    api: [{ name: 'options', type: 'ChoiceOption[]', description: 'Checkbox labels, values, hints and conditional content.' }, { name: 'value', type: 'string[]', description: 'Controlled selected values.' }, { name: 'onChange', type: '(value: string[]) => void', description: 'Called with all selected values.' }, text('legend', 'Question shown as the fieldset legend.')],
+    api: [{ name: 'options', type: 'ChoiceOption[]', description: 'Checkbox labels, values, hints and conditional content.' }, { name: 'value', type: 'string[]', description: 'Controlled selected values.' }, { name: 'onChange', type: '(value: string[]) => void', description: 'Called with all selected values.' }, text('legend', 'Question shown as the fieldset legend.'), { name: 'ref', type: 'Ref<HTMLFieldSetElement>', description: 'Group fieldset.' }, { name: 'inputRefs', type: 'Record<string, Ref<HTMLInputElement>>', description: 'Refs for individual options, keyed by option value.' }, { name: 'inputProps', type: 'InputHTMLAttributes<HTMLInputElement>', description: 'Native event handlers and attributes shared by each checkbox.' }],
   },
   {
     slug: 'cookie-banner', name: 'Cookie banner',
@@ -157,7 +159,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'The three numeric inputs are grouped in a fieldset with one legend and return a single date value object.',
     code: `<DateInput legend="What is your date of birth?" hint="For example, 31 3 1980" />`,
     example: () => <DateInput legend="What is your date of birth?" hint="For example, 31 3 1980" namePrefix="dob" />,
-    api: [text('legend', 'Question for the complete date.'), { name: 'value', type: '{ day?: string; month?: string; year?: string }', description: 'Controlled date value.' }, onChange('Called with the complete date value object.')],
+    api: [text('legend', 'Question for the complete date.'), { name: 'value', type: '{ day?: string; month?: string; year?: string }', description: 'Controlled date value.' }, onChange('Called with the complete date value object.'), { name: 'ref', type: 'Ref<HTMLFieldSetElement>', description: 'Group fieldset.' }, { name: 'inputRefs', type: '{ day?, month?, year? }', description: 'Refs for the individual date fields.' }, { name: 'inputProps', type: 'InputHTMLAttributes<HTMLInputElement>', description: 'Native event handlers and attributes shared by the day, month and year fields.' }],
   },
   {
     slug: 'details', name: 'Details',
@@ -166,7 +168,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'This uses the native details and summary elements, so the basic interaction works without JavaScript.',
     code: `<Details summary="Help with nationality">We need this information to...</Details>`,
     example: () => <Details summary="Help with nationality">We need to know your nationality so we can work out which elections you are entitled to vote in.</Details>,
-    api: [text('summary', 'Visible disclosure label.'), text('children', 'Content revealed when expanded.'), { name: 'open', type: 'boolean', defaultValue: 'false', description: 'Initial open state.' }],
+    api: [text('summary', 'Visible disclosure label.'), text('children', 'Content revealed when expanded.'), { name: 'open', type: 'boolean', description: 'Initial native open state.' }, { name: 'onToggle', type: 'ReactEventHandler<HTMLDetailsElement>', description: 'Native toggle event; read currentTarget.open for the new state.' }, { name: 'ref', type: 'Ref<HTMLDetailsElement>', description: 'Native details element.' }],
   },
   {
     slug: 'error-message', name: 'Error message',
@@ -202,7 +204,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'The compact useful/not useful prompt can reveal a short problem report form without leaving the page.',
     code: `<Feedback onUseful={setUseful} onSubmit={sendFeedback} />`,
     example: () => <Feedback />,
-    api: [{ name: 'onUseful', type: '(useful: boolean) => void', description: 'Records the quick usefulness response.' }, { name: 'onSubmit', type: '(message: string) => void', description: 'Receives a problem report.' }],
+    api: [{ name: 'onUseful', type: '(useful: boolean) => void', description: 'Records the quick usefulness response.' }, { name: 'onSubmit', type: '(message: string) => void', description: 'Receives a problem report.' }, { name: 'onOpenChange', type: '(open: boolean) => void', description: 'Called when the problem report form opens or closes.' }, { name: 'ref', type: 'Ref<HTMLElement>', description: 'Feedback section root element.' }],
     wide: true,
   },
   {
@@ -229,12 +231,23 @@ export const componentDocs: ComponentDoc[] = [
     api: [text('label', 'Visible file input label.'), text('hint', 'Accepted format and size guidance.'), text('error', 'Validation error.'), { name: 'accept', type: 'string', description: 'Native accepted file types.' }],
   },
   {
+    slug: 'generic-footer', name: 'Generic footer', status: 'trial',
+    summary: 'Add supporting links and organisation details at the end of a page.',
+    whenToUse: 'Use for services outside GOV.UK that need a footer without Crown copyright or GOV.UK licence text.',
+    howItWorks: 'Footer provides the layout. Supply the links and text appropriate to your organisation; FooterGovUk adds the standard GOV.UK wording.',
+    code: `<Footer meta={[{ label: 'Privacy', href: '/privacy' }]} description="Service information" copyright="© Example organisation" />`,
+    example: () => <Footer meta={[{ label: 'Help', href: '#' }, { label: 'Privacy', href: '#' }]} description="Service information" copyright="© Example organisation" />,
+    api: [{ name: 'navigation', type: 'FooterSection[]', description: 'Grouped footer navigation.' }, { name: 'meta', type: 'LinkItem[]', description: 'Supporting links.' }, text('description', 'Optional licence or service information.'), text('copyright', 'Optional organisation copyright statement.')],
+    guidanceUrl: null,
+    wide: true,
+  },
+  {
     slug: 'generic-header', name: 'Generic header', status: 'trial',
     summary: 'Provide a simple branded header for non-GOV.UK services.',
     whenToUse: 'Use when a service needs the design system interaction standards without presenting itself as GOV.UK.',
     howItWorks: 'Supply a service name and optional logo. The component deliberately avoids the GOV.UK logotype and does not include service navigation.',
-    code: `<GenericHeader title="Service name" logo={<ServiceLogo />} />`,
-    example: () => <GenericHeader title="Service name" logo={genericServiceLogo} />,
+    code: `<Header title="Service name" logo={<ServiceLogo />} />`,
+    example: () => <Header title="Service name" logo={genericServiceLogo} />,
     api: [text('title', 'Service or organisation name.'), { name: 'logo', type: 'ReactNode', description: 'Optional image or SVG shown before the title.' }, { name: 'homeHref', type: 'string', defaultValue: '/', description: 'Home destination.' }, { name: 'fullWidth', type: 'boolean', defaultValue: 'false', description: 'Use a full-width container.' }],
     wide: true,
   },
@@ -243,8 +256,8 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Provide copyright, licence and supporting navigation at the end of a page.',
     whenToUse: 'Use the standard footer on GOV.UK services and keep core support links consistent across pages.',
     howItWorks: 'Navigation sections and metadata links are supplied as arrays so services can add only relevant destinations.',
-    code: `<Footer meta={[{ label: 'Privacy', href: '/privacy' }]} />`,
-    example: () => <Footer meta={[{ label: 'Help', href: '#' }, { label: 'Privacy', href: '#' }, { label: 'Cookies', href: '#' }]} navigation={[{ title: 'Services and information', items: [{ label: 'Benefits', href: '#' }, { label: 'Driving and transport', href: '#' }] }]} />,
+    code: `<FooterGovUk meta={[{ label: 'Privacy', href: '/privacy' }]} />`,
+    example: () => <FooterGovUk meta={[{ label: 'Help', href: '#' }, { label: 'Privacy', href: '#' }, { label: 'Cookies', href: '#' }]} navigation={[{ title: 'Services and information', items: [{ label: 'Benefits', href: '#' }, { label: 'Driving and transport', href: '#' }] }]} />,
     api: [{ name: 'navigation', type: 'FooterSection[]', description: 'Grouped footer navigation.' }, { name: 'meta', type: 'LinkItem[]', description: 'Supporting policy links.' }],
     wide: true,
   },
@@ -253,8 +266,8 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Show the GOV.UK identity and an optional product name at the top of a page.',
     whenToUse: 'Use at the top of GOV.UK services. Put the service name and service-level links in the separate Service navigation component.',
     howItWorks: 'The 6.5.0 header renders the official GOV.UK crown and logotype, with an optional product name. Service navigation is deliberately kept separate.',
-    code: `<Header productName="Product name" />`,
-    example: () => <Header productName="Product name" />,
+    code: `<HeaderGovUk productName="Product name" />`,
+    example: () => <HeaderGovUk productName="Product name" />,
     api: [text('productName', 'Optional product identity shown beside the GOV.UK logotype.'), { name: 'homepageUrl', type: 'string', defaultValue: '//gov.uk', description: 'GOV.UK home destination.' }, { name: 'fullWidth', type: 'boolean', defaultValue: 'false', description: 'Use a full-width header container.' }],
     wide: true,
   },
@@ -310,7 +323,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'The show/hide control updates the native input type and communicates its pressed state.',
     code: `<PasswordInput label="Password" name="password" autoComplete="current-password" />`,
     example: () => <PasswordInput label="Password" name="password" autoComplete="current-password" />,
-    api: [text('label', 'Input label.'), { name: 'showText', type: 'string', defaultValue: 'Show', description: 'Reveal control label.' }, { name: 'hideText', type: 'string', defaultValue: 'Hide', description: 'Mask control label.' }],
+    api: [text('label', 'Input label.'), { name: 'showText', type: 'string', defaultValue: 'Show', description: 'Reveal control label.' }, { name: 'hideText', type: 'string', defaultValue: 'Hide', description: 'Mask control label.' }, { name: 'onVisibilityChange', type: '(visible: boolean) => void', description: 'Called when the show/hide control changes the input type.' }, { name: 'ref', type: 'Ref<HTMLInputElement>', description: 'Native password input; standard input event handlers are also supported.' }],
   },
   {
     slug: 'phase-banner', name: 'Phase banner',
@@ -328,7 +341,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'The choices share a fieldset legend and may reveal conditional content after selection.',
     code: `<Radios name="contact" legend="How would you prefer to be contacted?" options={[\n  { label: 'Email', value: 'email' },\n  { label: 'Phone', value: 'phone' }\n]} />`,
     example: () => <Radios name="contact" legend="How would you prefer to be contacted?" options={[{ label: 'Email', value: 'email' }, { label: 'Phone', value: 'phone' }, { label: 'Text message', value: 'text' }]} />,
-    api: [{ name: 'options', type: 'ChoiceOption[]', description: 'Radio options, hints and conditional content.' }, value(), onChange(), text('legend', 'Question for the group.')],
+    api: [{ name: 'options', type: 'ChoiceOption[]', description: 'Radio options, hints and conditional content.' }, value(), onChange(), text('legend', 'Question for the group.'), { name: 'ref', type: 'Ref<HTMLFieldSetElement>', description: 'Group fieldset.' }, { name: 'inputRefs', type: 'Record<string, Ref<HTMLInputElement>>', description: 'Refs for individual options, keyed by option value.' }, { name: 'inputProps', type: 'InputHTMLAttributes<HTMLInputElement>', description: 'Native event handlers and attributes shared by each radio.' }],
   },
   {
     slug: 'search-input', name: 'Search input',
@@ -355,7 +368,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'The service name and current navigation item are clearly distinguished inside a labelled navigation landmark.',
     code: `<ServiceNavigation serviceName="Service name" items={[{ label: 'Home', href: '/', current: true }]} />`,
     example: () => <ServiceNavigation serviceName="Apply for a passport" items={[{ label: 'Home', href: '#', current: true }, { label: 'Your applications', href: '#' }, { label: 'Messages', href: '#' }]} />,
-    api: [text('serviceName', 'Service identity.'), { name: 'serviceUrl', type: 'string', description: 'Optional service home destination.' }, { name: 'serviceOnClick', type: 'IClickBehaviour["onClick"]', description: 'Optional click handler for the service name.' }, items('Navigation items accept optional href and onClick. The handler can prevent navigation.')],
+    api: [text('serviceName', 'Service identity.'), { name: 'serviceUrl', type: 'string', description: 'Optional service home destination.' }, { name: 'serviceOnClick', type: 'IClickBehaviour["onClick"]', description: 'Optional click handler for the service name.' }, items('Navigation items accept optional href and onClick. The handler can prevent navigation.'), { name: 'menuOpen', type: 'boolean', description: 'Optional controlled state of the mobile menu.' }, { name: 'onMenuToggle', type: '(open: boolean) => void', description: 'Called when the mobile menu button is pressed.' }, { name: 'ref', type: 'Ref<HTMLElement>', description: 'Service navigation root element.' }],
     wide: true,
   },
   {

@@ -1,9 +1,9 @@
-import { useId, useRef, useState } from 'react'
+import { forwardRef, useId, useRef, useState } from 'react'
 import type { TabsProps } from '@kvzd-design/gov-uk'
 
 export type FancyTabsProps = TabsProps
 
-export function FancyTabs({ items, activeKey, defaultActiveKey, onChange }: FancyTabsProps) {
+export const FancyTabs = forwardRef<HTMLDivElement, FancyTabsProps>(function FancyTabs({ items, activeKey, defaultActiveKey, onChange }, ref) {
   const [inner, setInner] = useState(defaultActiveKey ?? items[0]?.key)
   const current = activeKey ?? inner
   const id = useId().replaceAll(':', '')
@@ -19,7 +19,7 @@ export function FancyTabs({ items, activeKey, defaultActiveKey, onChange }: Fanc
     tabRefs.current[key]?.focus()
   }
 
-  return <div className="kvzd-fancy-tabs">
+  return <div ref={ref} className="kvzd-fancy-tabs">
     <div className="kvzd-fancy-tabs__list" role="tablist">
       {items.map((item, index) => {
         const selected = item.key === current
@@ -59,4 +59,4 @@ export function FancyTabs({ items, activeKey, defaultActiveKey, onChange }: Fanc
       >{item.children}</div>
     })}
   </div>
-}
+})

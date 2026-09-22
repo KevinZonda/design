@@ -17,8 +17,6 @@
 .site-search__results span { margin-top: 2px; color: #484949; font-size: 14px; line-height: 1.25; }
 .site-search__results p { margin: 0; padding: 12px; color: #484949; font-size: 16px; }
 .version-chip { align-self: center; margin-left: auto; }
-.site-footer { border-top: 10px solid #1d70b8; background: #f3f3f3; }
-.site-footer__inner { min-height: 150px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 
 @media (max-width: 40.0525em) {
   .site-width { width: calc(100% - 30px); }
@@ -30,5 +28,4 @@
   .docs-service-navigation .govuk-service-navigation__inlining-container { position: relative; }
   .docs-service-navigation .govuk-service-navigation__container { margin-right: 0; }
   .docs-service-navigation .version-chip { position: absolute; top: 10px; right: 0; margin-left: 0; }
-  .site-footer__inner { min-height: 130px; align-items: start; flex-direction: column; justify-content: center; }
 }

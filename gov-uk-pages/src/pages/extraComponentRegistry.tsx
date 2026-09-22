@@ -109,6 +109,8 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'currentKey', type: 'string', description: 'Key of the current link and branch.' },
       { name: 'collapsible', type: 'boolean', defaultValue: 'false', description: 'Add expand and collapse controls to items with children.' },
       { name: 'renderLink', type: '(item, options) => ReactNode', description: 'Optional link renderer for a client-side router.' },
+      { name: 'onExpandChange', type: '(key: string, expanded: boolean) => void', description: 'Called when a collapsible group is toggled.' },
+      { name: 'ref', type: 'Ref<HTMLElement>', description: 'Sidebar navigation root element.' },
     ],
   },
   {

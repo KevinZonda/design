@@ -5,7 +5,7 @@ const slugs = [
   'accordion', 'back-link', 'breadcrumbs', 'button', 'character-count',
   'checkboxes', 'cookie-banner', 'date-input', 'details', 'error-message',
   'error-summary', 'exit-this-page', 'feedback', 'fieldset', 'file-upload',
-  'generic-header', 'footer', 'header', 'inset-text', 'language-navigation',
+  'generic-footer', 'generic-header', 'footer', 'header', 'inset-text', 'language-navigation',
   'notification-banner', 'pagination', 'panel', 'password-input', 'phase-banner',
   'radios', 'select', 'service-navigation', 'skip-link', 'summary-list', 'table',
   'tabs', 'tag', 'task-list', 'text-input', 'textarea', 'warning-text',

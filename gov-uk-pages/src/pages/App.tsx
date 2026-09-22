@@ -83,7 +83,7 @@ function ComponentPage({ component }: { component: ComponentDoc }) {
       <Breadcrumbs className="doc-breadcrumbs" items={[{ label: 'Components', href: sitePath('/components/') }, { label: component.name, current: true }]} />
       <div className="component-title-row"><h1 className="govuk-heading-xl">{component.name}</h1>{component.status === 'trial' && <Tag color="blue">Trial</Tag>}</div>
       <p className="govuk-body-l component-summary">{component.summary}</p>
-      <ExampleBlock component={component} guidanceUrl={`https://design-system.service.gov.uk/components/${component.slug}/`} />
+      <ExampleBlock component={component} guidanceUrl={component.guidanceUrl === null ? undefined : component.guidanceUrl ?? `https://design-system.service.gov.uk/components/${component.slug}/`} />
       <ApiTable component={component} />
       <section className="guidance-section"><h2 className="govuk-heading-l">When to use this component</h2><p className="govuk-body">{component.whenToUse}</p></section>
       <section className="guidance-section"><h2 className="govuk-heading-l">How it works</h2><p className="govuk-body">{component.howItWorks}</p><div className="implementation-note"><strong>React implementation</strong><p>State changes stay inside React. The rendered markup uses GOV.UK classes and semantic HTML, without initialising DOM-mutating GOV.UK JavaScript.</p></div></section>
