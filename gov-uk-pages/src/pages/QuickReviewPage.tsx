@@ -100,7 +100,7 @@ export function QuickReviewPage() {
                     </div>
                     <div className="review-card__footer">
                       <Link className="govuk-link" to={`/components/${component.slug}/`}>
-                        View {component.name} documentation
+                        View documentation
                       </Link>
                       <a className="govuk-link review-card__top-link" href="#top">Back to top</a>
                     </div>
