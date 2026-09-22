@@ -58,7 +58,7 @@ export type MessageKey = keyof typeof english
 export const message = (locale: Locale, key: MessageKey) => locale === 'zh' ? chinese[key] : english[key]
 
 export function localeFromPath(pathname: string): Locale {
-  return pathname === '/zh' || pathname.startsWith('/zh/') ? 'zh' : 'en'
+  return pathname === '/en' || pathname.startsWith('/en/') ? 'en' : 'zh'
 }
 
 export function useLocale(): Locale {
@@ -67,12 +67,12 @@ export function useLocale(): Locale {
 
 export function localizedPath(path: string, locale: Locale): string {
   const normalized = path.startsWith('/') ? path : `/${path}`
-  return locale === 'zh' ? `/zh${normalized}` : normalized
+  const unprefixed = normalized.replace(/^\/(?:zh|en)(?=\/|$)/, '') || '/'
+  return `/${locale}${unprefixed}`
 }
 
 export function pathInLocale(pathname: string, locale: Locale): string {
-  const unprefixed = pathname.replace(/^\/zh(?=\/|$)/, '') || '/'
-  return localizedPath(unprefixed, locale)
+  return localizedPath(pathname, locale)
 }
 
 export function pageTitle(title: string, locale: Locale): string {

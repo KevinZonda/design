@@ -7,7 +7,7 @@ import { extraComponentBySlug, extraComponentDocs, type ExtraComponentDoc } from
 import { DocsFooter, DocsHeader } from './DocsChrome'
 import { QuickReviewPage } from './QuickReviewPage'
 import { LicensePage } from './LicensePage'
-import { localizedPath, message, pageTitle, useLocale, type Locale } from './i18n'
+import { localeFromPath, localizedPath, message, pageTitle, useLocale, type Locale } from './i18n'
 import { localizedComponent, localizedExtraComponent } from './zhDocs'
 import { chineseApiDescription } from './zhApi'
 import { sitePath } from './sitePath'
@@ -164,7 +164,7 @@ function ExtraComponentRoute() {
 function RouteScroll() {
   const { pathname, hash } = useLocation()
   useEffect(() => {
-    document.documentElement.lang = pathname === '/zh' || pathname.startsWith('/zh/') ? 'zh-CN' : 'en'
+    document.documentElement.lang = localeFromPath(pathname) === 'zh' ? 'zh-CN' : 'en'
     if (!hash) {
       window.scrollTo(0, 0)
       return
@@ -175,13 +175,19 @@ function RouteScroll() {
   return null
 }
 
+function LocaleRedirect() {
+  const { pathname, search, hash } = useLocation()
+  const legacyEnglish = /^\/(?:components|extra-components|quick-review|license)(?:\/|$)/.test(pathname)
+  return <Navigate to={`${localizedPath(pathname, legacyEnglish ? 'en' : 'zh')}${search}${hash}`} replace />
+}
+
 export default function App() {
-  const prefixes = ['', '/zh'] as const
+  const prefixes = ['/zh', '/en'] as const
   return <>
     <RouteScroll />
     <Routes>
       {prefixes.flatMap((prefix) => [
-        <Route key={`${prefix}-home`} path={prefix || '/'} element={<QuickReviewPage />} />,
+        <Route key={`${prefix}-home`} path={prefix} element={<QuickReviewPage />} />,
         <Route key={`${prefix}-components`} path={`${prefix}/components`} element={<OverviewPage />} />,
         <Route key={`${prefix}-component`} path={`${prefix}/components/:slug`} element={<ComponentRoute />} />,
         <Route key={`${prefix}-extras`} path={`${prefix}/extra-components`} element={<ExtraOverviewPage />} />,
@@ -189,7 +195,9 @@ export default function App() {
         <Route key={`${prefix}-review`} path={`${prefix}/quick-review`} element={<QuickReviewPage />} />,
         <Route key={`${prefix}-license`} path={`${prefix}/license`} element={<LicensePage />} />,
       ])}
-      <Route path="*" element={<NotFoundPage />} />
+      <Route path="/zh/*" element={<NotFoundPage />} />
+      <Route path="/en/*" element={<NotFoundPage />} />
+      <Route path="*" element={<LocaleRedirect />} />
     </Routes>
   </>
 }

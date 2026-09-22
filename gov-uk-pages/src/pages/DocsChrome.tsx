@@ -82,7 +82,7 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
         { label: message(locale, 'govukLicense'), href: sitePath(localizedPath('/license/', locale)), onClick: navigateOnClick(localizedPath('/license/', locale)), current: current === 'license' },
       ]}
       end={<div className="docs-nav-end">
-        <LanguageNavigation ariaLabel={message(locale, 'chooseLanguage')} items={(['en', 'zh'] as const).map((language) => {
+        <LanguageNavigation ariaLabel={message(locale, 'chooseLanguage')} items={(['zh', 'en'] as const).map((language) => {
           const path = `${pathInLocale(location.pathname, language)}${location.search}${location.hash}`
           return { label: language === 'zh' ? '中文' : 'English', lang: language === 'zh' ? 'zh-CN' : 'en', href: sitePath(path), onClick: navigateOnClick(path), current: locale === language }
         })} />

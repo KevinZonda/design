@@ -14,9 +14,12 @@ Create the static documentation build with:
 pnpm build:pages
 ```
 
-The existing routes are English. Chinese pages use the same slugs under `/zh/`,
-for example `/zh/components/button/`. The language navigation keeps visitors on
-the corresponding page. `src/pages/i18n.ts` contains shared interface text,
+Documentation routes always include a language prefix: `/zh/` for Chinese and
+`/en/` for English, for example `/zh/components/button/` and
+`/en/components/button/`. `/` redirects to the Chinese home page. Older English
+URLs without a prefix redirect to their `/en/` equivalents. The language
+navigation keeps visitors on the corresponding page and lists Chinese first.
+`src/pages/i18n.ts` contains shared interface text,
 `zhDocs.ts` contains component summaries and guidance, and `zhApi.ts` contains
 API descriptions. React identifiers, code samples and their live examples remain
 in English so the preview matches the code.

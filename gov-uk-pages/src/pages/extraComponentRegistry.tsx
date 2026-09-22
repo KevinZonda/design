@@ -188,7 +188,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     slug: 'fancy-tabs',
     name: 'FancyTabs',
     summary: 'A stronger tab treatment for switching between views such as a live preview and its React source.',
-    whenToUse: <>Use when an interface needs a more prominent tab treatment than the standard <Link className="govuk-link" to="/components/tabs/">Tabs</Link> component.</>,
+    whenToUse: <>Use when an interface needs a more prominent tab treatment than the standard <Link className="govuk-link" to="/en/components/tabs/">Tabs</Link> component.</>,
     howItWorks: 'It shares the standard Tabs props and manages the selected panel in React. Arrow keys move between tabs.',
     code: fancyTabsCode,
     example: () => <FancyTabs items={[
@@ -265,7 +265,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     slug: 'tag-box',
     name: 'TagBox',
     summary: 'A neutral outlined label for short metadata such as a version number.',
-    whenToUse: <>Use for metadata that does not communicate a status. Use the standard <Link className="govuk-link" to="/components/tag/">Tag</Link> when the label communicates a status.</>,
+    whenToUse: <>Use for metadata that does not communicate a status. Use the standard <Link className="govuk-link" to="/en/components/tag/">Tag</Link> when the label communicates a status.</>,
     howItWorks: 'It renders a span and accepts standard span attributes and an optional className.',
     code: '<TagBox>6.5.1</TagBox>',
     example: () => <div className="tag-box-example"><TagBox>6.5.1</TagBox><TagBox>Release candidate</TagBox></div>,
