@@ -1,14 +1,14 @@
 .kvzd-fancy-tabs__list {
   display: flex;
   gap: 2px;
-  border-bottom: 1px solid #b1b4b6;
+  border-bottom: 1px solid var(--govuk-border-colour);
 }
 
 .kvzd-fancy-tabs__tab {
   padding: 12px 20px 10px;
   border: 0;
   border-bottom: 4px solid transparent;
-  color: #1d70b8;
+  color: var(--govuk-link-colour);
   background: transparent;
   font: inherit;
   font-weight: 700;
@@ -16,23 +16,23 @@
 }
 
 .kvzd-fancy-tabs__tab:hover {
-  color: #003078;
-  background: #f3f2f1;
+  color: var(--govuk-link-hover-colour);
+  background: var(--govuk-surface-background-colour);
 }
 
 .kvzd-fancy-tabs__tab[aria-selected='true'] {
-  border-bottom-color: #1d70b8;
-  color: #0b0c0c;
-  background: #f3f2f1;
+  border-bottom-color: var(--govuk-brand-colour);
+  color: var(--govuk-text-colour);
+  background: var(--govuk-surface-background-colour);
 }
 
 .kvzd-fancy-tabs__tab:focus {
   position: relative;
   z-index: 1;
-  color: #0b0c0c;
-  background: #ffdd00;
+  color: var(--govuk-focus-text-colour);
+  background: var(--govuk-focus-colour);
   outline: 3px solid transparent;
-  box-shadow: 0 -2px #ffdd00, 0 4px #0b0c0c;
+  box-shadow: 0 -2px var(--govuk-focus-colour), 0 4px var(--govuk-focus-text-colour);
 }
 
 .kvzd-fancy-tabs__panel {
@@ -100,20 +100,20 @@
 }
 
 .kvzd-sidebar__row--split:focus-within {
-  color: #0b0c0c;
-  background: #ffdd00;
-  box-shadow: 0 4px #0b0c0c;
+  color: var(--govuk-focus-text-colour);
+  background: var(--govuk-focus-colour);
+  box-shadow: 0 4px var(--govuk-focus-text-colour);
 }
 
 .kvzd-sidebar__row--split:focus-within .kvzd-sidebar__link {
-  color: #0b0c0c;
+  color: var(--govuk-focus-text-colour);
 }
 
 .kvzd-sidebar__item--highlighted {
   margin-left: -14px;
   padding-left: 10px;
-  border-left: 4px solid #1d70b8;
-  background: #fff;
+  border-left: 4px solid var(--govuk-brand-colour);
+  background: var(--govuk-body-background-colour);
 }
 
 .kvzd-sidebar__link {
@@ -132,7 +132,7 @@
 .kvzd-sidebar__group,
 .kvzd-sidebar__toggle {
   border: 0;
-  color: #1d70b8;
+  color: var(--govuk-link-colour);
   background: transparent;
   font: inherit;
   cursor: pointer;
@@ -190,15 +190,15 @@
 
 .kvzd-sidebar__group:hover,
 .kvzd-sidebar__toggle:hover {
-  color: #003078;
+  color: var(--govuk-link-hover-colour);
 }
 
 .kvzd-sidebar__group:focus,
 .kvzd-sidebar__toggle:focus {
-  color: #0b0c0c;
-  background: #ffdd00;
+  color: var(--govuk-focus-text-colour);
+  background: var(--govuk-focus-colour);
   outline: 3px solid transparent;
-  box-shadow: 0 -2px #ffdd00, 0 4px #0b0c0c;
+  box-shadow: 0 -2px var(--govuk-focus-colour), 0 4px var(--govuk-focus-text-colour);
 }
 
 .kvzd-sidebar__row--split .kvzd-sidebar__toggle:focus {
@@ -210,8 +210,8 @@
   display: inline-flex;
   align-items: center;
   padding: 4px 8px 3px;
-  border: 1px solid #505a5f;
-  color: #0b0c0c;
+  border: 1px solid var(--govuk-border-colour);
+  color: var(--govuk-text-colour);
   font-size: 14px;
   font-weight: 700;
   line-height: 1.25;

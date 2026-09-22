@@ -3,8 +3,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Footer, HeaderGovUk, SearchInput, ServiceNavigation, SkipLink } from '@kvzd-design/gov-uk'
 import { TagBox } from '@kvzd-design/gov-uk-extends'
 import { componentDocs } from './componentRegistry'
+import { extraComponentDocs } from './extraComponentRegistry'
 import { sitePath } from './sitePath'
 import './DocsChrome.css'
+
+const searchItems = [
+  ...componentDocs.map((component) => ({ ...component, path: `/components/${component.slug}/`, resultId: `component-${component.slug}` })),
+  ...extraComponentDocs.map((component) => ({ ...component, path: `/extra-components/${component.slug}/`, resultId: `extra-component-${component.slug}` })),
+]
 
 function DocsSearch() {
   const navigate = useNavigate()
@@ -14,16 +20,16 @@ function DocsSearch() {
   const matches = useMemo(() => {
     const needle = query.trim().toLowerCase()
     if (!needle) return []
-    return componentDocs.filter((component) => `${component.name} ${component.summary}`.toLowerCase().includes(needle)).slice(0, 8)
+    return searchItems.filter((component) => `${component.name} ${component.summary}`.toLowerCase().includes(needle)).slice(0, 8)
   }, [query])
   const showResults = open && query.trim().length > 0
   const goToResult = (index = activeIndex) => {
     const result = matches[index] ?? matches[0]
-    if (result) navigate(`/components/${result.slug}/`)
+    if (result) navigate(result.path)
   }
 
   return <form className="site-search" role="search" onSubmit={(event) => { event.preventDefault(); goToResult() }} onFocus={() => setOpen(true)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false) }}>
-    <SearchInput id="site-search" label="Search GOV.UK React components" visuallyHiddenLabel placeholder="Search GOV.UK React" autoComplete="off" value={query} role="combobox" aria-autocomplete="list" aria-expanded={showResults} aria-controls="site-search-results" aria-activedescendant={showResults && matches[activeIndex] ? `site-search-result-${matches[activeIndex].slug}` : undefined} onChange={(event) => { setQuery(event.target.value); setActiveIndex(0); setOpen(true) }} onKeyDown={(event) => {
+    <SearchInput id="site-search" label="Search KevinZonda Design System" visuallyHiddenLabel placeholder="Search KevinZonda Design System" autoComplete="off" value={query} role="combobox" aria-autocomplete="list" aria-expanded={showResults} aria-controls="site-search-results" aria-activedescendant={showResults && matches[activeIndex] ? `site-search-result-${matches[activeIndex].resultId}` : undefined} onChange={(event) => { setQuery(event.target.value); setActiveIndex(0); setOpen(true) }} onKeyDown={(event) => {
       if (event.key === 'Escape') { setOpen(false); return }
       if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return
       event.preventDefault()
@@ -33,7 +39,7 @@ function DocsSearch() {
       setOpen(true)
     }} />
     {showResults && <div className="site-search__results" id="site-search-results" role="listbox">
-      {matches.length > 0 ? matches.map((component, index) => <Link id={`site-search-result-${component.slug}`} role="option" aria-selected={index === activeIndex} className={index === activeIndex ? 'is-active' : undefined} to={`/components/${component.slug}/`} key={component.slug} onMouseEnter={() => setActiveIndex(index)}><strong>{component.name}</strong><span>{component.summary}</span></Link>) : <p>No components found</p>}
+      {matches.length > 0 ? matches.map((component, index) => <Link id={`site-search-result-${component.resultId}`} role="option" aria-selected={index === activeIndex} className={index === activeIndex ? 'is-active' : undefined} to={component.path} key={component.resultId} onMouseEnter={() => setActiveIndex(index)}><strong>{component.name}</strong><span>{component.summary}</span></Link>) : <p>No components found</p>}
     </div>}
   </form>
 }

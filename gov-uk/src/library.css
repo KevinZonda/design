@@ -27,12 +27,6 @@
   vertical-align: top;
 }
 
-.govuk-feedback {
-  padding: 20px;
-  border-top: 10px solid #1d70b8;
-  background: #f3f3f3;
-}
-
 .govuk-feedback__prompt {
   display: flex;
   align-items: center;
@@ -51,8 +45,8 @@
 
 .kvzd-surface {
   padding: 20px;
-  border: 1px solid #8eb8dc;
-  background: #f4f8fb;
+  border: 1px solid var(--govuk-surface-border-colour);
+  background: var(--govuk-surface-background-colour);
 }
 
 .kvzd-search-input__control {
@@ -81,7 +75,7 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  color: #505a5f;
+  color: var(--govuk-secondary-text-colour);
   pointer-events: none;
   transform: translateY(-50%);
 }
