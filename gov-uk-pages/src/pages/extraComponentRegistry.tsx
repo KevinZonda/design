@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { FancyTabs, Sidebar, TagBox } from '@kvzd-design/gov-uk-extends'
+import { FancyTabs, Note, Sidebar, TagBox } from '@kvzd-design/gov-uk-extends'
 import type { ApiProp } from './componentRegistry'
 
 export interface ExtraComponentDoc {
@@ -69,6 +69,23 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'activeKey', type: 'string', description: 'Controlled active tab.' },
       { name: 'defaultActiveKey', type: 'string', description: 'Initial active tab.' },
       { name: 'onChange', type: '(key: string) => void', description: 'Called with the selected tab key.' },
+    ],
+  },
+  {
+    slug: 'note',
+    name: 'Note',
+    summary: 'Highlight a short implementation note or other supporting information.',
+    whenToUse: 'Use for supporting guidance that needs more emphasis than ordinary body text without implying a warning or success state.',
+    howItWorks: 'The optional title appears above the content. Note accepts normal div attributes, so a page can add a class for local spacing.',
+    code: `<Note title="React implementation">
+  <p>State changes stay inside React.</p>
+</Note>`,
+    example: () => <Note title="React implementation"><p>State changes stay inside React. The rendered markup uses GOV.UK classes and semantic HTML.</p></Note>,
+    api: [
+      { name: 'title', type: 'ReactNode', description: 'Optional bold label above the content.' },
+      { name: 'children', type: 'ReactNode', description: 'Supporting content inside the note.' },
+      { name: 'className', type: 'string', description: 'Additional CSS class for local spacing or styling.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Note root element.' },
     ],
   },
   {

@@ -10,7 +10,7 @@ const slugs = [
   'radios', 'select', 'service-navigation', 'skip-link', 'summary-list', 'table',
   'tabs', 'tag', 'task-list', 'text-input', 'textarea', 'warning-text',
 ]
-const extraSlugs = ['fancy-tabs', 'sidebar', 'tag-box']
+const extraSlugs = ['fancy-tabs', 'note', 'sidebar', 'tag-box']
 
 const outputRoot = join(process.cwd(), 'dist')
 const source = await readFile(join(outputRoot, 'index.html'), 'utf8')

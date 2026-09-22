@@ -25,8 +25,7 @@
 .component-api .govuk-table { min-width: 680px; }
 .component-api code { padding: 2px 5px; color: #0b0c0c; background: #f3f2f1; font: 14px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; }
 .guidance-section { max-width: 720px; margin-top: 46px; }
-.implementation-note { margin-top: 30px; padding: 22px 24px 18px; border-left: 5px solid #1d70b8; background: #f3f2f1; }
-.implementation-note p { margin: 8px 0 0; }
+.implementation-note { margin-top: 30px; }
 .component-pagination { margin-top: 65px; padding-top: 25px; border-top: 1px solid #b1b4b6; }
 .example-force-skip-link .govuk-skip-link { position: static; display: inline-block; width: auto; height: auto; margin: 0; clip: auto; clip-path: none; }
 .example-tag-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }

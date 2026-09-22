@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { Link, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { Breadcrumbs, Button, Pagination, Table, Tag } from '@kvzd-design/gov-uk'
-import { FancyTabs, Sidebar } from '@kvzd-design/gov-uk-extends'
+import { FancyTabs, Note, Sidebar } from '@kvzd-design/gov-uk-extends'
 import { componentBySlug, componentDocs, type ComponentDoc } from './componentRegistry'
 import { extraComponentBySlug, extraComponentDocs, type ExtraComponentDoc } from './extraComponentRegistry'
 import { DocsFooter, DocsHeader } from './DocsChrome'
@@ -86,7 +86,7 @@ function ComponentPage({ component }: { component: ComponentDoc }) {
       <ExampleBlock component={component} guidanceUrl={component.guidanceUrl === null ? undefined : component.guidanceUrl ?? `https://design-system.service.gov.uk/components/${component.slug}/`} />
       <ApiTable component={component} />
       <section className="guidance-section"><h2 className="govuk-heading-l">When to use this component</h2><p className="govuk-body">{component.whenToUse}</p></section>
-      <section className="guidance-section"><h2 className="govuk-heading-l">How it works</h2><p className="govuk-body">{component.howItWorks}</p><div className="implementation-note"><strong>React implementation</strong><p>State changes stay inside React. The rendered markup uses GOV.UK classes and semantic HTML, without initialising DOM-mutating GOV.UK JavaScript.</p></div></section>
+      <section className="guidance-section"><h2 className="govuk-heading-l">How it works</h2><p className="govuk-body">{component.howItWorks}</p><Note className="implementation-note" title="React implementation"><p>State changes stay inside React. The rendered markup uses GOV.UK classes and semantic HTML, without initialising DOM-mutating GOV.UK JavaScript.</p></Note></section>
       <Pagination className="component-pagination" label="Component pages" previous={previous ? { href: pathFor(previous.slug), text: 'Previous component', label: previous.name } : undefined} next={next ? { href: pathFor(next.slug), text: 'Next component', label: next.name } : undefined} />
     </article>
   </DocsLayout>

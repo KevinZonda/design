@@ -39,6 +39,28 @@
   min-width: 0;
 }
 
+.kvzd-note {
+  padding: 22px 24px 18px;
+  border-left: 5px solid var(--govuk-brand-colour);
+  background: var(--govuk-surface-background-colour);
+}
+
+.kvzd-note__title {
+  display: block;
+}
+
+.kvzd-note__content--with-title {
+  margin-top: 8px;
+}
+
+.kvzd-note__content > :first-child {
+  margin-top: 0;
+}
+
+.kvzd-note__content > :last-child {
+  margin-bottom: 0;
+}
+
 .kvzd-sidebar {
   align-self: start;
   min-width: 0;
