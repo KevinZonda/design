@@ -1,5 +1,5 @@
-import { forwardRef, useId, useState, type ReactNode } from 'react'
-import { ClickTarget, type IClickBehaviour } from '@kvzd-design/gov-uk'
+import { forwardRef, useId, useState, type CSSProperties, type ReactNode } from 'react'
+import { ClickTarget, type IClickBehaviour, type SemanticStyling } from '@kvzd-design/gov-uk'
 
 interface SidebarItemBase {
   key: string
@@ -16,12 +16,13 @@ export interface SidebarGroupItem extends SidebarItemBase {
 
 export type SidebarItem = SidebarLinkItem | SidebarGroupItem
 
-export interface SidebarProps {
+export interface SidebarProps extends SemanticStyling<'root' | 'heading' | 'list'> {
   heading: ReactNode
   items: SidebarItem[]
   currentKey?: string
   collapsible?: boolean
   className?: string
+  style?: CSSProperties
   renderLink?: (item: SidebarLinkItem, options: { className: string; current: boolean }) => ReactNode
   onExpandChange?: (key: string, expanded: boolean) => void
 }
@@ -75,12 +76,12 @@ function SidebarNode({ item, currentKey, collapsible, depth, renderLink, onExpan
   </li>
 }
 
-export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar({ heading, items, currentKey, collapsible = false, className = '', renderLink, onExpandChange }, ref) {
+export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar({ heading, items, currentKey, collapsible = false, className = '', classNames, style, styles, renderLink, onExpandChange }, ref) {
   const headingId = useId()
 
-  return <nav ref={ref} className={`kvzd-sidebar ${className}`.trim()} aria-labelledby={headingId}>
-    <h2 className="govuk-heading-s kvzd-sidebar__heading" id={headingId}>{heading}</h2>
-    <ul className="kvzd-sidebar__list">
+  return <nav ref={ref} className={`kvzd-sidebar ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }} aria-labelledby={headingId}>
+    <h2 className={`govuk-heading-s kvzd-sidebar__heading ${classNames?.heading ?? ''}`.trim()} style={styles?.heading} id={headingId}>{heading}</h2>
+    <ul className={`kvzd-sidebar__list ${classNames?.list ?? ''}`.trim()} style={styles?.list}>
       {items.map((item) => <SidebarNode key={item.key} item={item} currentKey={currentKey} collapsible={collapsible} depth={0} renderLink={renderLink} onExpandChange={onExpandChange} />)}
     </ul>
   </nav>

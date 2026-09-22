@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { FancyTabs, Note, Sidebar, TagBox } from '@kvzd-design/gov-uk-extends'
+import { Empty, FancyTabs, Loading, Note, Sidebar, TagBox } from '@kvzd-design/gov-uk-extends'
 import type { ApiProp } from './componentRegistry'
+import { DropdownExample, FancyTableExample, MenuExample, ModalExample } from './extraExamples'
 
 export interface ExtraComponentDoc {
   slug: string
@@ -53,6 +54,136 @@ const sidebarCode = `<Sidebar
 />`
 
 export const extraComponentDocs: ExtraComponentDoc[] = [
+  {
+    slug: 'modal',
+    name: 'Modal',
+    summary: 'A focused dialog for a short decision or task that must be completed before returning to the page.',
+    whenToUse: 'Use for a brief confirmation or focused task. Keep longer journeys on normal pages.',
+    howItWorks: 'A native dialog enters the top layer and keeps keyboard focus inside it. Escape, the close button and optional backdrop clicks request closure through onClose.',
+    code: `<Modal open={open} title="Confirm your action" onClose={() => setOpen(false)}
+  footer={<button type="button" onClick={confirm}>Confirm</button>}>
+  <p>Check the details before continuing.</p>
+</Modal>`,
+    example: () => <ModalExample />,
+    api: [
+      { name: 'open', type: 'boolean', description: 'Controls whether the dialog is shown.' },
+      { name: 'title', type: 'ReactNode', description: 'Visible heading and accessible dialog name.' },
+      { name: 'children', type: 'ReactNode', description: 'Dialog content.' },
+      { name: 'footer', type: 'ReactNode', description: 'Optional action area.' },
+      { name: 'onClose', type: '() => void', description: 'Called when the user requests closure; update open in the parent.' },
+      { name: 'closeOnBackdrop', type: 'boolean', defaultValue: 'true', description: 'Allow backdrop clicks to request closure.' },
+      { name: 'closeLabel', type: 'string', defaultValue: 'Close', description: 'Accessible name of the close button.' },
+      { name: 'ref', type: 'Ref<HTMLDialogElement>', description: 'Native dialog element.' },
+    ],
+  },
+  {
+    slug: 'empty',
+    name: 'Empty',
+    summary: 'A clear state for a list, table or search with no records to display.',
+    whenToUse: 'Show when a view has no data or a filter returns no results. Explain the reason or offer a next step when useful.',
+    howItWorks: 'A visible heading, optional description and action sit inside a neutral surface. The illustration is decorative and can be replaced.',
+    code: `<Empty title="No applications found" description="Try changing your filters.">
+  <button type="button">Clear filters</button>
+</Empty>`,
+    example: () => <Empty title="No applications found" description="Try changing your filters." />,
+    api: [
+      { name: 'title', type: 'ReactNode', defaultValue: 'No results found', description: 'Short explanation of the empty state.' },
+      { name: 'description', type: 'ReactNode', description: 'Optional guidance beneath the title.' },
+      { name: 'illustration', type: 'ReactNode', description: 'Optional decorative graphic.' },
+      { name: 'children', type: 'ReactNode', description: 'Optional action area.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Empty state root element.' },
+    ],
+  },
+  {
+    slug: 'loading',
+    name: 'Loading',
+    summary: 'Spinner and skeleton treatments for content that is still loading.',
+    whenToUse: 'Use the spinner for a short wait and the skeleton when the structure of the pending content is known.',
+    howItWorks: 'Both variants expose a status label to assistive technology. Animation stops when reduced motion is requested.',
+    code: `<Loading label="Loading applications" />
+<Loading variant="skeleton" lines={3} label="Loading results" />`,
+    example: () => <div className="extra-loading-example"><Loading label="Loading applications" /><Loading variant="skeleton" lines={3} label="Loading results" /></div>,
+    api: [
+      { name: 'variant', type: "'spinner' | 'skeleton'", defaultValue: 'spinner', description: 'Visual loading treatment.' },
+      { name: 'label', type: 'string', defaultValue: 'Loading', description: 'Accessible loading status.' },
+      { name: 'lines', type: 'number', defaultValue: '3', description: 'Number of skeleton rows.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Loading root element.' },
+    ],
+  },
+  {
+    slug: 'menu',
+    name: 'Menu',
+    summary: 'A compact list of actions with keyboard navigation.',
+    whenToUse: 'Use for a short group of related actions. Use ordinary navigation links for primary page navigation.',
+    howItWorks: 'Arrow keys and Home/End move focus among enabled actions. Items can use href or onClick; when both are supplied, onClick takes precedence.',
+    code: `<Menu ariaLabel="Record actions" items={[
+  { key: 'view', label: 'View record', onClick: viewRecord },
+  { key: 'edit', label: 'Edit record', onClick: editRecord },
+]} />`,
+    example: () => <MenuExample />,
+    api: [
+      { name: 'items', type: 'MenuItem[]', description: 'Actions with key, label, optional href, onClick and disabled.' },
+      { name: 'ariaLabel', type: 'string', description: 'Accessible name for the menu.' },
+      { name: 'autoFocus', type: 'boolean', defaultValue: 'false', description: 'Focus the first enabled action on mount.' },
+      { name: 'onAction', type: '(key: string) => void', description: 'Called after an action is activated.' },
+      { name: 'onEscape', type: '() => void', description: 'Called when Escape is pressed.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Menu root element.' },
+    ],
+  },
+  {
+    slug: 'dropdown',
+    name: 'Dropdown',
+    summary: 'A button that opens a compact action menu.',
+    whenToUse: 'Use when several secondary actions share a single place in a toolbar or record row.',
+    howItWorks: 'The trigger exposes its expanded state. The menu opens with focus on its first action and closes on selection, Escape or an outside click.',
+    code: `<Dropdown label="Actions" menuLabel="Application actions"
+  items={[{ key: 'view', label: 'View application', onClick: viewApplication }]}
+/>`,
+    example: () => <DropdownExample />,
+    api: [
+      { name: 'label', type: 'ReactNode', description: 'Trigger button content.' },
+      { name: 'menuLabel', type: 'string', description: 'Accessible name for the action menu.' },
+      { name: 'items', type: 'MenuItem[]', description: 'Actions shown in the menu.' },
+      { name: 'open / defaultOpen', type: 'boolean', description: 'Controlled or initial open state.' },
+      { name: 'onOpenChange', type: '(open: boolean) => void', description: 'Called when the menu requests a state change.' },
+      { name: 'onAction', type: '(key: string) => void', description: 'Called after an item is activated.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Dropdown root element.' },
+    ],
+  },
+  {
+    slug: 'fancy-table',
+    name: 'FancyTable',
+    summary: 'A data table with optional sorting, filtering, row selection and client-side pagination.',
+    whenToUse: 'Use for records that need comparison and direct interaction. Keep the standard Table for simple read-only data.',
+    howItWorks: 'Column comparators and filter functions process the supplied data locally. Selection can be controlled or internal; Select all applies to the current page.',
+    code: `<FancyTable rowKey="id" dataSource={rows} selectable pageSize={10}
+  columns={[
+    { key: 'name', title: 'Name', dataIndex: 'name',
+      sorter: (a, b) => a.name.localeCompare(b.name) },
+    { key: 'status', title: 'Status', dataIndex: 'status',
+      filters: [{ label: 'Submitted', value: 'Submitted' }],
+      onFilter: (value, row) => row.status === value },
+  ]}
+/>`,
+    example: () => <FancyTableExample />,
+    wide: true,
+    api: [
+      { name: 'columns', type: 'FancyTableColumn<T>[]', description: 'Column definitions; add sorter for sortable headers.' },
+      { name: 'dataSource', type: 'T[]', description: 'Records displayed by the table.' },
+      { name: 'rowKey', type: 'keyof T | (record: T) => Key', description: 'Stable unique key for each row.' },
+      { name: 'selectable', type: 'boolean', defaultValue: 'false', description: 'Show row and current-page selection controls.' },
+      { name: 'selectedRowKeys / defaultSelectedRowKeys', type: 'Key[]', description: 'Controlled or initial selected row keys.' },
+      { name: 'onSelectionChange', type: '(keys: Key[]) => void', description: 'Called when the selection changes.' },
+      { name: 'sort / defaultSort', type: 'FancyTableSort | null', description: 'Controlled or initial column and direction.' },
+      { name: 'onSortChange', type: '(sort: FancyTableSort | null) => void', description: 'Called when the sort changes.' },
+      { name: 'filterValues / defaultFilterValues', type: 'Record<string, string>', description: 'Controlled or initial filter values by column key.' },
+      { name: 'onFilterChange', type: '(values: Record<string, string>) => void', description: 'Called when a column filter changes.' },
+      { name: 'pageSize / currentPage', type: 'number', description: 'Local page size and optional controlled page.' },
+      { name: 'onPageChange', type: '(page: number) => void', description: 'Called when the page changes.' },
+      { name: 'emptyContent', type: 'ReactNode', description: 'Content displayed when there are no records.' },
+      { name: 'ref', type: 'Ref<HTMLTableElement>', description: 'Table element.' },
+    ],
+  },
   {
     slug: 'fancy-tabs',
     name: 'FancyTabs',

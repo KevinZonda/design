@@ -1,0 +1,8 @@
+.license-page { box-sizing: border-box; max-width: 1100px; padding-top: 48px; padding-bottom: 80px; }
+.license-page > * { max-width: 780px; }
+.license-page__notice { box-sizing: border-box; padding: 24px; border: 1px solid #b1b4b6; background: #f3f2f1; color: #0b0c0c; font: 16px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+@media (max-width: 800px) {
+  .license-page { padding-top: 30px; }
+  .license-page__notice { padding: 16px; font-size: 14px; }
+}

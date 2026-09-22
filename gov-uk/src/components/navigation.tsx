@@ -1,20 +1,21 @@
-import { forwardRef, useId, useState, type HTMLAttributes, type MouseEvent, type ReactNode, type Ref } from 'react'
+import { forwardRef, useId, useState, type CSSProperties, type HTMLAttributes, type MouseEvent, type ReactNode, type Ref } from 'react'
 import { ClickTarget, type IClickBehaviour } from './clickBehaviour'
+import type { SemanticStyling } from './styling'
 
 export interface LinkItem extends IClickBehaviour { label: ReactNode; current?: boolean }
 export interface BreadcrumbItem extends IClickBehaviour { label: ReactNode; current?: boolean }
 
-export const SkipLink = forwardRef<HTMLAnchorElement | HTMLButtonElement | HTMLSpanElement, IClickBehaviour & { children?: ReactNode }>(function SkipLink({ href, onClick, children = 'Skip to main content' }, ref) {
-  return <ClickTarget ref={ref} className="govuk-skip-link" href={href ?? (onClick ? undefined : '#main-content')} onClick={onClick}>{children}</ClickTarget>
+export const SkipLink = forwardRef<HTMLAnchorElement | HTMLButtonElement | HTMLSpanElement, IClickBehaviour & { children?: ReactNode; style?: CSSProperties }>(function SkipLink({ href, onClick, children = 'Skip to main content', style }, ref) {
+  return <ClickTarget ref={ref} className="govuk-skip-link" style={style} href={href ?? (onClick ? undefined : '#main-content')} onClick={onClick}>{children}</ClickTarget>
 })
 
-export const BackLink = forwardRef<HTMLAnchorElement | HTMLButtonElement | HTMLSpanElement, IClickBehaviour & { children?: ReactNode }>(function BackLink({ href, onClick, children = 'Back' }, ref) {
-  return <ClickTarget ref={ref} href={href} onClick={onClick} className="govuk-back-link">{children}</ClickTarget>
+export const BackLink = forwardRef<HTMLAnchorElement | HTMLButtonElement | HTMLSpanElement, IClickBehaviour & { children?: ReactNode; style?: CSSProperties }>(function BackLink({ href, onClick, children = 'Back', style }, ref) {
+  return <ClickTarget ref={ref} href={href} onClick={onClick} className="govuk-back-link" style={style}>{children}</ClickTarget>
 })
 
-export interface BreadcrumbsProps { items: BreadcrumbItem[]; collapseOnMobile?: boolean; className?: string; label?: string }
-export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(function Breadcrumbs({ items, collapseOnMobile = false, className = '', label = 'Breadcrumb' }, ref) {
-  return <nav ref={ref} className={`govuk-breadcrumbs ${collapseOnMobile ? 'govuk-breadcrumbs--collapse-on-mobile' : ''} ${className}`.trim()} aria-label={label}>
+export interface BreadcrumbsProps { items: BreadcrumbItem[]; collapseOnMobile?: boolean; className?: string; label?: string; style?: CSSProperties }
+export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(function Breadcrumbs({ items, collapseOnMobile = false, className = '', label = 'Breadcrumb', style }, ref) {
+  return <nav ref={ref} className={`govuk-breadcrumbs ${collapseOnMobile ? 'govuk-breadcrumbs--collapse-on-mobile' : ''} ${className}`.trim()} style={style} aria-label={label}>
     <ol className="govuk-breadcrumbs__list">
       {items.map((item, index) => {
         const current = item.current || (item.href === undefined && !item.onClick)
@@ -26,7 +27,7 @@ export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(function Br
   </nav>
 })
 
-export interface HeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
+export interface HeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'title'>, SemanticStyling<'root' | 'container' | 'logo' | 'homeLink'> {
   title: ReactNode
   homeHref?: string
   homeOnClick?: IClickBehaviour['onClick']
@@ -55,13 +56,13 @@ function GovUkLogo() {
   </svg>
 }
 
-export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ title, homeHref, homeOnClick, logo, children, fullWidth = false, className = '', containerClassName = '', variant = 'generic', ...props }, ref) {
+export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ title, homeHref, homeOnClick, logo, children, fullWidth = false, className = '', classNames, containerClassName = '', style, styles, variant = 'generic', ...props }, ref) {
   const govuk = variant === 'govuk'
   const base = govuk ? 'govuk-header' : 'govuk-generic-header'
-  return <header {...props} ref={ref} className={`${base} ${className}`.trim()} data-module={govuk ? 'govuk-header' : undefined}>
-    <div className={`${base}__container ${fullWidth ? `${base}__container--full-width` : 'govuk-width-container'} ${containerClassName}`.trim()}>
-      <div className={`${base}__logo`}>
-        <ClickTarget className={`${base}__homepage-link`} href={homeHref ?? (homeOnClick ? undefined : '/')} onClick={homeOnClick}>
+  return <header {...props} ref={ref} className={`${base} ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }} data-module={govuk ? 'govuk-header' : undefined}>
+    <div className={`${base}__container ${fullWidth ? `${base}__container--full-width` : 'govuk-width-container'} ${classNames?.container ?? ''} ${containerClassName}`.trim()} style={styles?.container}>
+      <div className={`${base}__logo ${classNames?.logo ?? ''}`.trim()} style={styles?.logo}>
+        <ClickTarget className={`${base}__homepage-link ${classNames?.homeLink ?? ''}`.trim()} style={styles?.homeLink} href={homeHref ?? (homeOnClick ? undefined : '/')} onClick={homeOnClick}>
           {logo && <span className="kvzd-generic-header__logo-mark">{logo}</span>}{title}
         </ClickTarget>
       </div>
@@ -74,7 +75,7 @@ export const HeaderGovUk = forwardRef<HTMLElement, HeaderGovUkProps>(function He
   return <Header {...props} ref={ref} variant="govuk" homeHref={homepageUrl ?? (homepageOnClick ? undefined : '//gov.uk')} homeOnClick={homepageOnClick} title={<>{logo ?? <GovUkLogo />}{productName && <span className="govuk-header__product-name">{productName}</span>}</>} />
 })
 
-export interface ServiceNavigationProps {
+export interface ServiceNavigationProps extends SemanticStyling<'root' | 'container'> {
   serviceName?: ReactNode
   serviceUrl?: string
   serviceOnClick?: IClickBehaviour['onClick']
@@ -82,35 +83,38 @@ export interface ServiceNavigationProps {
   end?: ReactNode
   endAlign?: 'block' | 'inline'
   className?: string
+  style?: CSSProperties
   containerClassName?: string
   navigationLabel?: string
+  menuLabel?: string
+  serviceLabel?: string
   collapseNavigationOnMobile?: boolean
   menuOpen?: boolean
   onMenuToggle?: (open: boolean) => void
 }
-export const ServiceNavigation = forwardRef<HTMLElement, ServiceNavigationProps>(function ServiceNavigation({ serviceName, serviceUrl, serviceOnClick, items = [], end, endAlign = 'block', className = '', containerClassName = 'govuk-width-container', navigationLabel = 'Menu', collapseNavigationOnMobile = items.length > 1, menuOpen, onMenuToggle }, ref) {
+export const ServiceNavigation = forwardRef<HTMLElement, ServiceNavigationProps>(function ServiceNavigation({ serviceName, serviceUrl, serviceOnClick, items = [], end, endAlign = 'block', className = '', classNames, style, styles, containerClassName = 'govuk-width-container', navigationLabel = 'Menu', menuLabel = 'Menu', serviceLabel = 'Service information', collapseNavigationOnMobile = items.length > 1, menuOpen, onMenuToggle }, ref) {
   const [innerOpen, setInnerOpen] = useState(false)
   const open = menuOpen ?? innerOpen
   const toggle = () => { const next = !open; if (menuOpen === undefined) setInnerOpen(next); onMenuToggle?.(next) }
   const navigationId = `service-navigation-${useId().replaceAll(':', '')}`
-  const inner = <div className={`${containerClassName} ${end && endAlign === 'inline' ? 'govuk-service-navigation__inlining-container' : ''}`.trim()}>
+  const inner = <div className={`${containerClassName} ${end && endAlign === 'inline' ? 'govuk-service-navigation__inlining-container' : ''} ${classNames?.container ?? ''}`.trim()} style={styles?.container}>
     <div className="govuk-service-navigation__container">
       {serviceName && <span className="govuk-service-navigation__service-name">{serviceUrl !== undefined || serviceOnClick ? <ClickTarget href={serviceUrl} onClick={serviceOnClick} className="govuk-service-navigation__link">{serviceName}</ClickTarget> : <span className="govuk-service-navigation__text">{serviceName}</span>}</span>}
       {items.length > 0 && <nav aria-label={navigationLabel} className="govuk-service-navigation__wrapper">
-        {collapseNavigationOnMobile && <button type="button" className="govuk-service-navigation__toggle kvzd-service-navigation__toggle" aria-controls={navigationId} aria-expanded={open} onClick={toggle}>Menu</button>}
+        {collapseNavigationOnMobile && <button type="button" className="govuk-service-navigation__toggle kvzd-service-navigation__toggle" aria-controls={navigationId} aria-expanded={open} onClick={toggle}>{menuLabel}</button>}
         <ul className={`govuk-service-navigation__list ${collapseNavigationOnMobile && !open ? 'kvzd-service-navigation__list--closed' : ''}`} id={navigationId}>{items.map((item, index) => <li className={`govuk-service-navigation__item ${item.current ? 'govuk-service-navigation__item--active' : ''}`} key={item.href ?? index}><ClickTarget className="govuk-service-navigation__link" href={item.href} onClick={item.onClick} anchorProps={{ 'aria-current': item.current ? 'page' : undefined }}>{item.current ? <strong className="govuk-service-navigation__active-fallback">{item.label}</strong> : item.label}</ClickTarget></li>)}</ul>
       </nav>}
     </div>
     {end}
   </div>
-  const rootClass = `govuk-service-navigation ${className}`.trim()
+  const rootClass = `govuk-service-navigation ${classNames?.root ?? ''} ${className}`.trim()
   return serviceName || end
-    ? <section ref={ref} aria-label="Service information" className={rootClass} data-module="govuk-service-navigation">{inner}</section>
-    : <div ref={ref as Ref<HTMLDivElement>} className={rootClass} data-module="govuk-service-navigation">{inner}</div>
+    ? <section ref={ref} aria-label={serviceLabel} className={rootClass} style={{ ...styles?.root, ...style }} data-module="govuk-service-navigation">{inner}</section>
+    : <div ref={ref as Ref<HTMLDivElement>} className={rootClass} style={{ ...styles?.root, ...style }} data-module="govuk-service-navigation">{inner}</div>
 })
 
-export const LanguageNavigation = forwardRef<HTMLElement, { items: LinkItem[]; ariaLabel?: string }>(function LanguageNavigation({ items, ariaLabel = 'Choose language' }, ref) {
-  return <nav ref={ref} className="govuk-language-navigation" aria-label={ariaLabel}><ul className="govuk-language-navigation__list">{items.map((item, index) => <li className="govuk-language-navigation__list-item" key={item.href ?? index}><ClickTarget className="govuk-language-navigation__link" href={item.href} onClick={item.onClick} anchorProps={{ hrefLang: typeof item.label === 'string' ? item.label.toLowerCase() : undefined, 'aria-current': item.current ? 'page' : undefined }}>{item.label}</ClickTarget></li>)}</ul></nav>
+export const LanguageNavigation = forwardRef<HTMLElement, { items: (LinkItem & { lang?: string })[]; ariaLabel?: string; style?: CSSProperties }>(function LanguageNavigation({ items, ariaLabel = 'Choose language', style }, ref) {
+  return <nav ref={ref} className="govuk-language-navigation" style={style} aria-label={ariaLabel}><ul className="govuk-language-navigation__list">{items.map((item, index) => <li className="govuk-language-navigation__list-item" key={item.href ?? index}><ClickTarget className="govuk-language-navigation__link" href={item.href} onClick={item.onClick} anchorProps={{ hrefLang: item.lang, 'aria-current': item.current ? 'page' : undefined }}>{item.label}</ClickTarget></li>)}</ul></nav>
 })
 
 export interface PaginationLink extends IClickBehaviour { label?: ReactNode; text?: ReactNode }
@@ -122,6 +126,7 @@ export interface PaginationProps {
   previous?: PaginationLink
   next?: PaginationLink
   className?: string
+  style?: CSSProperties
   label?: string
 }
 function PaginationArrow({ direction }: { direction: 'prev' | 'next' }) {
@@ -131,30 +136,31 @@ function PaginationBlockLink({ direction, link }: { direction: 'prev' | 'next'; 
   const title = link.text ?? (direction === 'prev' ? 'Previous' : 'Next')
   return <div className={`govuk-pagination__${direction}`}><ClickTarget className="govuk-link govuk-pagination__link" href={link.href} onClick={link.onClick} anchorProps={{ rel: direction }}>{direction === 'prev' && <PaginationArrow direction="prev" />}<span className={`govuk-pagination__link-title ${link.label ? '' : 'govuk-pagination__link-title--decorated'}`.trim()}>{title}</span>{link.label && <><span className="govuk-visually-hidden">:</span><span className="govuk-pagination__link-label">{link.label}</span></>}{direction === 'next' && <PaginationArrow direction="next" />}</ClickTarget></div>
 }
-export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagination({ current, total, onChange, getHref = (page) => `#page-${page}`, previous, next, className = '', label = 'Pagination' }, ref) {
+export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagination({ current, total, onChange, getHref = (page) => `#page-${page}`, previous, next, className = '', label = 'Pagination', style }, ref) {
   const block = current === undefined || total === undefined
-  if (block) return <nav ref={ref} className={`govuk-pagination govuk-pagination--block ${className}`.trim()} aria-label={label}>{previous && <PaginationBlockLink direction="prev" link={previous} />}{next && <PaginationBlockLink direction="next" link={next} />}</nav>
+  if (block) return <nav ref={ref} className={`govuk-pagination govuk-pagination--block ${className}`.trim()} style={style} aria-label={label}>{previous && <PaginationBlockLink direction="prev" link={previous} />}{next && <PaginationBlockLink direction="next" link={next} />}</nav>
   const pages = Array.from({ length: total }, (_, index) => index + 1)
   const handlePage = (page: number) => onChange ? (event: MouseEvent<HTMLAnchorElement>) => { event.preventDefault(); onChange(page) } : undefined
-  return <nav ref={ref} className={`govuk-pagination ${className}`.trim()} aria-label={label}>
+  return <nav ref={ref} className={`govuk-pagination ${className}`.trim()} style={style} aria-label={label}>
     {current > 1 && <div className="govuk-pagination__prev"><a className="govuk-link govuk-pagination__link" href={getHref(current - 1)} rel="prev" onClick={handlePage(current - 1)}><PaginationArrow direction="prev" /><span className="govuk-pagination__link-title">Previous<span className="govuk-visually-hidden"> page</span></span></a></div>}
     <ul className="govuk-pagination__list">{pages.map((page) => <li key={page} className={`govuk-pagination__item ${page === current ? 'govuk-pagination__item--current' : ''}`}><a className="govuk-link govuk-pagination__link" href={getHref(page)} aria-label={`Page ${page}`} aria-current={page === current ? 'page' : undefined} onClick={handlePage(page)}>{page}</a></li>)}</ul>
     {current < total && <div className="govuk-pagination__next"><a className="govuk-link govuk-pagination__link" href={getHref(current + 1)} rel="next" onClick={handlePage(current + 1)}><span className="govuk-pagination__link-title">Next<span className="govuk-visually-hidden"> page</span></span><PaginationArrow direction="next" /></a></div>}
   </nav>
 })
 
-export interface FooterProps {
+export interface FooterProps extends SemanticStyling<'root' | 'container'> {
   meta?: LinkItem[]
   navigation?: Array<{ title: ReactNode; items: LinkItem[] }>
   description?: ReactNode
   copyright?: ReactNode
   className?: string
+  style?: CSSProperties
   containerClassName?: string
 }
 
-export const Footer = forwardRef<HTMLElement, FooterProps>(function Footer({ meta = [], navigation = [], description, copyright, className = '', containerClassName = '' }, ref) {
-  return <footer ref={ref} className={`govuk-footer ${className}`.trim()}>
-    <div className={`govuk-width-container ${containerClassName}`.trim()}>
+export const Footer = forwardRef<HTMLElement, FooterProps>(function Footer({ meta = [], navigation = [], description, copyright, className = '', classNames, style, styles, containerClassName = '' }, ref) {
+  return <footer ref={ref} className={`govuk-footer ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
+    <div className={`govuk-width-container ${classNames?.container ?? ''} ${containerClassName}`.trim()} style={styles?.container}>
       {navigation.length > 0 && <>
         <div className="govuk-footer__navigation">{navigation.map((section, index) => <div className="govuk-footer__section govuk-grid-column-full" key={index}>
           <h2 className="govuk-footer__heading govuk-heading-m">{section.title}</h2>

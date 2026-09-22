@@ -10,7 +10,12 @@ const slugs = [
   'radios', 'select', 'service-navigation', 'skip-link', 'summary-list', 'table',
   'tabs', 'tag', 'task-list', 'text-input', 'textarea', 'warning-text',
 ]
-const extraSlugs = ['fancy-tabs', 'note', 'sidebar', 'tag-box']
+const extraSlugs = ['modal', 'empty', 'loading', 'menu', 'dropdown', 'fancy-table', 'fancy-tabs', 'note', 'sidebar', 'tag-box']
+const displayNames = {
+  footer: 'GOV.UK footer', header: 'GOV.UK header',
+  'fancy-tabs': 'FancyTabs', 'fancy-table': 'FancyTable', 'tag-box': 'TagBox',
+}
+const displayName = (slug) => displayNames[slug] ?? `${slug[0].toUpperCase()}${slug.slice(1).replaceAll('-', ' ')}`
 
 const outputRoot = join(process.cwd(), 'dist')
 const source = await readFile(join(outputRoot, 'index.html'), 'utf8')
@@ -26,19 +31,30 @@ for (const file of await readdir(assetsRoot)) {
   await writeFile(path, css.replace(/url\((['"]?)\/assets\//g, 'url($1./'))
 }
 
-async function createEntry(path, title) {
+async function createEntry(path, title, language = 'en') {
   const directory = join(outputRoot, ...path.split('/').filter(Boolean))
   await mkdir(directory, { recursive: true })
-  const html = source.replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
+  const html = source
+    .replace(/<html lang="en">/, `<html lang="${language === 'zh' ? 'zh-CN' : 'en'}">`)
+    .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
+    .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${language === 'zh' ? '基于 GOV.UK Frontend 6.5.1 的无障碍 React 组件。' : 'Accessible React components based on GOV.UK Frontend 6.5.1.'}"`)
   await writeFile(join(directory, 'index.html'), html)
 }
 
-await createEntry('components', 'Components – KVZD GOV.UK React')
-await createEntry('quick-review', 'Quick Review – KVZD GOV.UK React')
-await Promise.all(slugs.map((slug) => createEntry(`components/${slug}`, `${slug.replaceAll('-', ' ')} – KVZD GOV.UK React`)))
+await createEntry('components', 'Components – KevinZonda Design System')
+await createEntry('quick-review', 'Quick Review – KevinZonda Design System')
+await createEntry('license', 'License – KevinZonda Design System')
+await Promise.all(slugs.map((slug) => createEntry(`components/${slug}`, `${displayName(slug)} – KevinZonda Design System`)))
 
-await createEntry('extra-components', 'Extra Components – KVZD GOV.UK React')
-await Promise.all(extraSlugs.map((slug) => createEntry(`extra-components/${slug}`, `${slug.replaceAll('-', ' ')} – KVZD GOV.UK React`)))
-await writeFile(join(outputRoot, '404.html'), source.replace(/<title>.*?<\/title>/, '<title>Page not found – KVZD GOV.UK React</title>'))
+await createEntry('extra-components', 'Extra Components – KevinZonda Design System')
+await Promise.all(extraSlugs.map((slug) => createEntry(`extra-components/${slug}`, `${displayName(slug)} – KevinZonda Design System`)))
+await createEntry('zh', '快速总览｜KevinZonda 设计系统', 'zh')
+await createEntry('zh/components', '组件｜KevinZonda 设计系统', 'zh')
+await createEntry('zh/quick-review', '快速总览｜KevinZonda 设计系统', 'zh')
+await createEntry('zh/license', '授权｜KevinZonda 设计系统', 'zh')
+await Promise.all(slugs.map((slug) => createEntry(`zh/components/${slug}`, `${displayName(slug)}｜KevinZonda 设计系统`, 'zh')))
+await createEntry('zh/extra-components', '扩展组件｜KevinZonda 设计系统', 'zh')
+await Promise.all(extraSlugs.map((slug) => createEntry(`zh/extra-components/${slug}`, `${displayName(slug)}｜KevinZonda 设计系统`, 'zh')))
+await writeFile(join(outputRoot, '404.html'), source.replace(/<title>.*?<\/title>/, '<title>Page not found – KevinZonda Design System</title>'))
 
-console.log(`Generated ${slugs.length + extraSlugs.length + 3} documentation routes.`)
+console.log(`Generated ${(slugs.length + extraSlugs.length + 4) * 2 + 1} documentation routes.`)

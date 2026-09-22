@@ -1,6 +1,12 @@
 import './style.css'
 
 export * from './FancyTabs'
+export * from './Modal'
+export * from './Empty'
+export * from './Loading'
+export * from './Menu'
+export * from './Dropdown'
+export * from './FancyTable'
 export * from './Note'
 export * from './Sidebar'
 export * from './TagBox'

@@ -1,9 +1,9 @@
 import { forwardRef, useId, useRef, useState } from 'react'
-import type { TabsProps } from '@kvzd-design/gov-uk'
+import type { SemanticStyling, TabsProps } from '@kvzd-design/gov-uk'
 
-export type FancyTabsProps = TabsProps
+export type FancyTabsProps = Omit<TabsProps, 'styles' | 'classNames'> & SemanticStyling<'root' | 'list' | 'tab' | 'panel'>
 
-export const FancyTabs = forwardRef<HTMLDivElement, FancyTabsProps>(function FancyTabs({ items, activeKey, defaultActiveKey, onChange }, ref) {
+export const FancyTabs = forwardRef<HTMLDivElement, FancyTabsProps>(function FancyTabs({ items, activeKey, defaultActiveKey, onChange, style, styles, classNames }, ref) {
   const [inner, setInner] = useState(defaultActiveKey ?? items[0]?.key)
   const current = activeKey ?? inner
   const id = useId().replaceAll(':', '')
@@ -19,14 +19,15 @@ export const FancyTabs = forwardRef<HTMLDivElement, FancyTabsProps>(function Fan
     tabRefs.current[key]?.focus()
   }
 
-  return <div ref={ref} className="kvzd-fancy-tabs">
-    <div className="kvzd-fancy-tabs__list" role="tablist">
+  return <div ref={ref} className={`kvzd-fancy-tabs ${classNames?.root ?? ''}`.trim()} style={{ ...styles?.root, ...style }}>
+    <div className={`kvzd-fancy-tabs__list ${classNames?.list ?? ''}`.trim()} style={styles?.list} role="tablist">
       {items.map((item, index) => {
         const selected = item.key === current
         const tabId = `${id}-tab-${item.key}`
         const panelId = `${id}-panel-${item.key}`
         return <button
-          className="kvzd-fancy-tabs__tab"
+          className={`kvzd-fancy-tabs__tab ${classNames?.tab ?? ''}`.trim()}
+          style={styles?.tab}
           id={tabId}
           key={item.key}
           type="button"
@@ -50,7 +51,8 @@ export const FancyTabs = forwardRef<HTMLDivElement, FancyTabsProps>(function Fan
     {items.map((item) => {
       const selected = item.key === current
       return <div
-        className="kvzd-fancy-tabs__panel"
+        className={`kvzd-fancy-tabs__panel ${classNames?.panel ?? ''}`.trim()}
+        style={styles?.panel}
         id={`${id}-panel-${item.key}`}
         key={item.key}
         role="tabpanel"

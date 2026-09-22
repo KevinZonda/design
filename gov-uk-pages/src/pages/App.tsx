@@ -6,28 +6,33 @@ import { componentBySlug, componentDocs, type ComponentDoc } from './componentRe
 import { extraComponentBySlug, extraComponentDocs, type ExtraComponentDoc } from './extraComponentRegistry'
 import { DocsFooter, DocsHeader } from './DocsChrome'
 import { QuickReviewPage } from './QuickReviewPage'
+import { LicensePage } from './LicensePage'
+import { localizedPath, message, pageTitle, useLocale, type Locale } from './i18n'
+import { localizedComponent, localizedExtraComponent } from './zhDocs'
+import { chineseApiDescription } from './zhApi'
 import { sitePath } from './sitePath'
 import './DocsLayout.css'
 import './ComponentDocs.css'
 
-function pathFor(slug: string) {
-  return sitePath(`/components/${slug}/`)
+function pathFor(slug: string, locale: Locale) {
+  return sitePath(localizedPath(`/components/${slug}/`, locale))
 }
 
-function extraPathFor(slug: string) {
-  return sitePath(`/extra-components/${slug}/`)
+function extraPathFor(slug: string, locale: Locale) {
+  return sitePath(localizedPath(`/extra-components/${slug}/`, locale))
 }
 
 type DocsSection = 'components' | 'extra-components'
 
 function SideNavigation({ currentSlug, section }: { currentSlug?: string; section: DocsSection }) {
+  const locale = useLocale()
   const items = section === 'extra-components'
-    ? extraComponentDocs.map((component) => ({ key: component.slug, label: component.name, href: `/extra-components/${component.slug}/` }))
-    : componentDocs.map((component) => ({ key: component.slug, label: component.name, href: `/components/${component.slug}/` }))
+    ? extraComponentDocs.map((component) => ({ key: component.slug, label: component.name, href: localizedPath(`/extra-components/${component.slug}/`, locale) }))
+    : componentDocs.map((component) => ({ key: component.slug, label: component.name, href: localizedPath(`/components/${component.slug}/`, locale) }))
 
   return <Sidebar
     className="docs-sidebar"
-    heading={section === 'extra-components' ? 'Extra Components' : 'Components'}
+    heading={message(locale, section === 'extra-components' ? 'extraComponents' : 'components')}
     items={items}
     currentKey={currentSlug}
     renderLink={(item, { className, current }) => item.href !== undefined
@@ -37,92 +42,100 @@ function SideNavigation({ currentSlug, section }: { currentSlug?: string; sectio
 }
 
 function OverviewPage() {
-  useEffect(() => { document.title = 'Components – KVZD GOV.UK React' }, [])
+  const locale = useLocale()
+  useEffect(() => { document.title = pageTitle(message(locale, 'components'), locale) }, [locale])
   return <DocsLayout>
     <div className="component-overview">
-      <span className="govuk-caption-xl">GOV.UK React</span>
-      <h1 className="govuk-heading-xl">Components</h1>
-      <p className="govuk-body-l">Reusable React components for building consistent, accessible public services.</p>
-      <p className="govuk-body">Each page includes a working example, a compact React API and implementation guidance aligned with GOV.UK Frontend 6.5.1.</p>
-      <div className="overview-actions"><Button href={sitePath('/quick-review/')}>Open Quick Review</Button><span>Explore multiple components together in one interactive page.</span></div>
-      <ul className="official-component-list">{componentDocs.map((component) => <li key={component.slug}><Link className="govuk-link" to={`/components/${component.slug}/`}>{component.name}</Link>{component.status === 'trial' && <Tag color="orange">Trial</Tag>}<p>{component.summary}</p></li>)}</ul>
+      <span className="govuk-caption-xl">{message(locale, 'brand')}</span>
+      <h1 className="govuk-heading-xl">{message(locale, 'components')}</h1>
+      <p className="govuk-body-l">{message(locale, 'componentsIntro')}</p>
+      <p className="govuk-body">{message(locale, 'componentsDetail')}</p>
+      <div className="overview-actions"><Button href={sitePath(localizedPath('/quick-review/', locale))}>{message(locale, 'openQuickReview')}</Button><span>{message(locale, 'quickReviewHint')}</span></div>
+      <ul className="official-component-list">{componentDocs.map((component) => <li key={component.slug}><Link className="govuk-link" to={localizedPath(`/components/${component.slug}/`, locale)}>{component.name}</Link>{component.status === 'trial' && <Tag color="orange">{message(locale, 'trial')}</Tag>}<p>{localizedComponent(component, locale).summary}</p></li>)}</ul>
     </div>
   </DocsLayout>
 }
 
 function ExampleBlock({ component, guidanceUrl }: { component: ComponentDoc | ExtraComponentDoc; guidanceUrl?: string }) {
+  const locale = useLocale()
   return <section className="component-example" aria-labelledby="example-title">
-    <div className="example-heading"><h2 className="govuk-heading-l" id="example-title">Example</h2>{guidanceUrl && <a className="govuk-link" href={guidanceUrl} target="_blank" rel="noreferrer">View GOV.UK guidance</a>}</div>
+    <div className="example-heading"><h2 className="govuk-heading-l" id="example-title">{message(locale, 'example')}</h2>{guidanceUrl && <a className="govuk-link" href={guidanceUrl} target="_blank" rel="noreferrer">{message(locale, 'guidance')}</a>}</div>
     <FancyTabs items={[
-      { key: 'example', label: 'Preview', children: <div className={`example-canvas ${component.wide ? 'example-canvas--wide' : ''}`}>{component.example()}</div> },
+      { key: 'example', label: message(locale, 'preview'), children: <div className={`example-canvas ${component.wide ? 'example-canvas--wide' : ''}`}>{component.example()}</div> },
       { key: 'react', label: 'React', children: <pre className="code-block"><code>{component.code}</code></pre> },
     ]} />
   </section>
 }
 
 function ApiTable({ component }: { component: ComponentDoc | ExtraComponentDoc }) {
+  const locale = useLocale()
   return <section className="component-api" aria-labelledby="api-title">
     <h2 className="govuk-heading-l" id="api-title">React API</h2>
-    <p className="govuk-body">Props accepted by this React component.</p>
+    <p className="govuk-body">{message(locale, 'apiIntro')}</p>
     <div className="api-table-scroll"><Table rowKey="name" columns={[
-      { title: 'Property', dataIndex: 'name', rowHeader: true, render: (value) => <code>{String(value)}</code> },
-      { title: 'Type', dataIndex: 'type', render: (value) => <code>{String(value)}</code> },
-      { title: 'Default', dataIndex: 'defaultValue', render: (value) => value ? <code>{String(value)}</code> : '—' },
-      { title: 'Description', dataIndex: 'description' },
-    ]} dataSource={component.api} /></div>
+      { title: message(locale, 'property'), dataIndex: 'name', rowHeader: true, render: (value) => <code>{String(value)}</code> },
+      { title: message(locale, 'type'), dataIndex: 'type', render: (value) => <code>{String(value)}</code> },
+      { title: message(locale, 'default'), dataIndex: 'defaultValue', render: (value) => value ? <code>{String(value)}</code> : '—' },
+      { title: message(locale, 'description'), dataIndex: 'description' },
+    ]} dataSource={locale === 'zh' ? component.api.map((prop) => ({ ...prop, description: chineseApiDescription(prop.description) })) : component.api} /></div>
   </section>
 }
 
 function ComponentPage({ component }: { component: ComponentDoc }) {
+  const locale = useLocale()
+  const doc = localizedComponent(component, locale)
   const index = componentDocs.findIndex((item) => item.slug === component.slug)
   const previous = componentDocs[index - 1]
   const next = componentDocs[index + 1]
-  useEffect(() => { document.title = `${component.name} – KVZD GOV.UK React` }, [component])
+  useEffect(() => { document.title = pageTitle(component.name, locale) }, [component, locale])
   return <DocsLayout currentSlug={component.slug}>
     <article className="component-doc">
-      <Breadcrumbs className="doc-breadcrumbs" items={[{ label: 'Components', href: sitePath('/components/') }, { label: component.name, current: true }]} />
-      <div className="component-title-row"><h1 className="govuk-heading-xl">{component.name}</h1>{component.status === 'trial' && <Tag color="orange">Trial</Tag>}</div>
-      <p className="govuk-body-l component-summary">{component.summary}</p>
+      <Breadcrumbs className="doc-breadcrumbs" items={[{ label: message(locale, 'components'), href: sitePath(localizedPath('/components/', locale)) }, { label: component.name, current: true }]} />
+      <div className="component-title-row"><h1 className="govuk-heading-xl">{component.name}</h1>{component.status === 'trial' && <Tag color="orange">{message(locale, 'trial')}</Tag>}</div>
+      <p className="govuk-body-l component-summary">{doc.summary}</p>
       <ExampleBlock component={component} guidanceUrl={component.guidanceUrl === null ? undefined : component.guidanceUrl ?? `https://design-system.service.gov.uk/components/${component.slug}/`} />
       <ApiTable component={component} />
-      <section className="guidance-section"><h2 className="govuk-heading-l">When to use this component</h2><p className="govuk-body">{component.whenToUse}</p></section>
-      <section className="guidance-section"><h2 className="govuk-heading-l">How it works</h2><p className="govuk-body">{component.howItWorks}</p><Note className="implementation-note" title="React implementation"><p>State changes stay inside React. The rendered markup uses GOV.UK classes and semantic HTML, without initialising DOM-mutating GOV.UK JavaScript.</p></Note></section>
-      <Pagination className="component-pagination" label="Component pages" previous={previous ? { href: pathFor(previous.slug), text: 'Previous component', label: previous.name } : undefined} next={next ? { href: pathFor(next.slug), text: 'Next component', label: next.name } : undefined} />
+      <section className="guidance-section"><h2 className="govuk-heading-l">{message(locale, 'whenToUse')}</h2><p className="govuk-body">{doc.whenToUse}</p></section>
+      <section className="guidance-section"><h2 className="govuk-heading-l">{message(locale, 'howItWorks')}</h2><p className="govuk-body">{doc.howItWorks}</p><Note className="implementation-note" title={message(locale, 'implementation')}><p>{message(locale, 'implementationDetail')}</p></Note></section>
+      <Pagination className="component-pagination" label={message(locale, 'componentPages')} previous={previous ? { href: pathFor(previous.slug, locale), text: message(locale, 'previousComponent'), label: previous.name } : undefined} next={next ? { href: pathFor(next.slug, locale), text: message(locale, 'nextComponent'), label: next.name } : undefined} />
     </article>
   </DocsLayout>
 }
 
 function ExtraOverviewPage() {
+  const locale = useLocale()
   const { hash } = useLocation()
-  useEffect(() => { document.title = 'Extra Components – KVZD GOV.UK React' }, [])
+  useEffect(() => { document.title = pageTitle(message(locale, 'extraComponents'), locale) }, [locale])
   const legacySlug = hash.slice(1).replace(/-(api|title)$/, '')
-  if (extraComponentBySlug.has(legacySlug)) return <Navigate to={`/extra-components/${legacySlug}/${hash.endsWith('-api') ? '#api-title' : ''}`} replace />
+  if (extraComponentBySlug.has(legacySlug)) return <Navigate to={localizedPath(`/extra-components/${legacySlug}/${hash.endsWith('-api') ? '#api-title' : ''}`, locale)} replace />
   return <DocsLayout currentSection="extra-components">
     <div className="component-overview">
-      <span className="govuk-caption-xl">KVZD Design</span>
-      <h1 className="govuk-heading-xl">Extra Components</h1>
-      <p className="govuk-body-l">Optional components for documentation, developer tools and other interfaces outside the official GOV.UK component set.</p>
-      <p className="govuk-body">Each component has a live example, React code and its own API reference.</p>
-      <ul className="official-component-list">{extraComponentDocs.map((component) => <li key={component.slug}><Link className="govuk-link" to={`/extra-components/${component.slug}/`}>{component.name}</Link><p>{component.summary}</p></li>)}</ul>
+      <span className="govuk-caption-xl">{message(locale, 'brand')}</span>
+      <h1 className="govuk-heading-xl">{message(locale, 'extraComponents')}</h1>
+      <p className="govuk-body-l">{message(locale, 'extraIntro')}</p>
+      <p className="govuk-body">{message(locale, 'extraDetail')}</p>
+      <ul className="official-component-list">{extraComponentDocs.map((component) => <li key={component.slug}><Link className="govuk-link" to={localizedPath(`/extra-components/${component.slug}/`, locale)}>{component.name}</Link><p>{localizedExtraComponent(component, locale).summary}</p></li>)}</ul>
     </div>
   </DocsLayout>
 }
 
 function ExtraComponentPage({ component }: { component: ExtraComponentDoc }) {
+  const locale = useLocale()
+  const doc = localizedExtraComponent(component, locale)
   const index = extraComponentDocs.findIndex((item) => item.slug === component.slug)
   const previous = extraComponentDocs[index - 1]
   const next = extraComponentDocs[index + 1]
-  useEffect(() => { document.title = `${component.name} – KVZD GOV.UK React` }, [component])
+  useEffect(() => { document.title = pageTitle(component.name, locale) }, [component, locale])
   return <DocsLayout currentSection="extra-components" currentSlug={component.slug}>
     <article className="component-doc">
-      <Breadcrumbs className="doc-breadcrumbs" items={[{ label: 'Extra Components', href: sitePath('/extra-components/') }, { label: component.name, current: true }]} />
+      <Breadcrumbs className="doc-breadcrumbs" items={[{ label: message(locale, 'extraComponents'), href: sitePath(localizedPath('/extra-components/', locale)) }, { label: component.name, current: true }]} />
       <h1 className="govuk-heading-xl">{component.name}</h1>
-      <p className="govuk-body-l component-summary">{component.summary}</p>
+      <p className="govuk-body-l component-summary">{doc.summary}</p>
       <ExampleBlock component={component} />
       <ApiTable component={component} />
-      <section className="guidance-section" aria-labelledby="guidance-title"><h2 className="govuk-heading-l" id="guidance-title">When to use this component</h2><p className="govuk-body">{component.whenToUse}</p></section>
-      <section className="guidance-section"><h2 className="govuk-heading-l">How it works</h2><p className="govuk-body">{component.howItWorks}</p></section>
-      <Pagination className="component-pagination" label="Extra component pages" previous={previous ? { href: extraPathFor(previous.slug), text: 'Previous component', label: previous.name } : undefined} next={next ? { href: extraPathFor(next.slug), text: 'Next component', label: next.name } : undefined} />
+      <section className="guidance-section" aria-labelledby="guidance-title"><h2 className="govuk-heading-l" id="guidance-title">{message(locale, 'whenToUse')}</h2><p className="govuk-body">{doc.whenToUse}</p></section>
+      <section className="guidance-section"><h2 className="govuk-heading-l">{message(locale, 'howItWorks')}</h2><p className="govuk-body">{doc.howItWorks}</p></section>
+      <Pagination className="component-pagination" label={message(locale, 'extraComponentPages')} previous={previous ? { href: extraPathFor(previous.slug, locale), text: message(locale, 'previousComponent'), label: previous.name } : undefined} next={next ? { href: extraPathFor(next.slug, locale), text: message(locale, 'nextComponent'), label: next.name } : undefined} />
     </article>
   </DocsLayout>
 }
@@ -132,8 +145,10 @@ function DocsLayout({ children, currentSlug, currentSection = 'components' }: { 
 }
 
 function NotFoundPage({ section = 'components' }: { section?: DocsSection }) {
-  useEffect(() => { document.title = 'Page not found – KVZD GOV.UK React' }, [])
-  return <DocsLayout currentSection={section}><h1 className="govuk-heading-xl">Page not found</h1><p className="govuk-body">The component page you requested does not exist.</p><Link className="govuk-link" to={section === 'extra-components' ? '/extra-components/' : '/components/'}>Return to {section === 'extra-components' ? 'Extra Components' : 'Components'}</Link></DocsLayout>
+  const locale = useLocale()
+  useEffect(() => { document.title = pageTitle(message(locale, 'notFound'), locale) }, [locale])
+  const sectionLabel = message(locale, section === 'extra-components' ? 'extraComponents' : 'components')
+  return <DocsLayout currentSection={section}><h1 className="govuk-heading-xl">{message(locale, 'notFound')}</h1><p className="govuk-body">{message(locale, 'notFoundDetail')}</p><Link className="govuk-link" to={localizedPath(section === 'extra-components' ? '/extra-components/' : '/components/', locale)}>{message(locale, 'returnTo')}{locale === 'zh' ? '' : ' '}{sectionLabel}</Link></DocsLayout>
 }
 
 function ComponentRoute() {
@@ -151,6 +166,7 @@ function ExtraComponentRoute() {
 function RouteScroll() {
   const { pathname, hash } = useLocation()
   useEffect(() => {
+    document.documentElement.lang = pathname === '/zh' || pathname.startsWith('/zh/') ? 'zh-CN' : 'en'
     if (!hash) {
       window.scrollTo(0, 0)
       return
@@ -162,15 +178,19 @@ function RouteScroll() {
 }
 
 export default function App() {
+  const prefixes = ['', '/zh'] as const
   return <>
     <RouteScroll />
     <Routes>
-      <Route path="/" element={<OverviewPage />} />
-      <Route path="/components" element={<OverviewPage />} />
-      <Route path="/components/:slug" element={<ComponentRoute />} />
-      <Route path="/extra-components" element={<ExtraOverviewPage />} />
-      <Route path="/extra-components/:slug" element={<ExtraComponentRoute />} />
-      <Route path="/quick-review" element={<QuickReviewPage />} />
+      {prefixes.flatMap((prefix) => [
+        <Route key={`${prefix}-home`} path={prefix || '/'} element={<QuickReviewPage />} />,
+        <Route key={`${prefix}-components`} path={`${prefix}/components`} element={<OverviewPage />} />,
+        <Route key={`${prefix}-component`} path={`${prefix}/components/:slug`} element={<ComponentRoute />} />,
+        <Route key={`${prefix}-extras`} path={`${prefix}/extra-components`} element={<ExtraOverviewPage />} />,
+        <Route key={`${prefix}-extra`} path={`${prefix}/extra-components/:slug`} element={<ExtraComponentRoute />} />,
+        <Route key={`${prefix}-review`} path={`${prefix}/quick-review`} element={<QuickReviewPage />} />,
+        <Route key={`${prefix}-license`} path={`${prefix}/license`} element={<LicensePage />} />,
+      ])}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   </>

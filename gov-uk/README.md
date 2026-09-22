@@ -52,6 +52,37 @@ import { Button, ButtonGroup } from '@kvzd-design/gov-uk'
 - Controlled and uncontrolled modes are supported where they are useful.
 - GOV.UK Frontend is pinned to exactly `6.5.1`.
 
+### Styling
+
+Every component accepts a React `style` object on its primary element. For
+form controls such as `Input`, `SearchInput` and `Textarea`, that element is the
+native input or textarea; for grouped choices it is the fieldset. Existing
+`className` props retain their current targets.
+
+Composite components including `Input`, `SearchInput`, `Panel`, `Tabs`,
+`Header`, `ServiceNavigation` and `Footer` also expose Ant Design-style
+`styles` and `classNames` objects. Their typed keys name the part being customised.
+`style` and `className` take precedence over the matching primary-element slot.
+
+```tsx
+<Input
+  label="Reference number"
+  style={{ width: 240 }}
+  styles={{ root: { marginBottom: 20 }, label: { fontWeight: 700 } }}
+  classNames={{ input: 'reference-input' }}
+/>
+
+<Panel
+  title="Application complete"
+  styles={{ body: { maxWidth: 480 } }}
+>
+  Your reference number is HDJ2123F.
+</Panel>
+```
+
+Use CSS classes for responsive and interaction states; inline styles are best
+for values that depend on runtime data.
+
 ### Click behaviour
 
 Link items use the exported `IClickBehaviour` interface. Both `href` and

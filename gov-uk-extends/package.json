@@ -1,7 +1,7 @@
 {
   "name": "@kvzd-design/gov-uk-extends",
   "version": "0.1.0",
-  "description": "Optional React components that extend KVZD GOV.UK.",
+  "description": "Optional React components that extend KevinZonda-implemented unofficial GOV.UK components.",
   "type": "module",
   "files": [
     "dist-lib"

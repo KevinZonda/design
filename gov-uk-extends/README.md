@@ -24,6 +24,10 @@ import { FancyTabs } from '@kvzd-design/gov-uk-extends'
 
 `FancyTabs` has the same props as `Tabs` from `@kvzd-design/gov-uk`.
 
+Extension components accept `style` on their outer element. Composite
+components such as `FancyTabs`, `Note`, `Sidebar`, `Dropdown` and `Modal` also
+accept typed `styles` and `classNames` objects for their named inner parts.
+
 `Note` highlights supporting content with an optional title. It accepts normal `div` attributes and forwards its ref to the root element.
 
 ```tsx

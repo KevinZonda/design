@@ -1,8 +1,9 @@
 import { forwardRef, useId } from 'react'
 import type { ReactNode } from 'react'
 import type { InputProps } from './Input'
+import type { SemanticStyling } from './styling'
 
-export interface SearchInputProps extends Omit<InputProps, 'type' | 'width'> {
+export interface SearchInputProps extends Omit<InputProps, 'type' | 'width' | 'styles' | 'classNames'>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'control' | 'input' | 'icon'> {
   /** Decorative icon shown inside the field. Pass null to hide it. */
   icon?: ReactNode
   iconPosition?: 'left' | 'right'
@@ -20,6 +21,7 @@ const defaultSearchIcon = (
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(function SearchInput({
   'aria-describedby': ariaDescribedBy,
   className = '',
+  classNames,
   error,
   hint,
   icon = defaultSearchIcon,
@@ -28,6 +30,8 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
   label,
   labelSize,
   status,
+  style,
+  styles,
   visuallyHiddenLabel = false,
   ...props
 }, ref) {
@@ -37,11 +41,11 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
   const describedBy = [ariaDescribedBy, hint && `${inputId}-hint`, error && `${inputId}-error`].filter(Boolean).join(' ')
 
   return (
-    <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''}`.trim()}>
-      <label className={`govuk-label ${visuallyHiddenLabel ? 'govuk-visually-hidden' : labelSize ? `govuk-label--${labelSize}` : ''}`.trim()} htmlFor={inputId}>{label}</label>
-      {hint && <div className="govuk-hint" id={`${inputId}-hint`}>{hint}</div>}
-      {error && <p className="govuk-error-message" id={`${inputId}-error`}><span className="govuk-visually-hidden">Error:</span> {error}</p>}
-      <div className={`kvzd-search-input__control kvzd-search-input__control--${iconPosition}`}>
+    <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
+      <label className={`govuk-label ${visuallyHiddenLabel ? 'govuk-visually-hidden' : labelSize ? `govuk-label--${labelSize}` : ''} ${classNames?.label ?? ''}`.trim()} style={styles?.label} htmlFor={inputId}>{label}</label>
+      {hint && <div className={`govuk-hint ${classNames?.hint ?? ''}`.trim()} style={styles?.hint} id={`${inputId}-hint`}>{hint}</div>}
+      {error && <p className={`govuk-error-message ${classNames?.error ?? ''}`.trim()} style={styles?.error} id={`${inputId}-error`}><span className="govuk-visually-hidden">Error:</span> {error}</p>}
+      <div className={`kvzd-search-input__control kvzd-search-input__control--${iconPosition} ${classNames?.control ?? ''}`.trim()} style={styles?.control}>
         <input
           {...props}
           ref={ref}
@@ -49,9 +53,10 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
           type="search"
           aria-describedby={describedBy || undefined}
           aria-invalid={hasError || undefined}
-          className={`govuk-input ${hasError ? 'govuk-input--error' : ''} ${icon ? 'kvzd-search-input__input' : ''} ${className}`.trim()}
+          className={`govuk-input ${hasError ? 'govuk-input--error' : ''} ${icon ? 'kvzd-search-input__input' : ''} ${classNames?.input ?? ''} ${className}`.trim()}
+          style={{ ...styles?.input, ...style }}
         />
-        {icon && <span className="kvzd-search-input__icon" aria-hidden="true">{icon}</span>}
+        {icon && <span className={`kvzd-search-input__icon ${classNames?.icon ?? ''}`.trim()} style={styles?.icon} aria-hidden="true">{icon}</span>}
       </div>
     </div>
   )

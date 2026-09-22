@@ -294,9 +294,9 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Let users switch between languages offered by a service.',
     whenToUse: 'Use when the same service journey is available in two or more languages.',
     howItWorks: 'The current language is identified with aria-current and the navigation has its own accessible label.',
-    code: `<LanguageNavigation items={[{ label: 'English', href: '/en', current: true }, { label: 'Cymraeg', href: '/cy' }]} />`,
-    example: () => <LanguageNavigation items={[{ label: 'English', href: '#english', current: true }, { label: 'Cymraeg', href: '#cymraeg' }]} />,
-    api: [items('Languages, links and current state.'), { name: 'ariaLabel', type: 'string', defaultValue: 'Choose language', description: 'Accessible navigation label.' }],
+    code: `<LanguageNavigation items={[{ label: 'English', lang: 'en', href: '/en', current: true }, { label: 'Cymraeg', lang: 'cy', href: '/cy' }]} />`,
+    example: () => <LanguageNavigation items={[{ label: 'English', lang: 'en', href: '#english', current: true }, { label: 'Cymraeg', lang: 'cy', href: '#cymraeg' }]} />,
+    api: [items('Languages, links, language tags and current state.'), { name: 'ariaLabel', type: 'string', defaultValue: 'Choose language', description: 'Accessible navigation label.' }],
   },
   {
     slug: 'notification-banner', name: 'Notification banner',
