@@ -44,7 +44,7 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
       className="docs-header"
       containerClassName="site-width docs-header__container"
       homepageUrl={sitePath('/components/')}
-      logo={<span className="docs-brand-mark"><span className="docs-brand-mark__symbol" aria-hidden="true">◆</span><span>KVZD Design</span></span>}
+      logo={<span className="docs-brand-mark">KVZD Design</span>}
       productName="GOV.UK React"
     >
       <DocsSearch />
