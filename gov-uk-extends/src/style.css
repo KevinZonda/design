@@ -267,11 +267,14 @@
 .kvzd-menu__item:disabled { color: var(--govuk-secondary-text-colour); cursor: not-allowed; }
 
 .kvzd-fancy-table__scroll { overflow-x: auto; }
-.kvzd-fancy-table__table { width: 100%; margin-bottom: 0; }
+.kvzd-fancy-table__table { width: 100%; margin-bottom: 0; table-layout: fixed; }
+.kvzd-fancy-table__table th,
+.kvzd-fancy-table__table td { overflow-wrap: anywhere; }
 .kvzd-fancy-table__select { width: 40px; text-align: center; }
 .kvzd-fancy-table__select input { width: 20px; height: 20px; accent-color: var(--govuk-brand-colour); cursor: pointer; }
 .kvzd-fancy-table__select input:focus-visible { outline: 3px solid var(--govuk-focus-colour); box-shadow: 0 0 0 5px var(--govuk-focus-text-colour); }
 .kvzd-fancy-table__sort { padding: 4px 0; border: 0; color: var(--govuk-link-colour); background: transparent; font: inherit; font-weight: 700; text-align: inherit; cursor: pointer; }
+.kvzd-fancy-table__sort span { display: inline-block; width: 1.25em; text-align: center; }
 .kvzd-fancy-table__sort:hover { color: var(--govuk-link-hover-colour); }
 .kvzd-fancy-table__sort:focus { color: var(--govuk-focus-text-colour); background: var(--govuk-focus-colour); outline: 3px solid transparent; box-shadow: 0 -2px var(--govuk-focus-colour), 0 4px var(--govuk-focus-text-colour); }
 .kvzd-fancy-table__filter { display: block; width: 100%; max-width: 160px; margin-top: 8px; font-weight: 400; }
