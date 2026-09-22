@@ -29,6 +29,21 @@ export function Example() {
 }
 ```
 
+## Buttons
+
+Start buttons, disabled buttons and button groups use the GOV.UK Frontend styles:
+
+```tsx
+import { Button, ButtonGroup } from '@kvzd-design/gov-uk'
+
+<Button href="/start" isStartButton>Start now</Button>
+<ButtonGroup>
+  <Button htmlType="submit" preventDoubleClick>Save and continue</Button>
+  <Button type="secondary">Save as draft</Button>
+</ButtonGroup>
+<Button disabled>Disabled button</Button>
+```
+
 ## API principles
 
 - Ant Design-style props such as `items`, `options`, `value`, `onChange`, `status` and `type`.
@@ -84,7 +99,7 @@ Stateful components report changes through `onChange` (`Accordion`),
 
 ## Components
 
-Accordion, BackLink, Breadcrumbs, Button, CharacterCount, Checkboxes,
+Accordion, BackLink, Breadcrumbs, Button, ButtonGroup, CharacterCount, Checkboxes,
 CookieBanner, DateInput, Details, ErrorMessage, ErrorSummary, ExitThisPage,
 Feedback, Fieldset, FileUpload, Footer, FooterGovUk, Header, HeaderGovUk, Hint, Input,
 InsetText, Label, LanguageNavigation, NotificationBanner, Pagination, Panel,

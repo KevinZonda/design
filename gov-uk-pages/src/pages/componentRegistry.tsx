@@ -4,6 +4,7 @@ import {
   BackLink,
   Breadcrumbs,
   Button,
+  ButtonGroup,
   CharacterCount,
   Checkboxes,
   CookieBanner,
@@ -118,11 +119,19 @@ export const componentDocs: ComponentDoc[] = [
   {
     slug: 'button', name: 'Button',
     summary: 'Help users carry out an action such as saving information or starting a service.',
-    whenToUse: 'Use one clear primary action per page. Secondary and warning variants should reflect the action hierarchy, not decoration.',
-    howItWorks: 'Use sentence case and describe the action. Supply href for navigation or htmlType for a native form button.',
-    code: `<Button type="primary" htmlType="submit">Save and continue</Button>`,
-    example: () => <div className="govuk-button-group"><Button>Save and continue</Button><Button type="secondary">Save draft</Button><Button danger>Delete account</Button></div>,
-    api: [text('children', 'Button label.'), { name: 'type', type: `'primary' | 'secondary' | 'warning' | 'inverse'`, defaultValue: 'primary', description: 'Visual hierarchy.' }, { name: 'href', type: 'string', description: 'Renders a link styled as a button.' }, { name: 'htmlType', type: `'button' | 'submit' | 'reset'`, defaultValue: 'button', description: 'Native button type when href is not supplied.' }, { name: 'danger', type: 'boolean', defaultValue: 'false', description: 'Shortcut for the warning treatment.' }],
+    whenToUse: 'Use one clear primary action per page. Use a start button on a service start page, and group related actions together. Avoid disabled buttons unless user research supports them.',
+    howItWorks: 'Supply href for navigation or htmlType for a native form button. Start buttons include the GOV.UK arrow. ButtonGroup aligns buttons and links, and disabled form buttons receive both disabled and aria-disabled.',
+    code: `<Button href="/start" isStartButton>Start now</Button>
+
+<ButtonGroup>
+  <Button htmlType="submit">Save and continue</Button>
+  <Button type="secondary">Save as draft</Button>
+  <a className="govuk-link" href="/cancel">Cancel</a>
+</ButtonGroup>
+
+<Button disabled>Disabled button</Button>`,
+    example: () => <div className="button-examples"><Button href="#start" isStartButton>Start now</Button><ButtonGroup><Button htmlType="submit">Save and continue</Button><Button type="secondary">Save as draft</Button><a className="govuk-link" href="#cancel">Cancel</a></ButtonGroup><div className="button-examples__variants"><Button disabled>Disabled button</Button><Button danger>Delete account</Button><div className="button-examples__inverse"><Button type="inverse">Create an account</Button></div></div></div>,
+    api: [text('children', 'Button label.'), { name: 'type', type: `'primary' | 'secondary' | 'warning' | 'inverse'`, defaultValue: 'primary', description: 'Visual hierarchy.' }, { name: 'href', type: 'string', description: 'Renders a link styled as a button.' }, { name: 'htmlType', type: `'button' | 'submit' | 'reset'`, defaultValue: 'button', description: 'Native button type when href is not supplied.' }, { name: 'isStartButton', type: 'boolean', defaultValue: 'false', description: 'Use start button styling and the arrow icon.' }, { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disables a native button and adds aria-disabled. Not available for links.' }, { name: 'preventDoubleClick', type: 'boolean', defaultValue: 'false', description: 'Ignore another button click within one second. Not applied to links.' }, { name: 'danger', type: 'boolean', defaultValue: 'false', description: 'Shortcut for the warning treatment.' }],
   },
   {
     slug: 'character-count', name: 'Character count',

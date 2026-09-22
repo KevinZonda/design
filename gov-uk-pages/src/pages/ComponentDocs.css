@@ -30,6 +30,10 @@
 .component-pagination { margin-top: 65px; padding-top: 25px; border-top: 1px solid #b1b4b6; }
 .example-force-skip-link .govuk-skip-link { position: static; display: inline-block; width: auto; height: auto; margin: 0; clip: auto; clip-path: none; }
 .example-tag-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.button-examples__variants { display: flex; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
+.button-examples__variants > .govuk-button { margin-bottom: 0; }
+.button-examples__inverse { display: inline-block; padding: 20px; background: #1d70b8; }
+.button-examples__inverse .govuk-button { margin-bottom: 0; }
 .search-input-examples { max-width: 420px; }
 .search-input-examples .govuk-form-group:last-child { margin-bottom: 0; }
 .sidebar-example { max-width: 280px; margin: 16px 0 36px; }
