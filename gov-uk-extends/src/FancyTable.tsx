@@ -63,7 +63,7 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
       : filtered
   }, [activeFilters, activeSort, columns, dataSource])
 
-  const effectivePageSize = pageSize && pageSize > 0 ? Math.floor(pageSize) : undefined
+  const effectivePageSize = pageSize && Number.isFinite(pageSize) && pageSize >= 1 ? Math.floor(pageSize) : undefined
   const pageCount = effectivePageSize ? Math.max(1, Math.ceil(sortedData.length / effectivePageSize)) : 1
   const page = Math.min(Math.max(1, currentPage ?? innerPage), pageCount)
   const visibleData = effectivePageSize ? sortedData.slice((page - 1) * effectivePageSize, page * effectivePageSize) : sortedData

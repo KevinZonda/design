@@ -34,7 +34,12 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal({ 
     style={{ ...styles?.root, ...style }}
     aria-labelledby={titleId}
     onCancel={(event) => { event.preventDefault(); onClose() }}
-    onClick={(event) => { if (closeOnBackdrop && event.target === dialogRef.current) onClose() }}
+    onClick={(event) => {
+      const dialog = dialogRef.current
+      if (!closeOnBackdrop || event.target !== dialog) return
+      const bounds = dialog.getBoundingClientRect()
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) onClose()
+    }}
   >
     <div className={`kvzd-modal__header ${classNames?.header ?? ''}`.trim()} style={styles?.header}>
       <h2 className={`govuk-heading-m kvzd-modal__title ${classNames?.title ?? ''}`.trim()} style={styles?.title} id={titleId}>{title}</h2>
