@@ -400,7 +400,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'Each row is a semantic description list entry; action links include visually hidden context.',
     code: `<SummaryList items={[{ key: 'Name', value: 'Sarah Philips', actions: [{ label: 'Change', href: '#' }] }]} />`,
     example: () => <SummaryList items={[{ key: 'Name', value: 'Sarah Philips', actions: [{ label: 'Change', href: '#', visuallyHiddenText: 'name' }] }, { key: 'Date of birth', value: '5 January 1978', actions: [{ label: 'Change', href: '#', visuallyHiddenText: 'date of birth' }] }, { key: 'Address', value: <>72 Guild Street<br />London<br />SE23 6FH</>, actions: [{ label: 'Change', href: '#', visuallyHiddenText: 'address' }] }]} />,
-    api: [items('Key, value and optional contextual actions.'), { name: 'bordered', type: 'boolean', defaultValue: 'true', description: 'Show separators between rows.' }],
+    api: [items('Key, value and optional contextual actions.'), { name: 'bordered', type: 'boolean', defaultValue: 'true', description: 'Show separators between rows.' }, { name: 'styles', type: "SummaryListProps['styles']", description: 'Inline styles for root, row, key, value, actions and link.' }, { name: 'classNames', type: "SummaryListProps['classNames']", description: 'CSS classes for root, row, key, value, actions and link.' }],
   },
   {
     slug: 'table', name: 'Table',
@@ -409,7 +409,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'Column definitions map record fields to semantic headers and may format numeric values or identify row headers.',
     code: `<Table caption="Dates and amounts" columns={columns} dataSource={rows} />`,
     example: () => <Table caption="Dates and amounts" columns={[{ title: 'Date', dataIndex: 'date' }, { title: 'Amount', dataIndex: 'amount', numeric: true }]} dataSource={[{ date: 'First 6 weeks', amount: '£109.80 per week' }, { date: 'Next 33 weeks', amount: '£109.80 per week' }, { date: 'Total estimated pay', amount: '£4,282.20' }]} />,
-    api: [{ name: 'columns', type: 'TableColumn<T>[]', description: 'Column titles, record keys, rowHeader flags and render functions.' }, { name: 'dataSource', type: 'T[]', description: 'Rows to render.' }, text('caption', 'Accessible table title.')],
+    api: [{ name: 'columns', type: 'TableColumn<T>[]', description: 'Column titles, record keys, rowHeader flags and render functions.' }, { name: 'dataSource', type: 'T[]', description: 'Rows to render.' }, text('caption', 'Accessible table title.'), { name: 'styles', type: "TableProps<T>['styles']", description: 'Inline styles for root, caption, head, body, row, header and cell.' }, { name: 'classNames', type: "TableProps<T>['classNames']", description: 'CSS classes for root, caption, head, body, row, header and cell.' }],
   },
   {
     slug: 'tabs', name: 'Tabs',
@@ -442,7 +442,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'Each task link is associated with its visible status and may include a short hint.',
     code: `<TaskList items={[{ title: 'Company details', href: '#', status: 'Completed', statusColor: 'green' }]} />`,
     example: () => <TaskList items={[{ title: 'Company details', href: '#', status: 'Completed', statusColor: 'green' }, { title: 'Director information', href: '#', status: 'Incomplete', statusColor: 'blue' }, { title: 'Check and submit', href: '#', status: 'Cannot start yet' }]} />,
-    api: [items('Task title, destination, hint and status.')],
+    api: [items('Task title, destination, hint and status.'), { name: 'styles', type: "TaskListProps['styles']", description: 'Inline styles for root, item, nameAndHint, link, hint and status.' }, { name: 'classNames', type: "TaskListProps['classNames']", description: 'CSS classes for root, item, nameAndHint, link, hint and status.' }],
   },
   {
     slug: 'text-input', name: 'Text input',

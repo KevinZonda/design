@@ -1,6 +1,12 @@
 // API names and types remain in English because they are the actual React contract.
 // Descriptions are keyed by the source text so shared props need one translation.
 const descriptions: Record<string, string> = {
+  'Inline styles for root, row, key, value, actions and link.': '可为 root、row、key、value、actions 和 link 指定行内样式。',
+  'CSS classes for root, row, key, value, actions and link.': '可为 root、row、key、value、actions 和 link 指定 CSS 类名。',
+  'Inline styles for root, caption, head, body, row, header and cell.': '可为 root、caption、head、body、row、header 和 cell 指定行内样式。',
+  'CSS classes for root, caption, head, body, row, header and cell.': '可为 root、caption、head、body、row、header 和 cell 指定 CSS 类名。',
+  'Inline styles for root, item, nameAndHint, link, hint and status.': '可为 root、item、nameAndHint、link、hint 和 status 指定行内样式。',
+  'CSS classes for root, item, nameAndHint, link, hint and status.': '可为 root、item、nameAndHint、link、hint 和 status 指定 CSS 类名。',
   'GOV.UK spacing around the section break.': '分隔线周围的 GOV.UK 间距。',
   'Show the divider line; false leaves a spacing-only break.': '显示分隔线；设为 false 时仅保留间距。',
   'Native horizontal rule element.': '原生水平分隔线元素。',

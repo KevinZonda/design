@@ -60,9 +60,9 @@ native input or textarea; for grouped choices it is the fieldset. Existing
 `className` props retain their current targets.
 
 Composite components including `Input`, `SearchInput`, `Panel`, `Tabs`,
-`Header`, `ServiceNavigation` and `Footer` also expose Ant Design-style
-`styles` and `classNames` objects. Their typed keys name the part being customised.
-`style` and `className` take precedence over the matching primary-element slot.
+`Header`, `ServiceNavigation`, `Footer`, `Table`, `SummaryList` and `TaskList`
+also expose `styles` and `classNames` objects. Their typed keys name the part
+being customised. `style` takes precedence over `styles.root`.
 
 ```tsx
 <Input
@@ -78,6 +78,11 @@ Composite components including `Input`, `SearchInput`, `Panel`, `Tabs`,
 >
   Your reference number is HDJ2123F.
 </Panel>
+
+<SummaryList
+  items={[{ key: 'Name', value: 'Sarah Philips' }]}
+  styles={{ key: { width: 180 }, value: { maxWidth: 480 } }}
+/>
 ```
 
 Use CSS classes for responsive and interaction states; inline styles are best

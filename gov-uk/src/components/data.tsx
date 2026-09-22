@@ -5,19 +5,62 @@ import { ClickTarget, type IClickBehaviour } from './clickBehaviour'
 import type { SemanticStyling } from './styling'
 
 export interface TableColumn<T> { title: ReactNode; dataIndex: keyof T; key?: string; numeric?: boolean; rowHeader?: boolean; render?: (value: T[keyof T], record: T, index: number) => ReactNode }
-export interface TableProps<T> { columns: TableColumn<T>[]; dataSource: T[]; caption?: ReactNode; rowKey?: keyof T | ((record: T) => Key); style?: CSSProperties }
-const TableWithRef = forwardRef(function Table<T extends object>({ caption, columns, dataSource, rowKey, style }: TableProps<T>, ref: Ref<HTMLTableElement>) {
+export interface TableProps<T> extends SemanticStyling<'root' | 'caption' | 'head' | 'body' | 'row' | 'header' | 'cell'> { columns: TableColumn<T>[]; dataSource: T[]; caption?: ReactNode; rowKey?: keyof T | ((record: T) => Key); className?: string; style?: CSSProperties }
+const TableWithRef = forwardRef(function Table<T extends object>({ caption, columns, dataSource, rowKey, className = '', style, styles, classNames }: TableProps<T>, ref: Ref<HTMLTableElement>) {
   const keyFor = (record: T, index: number) => typeof rowKey === 'function' ? rowKey(record) : rowKey ? String(record[rowKey]) : index
-  return <table ref={ref} className="govuk-table" style={style}>{caption && <caption className="govuk-table__caption govuk-table__caption--m">{caption}</caption>}<thead className="govuk-table__head"><tr className="govuk-table__row">{columns.map((column) => <th className={`govuk-table__header ${column.numeric ? 'govuk-table__header--numeric' : ''}`} scope="col" key={column.key ?? String(column.dataIndex)}>{column.title}</th>)}</tr></thead><tbody className="govuk-table__body">{dataSource.map((record, rowIndex) => <tr className="govuk-table__row" key={keyFor(record, rowIndex)}>{columns.map((column) => { const value = record[column.dataIndex]; const content = column.render ? column.render(value, record, rowIndex) : String(value ?? ''); const classes = `${column.rowHeader ? 'govuk-table__header' : 'govuk-table__cell'} ${column.numeric ? `${column.rowHeader ? 'govuk-table__header' : 'govuk-table__cell'}--numeric` : ''}`.trim(); return column.rowHeader ? <th className={classes} scope="row" key={column.key ?? String(column.dataIndex)}>{content}</th> : <td className={classes} key={column.key ?? String(column.dataIndex)}>{content}</td> })}</tr>)}</tbody></table>
+  return <table ref={ref} className={`govuk-table ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
+    {caption && <caption className={`govuk-table__caption govuk-table__caption--m ${classNames?.caption ?? ''}`.trim()} style={styles?.caption}>{caption}</caption>}
+    <thead className={`govuk-table__head ${classNames?.head ?? ''}`.trim()} style={styles?.head}>
+      <tr className={`govuk-table__row ${classNames?.row ?? ''}`.trim()} style={styles?.row}>
+        {columns.map((column) => <th className={`govuk-table__header ${column.numeric ? 'govuk-table__header--numeric' : ''} ${classNames?.header ?? ''}`.trim()} style={styles?.header} scope="col" key={column.key ?? String(column.dataIndex)}>{column.title}</th>)}
+      </tr>
+    </thead>
+    <tbody className={`govuk-table__body ${classNames?.body ?? ''}`.trim()} style={styles?.body}>
+      {dataSource.map((record, rowIndex) => <tr className={`govuk-table__row ${classNames?.row ?? ''}`.trim()} style={styles?.row} key={keyFor(record, rowIndex)}>
+        {columns.map((column) => {
+          const value = record[column.dataIndex]
+          const content = column.render ? column.render(value, record, rowIndex) : String(value ?? '')
+          const slot = column.rowHeader ? 'header' : 'cell'
+          const base = column.rowHeader ? 'govuk-table__header' : 'govuk-table__cell'
+          const classes = `${base} ${column.numeric ? `${base}--numeric` : ''} ${classNames?.[slot] ?? ''}`.trim()
+          return column.rowHeader
+            ? <th className={classes} style={styles?.header} scope="row" key={column.key ?? String(column.dataIndex)}>{content}</th>
+            : <td className={classes} style={styles?.cell} key={column.key ?? String(column.dataIndex)}>{content}</td>
+        })}
+      </tr>)}
+    </tbody>
+  </table>
 })
 export const Table = TableWithRef as <T extends object>(props: TableProps<T> & RefAttributes<HTMLTableElement>) => ReactElement | null
 
 export interface SummaryAction extends IClickBehaviour { label: ReactNode; visuallyHiddenText?: string }
 export interface SummaryItem { key: ReactNode; value: ReactNode; actions?: SummaryAction[] }
-export const SummaryList = forwardRef<HTMLDListElement, { items: SummaryItem[]; bordered?: boolean; style?: CSSProperties }>(function SummaryList({ items, bordered = true, style }, ref) { return <dl ref={ref} style={style} className={`govuk-summary-list ${bordered ? '' : 'govuk-summary-list--no-border'}`}>{items.map((item, index) => <div className="govuk-summary-list__row" key={index}><dt className="govuk-summary-list__key">{item.key}</dt><dd className="govuk-summary-list__value">{item.value}</dd>{item.actions && <dd className="govuk-summary-list__actions">{item.actions.map((action, actionIndex) => <span key={action.href ?? actionIndex}>{actionIndex > 0 && ' '}<ClickTarget className="govuk-link" href={action.href} onClick={action.onClick}>{action.label}{action.visuallyHiddenText && <span className="govuk-visually-hidden"> {action.visuallyHiddenText}</span>}</ClickTarget></span>)}</dd>}</div>)}</dl> })
+export interface SummaryListProps extends SemanticStyling<'root' | 'row' | 'key' | 'value' | 'actions' | 'link'> { items: SummaryItem[]; bordered?: boolean; className?: string; style?: CSSProperties }
+export const SummaryList = forwardRef<HTMLDListElement, SummaryListProps>(function SummaryList({ items, bordered = true, className = '', style, styles, classNames }, ref) {
+  return <dl ref={ref} style={{ ...styles?.root, ...style }} className={`govuk-summary-list ${bordered ? '' : 'govuk-summary-list--no-border'} ${classNames?.root ?? ''} ${className}`.trim()}>
+    {items.map((item, index) => <div className={`govuk-summary-list__row ${classNames?.row ?? ''}`.trim()} style={styles?.row} key={index}>
+      <dt className={`govuk-summary-list__key ${classNames?.key ?? ''}`.trim()} style={styles?.key}>{item.key}</dt>
+      <dd className={`govuk-summary-list__value ${classNames?.value ?? ''}`.trim()} style={styles?.value}>{item.value}</dd>
+      {item.actions && <dd className={`govuk-summary-list__actions ${classNames?.actions ?? ''}`.trim()} style={styles?.actions}>
+        {item.actions.map((action, actionIndex) => <span key={action.href ?? actionIndex}>{actionIndex > 0 && ' '}<ClickTarget className={`govuk-link ${classNames?.link ?? ''}`.trim()} style={styles?.link} href={action.href} onClick={action.onClick}>{action.label}{action.visuallyHiddenText && <span className="govuk-visually-hidden"> {action.visuallyHiddenText}</span>}</ClickTarget></span>)}
+      </dd>}
+    </div>)}
+  </dl>
+})
 
 export interface TaskItem extends IClickBehaviour { title: ReactNode; status: ReactNode; hint?: ReactNode; statusColor?: Parameters<typeof Tag>[0]['color'] }
-export const TaskList = forwardRef<HTMLUListElement, { items: TaskItem[]; style?: CSSProperties }>(function TaskList({ items, style }, ref) { return <ul ref={ref} className="govuk-task-list" style={style}>{items.map((item, index) => <li className={`govuk-task-list__item ${item.href !== undefined || item.onClick ? 'govuk-task-list__item--with-link' : ''}`} key={`${item.href ?? ''}-${index}`}><div className="govuk-task-list__name-and-hint"><ClickTarget className="govuk-link govuk-task-list__link" href={item.href} onClick={item.onClick} anchorProps={{ 'aria-describedby': `task-status-${index}` }}>{item.title}</ClickTarget>{item.hint && <div className="govuk-task-list__hint">{item.hint}</div>}</div><div className="govuk-task-list__status" id={`task-status-${index}`}>{item.statusColor ? <Tag color={item.statusColor}>{item.status}</Tag> : item.status}</div></li>)}</ul> })
+export interface TaskListProps extends SemanticStyling<'root' | 'item' | 'nameAndHint' | 'link' | 'hint' | 'status'> { items: TaskItem[]; className?: string; style?: CSSProperties }
+export const TaskList = forwardRef<HTMLUListElement, TaskListProps>(function TaskList({ items, className = '', style, styles, classNames }, ref) {
+  return <ul ref={ref} className={`govuk-task-list ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
+    {items.map((item, index) => <li className={`govuk-task-list__item ${item.href !== undefined || item.onClick ? 'govuk-task-list__item--with-link' : ''} ${classNames?.item ?? ''}`.trim()} style={styles?.item} key={`${item.href ?? ''}-${index}`}>
+      <div className={`govuk-task-list__name-and-hint ${classNames?.nameAndHint ?? ''}`.trim()} style={styles?.nameAndHint}>
+        <ClickTarget className={`govuk-link govuk-task-list__link ${classNames?.link ?? ''}`.trim()} style={styles?.link} href={item.href} onClick={item.onClick} anchorProps={{ 'aria-describedby': `task-status-${index}` }}>{item.title}</ClickTarget>
+        {item.hint && <div className={`govuk-task-list__hint ${classNames?.hint ?? ''}`.trim()} style={styles?.hint}>{item.hint}</div>}
+      </div>
+      <div className={`govuk-task-list__status ${classNames?.status ?? ''}`.trim()} style={styles?.status} id={`task-status-${index}`}>{item.statusColor ? <Tag color={item.statusColor}>{item.status}</Tag> : item.status}</div>
+    </li>)}
+  </ul>
+})
 
 export interface TabItem { key: string; label: ReactNode; children: ReactNode }
 export interface TabsProps extends SemanticStyling<'root' | 'title' | 'list' | 'tab' | 'panel'> { items: TabItem[]; activeKey?: string; defaultActiveKey?: string; onChange?: (key: string) => void; style?: CSSProperties }
