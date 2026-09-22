@@ -1,7 +1,6 @@
 packages:
-  - gov-uk
-  - gov-uk-extends
-  - gov-uk-pages
+  - kvzd-design
+  - kvzd-design-page
 
 allowBuilds:
   '@parcel/watcher': true

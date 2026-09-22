@@ -1,12 +1,11 @@
 {
-  "name": "@kvzd-design/workspace",
+  "name": "@kevinzonda/design-workspace",
   "private": true,
   "scripts": {
-    "build": "pnpm --filter @kvzd-design/gov-uk build && pnpm --filter @kvzd-design/gov-uk-extends build && pnpm --filter @kvzd-design/gov-uk-pages build",
-    "build:lib": "pnpm --filter @kvzd-design/gov-uk build",
-    "build:extends": "pnpm --filter @kvzd-design/gov-uk build && pnpm --filter @kvzd-design/gov-uk-extends build",
-    "build:pages": "pnpm --filter @kvzd-design/gov-uk build && pnpm --filter @kvzd-design/gov-uk-extends build && pnpm --filter @kvzd-design/gov-uk-pages build",
-    "dev": "pnpm --filter @kvzd-design/gov-uk build && pnpm --filter @kvzd-design/gov-uk-extends build && pnpm --filter @kvzd-design/gov-uk-pages dev",
+    "build": "pnpm --filter @kevinzonda/design build && pnpm --filter @kevinzonda/design-page build",
+    "build:lib": "pnpm --filter @kevinzonda/design build",
+    "build:pages": "pnpm --filter @kevinzonda/design build && pnpm --filter @kevinzonda/design-page build",
+    "dev": "pnpm --filter @kevinzonda/design build && pnpm --filter @kevinzonda/design-page dev",
     "lint": "pnpm -r lint"
   }
 }

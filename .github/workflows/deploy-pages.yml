@@ -40,7 +40,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: gov-uk-pages/dist
+          path: kvzd-design-page/dist
 
   deploy:
     needs: build
