@@ -4,4 +4,5 @@
 html { scroll-behavior: smooth; }
 body { min-width: 320px; margin: 0; background: #fff; }
 button, input, select, textarea { font: inherit; }
-#root { min-height: 100vh; }
+#root { min-height: 100vh; background: #f4f8fb; }
+.app-shell { background: #fff; }
