@@ -50,7 +50,7 @@ function SidebarNode({ item, currentKey, collapsible, depth, renderLink }: {
   const toggleLabel = typeof item.label === 'string' ? item.label : 'section'
 
   return <li className={`kvzd-sidebar__item ${depth === 0 && (current || currentInChildren) ? 'kvzd-sidebar__item--highlighted' : ''}`.trim()}>
-    <div className="kvzd-sidebar__row">
+    <div className={`kvzd-sidebar__row ${collapsible && hasChildren && (item.href !== undefined || item.onClick !== undefined) ? 'kvzd-sidebar__row--split' : ''}`.trim()}>
       {item.href !== undefined || item.onClick !== undefined
         ? (renderLink
           ? renderLink(item as SidebarLinkItem, { className: linkClassName, current })

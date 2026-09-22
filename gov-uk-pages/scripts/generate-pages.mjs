@@ -10,6 +10,7 @@ const slugs = [
   'radios', 'select', 'service-navigation', 'skip-link', 'summary-list', 'table',
   'tabs', 'tag', 'task-list', 'text-input', 'textarea', 'warning-text',
 ]
+const extraSlugs = ['fancy-tabs', 'sidebar', 'tag-box']
 
 const outputRoot = join(process.cwd(), 'dist')
 const source = await readFile(join(outputRoot, 'index.html'), 'utf8')
@@ -40,6 +41,7 @@ await createEntry('quick-review', 'Quick Review – KVZD GOV.UK React')
 await Promise.all(slugs.map((slug) => createEntry(`components/${slug}`, `${slug.replaceAll('-', ' ')} – KVZD GOV.UK React`)))
 
 await createEntry('extra-components', 'Extra Components – KVZD GOV.UK React')
+await Promise.all(extraSlugs.map((slug) => createEntry(`extra-components/${slug}`, `${slug.replaceAll('-', ' ')} – KVZD GOV.UK React`)))
 await writeFile(join(outputRoot, '404.html'), source.replace(/<title>.*?<\/title>/, '<title>Page not found – KVZD GOV.UK React</title>'))
 
-console.log(`Generated ${slugs.length + 3} documentation routes.`)
+console.log(`Generated ${slugs.length + extraSlugs.length + 3} documentation routes.`)
