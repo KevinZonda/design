@@ -78,7 +78,7 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
         { label: message(locale, 'quickReview'), href: sitePath(localizedPath('/quick-review/', locale)), onClick: navigateOnClick(localizedPath('/quick-review/', locale)), current: current === 'quick-review' },
         { label: message(locale, 'components'), href: sitePath(localizedPath('/components/', locale)), onClick: navigateOnClick(localizedPath('/components/', locale)), current: current === 'components' },
         { label: message(locale, 'extraComponents'), href: sitePath(localizedPath('/extra-components/', locale)), onClick: navigateOnClick(localizedPath('/extra-components/', locale)), current: current === 'extra-components' },
-        { label: message(locale, 'source'), href: 'https://github.com/alphagov/govuk-frontend' },
+        { label: message(locale, 'source'), href: 'https://github.com/KevinZonda/design-system' },
         { label: message(locale, 'govukLicense'), href: sitePath(localizedPath('/license/', locale)), onClick: navigateOnClick(localizedPath('/license/', locale)), current: current === 'license' },
       ]}
       end={<div className="docs-nav-end">

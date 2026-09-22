@@ -21,10 +21,10 @@ const english = {
   footerDescription: 'React components based on GOV.UK Frontend 6.5.1', govukLicense: 'License',
   licenseIntro: 'This site uses GOV.UK Frontend 6.5.1. Its software is released under the MIT License. The original copyright and license notice is reproduced below.',
   licenseSource: 'View the GOV.UK Frontend source and license',
-  reviewEyebrow: 'React component library', reviewIntro: 'Review every component in one place. Examples are interactive and use the same source as the individual documentation pages.',
+  reviewIntro: 'Review every component in one place. Examples are interactive and use the same source as the individual documentation pages.',
   baseline: 'Baseline', lockedTo: 'Locked to GOV.UK Frontend 6.5.1', componentsCovered: 'components covered',
-  filterComponents: 'Filter components', showing: 'Showing', of: 'of', jumpTo: 'Jump to a component', componentIndex: 'Component index',
-  liveExamples: 'Live examples', allComponents: 'All components', shown: 'shown', viewDocumentation: 'View documentation',
+  filterComponents: 'Filter components', showing: 'Showing', of: 'of', componentIndex: 'Component index',
+  allComponents: 'All components', shown: 'shown', viewDocumentation: 'View documentation',
   backToTop: 'Back to top', tryDifferent: 'Try a different component name or description.',
 } as const
 
@@ -47,10 +47,10 @@ const chinese: Record<keyof typeof english, string> = {
   footerDescription: '基于 GOV.UK Frontend 6.5.1 的 React 组件', govukLicense: '授权',
   licenseIntro: '本站使用 GOV.UK Frontend 6.5.1。其软件采用 MIT 许可证。以下为原始版权及许可声明。',
   licenseSource: '查看 GOV.UK Frontend 源码及许可证',
-  reviewEyebrow: 'React 组件库', reviewIntro: '在同一页面浏览所有组件。示例可以交互，与各组件文档页面使用相同的源码。',
+  reviewIntro: '在同一页面浏览所有组件。示例可以交互，与各组件文档页面使用相同的源码。',
   baseline: '基准版本', lockedTo: '基于 GOV.UK Frontend 6.5.1', componentsCovered: '个组件',
-  filterComponents: '筛选组件', showing: '显示', of: '共', jumpTo: '跳转到组件', componentIndex: '组件目录',
-  liveExamples: '实时示例', allComponents: '所有组件', shown: '个结果', viewDocumentation: '查看文档',
+  filterComponents: '筛选组件', showing: '显示', of: '共', componentIndex: '组件目录',
+  allComponents: '所有组件', shown: '个结果', viewDocumentation: '查看文档',
   backToTop: '返回顶部', tryDifferent: '请尝试其他组件名称或说明。',
 }
 

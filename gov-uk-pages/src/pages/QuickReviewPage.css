@@ -4,7 +4,6 @@
 .review-filter__count { margin: 0; color: #505a5f; font-size: 14px; }
 .component-index ul { margin: 0; padding: 0; list-style: none; }
 .component-index a { color: #1a65a6; font-size: 16px; line-height: 1.35; text-decoration-thickness: 1px; text-underline-offset: 3px; }
-.eyebrow, .section-kicker { margin: 0 0 10px; color: #505a5f; font-size: 16px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
 .main-content > h1 { margin-bottom: 20px; }
 .intro { max-width: 690px; }
 .release-note { display: flex; align-items: center; gap: 12px; margin: 28px 0 54px; font-weight: 700; }

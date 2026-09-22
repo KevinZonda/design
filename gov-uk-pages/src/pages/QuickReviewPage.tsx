@@ -36,7 +36,6 @@ export function QuickReviewPage() {
         }))} />
 
         <main id="main-content" className="main-content">
-          <div className="eyebrow">{message(locale, 'reviewEyebrow')}</div>
           <h1 className="govuk-heading-xl">{message(locale, 'quickReview')}</h1>
           <p className="govuk-body-l intro">{message(locale, 'reviewIntro')}</p>
           <div className="release-note">
@@ -60,7 +59,6 @@ export function QuickReviewPage() {
           </div>
 
           <section className="component-index" aria-labelledby="index-title">
-            <p className="section-kicker">{message(locale, 'jumpTo')}</p>
             <h2 className="govuk-heading-l" id="index-title">{message(locale, 'componentIndex')}</h2>
             <ul>
               {filteredComponents.map((component) => (
@@ -72,7 +70,6 @@ export function QuickReviewPage() {
           <section className="review-gallery" aria-labelledby="review-gallery-title">
             <div className="review-gallery__heading">
               <div>
-                <p className="section-kicker">{message(locale, 'liveExamples')}</p>
                 <h2 className="govuk-heading-l" id="review-gallery-title">{message(locale, 'allComponents')}</h2>
               </div>
               <span aria-live="polite">{filteredComponents.length} {message(locale, 'shown')}</span>

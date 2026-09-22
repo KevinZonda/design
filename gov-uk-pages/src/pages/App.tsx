@@ -46,7 +46,6 @@ function OverviewPage() {
   useEffect(() => { document.title = pageTitle(message(locale, 'components'), locale) }, [locale])
   return <DocsLayout>
     <div className="component-overview">
-      <span className="govuk-caption-xl">{message(locale, 'brand')}</span>
       <h1 className="govuk-heading-xl">{message(locale, 'components')}</h1>
       <p className="govuk-body-l">{message(locale, 'componentsIntro')}</p>
       <p className="govuk-body">{message(locale, 'componentsDetail')}</p>
@@ -110,7 +109,6 @@ function ExtraOverviewPage() {
   if (extraComponentBySlug.has(legacySlug)) return <Navigate to={localizedPath(`/extra-components/${legacySlug}/${hash.endsWith('-api') ? '#api-title' : ''}`, locale)} replace />
   return <DocsLayout currentSection="extra-components">
     <div className="component-overview">
-      <span className="govuk-caption-xl">{message(locale, 'brand')}</span>
       <h1 className="govuk-heading-xl">{message(locale, 'extraComponents')}</h1>
       <p className="govuk-body-l">{message(locale, 'extraIntro')}</p>
       <p className="govuk-body">{message(locale, 'extraDetail')}</p>
