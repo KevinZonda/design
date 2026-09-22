@@ -23,3 +23,18 @@ import { FancyTabs } from '@kvzd-design/gov-uk-extends'
 ```
 
 `FancyTabs` has the same props as `Tabs` from `@kvzd-design/gov-uk`.
+
+The `Sidebar` component renders a labelled navigation list. It accepts optional controls before the links and a custom link renderer for client-side routing:
+
+```tsx
+import { Sidebar } from '@kvzd-design/gov-uk-extends'
+
+<Sidebar
+  heading="Documentation"
+  currentKey="buttons"
+  items={[
+    { key: 'overview', label: 'Overview', href: '/overview/' },
+    { key: 'buttons', label: 'Buttons', href: '/buttons/' },
+  ]}
+/>
+```

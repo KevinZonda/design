@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Input, Tag } from '@kvzd-design/gov-uk'
+import { Sidebar } from '@kvzd-design/gov-uk-extends'
 import './QuickReviewPage.css'
 import { DocsFooter, DocsHeader } from './DocsChrome'
 import { componentDocs } from './componentRegistry'
@@ -25,8 +26,11 @@ export function QuickReviewPage() {
       <DocsHeader current="quick-review" />
 
       <div className="site-width page-layout" id="top">
-        <aside className="side-nav" aria-label="Components">
-          <h2>Components</h2>
+        <Sidebar className="review-sidebar" heading="Components" items={filteredComponents.map((component) => ({
+          key: component.slug,
+          label: component.name,
+          href: `#${component.slug}`,
+        }))}>
           <Input
             className="side-nav__search"
             id="component-search"
@@ -39,14 +43,7 @@ export function QuickReviewPage() {
           <p className="side-nav__count" aria-live="polite">
             Showing {filteredComponents.length} of {componentDocs.length}
           </p>
-          <ul>
-            {filteredComponents.map((component) => (
-              <li key={component.slug}>
-                <a href={`#${component.slug}`}>{component.name}</a>
-              </li>
-            ))}
-          </ul>
-        </aside>
+        </Sidebar>
 
         <main id="main-content" className="main-content">
           <div className="eyebrow">React component library</div>

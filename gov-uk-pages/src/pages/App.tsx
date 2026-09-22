@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { Breadcrumbs, Button, Pagination, Table, Tag } from '@kvzd-design/gov-uk'
-import { FancyTabs } from '@kvzd-design/gov-uk-extends'
+import { FancyTabs, Sidebar } from '@kvzd-design/gov-uk-extends'
 import { componentBySlug, componentDocs, type ComponentDoc } from './componentRegistry'
 import { DocsFooter, DocsHeader } from './DocsChrome'
 import { QuickReviewPage } from './QuickReviewPage'
@@ -16,18 +16,22 @@ function pathFor(slug: string) {
 type DocsSection = 'components' | 'extra-components'
 
 const extraComponentNavigation = [
-  { slug: 'fancy-tabs', name: 'FancyTabs', to: '/extra-components/#fancy-tabs' },
+  { key: 'fancy-tabs', label: 'FancyTabs', href: '/extra-components/#fancy-tabs' },
+  { key: 'sidebar', label: 'Sidebar', href: '/extra-components/#sidebar' },
 ]
 
 function SideNavigation({ currentSlug, section }: { currentSlug?: string; section: DocsSection }) {
   const items = section === 'extra-components'
     ? extraComponentNavigation
-    : componentDocs.map((component) => ({ ...component, to: `/components/${component.slug}/` }))
+    : componentDocs.map((component) => ({ key: component.slug, label: component.name, href: `/components/${component.slug}/` }))
 
-  return <nav className="app-subnav" aria-labelledby="app-subnav-heading">
-    <h2 className="govuk-heading-s app-subnav__heading" id="app-subnav-heading">{section === 'extra-components' ? 'Extra Components' : 'Components'}</h2>
-    <ul className="app-subnav__section">{items.map((component) => <li key={component.slug} className={`app-subnav__section-item ${component.slug === currentSlug ? 'app-subnav__section-item--current' : ''}`.trim()}><Link className="app-subnav__link govuk-link govuk-link--no-visited-state govuk-link--no-underline" to={component.to} aria-current={component.slug === currentSlug ? 'page' : undefined}>{component.name}</Link></li>)}</ul>
-  </nav>
+  return <Sidebar
+    className="docs-sidebar"
+    heading={section === 'extra-components' ? 'Extra Components' : 'Components'}
+    items={items}
+    currentKey={currentSlug}
+    renderLink={(item, { className, current }) => <Link className={`${className} govuk-link--no-visited-state govuk-link--no-underline`} to={item.href} aria-current={current ? 'page' : undefined}>{item.label}</Link>}
+  />
 }
 
 function OverviewPage() {
@@ -67,9 +71,19 @@ const fancyTabsCode = `<FancyTabs items={[
   },
 ]} />`
 
+const sidebarCode = `<Sidebar
+  heading="Documentation"
+  currentKey="overview"
+  items={[
+    { key: 'overview', label: 'Overview', href: '#overview' },
+    { key: 'examples', label: 'Examples', href: '#examples' },
+  ]}
+/>`
+
 function ExtraComponentsPage() {
+  const { hash } = useLocation()
   useEffect(() => { document.title = 'Extra Components – KVZD GOV.UK React' }, [])
-  return <DocsLayout currentSection="extra-components" currentSlug="fancy-tabs">
+  return <DocsLayout currentSection="extra-components" currentSlug={hash === '#sidebar' ? 'sidebar' : 'fancy-tabs'}>
     <article className="component-doc extra-components-page">
       <Breadcrumbs className="doc-breadcrumbs" items={[{ label: 'KVZD Design', href: sitePath('/components/') }, { label: 'Extra Components', current: true }]} />
       <span className="govuk-caption-xl">KVZD Design</span>
@@ -99,6 +113,30 @@ function ExtraComponentsPage() {
           { name: 'defaultActiveKey', type: 'string', description: 'Initial active tab.' },
           { name: 'onChange', type: '(key: string) => void', description: 'Called with the selected tab key.' },
         ]} /></div>
+      </section>
+      <section id="sidebar" aria-labelledby="sidebar-title">
+        <h2 className="govuk-heading-l" id="sidebar-title">Sidebar</h2>
+        <p className="govuk-body">A navigation list for related pages or sections. Pass the links and current item as data, and add search or other controls before the list when needed.</p>
+        <div className="extra-component-example sidebar-example">
+          <Sidebar heading="Documentation" currentKey="sidebar" items={[
+            { key: 'fancy-tabs', label: 'FancyTabs', href: '#fancy-tabs' },
+            { key: 'sidebar', label: 'Sidebar', href: '#sidebar' },
+          ]} />
+        </div>
+        <h3 className="govuk-heading-m extra-component-api-title">React API</h3>
+        <p className="govuk-body">Import it from <code className="inline-code">@kvzd-design/gov-uk-extends</code>. Links render as anchors by default; use <code className="inline-code">renderLink</code> to integrate a client-side router.</p>
+        <div className="api-table-scroll"><Table rowKey="name" columns={[
+          { title: 'Property', dataIndex: 'name', rowHeader: true, render: (value) => <code>{String(value)}</code> },
+          { title: 'Type', dataIndex: 'type', render: (value) => <code>{String(value)}</code> },
+          { title: 'Description', dataIndex: 'description' },
+        ]} dataSource={[
+          { name: 'heading', type: 'ReactNode', description: 'Visible heading and navigation label.' },
+          { name: 'items', type: 'SidebarItem[]', description: 'Links with a key, label and href.' },
+          { name: 'currentKey', type: 'string', description: 'Key of the current page or section.' },
+          { name: 'children', type: 'ReactNode', description: 'Optional controls shown before the links.' },
+          { name: 'renderLink', type: '(item, options) => ReactNode', description: 'Optional link renderer for a client-side router.' },
+        ]} /></div>
+        <pre className="code-block"><code>{sidebarCode}</code></pre>
       </section>
     </article>
   </DocsLayout>

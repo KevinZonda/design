@@ -38,3 +38,41 @@
 .kvzd-fancy-tabs__panel {
   min-width: 0;
 }
+
+.kvzd-sidebar {
+  align-self: start;
+  min-width: 0;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.kvzd-sidebar__heading {
+  margin-bottom: 15px;
+}
+
+.kvzd-sidebar__list {
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.kvzd-sidebar__item {
+  margin-bottom: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.kvzd-sidebar__item--current {
+  margin-left: -14px;
+  padding-left: 10px;
+  border-left: 4px solid #1d70b8;
+  background: #fff;
+}
+
+.kvzd-sidebar__link {
+  padding: 2px 0;
+}
+
+.kvzd-sidebar__link[aria-current='page'] {
+  font-weight: 700;
+}
