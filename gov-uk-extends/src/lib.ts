@@ -1,6 +1,8 @@
 import './style.css'
 
 export * from './FancyTabs'
+export * from './Divider'
+export * from './Form'
 export * from './Modal'
 export * from './Empty'
 export * from './Loading'

@@ -10,7 +10,7 @@ const slugs = [
   'radios', 'select', 'service-navigation', 'skip-link', 'summary-list', 'table',
   'tabs', 'tag', 'task-list', 'text-input', 'textarea', 'warning-text',
 ]
-const extraSlugs = ['modal', 'empty', 'loading', 'menu', 'dropdown', 'fancy-table', 'fancy-tabs', 'note', 'sidebar', 'tag-box']
+const extraSlugs = ['modal', 'empty', 'loading', 'menu', 'dropdown', 'fancy-table', 'fancy-tabs', 'divider', 'form', 'note', 'sidebar', 'tag-box']
 const displayNames = {
   footer: 'GOV.UK footer', header: 'GOV.UK header',
   'fancy-tabs': 'FancyTabs', 'fancy-table': 'FancyTable', 'tag-box': 'TagBox',

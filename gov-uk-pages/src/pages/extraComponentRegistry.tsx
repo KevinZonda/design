@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { Empty, FancyTabs, Loading, Note, Sidebar, TagBox } from '@kvzd-design/gov-uk-extends'
+import { Divider, Empty, FancyTabs, Loading, Note, Sidebar, TagBox } from '@kvzd-design/gov-uk-extends'
 import type { ApiProp } from './componentRegistry'
-import { DropdownExample, FancyTableExample, MenuExample, ModalExample } from './extraExamples'
+import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample } from './extraExamples'
 
 export interface ExtraComponentDoc {
   slug: string
@@ -111,6 +111,20 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     ],
   },
   {
+    slug: 'divider',
+    name: 'Divider',
+    summary: 'Separate sections of content with the GOV.UK section break style.',
+    whenToUse: 'Use between distinct content sections when spacing alone is not enough. Avoid adding a line between every field or paragraph.',
+    howItWorks: 'Renders a semantic hr with GOV.UK section break spacing. Set visible to false for a spacing-only break.',
+    code: `<p className="govuk-body">First section</p>\n<Divider size="m" />\n<p className="govuk-body">Second section</p>`,
+    example: () => <div><p className="govuk-body">First section</p><Divider size="m" /><p className="govuk-body">Second section</p></div>,
+    api: [
+      { name: 'size', type: "'m' | 'l' | 'xl'", defaultValue: 'm', description: 'GOV.UK spacing around the section break.' },
+      { name: 'visible', type: 'boolean', defaultValue: 'true', description: 'Show the divider line; false leaves a spacing-only break.' },
+      { name: 'ref', type: 'Ref<HTMLHRElement>', description: 'Native horizontal rule element.' },
+    ],
+  },
+  {
     slug: 'menu',
     name: 'Menu',
     summary: 'A compact list of actions with keyboard navigation.',
@@ -200,6 +214,32 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'activeKey', type: 'string', description: 'Controlled active tab.' },
       { name: 'defaultActiveKey', type: 'string', description: 'Initial active tab.' },
       { name: 'onChange', type: '(key: string) => void', description: 'Called with the selected tab key.' },
+    ],
+  },
+  {
+    slug: 'form',
+    name: 'Form',
+    summary: 'Collect and validate related answers with GOV.UK field errors and an error summary.',
+    whenToUse: 'Use when a page has several answers that must be validated together on submission.',
+    howItWorks: 'Form.Item connects a field to a native form. On submission, Form reads FormData, validates registered rules, preserves entered answers, displays inline errors and focuses the error summary.',
+    code: `<Form onFinish={(values) => save(values)}>
+  <Form.Item name="fullName" rules={[{ required: true, message: 'Enter your full name' }]}>
+    <Input label="Full name" />
+  </Form.Item>
+  <Button htmlType="submit">Continue</Button>
+</Form>`,
+    example: () => <FormExample />,
+    api: [
+      { name: 'initialValues', type: 'Record<string, string | string[]>', description: 'Initial values for registered fields.' },
+      { name: 'onFinish', type: '(values: FormValues) => void', description: 'Called when every field passes validation.' },
+      { name: 'onFinishFailed', type: '(errors: FormError[], values: FormValues) => void', description: 'Called when submission finds errors.' },
+      { name: 'validate', type: '(values: FormValues) => { name: string; message: string }[]', description: 'Optional form-level validation for related fields.' },
+      { name: 'errorSummaryTitle', type: 'ReactNode', defaultValue: 'There is a problem', description: 'Heading displayed above validation links.' },
+      { name: 'Form.Item name', type: 'string', description: 'Native field name used to read its submitted value.' },
+      { name: 'Form.Item rules', type: 'FormRule[]', description: 'Required, pattern or custom validation rules checked on submit.' },
+      { name: 'Form.Item multiple', type: 'boolean', defaultValue: 'false', description: 'Read all values for a checkbox group.' },
+      { name: 'Form.Item focusId', type: 'string', description: 'ID targeted from the error summary for grouped fields.' },
+      { name: 'ref', type: 'Ref<HTMLFormElement>', description: 'Native form element.' },
     ],
   },
   {

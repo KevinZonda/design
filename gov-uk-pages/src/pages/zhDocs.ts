@@ -51,6 +51,7 @@ const componentText: Record<string, DocTranslation> = {
 }
 
 const extraText: Record<string, DocTranslation> = {
+  divider: { summary: '使用 GOV.UK 分隔线样式区分内容区块。', whenToUse: '当仅靠留白不足以区分内容区块时使用。不要在每个字段或段落之间都画线。', howItWorks: '渲染带有 GOV.UK 间距样式的语义化 hr。将 visible 设为 false 可只保留间距。' },
   modal: { summary: '用于在返回页面前完成简短决定或任务的聚焦对话框。', whenToUse: '用于简短确认或聚焦任务。较长的流程应放在普通页面。', howItWorks: '原生 dialog 进入顶层并将键盘焦点限制在其中。Escape、关闭按钮和可选的背景点击通过 onClose 请求关闭。' },
   empty: { summary: '用于列表、表格或搜索结果为空时的清晰提示。', whenToUse: '视图无数据或筛选后没有结果时使用。适当说明原因或提供下一步操作。', howItWorks: '中性容器中显示可见标题、可选说明和操作。插图只起装饰作用，可以替换。' },
   loading: { summary: '内容加载期间使用的旋转指示器和骨架屏。', whenToUse: '短暂等待使用旋转指示器；已知待加载内容的结构时使用骨架屏。', howItWorks: '两种样式都向辅助技术公开状态标签；用户要求减少动态效果时会停止动画。' },
@@ -58,6 +59,7 @@ const extraText: Record<string, DocTranslation> = {
   dropdown: { summary: '点击按钮后展开紧凑的操作菜单。', whenToUse: '工具栏或记录行中有多个次要操作，需要共用一个入口时使用。', howItWorks: '触发按钮公开展开状态。菜单打开后焦点移至第一个操作；选中条目、按 Escape 或点击外部可关闭菜单。' },
   'fancy-table': { summary: '支持可选排序、筛选、行选择和客户端分页的数据表格。', whenToUse: '记录需要比较和直接操作时使用。简单的只读数据仍可使用标准 Table。', howItWorks: '列比较函数和筛选函数在本地处理数据；行选择可由外部控制，也可由组件管理。“全选”只作用于当前页。' },
   'fancy-tabs': { summary: '用更醒目的标签页在实时预览和 React 源码等视图之间切换。', whenToUse: '当界面需要比标准 Tabs 组件更显眼的标签页时使用。', howItWorks: '它与标准 Tabs 共享属性，并由 React 管理选中面板。方向键可在标签之间移动。' },
+  form: { summary: '收集并校验相关答案，同时显示 GOV.UK 字段错误和错误摘要。', whenToUse: '页面包含多个需要在提交时一并校验的答案时使用。', howItWorks: 'Form.Item 将字段接入原生表单。提交时读取 FormData、校验规则、保留已输入答案、显示字段错误，并将焦点移至错误摘要。' },
   note: { summary: '突出简短的实现说明或其他补充信息。', whenToUse: '补充指导需要比普通正文更醒目，但并不表示警告或成功状态时使用。', howItWorks: '可选标题显示在内容上方。Note 接受普通 div 属性，页面可以用 className 调整局部间距。' },
   sidebar: { summary: '为相关页面或区块提供嵌套导航，并可选择展开和收起。', whenToUse: '用于一组相关文档页面。导航树较大时可启用折叠分组。', howItWorks: '链接默认渲染为锚点；分组可以包含多级子项。renderLink 可提供客户端路由链接，当前分支会高亮。' },
   'tag-box': { summary: '用于版本号等简短元信息的中性描边标签。', whenToUse: '用于不表示状态的元信息。表示状态时请使用标准 Tag 组件。', howItWorks: '它渲染 span，接受标准 span 属性以及可选的 className。' },

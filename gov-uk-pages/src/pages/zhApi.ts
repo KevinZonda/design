@@ -1,6 +1,19 @@
 // API names and types remain in English because they are the actual React contract.
 // Descriptions are keyed by the source text so shared props need one translation.
 const descriptions: Record<string, string> = {
+  'GOV.UK spacing around the section break.': '分隔线周围的 GOV.UK 间距。',
+  'Show the divider line; false leaves a spacing-only break.': '显示分隔线；设为 false 时仅保留间距。',
+  'Native horizontal rule element.': '原生水平分隔线元素。',
+  'Initial values for registered fields.': '已注册字段的初始值。',
+  'Called when every field passes validation.': '所有字段通过校验时调用。',
+  'Called when submission finds errors.': '提交时发现错误后调用。',
+  'Optional form-level validation for related fields.': '用于关联字段的可选表单级校验。',
+  'Heading displayed above validation links.': '显示在校验错误链接上方的标题。',
+  'Native field name used to read its submitted value.': '用于读取提交值的原生字段名称。',
+  'Required, pattern or custom validation rules checked on submit.': '提交时检查的必填、正则或自定义校验规则。',
+  'Read all values for a checkbox group.': '读取复选框组的所有选中值。',
+  'ID targeted from the error summary for grouped fields.': '错误摘要指向分组字段时使用的 ID。',
+  'Native form element.': '原生表单元素。',
   'Accessible loading status.': '供辅助技术读取的加载状态。',
   'Accessible name for the action menu.': '操作菜单的无障碍名称。',
   'Accessible name for the menu.': '菜单的无障碍名称。',

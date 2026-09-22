@@ -1,5 +1,22 @@
 import { useState, type Key } from 'react'
-import { Dropdown, FancyTable, Menu, Modal } from '@kvzd-design/gov-uk-extends'
+import { Button, Input } from '@kvzd-design/gov-uk'
+import { Dropdown, FancyTable, Form, Menu, Modal } from '@kvzd-design/gov-uk-extends'
+
+export function FormExample() {
+  const [submitted, setSubmitted] = useState('')
+  return <>
+    <Form onFinish={(values) => setSubmitted(`Submitted for ${values.fullName}`)} onFinishFailed={() => setSubmitted('')}>
+      <Form.Item name="fullName" rules={[{ required: true, message: 'Enter your full name' }]}>
+        <Input label="Full name" />
+      </Form.Item>
+      <Form.Item name="email" rules={[{ required: true, message: 'Enter your email address' }, { pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Enter a valid email address' }]}>
+        <Input label="Email address" type="email" />
+      </Form.Item>
+      <Button htmlType="submit">Continue</Button>
+    </Form>
+    {submitted && <p className="govuk-body" role="status">{submitted}</p>}
+  </>
+}
 
 export function ModalExample() {
   const [open, setOpen] = useState(false)

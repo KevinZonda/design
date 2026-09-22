@@ -65,3 +65,27 @@ import { TagBox } from '@kvzd-design/gov-uk-extends'
 
 <TagBox>6.5.1</TagBox>
 ```
+
+`Divider` wraps the GOV.UK section break style in a semantic `<hr>`. It uses medium spacing and a visible line by default; choose `size="l"` or `size="xl"` for more space, or `visible={false}` for spacing only.
+
+```tsx
+import { Divider } from '@kvzd-design/gov-uk-extends'
+
+<Divider size="l" />
+```
+
+`Form` validates registered `Form.Item` fields on submission. It keeps native form inputs and displays inline errors plus a GOV.UK error summary. Each child field should accept `name`, `id`, and `error` props.
+
+```tsx
+import { Button, Input } from '@kvzd-design/gov-uk'
+import { Form } from '@kvzd-design/gov-uk-extends'
+
+<Form onFinish={(values) => console.log(values)}>
+  <Form.Item name="fullName" rules={[{ required: true, message: 'Enter your full name' }]}>
+    <Input label="Full name" />
+  </Form.Item>
+  <Button htmlType="submit">Continue</Button>
+</Form>
+```
+
+Use `multiple` on `Form.Item` for checkbox groups and `focusId` to point error summary links to the first choice. Form-level `validate` handles checks involving more than one field. Validation runs on submit so entered answers stay in place when a user needs to correct them.
