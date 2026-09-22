@@ -30,7 +30,7 @@ function SideNavigation({ currentSlug, section }: { currentSlug?: string; sectio
     heading={section === 'extra-components' ? 'Extra Components' : 'Components'}
     items={items}
     currentKey={currentSlug}
-    renderLink={(item, { className, current }) => <Link className={`${className} govuk-link--no-visited-state govuk-link--no-underline`} to={item.href} aria-current={current ? 'page' : undefined}>{item.label}</Link>}
+    renderLink={(item, { className, current }) => <Link className={className} to={item.href} aria-current={current ? 'page' : undefined}>{item.label}</Link>}
   />
 }
 
@@ -116,7 +116,7 @@ function ExtraComponentsPage() {
       </section>
       <section id="sidebar" aria-labelledby="sidebar-title">
         <h2 className="govuk-heading-l" id="sidebar-title">Sidebar</h2>
-        <p className="govuk-body">A navigation list for related pages or sections. Pass the links and current item as data, and add search or other controls before the list when needed.</p>
+        <p className="govuk-body">A navigation list for related pages or sections, styled like the Components sidebar. Pass the links and current item as data.</p>
         <div className="extra-component-example sidebar-example">
           <Sidebar heading="Documentation" currentKey="sidebar" items={[
             { key: 'fancy-tabs', label: 'FancyTabs', href: '#fancy-tabs' },
@@ -133,7 +133,6 @@ function ExtraComponentsPage() {
           { name: 'heading', type: 'ReactNode', description: 'Visible heading and navigation label.' },
           { name: 'items', type: 'SidebarItem[]', description: 'Links with a key, label and href.' },
           { name: 'currentKey', type: 'string', description: 'Key of the current page or section.' },
-          { name: 'children', type: 'ReactNode', description: 'Optional controls shown before the links.' },
           { name: 'renderLink', type: '(item, options) => ReactNode', description: 'Optional link renderer for a client-side router.' },
         ]} /></div>
         <pre className="code-block"><code>{sidebarCode}</code></pre>

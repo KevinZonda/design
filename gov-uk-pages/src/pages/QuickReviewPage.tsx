@@ -26,24 +26,11 @@ export function QuickReviewPage() {
       <DocsHeader current="quick-review" />
 
       <div className="site-width page-layout" id="top">
-        <Sidebar className="review-sidebar" heading="Components" items={filteredComponents.map((component) => ({
+        <Sidebar className="docs-sidebar" heading="Components" items={filteredComponents.map((component) => ({
           key: component.slug,
           label: component.name,
           href: `#${component.slug}`,
-        }))}>
-          <Input
-            className="side-nav__search"
-            id="component-search"
-            type="search"
-            label="Filter components"
-            labelSize="s"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-          <p className="side-nav__count" aria-live="polite">
-            Showing {filteredComponents.length} of {componentDocs.length}
-          </p>
-        </Sidebar>
+        }))} />
 
         <main id="main-content" className="main-content">
           <div className="eyebrow">React component library</div>
@@ -56,6 +43,21 @@ export function QuickReviewPage() {
             <Tag color="blue">Baseline</Tag>
             <span>Locked to GOV.UK Frontend 6.5.0</span>
             <span className="release-note__count">{componentDocs.length} components covered</span>
+          </div>
+
+          <div className="review-filter">
+            <Input
+              className="review-filter__search"
+              id="component-search"
+              type="search"
+              label="Filter components"
+              labelSize="s"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+            <p className="review-filter__count" aria-live="polite">
+              Showing {filteredComponents.length} of {componentDocs.length}
+            </p>
           </div>
 
           <section className="component-index" aria-labelledby="index-title">
