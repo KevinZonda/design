@@ -1,7 +1,7 @@
 {
   "name": "@kvzd-design/gov-uk",
   "version": "0.1.0",
-  "description": "React components based on GOV.UK Frontend 6.5.0 with a compact Ant Design-inspired API.",
+  "description": "React components based on GOV.UK Frontend 6.5.1 with a compact Ant Design-inspired API.",
   "type": "module",
   "files": [
     "dist-lib"
@@ -22,7 +22,7 @@
     "lint": "oxlint src"
   },
   "dependencies": {
-    "govuk-frontend": "6.5.0"
+    "govuk-frontend": "6.5.1"
   },
   "peerDependencies": {
     "react": ">=18.2.0",

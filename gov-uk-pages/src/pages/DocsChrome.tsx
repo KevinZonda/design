@@ -67,12 +67,12 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
         { label: 'Quick Review', href: sitePath('/quick-review/'), onClick: navigateOnClick('/quick-review/'), current: current === 'quick-review' },
         { label: 'Source', href: 'https://github.com/alphagov/govuk-frontend' },
       ]}
-      end={<TagBox className="version-chip">6.5.0</TagBox>}
+      end={<TagBox className="version-chip">6.5.1</TagBox>}
       endAlign="inline"
     />
   </>
 }
 
 export function DocsFooter() {
-  return <Footer containerClassName="site-width" meta={[{ label: 'KVZD Design', href: sitePath('/components/') }]} description="React components based on GOV.UK Frontend 6.5.0" />
+  return <Footer containerClassName="site-width" meta={[{ label: 'KVZD Design', href: sitePath('/components/') }]} description="React components based on GOV.UK Frontend 6.5.1" />
 }

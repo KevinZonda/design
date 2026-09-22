@@ -49,5 +49,5 @@ import { Sidebar } from '@kvzd-design/gov-uk-extends'
 ```tsx
 import { TagBox } from '@kvzd-design/gov-uk-extends'
 
-<TagBox>6.5.0</TagBox>
+<TagBox>6.5.1</TagBox>
 ```

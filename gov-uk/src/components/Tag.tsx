@@ -3,7 +3,7 @@ import type { HTMLAttributes, ReactNode } from 'react'
 
 export interface TagProps extends HTMLAttributes<HTMLElement> {
   children: ReactNode
-  color?: 'grey' | 'green' | 'turquoise' | 'blue' | 'purple' | 'pink' | 'red' | 'orange' | 'yellow'
+  color?: 'grey' | 'green' | 'teal' | 'turquoise' | 'blue' | 'purple' | 'magenta' | 'pink' | 'red' | 'orange' | 'yellow'
 }
 
 export const Tag = forwardRef<HTMLElement, TagProps>(function Tag({ children, className = '', color, ...props }, ref) {

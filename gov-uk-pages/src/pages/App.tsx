@@ -43,9 +43,9 @@ function OverviewPage() {
       <span className="govuk-caption-xl">GOV.UK React</span>
       <h1 className="govuk-heading-xl">Components</h1>
       <p className="govuk-body-l">Reusable React components for building consistent, accessible public services.</p>
-      <p className="govuk-body">Each page includes a working example, a compact React API and implementation guidance aligned with GOV.UK Frontend 6.5.0.</p>
+      <p className="govuk-body">Each page includes a working example, a compact React API and implementation guidance aligned with GOV.UK Frontend 6.5.1.</p>
       <div className="overview-actions"><Button href={sitePath('/quick-review/')}>Open Quick Review</Button><span>Explore multiple components together in one interactive page.</span></div>
-      <ul className="official-component-list">{componentDocs.map((component) => <li key={component.slug}><Link className="govuk-link" to={`/components/${component.slug}/`}>{component.name}</Link>{component.status === 'trial' && <Tag color="blue">Trial</Tag>}<p>{component.summary}</p></li>)}</ul>
+      <ul className="official-component-list">{componentDocs.map((component) => <li key={component.slug}><Link className="govuk-link" to={`/components/${component.slug}/`}>{component.name}</Link>{component.status === 'trial' && <Tag color="orange">Trial</Tag>}<p>{component.summary}</p></li>)}</ul>
     </div>
   </DocsLayout>
 }
@@ -81,7 +81,7 @@ function ComponentPage({ component }: { component: ComponentDoc }) {
   return <DocsLayout currentSlug={component.slug}>
     <article className="component-doc">
       <Breadcrumbs className="doc-breadcrumbs" items={[{ label: 'Components', href: sitePath('/components/') }, { label: component.name, current: true }]} />
-      <div className="component-title-row"><h1 className="govuk-heading-xl">{component.name}</h1>{component.status === 'trial' && <Tag color="blue">Trial</Tag>}</div>
+      <div className="component-title-row"><h1 className="govuk-heading-xl">{component.name}</h1>{component.status === 'trial' && <Tag color="orange">Trial</Tag>}</div>
       <p className="govuk-body-l component-summary">{component.summary}</p>
       <ExampleBlock component={component} guidanceUrl={component.guidanceUrl === null ? undefined : component.guidanceUrl ?? `https://design-system.service.gov.uk/components/${component.slug}/`} />
       <ApiTable component={component} />

@@ -119,8 +119,8 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'A neutral outlined label for short metadata such as a version number.',
     whenToUse: <>Use for metadata that does not communicate a status. Use the standard <Link className="govuk-link" to="/components/tag/">Tag</Link> when the label communicates a status.</>,
     howItWorks: 'It renders a span and accepts standard span attributes and an optional className.',
-    code: '<TagBox>6.5.0</TagBox>',
-    example: () => <div className="tag-box-example"><TagBox>6.5.0</TagBox><TagBox>Release candidate</TagBox></div>,
+    code: '<TagBox>6.5.1</TagBox>',
+    example: () => <div className="tag-box-example"><TagBox>6.5.1</TagBox><TagBox>Release candidate</TagBox></div>,
     api: [
       { name: 'children', type: 'ReactNode', description: 'Short text or other inline content displayed inside the box.' },
       { name: 'className', type: 'string', description: 'Additional CSS class for positioning or local styling.' },

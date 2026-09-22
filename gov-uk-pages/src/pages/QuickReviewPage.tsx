@@ -41,7 +41,7 @@ export function QuickReviewPage() {
           </p>
           <div className="release-note">
             <Tag color="blue">Baseline</Tag>
-            <span>Locked to GOV.UK Frontend 6.5.0</span>
+            <span>Locked to GOV.UK Frontend 6.5.1</span>
             <span className="release-note__count">{componentDocs.length} components covered</span>
           </div>
 
@@ -89,7 +89,7 @@ export function QuickReviewPage() {
                     <div className="review-card__header">
                       <div className="review-card__title-row">
                         <h3 className="govuk-heading-m">{component.name}</h3>
-                        {component.status === 'trial' && <Tag color="blue">Trial</Tag>}
+                        {component.status === 'trial' && <Tag color="orange">Trial</Tag>}
                       </div>
                       <p className="govuk-body">{component.summary}</p>
                     </div>

@@ -1,11 +1,11 @@
 # @kvzd-design/gov-uk
 
-React components based on GOV.UK Frontend **6.5.0**, with a compact API inspired by Ant Design.
+React components based on GOV.UK Frontend **6.5.1**, with a compact API inspired by Ant Design.
 
 ## Install
 
 ```bash
-pnpm add @kvzd-design/gov-uk govuk-frontend@6.5.0
+pnpm add @kvzd-design/gov-uk govuk-frontend@6.5.1
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ export function Example() {
 - Semantic HTML and GOV.UK class names underneath.
 - React owns interactive state; GOV.UK's DOM-mutating JavaScript is not initialised.
 - Controlled and uncontrolled modes are supported where they are useful.
-- GOV.UK Frontend is pinned to exactly `6.5.0`.
+- GOV.UK Frontend is pinned to exactly `6.5.1`.
 
 ### Click behaviour
 
