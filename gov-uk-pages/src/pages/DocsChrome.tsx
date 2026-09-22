@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Header, ServiceNavigation, SkipLink } from '@kvzd-design/gov-uk'
+import { Header, SearchInput, ServiceNavigation, SkipLink } from '@kvzd-design/gov-uk'
 import { componentDocs } from './componentRegistry'
 import { sitePath } from './sitePath'
 import './DocsChrome.css'
@@ -22,9 +22,7 @@ function DocsSearch() {
   }
 
   return <form className="site-search" role="search" onSubmit={(event) => { event.preventDefault(); goToResult() }} onFocus={() => setOpen(true)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false) }}>
-    <label className="govuk-visually-hidden" htmlFor="site-search">Search GOV.UK React components</label>
-    <span className="site-search__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" /></svg></span>
-    <input id="site-search" type="search" placeholder="Search GOV.UK React" autoComplete="off" value={query} role="combobox" aria-autocomplete="list" aria-expanded={showResults} aria-controls="site-search-results" aria-activedescendant={showResults && matches[activeIndex] ? `site-search-result-${matches[activeIndex].slug}` : undefined} onChange={(event) => { setQuery(event.target.value); setActiveIndex(0); setOpen(true) }} onKeyDown={(event) => {
+    <SearchInput id="site-search" label="Search GOV.UK React components" visuallyHiddenLabel placeholder="Search GOV.UK React" autoComplete="off" value={query} role="combobox" aria-autocomplete="list" aria-expanded={showResults} aria-controls="site-search-results" aria-activedescendant={showResults && matches[activeIndex] ? `site-search-result-${matches[activeIndex].slug}` : undefined} onChange={(event) => { setQuery(event.target.value); setActiveIndex(0); setOpen(true) }} onKeyDown={(event) => {
       if (event.key === 'Escape') { setOpen(false); return }
       if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return
       event.preventDefault()

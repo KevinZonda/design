@@ -27,6 +27,7 @@ import {
   PasswordInput,
   PhaseBanner,
   Radios,
+  SearchInput,
   Select,
   ServiceNavigation,
   SkipLink,
@@ -328,6 +329,15 @@ export const componentDocs: ComponentDoc[] = [
     code: `<Radios name="contact" legend="How would you prefer to be contacted?" options={[\n  { label: 'Email', value: 'email' },\n  { label: 'Phone', value: 'phone' }\n]} />`,
     example: () => <Radios name="contact" legend="How would you prefer to be contacted?" options={[{ label: 'Email', value: 'email' }, { label: 'Phone', value: 'phone' }, { label: 'Text message', value: 'text' }]} />,
     api: [{ name: 'options', type: 'ChoiceOption[]', description: 'Radio options, hints and conditional content.' }, value(), onChange(), text('legend', 'Question for the group.')],
+  },
+  {
+    slug: 'search-input', name: 'Search input',
+    summary: 'Let users enter a search query with a recognisable icon.',
+    whenToUse: 'Use for searching or filtering content. Give the field a specific label; place result suggestions and search behaviour in the parent.',
+    howItWorks: 'The native search input keeps keyboard and browser behaviour. The icon is decorative and can sit on either side, be replaced or be hidden.',
+    code: `<SearchInput label="Search services" name="query" />\n<SearchInput label="Filter results" iconPosition="right" />`,
+    example: () => <div className="search-input-examples"><SearchInput label="Search services" name="query" placeholder="Enter a service" /><SearchInput label="Filter results" iconPosition="right" placeholder="Filter by keyword" /></div>,
+    api: [text('label', 'Accessible search field label.'), { name: 'iconPosition', type: `'left' | 'right'`, defaultValue: 'left', description: 'Side of the input containing the icon.' }, { name: 'icon', type: 'ReactNode', defaultValue: 'Search icon', description: 'Decorative icon. Pass null to hide it.' }, { name: 'visuallyHiddenLabel', type: 'boolean', defaultValue: 'false', description: 'Hide the label visually while keeping it available to assistive technology.' }, text('hint', 'Optional supporting guidance.'), text('error', 'Validation error.'), { name: 'value / onChange', type: 'native input props', description: 'Use controlled or uncontrolled search input behaviour.' }],
   },
   {
     slug: 'select', name: 'Select',

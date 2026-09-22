@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Input, Tag } from '@kvzd-design/gov-uk'
+import { SearchInput, Tag } from '@kvzd-design/gov-uk'
 import { Sidebar } from '@kvzd-design/gov-uk-extends'
 import './QuickReviewPage.css'
 import { DocsFooter, DocsHeader } from './DocsChrome'
@@ -46,10 +46,9 @@ export function QuickReviewPage() {
           </div>
 
           <div className="review-filter">
-            <Input
+            <SearchInput
               className="review-filter__search"
               id="component-search"
-              type="search"
               label="Filter components"
               labelSize="s"
               value={query}

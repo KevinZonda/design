@@ -43,7 +43,7 @@ Accordion, BackLink, Breadcrumbs, Button, CharacterCount, Checkboxes,
 CookieBanner, DateInput, Details, ErrorMessage, ErrorSummary, ExitThisPage,
 Feedback, Fieldset, FileUpload, Footer, GenericHeader, Header, Hint, Input,
 InsetText, Label, LanguageNavigation, NotificationBanner, Pagination, Panel,
-PasswordInput, PhaseBanner, Radios, Select, ServiceNavigation, SkipLink,
+PasswordInput, PhaseBanner, Radios, SearchInput, Select, ServiceNavigation, SkipLink,
 SummaryList, Table, Tabs, Tag, TaskList, Textarea and WarningText.
 
 ## Development

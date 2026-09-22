@@ -1,5 +1,6 @@
 export * from './Button'
 export * from './Input'
+export * from './SearchInput'
 export * from './Panel'
 export * from './Tag'
 export * from './navigation'

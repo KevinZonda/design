@@ -55,6 +55,41 @@
   background: #f4f8fb;
 }
 
+.kvzd-search-input__control {
+  position: relative;
+  width: 100%;
+}
+
+.kvzd-search-input__input {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.kvzd-search-input__control--left .kvzd-search-input__input {
+  padding-left: 42px;
+}
+
+.kvzd-search-input__control--right .kvzd-search-input__input {
+  padding-right: 42px;
+}
+
+.kvzd-search-input__icon {
+  position: absolute;
+  top: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #505a5f;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.kvzd-search-input__control--left .kvzd-search-input__icon { left: 10px; }
+.kvzd-search-input__control--right .kvzd-search-input__icon { right: 10px; }
+.kvzd-search-input__icon svg { display: block; max-width: 100%; max-height: 100%; }
+
 /* React owns the GOV.UK service navigation disclosure state. */
 .kvzd-service-navigation__toggle {
   display: none;
