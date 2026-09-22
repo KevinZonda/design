@@ -1,30 +1,32 @@
 import { useEffect, type ReactNode } from 'react'
+import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { Breadcrumbs, Button, Pagination, Table, Tag } from '@kvzd-design/gov-uk'
 import { FancyTabs } from '@kvzd-design/gov-uk-extends'
 import { componentBySlug, componentDocs, type ComponentDoc } from './componentRegistry'
 import { DocsFooter, DocsHeader } from './DocsChrome'
 import { QuickReviewPage } from './QuickReviewPage'
+import { sitePath } from './sitePath'
 import './DocsLayout.css'
 import './ComponentDocs.css'
 
 function pathFor(slug: string) {
-  return `/components/${slug}/`
+  return sitePath(`/components/${slug}/`)
 }
 
 type DocsSection = 'components' | 'extra-components'
 
 const extraComponentNavigation = [
-  { slug: 'fancy-tabs', name: 'FancyTabs', href: '/extra-components/#fancy-tabs' },
+  { slug: 'fancy-tabs', name: 'FancyTabs', to: '/extra-components/#fancy-tabs' },
 ]
 
 function SideNavigation({ currentSlug, section }: { currentSlug?: string; section: DocsSection }) {
   const items = section === 'extra-components'
     ? extraComponentNavigation
-    : componentDocs.map((component) => ({ ...component, href: pathFor(component.slug) }))
+    : componentDocs.map((component) => ({ ...component, to: `/components/${component.slug}/` }))
 
   return <nav className="app-subnav" aria-labelledby="app-subnav-heading">
     <h2 className="govuk-heading-s app-subnav__heading" id="app-subnav-heading">{section === 'extra-components' ? 'Extra Components' : 'Components'}</h2>
-    <ul className="app-subnav__section">{items.map((component) => <li key={component.slug} className={`app-subnav__section-item ${component.slug === currentSlug ? 'app-subnav__section-item--current' : ''}`.trim()}><a className="app-subnav__link govuk-link govuk-link--no-visited-state govuk-link--no-underline" href={component.href} aria-current={component.slug === currentSlug ? 'page' : undefined}>{component.name}</a></li>)}</ul>
+    <ul className="app-subnav__section">{items.map((component) => <li key={component.slug} className={`app-subnav__section-item ${component.slug === currentSlug ? 'app-subnav__section-item--current' : ''}`.trim()}><Link className="app-subnav__link govuk-link govuk-link--no-visited-state govuk-link--no-underline" to={component.to} aria-current={component.slug === currentSlug ? 'page' : undefined}>{component.name}</Link></li>)}</ul>
   </nav>
 }
 
@@ -36,8 +38,8 @@ function OverviewPage() {
       <h1 className="govuk-heading-xl">Components</h1>
       <p className="govuk-body-l">Reusable React components for building consistent, accessible public services.</p>
       <p className="govuk-body">Each page includes a working example, a compact React API and implementation guidance aligned with GOV.UK Frontend 6.5.0.</p>
-      <div className="overview-actions"><Button href="/quick-review/">Open Quick Review</Button><span>Explore multiple components together in one interactive page.</span></div>
-      <ul className="official-component-list">{componentDocs.map((component) => <li key={component.slug}><a className="govuk-link" href={pathFor(component.slug)}>{component.name}</a>{component.status === 'trial' && <Tag color="blue">Trial</Tag>}<p>{component.summary}</p></li>)}</ul>
+      <div className="overview-actions"><Button href={sitePath('/quick-review/')}>Open Quick Review</Button><span>Explore multiple components together in one interactive page.</span></div>
+      <ul className="official-component-list">{componentDocs.map((component) => <li key={component.slug}><Link className="govuk-link" to={`/components/${component.slug}/`}>{component.name}</Link>{component.status === 'trial' && <Tag color="blue">Trial</Tag>}<p>{component.summary}</p></li>)}</ul>
     </div>
   </DocsLayout>
 }
@@ -66,16 +68,16 @@ const fancyTabsCode = `<FancyTabs items={[
 ]} />`
 
 function ExtraComponentsPage() {
-  useEffect(() => { document.title = 'Extra Components – KVZD GOV.UK React'; window.scrollTo(0, 0) }, [])
+  useEffect(() => { document.title = 'Extra Components – KVZD GOV.UK React' }, [])
   return <DocsLayout currentSection="extra-components" currentSlug="fancy-tabs">
     <article className="component-doc extra-components-page">
-      <Breadcrumbs className="doc-breadcrumbs" items={[{ label: 'KVZD Design', href: '/components/' }, { label: 'Extra Components', current: true }]} />
+      <Breadcrumbs className="doc-breadcrumbs" items={[{ label: 'KVZD Design', href: sitePath('/components/') }, { label: 'Extra Components', current: true }]} />
       <span className="govuk-caption-xl">KVZD Design</span>
       <h1 className="govuk-heading-xl">Extra Components</h1>
       <p className="govuk-body-l component-summary">Optional components for documentation, developer tools and other interfaces that sit outside the official GOV.UK component set.</p>
       <section id="fancy-tabs" aria-labelledby="fancy-tabs-title">
         <h2 className="govuk-heading-l" id="fancy-tabs-title">FancyTabs</h2>
-        <p className="govuk-body">A stronger tab treatment for switching between views such as a live preview and its React source. It has the same interface as the standard <a className="govuk-link" href="/components/tabs/">Tabs</a> component.</p>
+        <p className="govuk-body">A stronger tab treatment for switching between views such as a live preview and its React source. It has the same interface as the standard <Link className="govuk-link" to="/components/tabs/">Tabs</Link> component.</p>
         <div className="extra-component-example">
           <FancyTabs items={[
             { key: 'preview', label: 'Preview', children: <div className="extra-component-example__panel"><FancyTabs items={[
@@ -119,10 +121,10 @@ function ComponentPage({ component }: { component: ComponentDoc }) {
   const index = componentDocs.findIndex((item) => item.slug === component.slug)
   const previous = componentDocs[index - 1]
   const next = componentDocs[index + 1]
-  useEffect(() => { document.title = `${component.name} – KVZD GOV.UK React`; window.scrollTo(0, 0) }, [component])
+  useEffect(() => { document.title = `${component.name} – KVZD GOV.UK React` }, [component])
   return <DocsLayout currentSlug={component.slug}>
     <article className="component-doc">
-      <Breadcrumbs className="doc-breadcrumbs" items={[{ label: 'Components', href: '/components/' }, { label: component.name, current: true }]} />
+      <Breadcrumbs className="doc-breadcrumbs" items={[{ label: 'Components', href: sitePath('/components/') }, { label: component.name, current: true }]} />
       <div className="component-title-row"><h1 className="govuk-heading-xl">{component.name}</h1>{component.status === 'trial' && <Tag color="blue">Trial</Tag>}</div>
       <p className="govuk-body-l component-summary">{component.summary}</p>
       <ExampleBlock component={component} />
@@ -140,15 +142,38 @@ function DocsLayout({ children, currentSlug, currentSection = 'components' }: { 
 
 function NotFoundPage() {
   useEffect(() => { document.title = 'Page not found – KVZD GOV.UK React' }, [])
-  return <DocsLayout><h1 className="govuk-heading-xl">Page not found</h1><p className="govuk-body">The component page you requested does not exist.</p><a className="govuk-link" href="/components/">Return to components</a></DocsLayout>
+  return <DocsLayout><h1 className="govuk-heading-xl">Page not found</h1><p className="govuk-body">The component page you requested does not exist.</p><Link className="govuk-link" to="/components/">Return to components</Link></DocsLayout>
+}
+
+function ComponentRoute() {
+  const { slug } = useParams()
+  const component = slug ? componentBySlug.get(slug) : undefined
+  return component ? <ComponentPage component={component} /> : <NotFoundPage />
+}
+
+function RouteScroll() {
+  const { pathname, hash } = useLocation()
+  useEffect(() => {
+    if (!hash) {
+      window.scrollTo(0, 0)
+      return
+    }
+    const frame = requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView())
+    return () => cancelAnimationFrame(frame)
+  }, [pathname, hash])
+  return null
 }
 
 export default function App() {
-  const cleanPath = window.location.pathname.replace(/\/+$/, '') || '/'
-  if (cleanPath === '/quick-review') return <QuickReviewPage />
-  if (cleanPath === '/extra-components') return <ExtraComponentsPage />
-  if (cleanPath === '/' || cleanPath === '/components') return <OverviewPage />
-  const match = cleanPath.match(/^\/components\/([^/]+)$/)
-  const component = match ? componentBySlug.get(match[1]) : undefined
-  return component ? <ComponentPage component={component} /> : <NotFoundPage />
+  return <>
+    <RouteScroll />
+    <Routes>
+      <Route path="/" element={<OverviewPage />} />
+      <Route path="/components" element={<OverviewPage />} />
+      <Route path="/components/:slug" element={<ComponentRoute />} />
+      <Route path="/extra-components" element={<ExtraComponentsPage />} />
+      <Route path="/quick-review" element={<QuickReviewPage />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  </>
 }

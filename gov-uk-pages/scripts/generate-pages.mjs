@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 const slugs = [
@@ -13,6 +13,20 @@ const slugs = [
 
 const outputRoot = join(process.cwd(), 'dist')
 const source = await readFile(join(outputRoot, 'index.html'), 'utf8')
+const assetsRoot = join(outputRoot, 'assets')
+const govukAssetsRoot = join(process.cwd(), '../gov-uk/node_modules/govuk-frontend/dist/govuk/assets')
+
+// GOV.UK's distributed CSS references /assets, which breaks on a Pages project path.
+// The built stylesheet lives in dist/assets, so relative URLs work at either base path.
+await Promise.all(['fonts', 'images'].map((directory) =>
+  cp(join(govukAssetsRoot, directory), join(assetsRoot, directory), { recursive: true }),
+))
+for (const file of await readdir(assetsRoot)) {
+  if (!file.endsWith('.css')) continue
+  const path = join(assetsRoot, file)
+  const css = await readFile(path, 'utf8')
+  await writeFile(path, css.replace(/url\((['"]?)\/assets\//g, 'url($1./'))
+}
 
 async function createEntry(path, title) {
   const directory = join(outputRoot, ...path.split('/').filter(Boolean))
@@ -26,5 +40,6 @@ await createEntry('quick-review', 'Quick Review – KVZD GOV.UK React')
 await Promise.all(slugs.map((slug) => createEntry(`components/${slug}`, `${slug.replaceAll('-', ' ')} – KVZD GOV.UK React`)))
 
 await createEntry('extra-components', 'Extra Components – KVZD GOV.UK React')
+await writeFile(join(outputRoot, '404.html'), source.replace(/<title>.*?<\/title>/, '<title>Page not found – KVZD GOV.UK React</title>'))
 
 console.log(`Generated ${slugs.length + 3} documentation routes.`)

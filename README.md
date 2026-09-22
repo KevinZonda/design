@@ -22,3 +22,15 @@ Build and lint the complete workspace with:
 pnpm build
 pnpm lint
 ```
+
+## GitHub Pages
+
+The [deployment workflow](.github/workflows/deploy-pages.yml) builds `gov-uk-pages` and publishes its `dist` directory on pushes to `main` or when run manually. In the repository's **Settings → Pages**, select **GitHub Actions** as the build and deployment source. The workflow uses the Pages base path, so project URLs such as `https://kevinzonda.github.io/design-system/` and custom domains both work.
+
+To check the project-site build locally:
+
+```bash
+pnpm install --frozen-lockfile
+SITE_BASE_PATH=/design-system pnpm build:pages
+SITE_BASE_PATH=/design-system pnpm --filter @kvzd-design/gov-uk-pages preview
+```

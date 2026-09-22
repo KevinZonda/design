@@ -1,13 +1,12 @@
 import { useMemo, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Header, ServiceNavigation, SkipLink } from '@kvzd-design/gov-uk'
 import { componentDocs } from './componentRegistry'
+import { sitePath } from './sitePath'
 import './DocsChrome.css'
 
-function pathFor(slug: string) {
-  return `/components/${slug}/`
-}
-
 function DocsSearch() {
+  const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -19,7 +18,7 @@ function DocsSearch() {
   const showResults = open && query.trim().length > 0
   const goToResult = (index = activeIndex) => {
     const result = matches[index] ?? matches[0]
-    if (result) window.location.assign(pathFor(result.slug))
+    if (result) navigate(`/components/${result.slug}/`)
   }
 
   return <form className="site-search" role="search" onSubmit={(event) => { event.preventDefault(); goToResult() }} onFocus={() => setOpen(true)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false) }}>
@@ -35,7 +34,7 @@ function DocsSearch() {
       setOpen(true)
     }} />
     {showResults && <div className="site-search__results" id="site-search-results" role="listbox">
-      {matches.length > 0 ? matches.map((component, index) => <a id={`site-search-result-${component.slug}`} role="option" aria-selected={index === activeIndex} className={index === activeIndex ? 'is-active' : undefined} href={pathFor(component.slug)} key={component.slug} onMouseEnter={() => setActiveIndex(index)}><strong>{component.name}</strong><span>{component.summary}</span></a>) : <p>No components found</p>}
+      {matches.length > 0 ? matches.map((component, index) => <Link id={`site-search-result-${component.slug}`} role="option" aria-selected={index === activeIndex} className={index === activeIndex ? 'is-active' : undefined} to={`/components/${component.slug}/`} key={component.slug} onMouseEnter={() => setActiveIndex(index)}><strong>{component.name}</strong><span>{component.summary}</span></Link>) : <p>No components found</p>}
     </div>}
   </form>
 }
@@ -46,7 +45,7 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
     <Header
       className="docs-header"
       containerClassName="site-width docs-header__container"
-      homepageUrl="/components/"
+      homepageUrl={sitePath('/components/')}
       logo={<span className="docs-brand-mark"><span className="docs-brand-mark__symbol" aria-hidden="true">◆</span><span>KVZD Design</span></span>}
       productName="GOV.UK React"
     >
@@ -57,9 +56,9 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
       containerClassName="site-width"
       navigationLabel="Documentation"
       items={[
-        { label: 'Components', href: '/components/', current: current === 'components' },
-        { label: 'Extra Components', href: '/extra-components/', current: current === 'extra-components' },
-        { label: 'Quick Review', href: '/quick-review/', current: current === 'quick-review' },
+        { label: 'Components', href: sitePath('/components/'), current: current === 'components' },
+        { label: 'Extra Components', href: sitePath('/extra-components/'), current: current === 'extra-components' },
+        { label: 'Quick Review', href: sitePath('/quick-review/'), current: current === 'quick-review' },
         { label: 'Source', href: 'https://github.com/alphagov/govuk-frontend' },
       ]}
       end={<span className="version-chip">6.5.0</span>}

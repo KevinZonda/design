@@ -1,19 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Input, Tag } from '@kvzd-design/gov-uk'
 import './QuickReviewPage.css'
 import { DocsFooter, DocsHeader } from './DocsChrome'
 import { componentDocs } from './componentRegistry'
-
-function componentPath(slug: string) {
-  return `/components/${slug}/`
-}
 
 export function QuickReviewPage() {
   const [query, setQuery] = useState('')
 
   useEffect(() => {
     document.title = 'Quick Review – KVZD GOV.UK React'
-    window.scrollTo(0, 0)
   }, [])
 
   const filteredComponents = useMemo(() => {
@@ -103,9 +99,9 @@ export function QuickReviewPage() {
                       {component.example()}
                     </div>
                     <div className="review-card__footer">
-                      <a className="govuk-link" href={componentPath(component.slug)}>
+                      <Link className="govuk-link" to={`/components/${component.slug}/`}>
                         View {component.name} documentation
-                      </a>
+                      </Link>
                       <a className="govuk-link review-card__top-link" href="#top">Back to top</a>
                     </div>
                   </article>
