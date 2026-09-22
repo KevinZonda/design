@@ -318,12 +318,16 @@ export const componentDocs: ComponentDoc[] = [
   },
   {
     slug: 'panel', name: 'Panel',
-    summary: 'Highlight important information after a completed transaction.',
-    whenToUse: 'Use on confirmation pages to show that a task is complete and to surface a reference number or key next step.',
-    howItWorks: 'The title is the primary confirmation message, with short supporting content underneath.',
-    code: `<Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel>`,
-    example: () => <Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel>,
-    api: [text('title', 'Main confirmation message.'), text('children', 'Reference number or supporting content.')],
+    summary: 'Highlight important information on confirmation or interruption pages.',
+    whenToUse: 'Use the confirmation variant after a completed transaction, or the interruption variant to pause a journey for important information.',
+    howItWorks: 'The title is the main heading. Interruption panels can include actions to let users resume or change their journey.',
+    code: `<Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel>
+
+<Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" type="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}>
+  <p className="govuk-body">You entered your age as <strong>109</strong>.</p>
+</Panel>`,
+    example: () => <div style={{ display: 'grid', gap: 30 }}><Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel><Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" type="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}><p className="govuk-body">You entered your age as <strong>109</strong>.</p></Panel></div>,
+    api: [text('title', 'Panel heading.'), { name: 'variant', type: `'confirmation' | 'interruption'`, defaultValue: 'confirmation', description: 'Panel style and purpose.' }, { name: 'headingLevel', type: '1 | 2 | 3 | 4 | 5 | 6', defaultValue: '1', description: 'Semantic heading level.' }, text('children', 'Supporting panel content.'), { name: 'actions', type: 'ReactNode', description: 'Buttons or links shown in the panel actions area; use inverse styles for interruption panels.' }],
   },
   {
     slug: 'password-input', name: 'Password input',
