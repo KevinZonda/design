@@ -25,12 +25,12 @@ pnpm lint
 
 ## GitHub Pages
 
-The [deployment workflow](.github/workflows/deploy-pages.yml) builds `gov-uk-pages` and publishes its `dist` directory on pushes to `main` or when run manually. In the repository's **Settings → Pages**, select **GitHub Actions** as the build and deployment source. The workflow uses the Pages base path, so project URLs such as `https://kevinzonda.github.io/design-system/` and custom domains both work.
+The [deployment workflow](.github/workflows/deploy-pages.yml) builds `gov-uk-pages` and publishes its `dist` directory on pushes to `main` or when run manually. In the repository's **Settings → Pages**, select **GitHub Actions** as the build and deployment source and set the custom domain to `design.kevinzonda.com`. This domain serves the site at `/`, so the workflow builds with a root base path.
 
-To check the project-site build locally:
+To check the custom-domain build locally:
 
 ```bash
 pnpm install --frozen-lockfile
-SITE_BASE_PATH=/design-system pnpm build:pages
-SITE_BASE_PATH=/design-system pnpm --filter @kvzd-design/gov-uk-pages preview
+pnpm build:pages
+pnpm --filter @kvzd-design/gov-uk-pages preview
 ```
