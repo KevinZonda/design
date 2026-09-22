@@ -92,7 +92,13 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
       <thead className="govuk-table__head"><tr className="govuk-table__row">
         {selectable && <th className="govuk-table__header kvzd-fancy-table__select" scope="col"><input type="checkbox" aria-label="Select all rows on this page" checked={allVisibleSelected} disabled={!visibleKeys.length} onChange={() => updateSelection(allVisibleSelected ? selected.filter((key) => !visibleKeys.includes(key)) : [...new Set([...selected, ...visibleKeys])])} /></th>}
         {columns.map((column) => <th className={`govuk-table__header ${column.numeric ? 'govuk-table__header--numeric' : ''}`} scope="col" key={column.key} aria-sort={activeSort?.columnKey === column.key ? (activeSort.order === 'ascend' ? 'ascending' : 'descending') : undefined}>
-          {column.sorter ? <button className="kvzd-fancy-table__sort" type="button" onClick={() => toggleSort(column.key)}>{column.title}<span aria-hidden="true">{activeSort?.columnKey === column.key ? (activeSort.order === 'ascend' ? ' ↑' : ' ↓') : ' ↕'}</span></button> : column.title}
+          {column.sorter ? <button className="kvzd-fancy-table__sort" type="button" onClick={() => toggleSort(column.key)}>
+            {column.title}
+            <svg className="kvzd-fancy-table__sort-icon" data-order={activeSort?.columnKey === column.key ? activeSort.order : 'none'} viewBox="0 0 12 16" aria-hidden="true" focusable="false">
+              <polygon className="kvzd-fancy-table__sort-up" points="6,1 11,7 1,7" />
+              <polygon className="kvzd-fancy-table__sort-down" points="1,9 11,9 6,15" />
+            </svg>
+          </button> : column.title}
           {column.filters && column.onFilter && <select className="govuk-select kvzd-fancy-table__filter" aria-label={column.filterLabel ?? `Filter ${typeof column.title === 'string' ? column.title : column.key}`} value={activeFilters[column.key] ?? ''} onChange={(event) => updateFilter(column.key, event.target.value)}><option value="">All</option>{column.filters.map((filter) => <option key={filter.value} value={filter.value}>{filter.label}</option>)}</select>}
         </th>)}
       </tr></thead>
