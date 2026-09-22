@@ -2,14 +2,15 @@ import { useState } from 'react'
 import type { HTMLAttributes, ReactNode } from 'react'
 import { Button } from './Button'
 import { Tag } from './Tag'
+import { ClickTarget, type IClickBehaviour } from './clickBehaviour'
 
 export function Details({ summary, children, open = false }: { summary: ReactNode; children: ReactNode; open?: boolean }) { return <details className="govuk-details" open={open}><summary className="govuk-details__summary"><span className="govuk-details__summary-text">{summary}</span></summary><div className="govuk-details__text">{children}</div></details> }
 export function InsetText({ children }: { children: ReactNode }) { return <div className="govuk-inset-text">{children}</div> }
 export function WarningText({ children, iconFallbackText = 'Warning' }: { children: ReactNode; iconFallbackText?: string }) { return <div className="govuk-warning-text"><span className="govuk-warning-text__icon" aria-hidden="true">!</span><strong className="govuk-warning-text__text"><span className="govuk-visually-hidden">{iconFallbackText}</span>{children}</strong></div> }
 
-export interface ErrorItem { href?: string; children: ReactNode }
+export interface ErrorItem extends IClickBehaviour { children: ReactNode }
 export function ErrorSummary({ title = 'There is a problem', errors }: { title?: ReactNode; errors: ErrorItem[] }) {
-  return <div className="govuk-error-summary" data-module="govuk-error-summary" role="alert" tabIndex={-1}><h2 className="govuk-error-summary__title">{title}</h2><div className="govuk-error-summary__body"><ul className="govuk-list govuk-error-summary__list">{errors.map((error, index) => <li key={index}>{error.href ? <a href={error.href}>{error.children}</a> : error.children}</li>)}</ul></div></div>
+  return <div className="govuk-error-summary" data-module="govuk-error-summary" role="alert" tabIndex={-1}><h2 className="govuk-error-summary__title">{title}</h2><div className="govuk-error-summary__body"><ul className="govuk-list govuk-error-summary__list">{errors.map((error, index) => <li key={index}><ClickTarget href={error.href} onClick={error.onClick}>{error.children}</ClickTarget></li>)}</ul></div></div>
 }
 
 export function NotificationBanner({ children, title, type = 'info', className = '' }: { children: ReactNode; title?: ReactNode; type?: 'info' | 'success'; className?: string }) {
@@ -32,7 +33,7 @@ export function CookieBanner({ acceptText = 'Accept analytics cookies', children
   return <div className="govuk-cookie-banner" role="region" aria-label="Cookies"><div className="govuk-cookie-banner__message govuk-width-container"><div className="govuk-grid-row"><div className="govuk-grid-column-two-thirds"><h2 className="govuk-cookie-banner__heading govuk-heading-m">{title}</h2><div className="govuk-cookie-banner__content"><p className="govuk-body">{children}</p></div></div></div><div className="govuk-button-group"><Button onClick={() => { setChoice('accepted'); onAccept?.() }}>{acceptText}</Button><Button onClick={() => { setChoice('rejected'); onReject?.() }}>{rejectText}</Button></div></div></div>
 }
 
-export function ExitThisPage({ href, children = 'Exit this page' }: { href: string; children?: ReactNode }) { return <a href={href} className="govuk-exit-this-page__button govuk-button govuk-button--warning" role="button" rel="nofollow noreferrer">{children}<span aria-hidden="true"> ⇥</span></a> }
+export function ExitThisPage({ href, onClick, children = 'Exit this page' }: IClickBehaviour & { children?: ReactNode }) { return <ClickTarget href={href} onClick={onClick} className="govuk-exit-this-page__button govuk-button govuk-button--warning" anchorProps={{ role: 'button', rel: 'nofollow noreferrer' }}>{children}<span aria-hidden="true"> ⇥</span></ClickTarget> }
 
 export function Feedback({ onUseful, onSubmit }: { onUseful?: (useful: boolean) => void; onSubmit?: (message: string) => void }) {
   const [open, setOpen] = useState(false); const [message, setMessage] = useState(''); const [sent, setSent] = useState(false)

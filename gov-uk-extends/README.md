@@ -24,7 +24,7 @@ import { FancyTabs } from '@kvzd-design/gov-uk-extends'
 
 `FancyTabs` has the same props as `Tabs` from `@kvzd-design/gov-uk`.
 
-The `Sidebar` component renders a labelled navigation list in the documentation sidebar style. It accepts a custom link renderer for client-side routing:
+The `Sidebar` component renders a labelled navigation list in the documentation sidebar style. Items can contain nested `children` at any depth. By default, nested links stay visible and the active branch has one left border. An item without `href` or `onClick` is a group heading. Set `collapsible` to add independent expand and collapse controls to items with children; the ancestors of `currentKey` open automatically. An item with a link or click action and `children` gets a separate expand button in this mode. It accepts a custom link renderer for client-side routing:
 
 ```tsx
 import { Sidebar } from '@kvzd-design/gov-uk-extends'
@@ -34,7 +34,20 @@ import { Sidebar } from '@kvzd-design/gov-uk-extends'
   currentKey="buttons"
   items={[
     { key: 'overview', label: 'Overview', href: '/overview/' },
-    { key: 'buttons', label: 'Buttons', href: '/buttons/' },
+    { key: 'components', label: 'Components', children: [
+      { key: 'buttons', label: 'Buttons', href: '/buttons/' },
+      { key: 'forms', label: 'Forms', href: '/forms/', children: [
+        { key: 'errors', label: 'Errors', href: '/forms/errors/' },
+      ] },
+    ] },
   ]}
 />
+```
+
+`TagBox` displays short, neutral metadata such as a version number in an outlined box. It accepts standard `span` attributes and an optional `className`.
+
+```tsx
+import { TagBox } from '@kvzd-design/gov-uk-extends'
+
+<TagBox>6.5.0</TagBox>
 ```

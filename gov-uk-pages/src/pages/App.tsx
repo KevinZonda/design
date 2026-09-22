@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { Breadcrumbs, Button, Pagination, Table, Tag } from '@kvzd-design/gov-uk'
-import { FancyTabs, Sidebar } from '@kvzd-design/gov-uk-extends'
+import { FancyTabs, Sidebar, TagBox } from '@kvzd-design/gov-uk-extends'
 import { componentBySlug, componentDocs, type ComponentDoc } from './componentRegistry'
 import { DocsFooter, DocsHeader } from './DocsChrome'
 import { QuickReviewPage } from './QuickReviewPage'
@@ -18,6 +18,7 @@ type DocsSection = 'components' | 'extra-components'
 const extraComponentNavigation = [
   { key: 'fancy-tabs', label: 'FancyTabs', href: '/extra-components/#fancy-tabs' },
   { key: 'sidebar', label: 'Sidebar', href: '/extra-components/#sidebar' },
+  { key: 'tag-box', label: 'TagBox', href: '/extra-components/#tag-box' },
 ]
 
 function SideNavigation({ currentSlug, section }: { currentSlug?: string; section: DocsSection }) {
@@ -30,7 +31,9 @@ function SideNavigation({ currentSlug, section }: { currentSlug?: string; sectio
     heading={section === 'extra-components' ? 'Extra Components' : 'Components'}
     items={items}
     currentKey={currentSlug}
-    renderLink={(item, { className, current }) => <Link className={className} to={item.href} aria-current={current ? 'page' : undefined}>{item.label}</Link>}
+    renderLink={(item, { className, current }) => item.href !== undefined
+      ? <Link className={className} to={item.href} onClick={item.onClick} aria-current={current ? 'page' : undefined}>{item.label}</Link>
+      : <button className={className} type="button" onClick={item.onClick} aria-current={current ? 'page' : undefined}>{item.label}</button>}
   />
 }
 
@@ -72,18 +75,35 @@ const fancyTabsCode = `<FancyTabs items={[
 ]} />`
 
 const sidebarCode = `<Sidebar
-  heading="Documentation"
-  currentKey="overview"
+  heading="Pages in this section"
+  currentKey="history"
   items={[
-    { key: 'overview', label: 'Overview', href: '#overview' },
-    { key: 'examples', label: 'Examples', href: '#examples' },
+    { key: 'accordion', label: 'Accordion', href: '#sidebar', children: [
+      { key: 'history', label: 'History', href: '#sidebar-api' },
+    ] },
+    { key: 'fancy-tabs', label: 'FancyTabs', href: '#fancy-tabs' },
+  ]}
+/>
+
+<Sidebar
+  heading="Documentation"
+  collapsible
+  currentKey="sidebar-api"
+  items={[
+    { key: 'examples', label: 'Examples', children: [
+      { key: 'sidebar', label: 'Sidebar', href: '#sidebar', children: [
+        { key: 'sidebar-api', label: 'React API', href: '#sidebar-api' },
+      ] },
+    ] },
   ]}
 />`
+
+const tagBoxCode = `<TagBox>6.5.0</TagBox>`
 
 function ExtraComponentsPage() {
   const { hash } = useLocation()
   useEffect(() => { document.title = 'Extra Components – KVZD GOV.UK React' }, [])
-  return <DocsLayout currentSection="extra-components" currentSlug={hash === '#sidebar' ? 'sidebar' : 'fancy-tabs'}>
+  return <DocsLayout currentSection="extra-components" currentSlug={hash === '#tag-box' ? 'tag-box' : hash === '#sidebar' ? 'sidebar' : 'fancy-tabs'}>
     <article className="component-doc extra-components-page">
       <Breadcrumbs className="doc-breadcrumbs" items={[{ label: 'KVZD Design', href: sitePath('/components/') }, { label: 'Extra Components', current: true }]} />
       <span className="govuk-caption-xl">KVZD Design</span>
@@ -101,7 +121,7 @@ function ExtraComponentsPage() {
             { key: 'react', label: 'React', children: <pre className="code-block"><code>{fancyTabsCode}</code></pre> },
           ]} />
         </div>
-        <h3 className="govuk-heading-m extra-component-api-title">React API</h3>
+        <h3 className="govuk-heading-m extra-component-api-title" id="fancy-tabs-api">React API</h3>
         <p className="govuk-body">Import it from <code className="inline-code">@kvzd-design/gov-uk-extends</code>. The props are shared with <code className="inline-code">TabsProps</code> from the base package.</p>
         <div className="api-table-scroll"><Table rowKey="name" columns={[
           { title: 'Property', dataIndex: 'name', rowHeader: true, render: (value) => <code>{String(value)}</code> },
@@ -116,14 +136,38 @@ function ExtraComponentsPage() {
       </section>
       <section id="sidebar" aria-labelledby="sidebar-title">
         <h2 className="govuk-heading-l" id="sidebar-title">Sidebar</h2>
-        <p className="govuk-body">A navigation list for related pages or sections, styled like the Components sidebar. Pass the links and current item as data.</p>
-        <div className="extra-component-example sidebar-example">
-          <Sidebar heading="Documentation" currentKey="sidebar" items={[
-            { key: 'fancy-tabs', label: 'FancyTabs', href: '#fancy-tabs' },
-            { key: 'sidebar', label: 'Sidebar', href: '#sidebar' },
+        <p className="govuk-body">Nested navigation follows the GOV.UK Design System sidebar style. Set <code className="inline-code">collapsible</code> when users need to expand and collapse groups.</p>
+        <div className="extra-component-example">
+          <FancyTabs items={[
+            { key: 'preview', label: 'Preview', children: <div className="extra-component-example__panel">
+              <p className="govuk-body"><strong>Nested navigation</strong></p>
+              <div className="sidebar-example">
+                <Sidebar heading="Pages in this section" currentKey="history" items={[
+                  { key: 'accordion', label: 'Accordion', href: '#sidebar', children: [
+                    { key: 'history', label: 'History', href: '#sidebar-api' },
+                  ] },
+                  { key: 'fancy-tabs', label: 'FancyTabs', href: '#fancy-tabs' },
+                ]} />
+              </div>
+              <p className="govuk-body"><strong>Collapsible navigation</strong></p>
+              <div className="sidebar-example">
+                <Sidebar heading="Documentation" collapsible currentKey="sidebar-api" items={[
+                  { key: 'examples', label: 'Examples', children: [
+                    { key: 'fancy-tabs', label: 'FancyTabs', href: '#fancy-tabs' },
+                    { key: 'sidebar', label: 'Sidebar', href: '#sidebar', children: [
+                      { key: 'sidebar-api', label: 'React API', href: '#sidebar-api' },
+                    ] },
+                  ] },
+                  { key: 'reference', label: 'Reference', children: [
+                    { key: 'fancy-tabs-api', label: 'FancyTabs API', href: '#fancy-tabs-api' },
+                  ] },
+                ]} />
+              </div>
+            </div> },
+            { key: 'react', label: 'React', children: <pre className="code-block"><code>{sidebarCode}</code></pre> },
           ]} />
         </div>
-        <h3 className="govuk-heading-m extra-component-api-title">React API</h3>
+        <h3 className="govuk-heading-m extra-component-api-title" id="sidebar-api">React API</h3>
         <p className="govuk-body">Import it from <code className="inline-code">@kvzd-design/gov-uk-extends</code>. Links render as anchors by default; use <code className="inline-code">renderLink</code> to integrate a client-side router.</p>
         <div className="api-table-scroll"><Table rowKey="name" columns={[
           { title: 'Property', dataIndex: 'name', rowHeader: true, render: (value) => <code>{String(value)}</code> },
@@ -131,11 +175,31 @@ function ExtraComponentsPage() {
           { title: 'Description', dataIndex: 'description' },
         ]} dataSource={[
           { name: 'heading', type: 'ReactNode', description: 'Visible heading and navigation label.' },
-          { name: 'items', type: 'SidebarItem[]', description: 'Links with a key, label and href.' },
-          { name: 'currentKey', type: 'string', description: 'Key of the current page or section.' },
+          { name: 'items', type: 'SidebarItem[]', description: 'Links can have nested children; items without href are group headings.' },
+          { name: 'currentKey', type: 'string', description: 'Key of the current link and branch.' },
+          { name: 'collapsible', type: 'boolean', description: 'Add expand and collapse controls to items with children. Default: false.' },
           { name: 'renderLink', type: '(item, options) => ReactNode', description: 'Optional link renderer for a client-side router.' },
         ]} /></div>
-        <pre className="code-block"><code>{sidebarCode}</code></pre>
+      </section>
+      <section id="tag-box" aria-labelledby="tag-box-title">
+        <h2 className="govuk-heading-l" id="tag-box-title">TagBox</h2>
+        <p className="govuk-body">A neutral outlined label for short metadata such as a version number. Use the standard <Link className="govuk-link" to="/components/tag/">Tag</Link> component when a label communicates a status.</p>
+        <div className="extra-component-example">
+          <FancyTabs items={[
+            { key: 'preview', label: 'Preview', children: <div className="extra-component-example__panel tag-box-example"><TagBox>6.5.0</TagBox><TagBox>Release candidate</TagBox></div> },
+            { key: 'react', label: 'React', children: <pre className="code-block"><code>{tagBoxCode}</code></pre> },
+          ]} />
+        </div>
+        <h3 className="govuk-heading-m extra-component-api-title">React API</h3>
+        <p className="govuk-body">Import it from <code className="inline-code">@kvzd-design/gov-uk-extends</code>. It renders a <code className="inline-code">span</code> and accepts standard span attributes.</p>
+        <div className="api-table-scroll"><Table rowKey="name" columns={[
+          { title: 'Property', dataIndex: 'name', rowHeader: true, render: (value) => <code>{String(value)}</code> },
+          { title: 'Type', dataIndex: 'type', render: (value) => <code>{String(value)}</code> },
+          { title: 'Description', dataIndex: 'description' },
+        ]} dataSource={[
+          { name: 'children', type: 'ReactNode', description: 'Short text or other inline content displayed inside the box.' },
+          { name: 'className', type: 'string', description: 'Additional CSS class for positioning or local styling.' },
+        ]} /></div>
       </section>
     </article>
   </DocsLayout>

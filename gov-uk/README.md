@@ -37,6 +37,24 @@ export function Example() {
 - Controlled and uncontrolled modes are supported where they are useful.
 - GOV.UK Frontend is pinned to exactly `6.5.0`.
 
+### Click behaviour
+
+Link items use the exported `IClickBehaviour` interface. Both `href` and
+`onClick` are optional. An item with `href` renders an anchor; its `onClick`
+handler runs first and can call `event.preventDefault()` to stop navigation.
+An item with only `onClick` renders a button. An item with neither renders
+plain text.
+
+```tsx
+<ServiceNavigation items={[
+  { label: 'Home', href: '/' },
+  { label: 'Review', href: '/review', onClick: (event) => {
+    if (hasUnsavedChanges) event.preventDefault()
+  } },
+  { label: 'Open help', onClick: () => setHelpOpen(true) },
+]} />
+```
+
 ## Components
 
 Accordion, BackLink, Breadcrumbs, Button, CharacterCount, Checkboxes,

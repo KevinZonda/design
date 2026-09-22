@@ -355,7 +355,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'The service name and current navigation item are clearly distinguished inside a labelled navigation landmark.',
     code: `<ServiceNavigation serviceName="Service name" items={[{ label: 'Home', href: '/', current: true }]} />`,
     example: () => <ServiceNavigation serviceName="Apply for a passport" items={[{ label: 'Home', href: '#', current: true }, { label: 'Your applications', href: '#' }, { label: 'Messages', href: '#' }]} />,
-    api: [text('serviceName', 'Service identity.'), { name: 'serviceUrl', type: 'string', defaultValue: '#', description: 'Service home destination.' }, items('Service navigation links.')],
+    api: [text('serviceName', 'Service identity.'), { name: 'serviceUrl', type: 'string', description: 'Optional service home destination.' }, { name: 'serviceOnClick', type: 'IClickBehaviour["onClick"]', description: 'Optional click handler for the service name.' }, items('Navigation items accept optional href and onClick. The handler can prevent navigation.')],
     wide: true,
   },
   {

@@ -1,4 +1,5 @@
 export * from './Button'
+export * from './clickBehaviour'
 export * from './Input'
 export * from './SearchInput'
 export * from './Panel'

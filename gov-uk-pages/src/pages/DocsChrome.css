@@ -16,7 +16,7 @@
 .site-search__results strong { font-size: 17px; }
 .site-search__results span { margin-top: 2px; color: #484949; font-size: 14px; line-height: 1.25; }
 .site-search__results p { margin: 0; padding: 12px; color: #484949; font-size: 16px; }
-.version-chip { align-self: center; margin-left: auto; padding: 4px 8px 3px; border: 1px solid #505a5f; color: #0b0c0c; font-size: 14px; font-weight: 700; }
+.version-chip { align-self: center; margin-left: auto; }
 .site-footer { border-top: 10px solid #1d70b8; background: #f3f3f3; }
 .site-footer__inner { min-height: 150px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 

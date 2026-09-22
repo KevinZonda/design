@@ -1,14 +1,15 @@
 import { useId, useState, type HTMLAttributes, type MouseEvent, type ReactNode } from 'react'
+import { ClickTarget, type IClickBehaviour } from './clickBehaviour'
 
-export interface LinkItem { href: string; label: ReactNode; current?: boolean }
-export interface BreadcrumbItem { href?: string; label: ReactNode; current?: boolean }
+export interface LinkItem extends IClickBehaviour { label: ReactNode; current?: boolean }
+export interface BreadcrumbItem extends IClickBehaviour { label: ReactNode; current?: boolean }
 
-export function SkipLink({ href = '#main-content', children = 'Skip to main content' }: { href?: string; children?: ReactNode }) {
-  return <a className="govuk-skip-link" href={href}>{children}</a>
+export function SkipLink({ href, onClick, children = 'Skip to main content' }: IClickBehaviour & { children?: ReactNode }) {
+  return <ClickTarget className="govuk-skip-link" href={href ?? (onClick ? undefined : '#main-content')} onClick={onClick}>{children}</ClickTarget>
 }
 
-export function BackLink({ href, children = 'Back' }: { href: string; children?: ReactNode }) {
-  return <a href={href} className="govuk-back-link">{children}</a>
+export function BackLink({ href, onClick, children = 'Back' }: IClickBehaviour & { children?: ReactNode }) {
+  return <ClickTarget href={href} onClick={onClick} className="govuk-back-link">{children}</ClickTarget>
 }
 
 export interface BreadcrumbsProps { items: BreadcrumbItem[]; collapseOnMobile?: boolean; className?: string; label?: string }
@@ -16,9 +17,9 @@ export function Breadcrumbs({ items, collapseOnMobile = false, className = '', l
   return <nav className={`govuk-breadcrumbs ${collapseOnMobile ? 'govuk-breadcrumbs--collapse-on-mobile' : ''} ${className}`.trim()} aria-label={label}>
     <ol className="govuk-breadcrumbs__list">
       {items.map((item, index) => {
-        const current = item.current || !item.href
+        const current = item.current || (item.href === undefined && !item.onClick)
         return <li className="govuk-breadcrumbs__list-item" aria-current={current ? 'page' : undefined} key={`${item.href ?? 'current'}-${index}`}>
-          {item.href && !current ? <a className="govuk-breadcrumbs__link" href={item.href}>{item.label}</a> : item.label}
+          {!current && (item.href !== undefined || item.onClick) ? <ClickTarget className="govuk-breadcrumbs__link" href={item.href} onClick={item.onClick}>{item.label}</ClickTarget> : item.label}
         </li>
       })}
     </ol>
@@ -27,6 +28,7 @@ export function Breadcrumbs({ items, collapseOnMobile = false, className = '', l
 
 export interface HeaderProps extends HTMLAttributes<HTMLElement> {
   homepageUrl?: string
+  homepageOnClick?: IClickBehaviour['onClick']
   productName?: ReactNode
   logo?: ReactNode
   containerClassName?: string
@@ -45,25 +47,25 @@ function GovUkLogo() {
   </svg>
 }
 
-export function Header({ children, className = '', containerClassName = '', homepageUrl = '//gov.uk', logo, productName, fullWidth = false, ...props }: HeaderProps) {
+export function Header({ children, className = '', containerClassName = '', homepageUrl, homepageOnClick, logo, productName, fullWidth = false, ...props }: HeaderProps) {
   return <header {...props} className={`govuk-header ${className}`.trim()} data-module="govuk-header">
     <div className={`govuk-header__container ${fullWidth ? 'govuk-header__container--full-width' : 'govuk-width-container'} ${containerClassName}`.trim()}>
       <div className="govuk-header__logo">
-        <a href={homepageUrl} className="govuk-header__homepage-link">{logo ?? <GovUkLogo />}{productName && <span className="govuk-header__product-name">{productName}</span>}</a>
+        <ClickTarget href={homepageUrl ?? (homepageOnClick ? undefined : '//gov.uk')} onClick={homepageOnClick} className="govuk-header__homepage-link">{logo ?? <GovUkLogo />}{productName && <span className="govuk-header__product-name">{productName}</span>}</ClickTarget>
       </div>
       {children}
     </div>
   </header>
 }
 
-export interface GenericHeaderProps { title: ReactNode; homeHref?: string; logo?: ReactNode; fullWidth?: boolean; className?: string }
-export function GenericHeader({ title, homeHref = '/', logo, fullWidth = false, className = '' }: GenericHeaderProps) {
+export interface GenericHeaderProps { title: ReactNode; homeHref?: string; homeOnClick?: IClickBehaviour['onClick']; logo?: ReactNode; fullWidth?: boolean; className?: string }
+export function GenericHeader({ title, homeHref, homeOnClick, logo, fullWidth = false, className = '' }: GenericHeaderProps) {
   return <div className={`govuk-generic-header ${className}`.trim()}>
     <div className={`govuk-generic-header__container ${fullWidth ? 'govuk-generic-header__container--full-width' : 'govuk-width-container'}`}>
       <div className="govuk-generic-header__logo">
-        <a className="govuk-generic-header__homepage-link" href={homeHref}>
+        <ClickTarget className="govuk-generic-header__homepage-link" href={homeHref ?? (homeOnClick ? undefined : '/')} onClick={homeOnClick}>
           {logo && <span className="kvzd-generic-header__logo-mark">{logo}</span>}{title}
-        </a>
+        </ClickTarget>
       </div>
     </div>
   </div>
@@ -72,6 +74,7 @@ export function GenericHeader({ title, homeHref = '/', logo, fullWidth = false, 
 export interface ServiceNavigationProps {
   serviceName?: ReactNode
   serviceUrl?: string
+  serviceOnClick?: IClickBehaviour['onClick']
   items?: LinkItem[]
   end?: ReactNode
   endAlign?: 'block' | 'inline'
@@ -80,15 +83,15 @@ export interface ServiceNavigationProps {
   navigationLabel?: string
   collapseNavigationOnMobile?: boolean
 }
-export function ServiceNavigation({ serviceName, serviceUrl, items = [], end, endAlign = 'block', className = '', containerClassName = 'govuk-width-container', navigationLabel = 'Menu', collapseNavigationOnMobile = items.length > 1 }: ServiceNavigationProps) {
+export function ServiceNavigation({ serviceName, serviceUrl, serviceOnClick, items = [], end, endAlign = 'block', className = '', containerClassName = 'govuk-width-container', navigationLabel = 'Menu', collapseNavigationOnMobile = items.length > 1 }: ServiceNavigationProps) {
   const [open, setOpen] = useState(false)
   const navigationId = `service-navigation-${useId().replaceAll(':', '')}`
   const inner = <div className={`${containerClassName} ${end && endAlign === 'inline' ? 'govuk-service-navigation__inlining-container' : ''}`.trim()}>
     <div className="govuk-service-navigation__container">
-      {serviceName && <span className="govuk-service-navigation__service-name">{serviceUrl ? <a href={serviceUrl} className="govuk-service-navigation__link">{serviceName}</a> : <span className="govuk-service-navigation__text">{serviceName}</span>}</span>}
+      {serviceName && <span className="govuk-service-navigation__service-name">{serviceUrl !== undefined || serviceOnClick ? <ClickTarget href={serviceUrl} onClick={serviceOnClick} className="govuk-service-navigation__link">{serviceName}</ClickTarget> : <span className="govuk-service-navigation__text">{serviceName}</span>}</span>}
       {items.length > 0 && <nav aria-label={navigationLabel} className="govuk-service-navigation__wrapper">
         {collapseNavigationOnMobile && <button type="button" className="govuk-service-navigation__toggle kvzd-service-navigation__toggle" aria-controls={navigationId} aria-expanded={open} onClick={() => setOpen((value) => !value)}>Menu</button>}
-        <ul className={`govuk-service-navigation__list ${collapseNavigationOnMobile && !open ? 'kvzd-service-navigation__list--closed' : ''}`} id={navigationId}>{items.map((item) => <li className={`govuk-service-navigation__item ${item.current ? 'govuk-service-navigation__item--active' : ''}`} key={item.href}><a className="govuk-service-navigation__link" href={item.href} aria-current={item.current ? 'page' : undefined}>{item.current ? <strong className="govuk-service-navigation__active-fallback">{item.label}</strong> : item.label}</a></li>)}</ul>
+        <ul className={`govuk-service-navigation__list ${collapseNavigationOnMobile && !open ? 'kvzd-service-navigation__list--closed' : ''}`} id={navigationId}>{items.map((item, index) => <li className={`govuk-service-navigation__item ${item.current ? 'govuk-service-navigation__item--active' : ''}`} key={item.href ?? index}><ClickTarget className="govuk-service-navigation__link" href={item.href} onClick={item.onClick} anchorProps={{ 'aria-current': item.current ? 'page' : undefined }}>{item.current ? <strong className="govuk-service-navigation__active-fallback">{item.label}</strong> : item.label}</ClickTarget></li>)}</ul>
       </nav>}
     </div>
     {end}
@@ -100,10 +103,10 @@ export function ServiceNavigation({ serviceName, serviceUrl, items = [], end, en
 }
 
 export function LanguageNavigation({ items, ariaLabel = 'Choose language' }: { items: LinkItem[]; ariaLabel?: string }) {
-  return <nav className="govuk-language-navigation" aria-label={ariaLabel}><ul className="govuk-language-navigation__list">{items.map((item) => <li className="govuk-language-navigation__list-item" key={item.href}><a className="govuk-language-navigation__link" href={item.href} hrefLang={typeof item.label === 'string' ? item.label.toLowerCase() : undefined} aria-current={item.current ? 'page' : undefined}>{item.label}</a></li>)}</ul></nav>
+  return <nav className="govuk-language-navigation" aria-label={ariaLabel}><ul className="govuk-language-navigation__list">{items.map((item, index) => <li className="govuk-language-navigation__list-item" key={item.href ?? index}><ClickTarget className="govuk-language-navigation__link" href={item.href} onClick={item.onClick} anchorProps={{ hrefLang: typeof item.label === 'string' ? item.label.toLowerCase() : undefined, 'aria-current': item.current ? 'page' : undefined }}>{item.label}</ClickTarget></li>)}</ul></nav>
 }
 
-export interface PaginationLink { href: string; label?: ReactNode; text?: ReactNode }
+export interface PaginationLink extends IClickBehaviour { label?: ReactNode; text?: ReactNode }
 export interface PaginationProps {
   current?: number
   total?: number
@@ -119,7 +122,7 @@ function PaginationArrow({ direction }: { direction: 'prev' | 'next' }) {
 }
 function PaginationBlockLink({ direction, link }: { direction: 'prev' | 'next'; link: PaginationLink }) {
   const title = link.text ?? (direction === 'prev' ? 'Previous' : 'Next')
-  return <div className={`govuk-pagination__${direction}`}><a className="govuk-link govuk-pagination__link" href={link.href} rel={direction}>{direction === 'prev' && <PaginationArrow direction="prev" />}<span className={`govuk-pagination__link-title ${link.label ? '' : 'govuk-pagination__link-title--decorated'}`.trim()}>{title}</span>{link.label && <><span className="govuk-visually-hidden">:</span><span className="govuk-pagination__link-label">{link.label}</span></>}{direction === 'next' && <PaginationArrow direction="next" />}</a></div>
+  return <div className={`govuk-pagination__${direction}`}><ClickTarget className="govuk-link govuk-pagination__link" href={link.href} onClick={link.onClick} anchorProps={{ rel: direction }}>{direction === 'prev' && <PaginationArrow direction="prev" />}<span className={`govuk-pagination__link-title ${link.label ? '' : 'govuk-pagination__link-title--decorated'}`.trim()}>{title}</span>{link.label && <><span className="govuk-visually-hidden">:</span><span className="govuk-pagination__link-label">{link.label}</span></>}{direction === 'next' && <PaginationArrow direction="next" />}</ClickTarget></div>
 }
 export function Pagination({ current, total, onChange, getHref = (page) => `#page-${page}`, previous, next, className = '', label = 'Pagination' }: PaginationProps) {
   const block = current === undefined || total === undefined
@@ -135,5 +138,5 @@ export function Pagination({ current, total, onChange, getHref = (page) => `#pag
 
 export interface FooterProps { meta?: LinkItem[]; navigation?: Array<{ title: ReactNode; items: LinkItem[] }> }
 export function Footer({ meta = [], navigation = [] }: FooterProps) {
-  return <footer className="govuk-footer"><div className="govuk-width-container">{navigation.length > 0 && <><div className="govuk-footer__navigation">{navigation.map((section, index) => <div className="govuk-footer__section govuk-grid-column-full" key={index}><h2 className="govuk-footer__heading govuk-heading-m">{section.title}</h2><ul className="govuk-footer__list">{section.items.map((item) => <li className="govuk-footer__list-item" key={item.href}><a className="govuk-footer__link" href={item.href}>{item.label}</a></li>)}</ul></div>)}</div><hr className="govuk-footer__section-break" /></>}<div className="govuk-footer__meta"><div className="govuk-footer__meta-item govuk-footer__meta-item--grow">{meta.length > 0 && <ul className="govuk-footer__inline-list">{meta.map((item) => <li className="govuk-footer__inline-list-item" key={item.href}><a className="govuk-footer__link" href={item.href}>{item.label}</a></li>)}</ul>}<span className="govuk-footer__licence-description">All content is available under the Open Government Licence v3.0, except where otherwise stated.</span></div><div className="govuk-footer__meta-item"><span>© Crown copyright</span></div></div></div></footer>
+  return <footer className="govuk-footer"><div className="govuk-width-container">{navigation.length > 0 && <><div className="govuk-footer__navigation">{navigation.map((section, index) => <div className="govuk-footer__section govuk-grid-column-full" key={index}><h2 className="govuk-footer__heading govuk-heading-m">{section.title}</h2><ul className="govuk-footer__list">{section.items.map((item, itemIndex) => <li className="govuk-footer__list-item" key={item.href ?? itemIndex}><ClickTarget className="govuk-footer__link" href={item.href} onClick={item.onClick}>{item.label}</ClickTarget></li>)}</ul></div>)}</div><hr className="govuk-footer__section-break" /></>}<div className="govuk-footer__meta"><div className="govuk-footer__meta-item govuk-footer__meta-item--grow">{meta.length > 0 && <ul className="govuk-footer__inline-list">{meta.map((item, index) => <li className="govuk-footer__inline-list-item" key={item.href ?? index}><ClickTarget className="govuk-footer__link" href={item.href} onClick={item.onClick}>{item.label}</ClickTarget></li>)}</ul>}<span className="govuk-footer__licence-description">All content is available under the Open Government Licence v3.0, except where otherwise stated.</span></div><div className="govuk-footer__meta-item"><span>© Crown copyright</span></div></div></div></footer>
 }

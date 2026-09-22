@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type MouseEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Header, SearchInput, ServiceNavigation, SkipLink } from '@kvzd-design/gov-uk'
+import { TagBox } from '@kvzd-design/gov-uk-extends'
 import { componentDocs } from './componentRegistry'
 import { sitePath } from './sitePath'
 import './DocsChrome.css'
@@ -38,6 +39,13 @@ function DocsSearch() {
 }
 
 export function DocsHeader({ current = 'components' }: { current?: 'components' | 'extra-components' | 'quick-review' }) {
+  const navigate = useNavigate()
+  const navigateOnClick = (path: string) => (event: MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    event.preventDefault()
+    navigate(path)
+  }
+
   return <>
     <SkipLink href="#main-content" />
     <Header
@@ -54,12 +62,12 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
       containerClassName="site-width"
       navigationLabel="Documentation"
       items={[
-        { label: 'Components', href: sitePath('/components/'), current: current === 'components' },
-        { label: 'Extra Components', href: sitePath('/extra-components/'), current: current === 'extra-components' },
-        { label: 'Quick Review', href: sitePath('/quick-review/'), current: current === 'quick-review' },
+        { label: 'Components', href: sitePath('/components/'), onClick: navigateOnClick('/components/'), current: current === 'components' },
+        { label: 'Extra Components', href: sitePath('/extra-components/'), onClick: navigateOnClick('/extra-components/'), current: current === 'extra-components' },
+        { label: 'Quick Review', href: sitePath('/quick-review/'), onClick: navigateOnClick('/quick-review/'), current: current === 'quick-review' },
         { label: 'Source', href: 'https://github.com/alphagov/govuk-frontend' },
       ]}
-      end={<span className="version-chip">6.5.0</span>}
+      end={<TagBox className="version-chip">6.5.0</TagBox>}
       endAlign="inline"
     />
   </>

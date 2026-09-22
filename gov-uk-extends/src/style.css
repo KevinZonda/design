@@ -56,13 +56,28 @@
   list-style: none;
 }
 
+.kvzd-sidebar__list--nested {
+  margin: 8px 0 0;
+  padding-left: 16px;
+}
+
+.kvzd-sidebar__list[hidden] {
+  display: none;
+}
+
 .kvzd-sidebar__item {
   margin-bottom: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
-.kvzd-sidebar__item--current {
+.kvzd-sidebar__row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.kvzd-sidebar__item--highlighted {
   margin-left: -14px;
   padding-left: 10px;
   border-left: 4px solid #1d70b8;
@@ -73,6 +88,87 @@
   padding: 2px 0;
 }
 
+.kvzd-sidebar__row > .kvzd-sidebar__link {
+  min-width: 0;
+  flex: 1;
+}
+
 .kvzd-sidebar__link[aria-current='page'] {
   font-weight: 700;
+}
+
+.kvzd-sidebar__group,
+.kvzd-sidebar__toggle {
+  border: 0;
+  color: #1d70b8;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.kvzd-sidebar__group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 2px 0;
+  text-align: left;
+  font-weight: 700;
+}
+
+.kvzd-sidebar__group-label {
+  padding: 2px 0;
+  font-weight: 700;
+}
+
+.kvzd-sidebar__toggle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+.kvzd-sidebar__chevron,
+.kvzd-sidebar__toggle::after {
+  display: block;
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  content: '';
+}
+
+.kvzd-sidebar__group[aria-expanded='true'] .kvzd-sidebar__chevron,
+.kvzd-sidebar__toggle[aria-expanded='true']::after {
+  transform: rotate(225deg);
+}
+
+.kvzd-sidebar__group:hover,
+.kvzd-sidebar__toggle:hover {
+  color: #003078;
+}
+
+.kvzd-sidebar__group:focus,
+.kvzd-sidebar__toggle:focus {
+  color: #0b0c0c;
+  background: #ffdd00;
+  outline: 3px solid transparent;
+  box-shadow: 0 -2px #ffdd00, 0 4px #0b0c0c;
+}
+
+.kvzd-tag-box {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px 3px;
+  border: 1px solid #505a5f;
+  color: #0b0c0c;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
 }
