@@ -17,11 +17,8 @@ const source = await readFile(join(outputRoot, 'index.html'), 'utf8')
 const assetsRoot = join(outputRoot, 'assets')
 const govukAssetsRoot = join(process.cwd(), '../gov-uk/node_modules/govuk-frontend/dist/govuk/assets')
 
-// GOV.UK's distributed CSS references /assets, which breaks on a Pages project path.
-// The built stylesheet lives in dist/assets, so relative URLs work at either base path.
-await Promise.all(['fonts', 'images'].map((directory) =>
-  cp(join(govukAssetsRoot, directory), join(assetsRoot, directory), { recursive: true }),
-))
+// GOV.UK image URLs need to resolve from the built stylesheet on a Pages project path.
+await cp(join(govukAssetsRoot, 'images'), join(assetsRoot, 'images'), { recursive: true })
 for (const file of await readdir(assetsRoot)) {
   if (!file.endsWith('.css')) continue
   const path = join(assetsRoot, file)

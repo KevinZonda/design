@@ -1,4 +1,4 @@
-import 'govuk-frontend/dist/govuk/govuk-frontend.min.css'
+import './frontend-arial.scss'
 import './library.css'
 
 export * from './components'

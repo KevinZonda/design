@@ -27,7 +27,7 @@
 .review-card__title-row .govuk-heading-m { margin-bottom: 12px; }
 .review-card__title-row .govuk-tag { flex: none; }
 .review-card__header .govuk-body { margin-bottom: 0; color: #505a5f; }
-.review-card .review-card__example { min-height: 220px; border-right: 0; border-left: 0; background: #f8f8f8; overflow-x: auto; }
+.review-card .review-card__example { min-height: 220px; border-right: 0; border-left: 0; background: var(--govuk-body-background-colour); overflow-x: auto; }
 .review-card--wide .review-card__example { min-height: 160px; }
 .review-card__footer { display: flex; justify-content: space-between; gap: 20px; padding: 18px 24px 20px; }
 .review-card__top-link { flex: none; }
