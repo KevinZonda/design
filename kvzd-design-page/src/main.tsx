@@ -12,7 +12,8 @@ createRoot(document.getElementById('root')!).render(
       <ThemeProvider palette={{
         brand: '#000000',
         templateBackground: '#eeeeee',
-        surfaceBackground: '#eeeeee' }}>
+        surfaceBackground: '#eeeeee',
+        link: '#000000' }}>
         <App />
       </ThemeProvider>
     </BrowserRouter>
