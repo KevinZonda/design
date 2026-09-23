@@ -29,7 +29,7 @@ const english = {
 } as const
 
 const chinese: Record<keyof typeof english, string> = {
-  brand: 'KevinZonda 设计系统', basedOn: '基于GOV.UK设计系统',
+  brand: 'KevinZonda 设计系统', basedOn: '基于 GOV.UK 设计系统',
   components: '组件', extraComponents: '扩展组件', quickReview: '快速总览', source: '源码',
   documentation: '文档', chooseLanguage: '选择语言', skipToContent: '跳转到主要内容', menu: '菜单', serviceInformation: '服务信息',
   search: '搜索 KevinZonda 设计系统', noComponents: '未找到组件',
