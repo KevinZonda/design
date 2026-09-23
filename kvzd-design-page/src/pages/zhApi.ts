@@ -50,6 +50,7 @@ const descriptions: Record<string, string> = {
   'Menu root element.': 'Menu 根元素。',
   'Native dialog element.': '原生 dialog 元素。',
   'Number of skeleton rows.': '骨架屏行数。',
+  'Size of the spinner or skeleton rows.': '旋转指示器或骨架屏行的尺寸。',
   'Optional action area.': '可选的操作区域。',
   'Optional decorative graphic.': '可选的装饰性图形。',
   'Optional guidance beneath the title.': '标题下方的可选说明。',

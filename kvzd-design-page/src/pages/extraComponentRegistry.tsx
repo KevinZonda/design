@@ -100,11 +100,12 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'Spinner and skeleton treatments for content that is still loading.',
     whenToUse: 'Use the spinner for a short wait and the skeleton when the structure of the pending content is known.',
     howItWorks: 'Both variants expose a status label to assistive technology. Animation stops when reduced motion is requested.',
-    code: `<Loading label="Loading applications" />
-<Loading variant="skeleton" lines={3} label="Loading results" />`,
-    example: () => <div className="extra-loading-example"><Loading label="Loading applications" /><Loading variant="skeleton" lines={3} label="Loading results" /></div>,
+    code: `<Loading size="l" label="Loading applications" />
+<Loading variant="skeleton" size="s" lines={3} label="Loading results" />`,
+    example: () => <div className="extra-loading-example"><Loading size="l" label="Loading applications" /><Loading variant="skeleton" size="s" lines={3} label="Loading results" /></div>,
     api: [
       { name: 'variant', type: "'spinner' | 'skeleton'", defaultValue: 'spinner', description: 'Visual loading treatment.' },
+      { name: 'size', type: "'s' | 'm' | 'l'", defaultValue: 'm', description: 'Size of the spinner or skeleton rows.' },
       { name: 'label', type: 'string', defaultValue: 'Loading', description: 'Accessible loading status.' },
       { name: 'lines', type: 'number', defaultValue: '3', description: 'Number of skeleton rows.' },
       { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Loading root element.' },
