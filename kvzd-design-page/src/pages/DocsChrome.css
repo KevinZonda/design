@@ -8,15 +8,15 @@
 .site-search { position: relative; width: 370px; max-width: 100%; margin: 10px 0; color: #0b0c0c; }
 .site-search .govuk-form-group { margin: 0; }
 .site-search input { box-sizing: border-box; width: 100%; height: 40px; margin: 0; border: 2px solid #fff; border-radius: 0; appearance: none; color: #0b0c0c; background: #fff; font: inherit; font-size: 19px; }
-.site-search input:focus { outline: 3px solid #ffdd00; outline-offset: 0; box-shadow: inset 0 0 0 1px #0b0c0c; }
+.site-search input:focus { outline: 3px solid var(--govuk-focus-colour); outline-offset: 0; box-shadow: inset 0 0 0 1px #0b0c0c; }
 .site-search__results { position: absolute; z-index: 20; top: calc(100% + 4px); right: 0; left: 0; border: 2px solid #0b0c0c; background: #fff; box-shadow: 0 4px 0 rgba(11, 12, 12, .2); }
-.site-search__results a { display: block; padding: 10px 12px 9px; border-bottom: 1px solid #b1b4b6; color: #1a65a6; text-decoration: none; }
+.site-search__results a { display: block; padding: 10px 12px 9px; border-bottom: 1px solid #b1b4b6; color: var(--govuk-link-colour); text-decoration: none; }
 .site-search__results a:last-child { border-bottom: 0; }
-.site-search__results a:hover, .site-search__results a.is-active { color: #0b0c0c; background: #ffdd00; }
+.site-search__results a:hover, .site-search__results a.is-active { color: var(--govuk-focus-text-colour); background: var(--govuk-focus-colour); }
 .site-search__results strong, .site-search__results span { display: block; }
 .site-search__results strong { font-size: 17px; }
-.site-search__results span { margin-top: 2px; color: #484949; font-size: 14px; line-height: 1.25; }
-.site-search__results p { margin: 0; padding: 12px; color: #484949; font-size: 16px; }
+.site-search__results span { margin-top: 2px; color: var(--govuk-secondary-text-colour); font-size: 14px; line-height: 1.25; }
+.site-search__results p { margin: 0; padding: 12px; color: var(--govuk-secondary-text-colour); font-size: 16px; }
 .docs-nav-end { display: flex; align-items: center; gap: 18px; margin-left: auto; }
 .docs-service-navigation .govuk-language-navigation { margin: 0; font-size: 16px; }
 .docs-service-navigation .govuk-language-navigation__link[aria-current="page"] { color: var(--govuk-text-colour); font-weight: 700; text-decoration: none; }
