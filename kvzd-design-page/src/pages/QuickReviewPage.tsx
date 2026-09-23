@@ -62,7 +62,7 @@ export function QuickReviewPage() {
             <h2 className="govuk-heading-l" id="index-title">{message(locale, 'componentIndex')}</h2>
             <ul>
               {filteredComponents.map((component) => (
-                <li key={component.slug}><a href={`#${component.slug}`}>{component.name}</a></li>
+                <li key={component.slug}><a className="govuk-link govuk-link--no-visited-state" href={`#${component.slug}`}>{component.name}</a></li>
               ))}
             </ul>
           </section>

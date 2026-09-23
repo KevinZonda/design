@@ -3,7 +3,7 @@
 .review-filter__search { max-width: 360px; }
 .review-filter__count { margin: 0; color: #505a5f; font-size: 14px; }
 .component-index ul { margin: 0; padding: 0; list-style: none; }
-.component-index a { color: #1a65a6; font-size: 16px; line-height: 1.35; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.component-index a { font-size: 18px; line-height: 1.35; font-weight: 700; }
 .main-content > h1 { margin-bottom: 20px; }
 .intro { max-width: 690px; }
 .release-note { display: flex; align-items: center; gap: 12px; margin: 28px 0 54px; font-weight: 700; }
@@ -11,7 +11,6 @@
 .component-index { padding: 35px 0 40px; border-top: 5px solid var(--govuk-brand-colour); border-bottom: 1px solid #b1b4b6; }
 .component-index ul { columns: 3; column-gap: 36px; }
 .component-index li { margin-bottom: 12px; break-inside: avoid; }
-.component-index a { font-size: 18px; font-weight: 700; }
 .review-gallery { padding-top: 48px; }
 .review-gallery__heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
 .review-gallery__heading h2 { margin-bottom: 0; }
