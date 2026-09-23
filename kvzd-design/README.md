@@ -88,6 +88,33 @@ being customised. `style` takes precedence over `styles.root`.
 Use CSS classes for responsive and interaction states; inline styles are best
 for values that depend on runtime data.
 
+### Theme colours
+
+`ThemeProvider` overrides the GOV.UK colour variables for its descendants. The
+palette is partial, so omitted colours inherit from a parent provider or retain
+the defaults from GOV.UK Frontend. Providers can be nested to theme one section
+of an application.
+
+```tsx
+import { ThemeProvider, type Theme } from '@kevinzonda/design'
+import '@kevinzonda/design/style.css'
+
+const palette = {
+  brand: '#005ea5',
+  link: '#005ea5',
+  focus: '#ffdd00',
+  surfaceBackground: '#f3f2f1',
+} satisfies Partial<Theme.ColourPalette>
+
+<ThemeProvider palette={palette}>
+  <App />
+</ThemeProvider>
+```
+
+The provider forwards its ref and standard `div` attributes to its scoped root.
+Use `Theme.ColourPalette` when defining a complete palette and
+`Partial<Theme.ColourPalette>` for an override.
+
 ### Click behaviour
 
 Link items use the exported `IClickBehaviour` interface. Both `href` and
