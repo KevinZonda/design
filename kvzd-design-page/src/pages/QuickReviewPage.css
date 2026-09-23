@@ -8,7 +8,7 @@
 .intro { max-width: 690px; }
 .release-note { display: flex; align-items: center; gap: 12px; margin: 28px 0 54px; font-weight: 700; }
 .release-note__count { margin-left: auto; color: #505a5f; font-weight: 400; }
-.component-index { padding: 35px 0 40px; border-top: 5px solid #1d70b8; border-bottom: 1px solid #b1b4b6; }
+.component-index { padding: 35px 0 40px; border-top: 5px solid var(--govuk-brand-colour); border-bottom: 1px solid #b1b4b6; }
 .component-index ul { columns: 3; column-gap: 36px; }
 .component-index li { margin-bottom: 12px; break-inside: avoid; }
 .component-index a { font-size: 18px; font-weight: 700; }
