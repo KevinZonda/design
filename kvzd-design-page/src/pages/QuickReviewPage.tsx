@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { SearchInput, Tag } from '@kevinzonda/design/components'
-import { Sidebar } from '@kevinzonda/design/extraComponents'
+import { ShowcaseBox, Sidebar } from '@kevinzonda/design/extraComponents'
 import './QuickReviewPage.css'
 import { DocsFooter, DocsHeader } from './DocsChrome'
 import { componentDocs } from './componentRegistry'
@@ -78,28 +78,24 @@ export function QuickReviewPage() {
             {filteredComponents.length > 0 ? (
               <div className="review-grid">
                 {filteredComponents.map((component) => (
-                  <article
-                    className={`review-card ${component.wide ? 'review-card--wide' : ''}`.trim()}
-                    id={component.slug}
-                    key={component.slug}
-                  >
-                    <div className="review-card__header">
-                      <div className="review-card__title-row">
-                        <h3 className="govuk-heading-m">{component.name}</h3>
-                        {component.status === 'trial' && <Tag color="orange">{message(locale, 'trial')}</Tag>}
-                      </div>
-                      <p className="govuk-body">{localizedComponent(component, locale).summary}</p>
-                    </div>
-                    <div className={`review-card__example example-canvas ${component.wide ? 'example-canvas--wide' : ''}`.trim()}>
-                      {component.example()}
-                    </div>
-                    <div className="review-card__footer">
+                  <ShowcaseBox
+                    className={component.wide ? 'review-card--wide' : ''}
+                    classNames={{ content: component.wide ? 'example-canvas--wide' : undefined }}
+                    description={localizedComponent(component, locale).summary}
+                    footer={<>
                       <Link className="govuk-link" to={localizedPath(`/components/${component.slug}/`, locale)}>
                         {message(locale, 'viewDocumentation')}
                       </Link>
                       <a className="govuk-link review-card__top-link" href="#top">{message(locale, 'backToTop')}</a>
-                    </div>
-                  </article>
+                    </>}
+                    headerExtra={component.status === 'trial' ? <Tag color="orange">{message(locale, 'trial')}</Tag> : undefined}
+                    headingLevel={3}
+                    id={component.slug}
+                    key={component.slug}
+                    title={component.name}
+                  >
+                    {component.example()}
+                  </ShowcaseBox>
                 ))}
               </div>
             ) : (

@@ -62,6 +62,7 @@ const extraText: Record<string, DocTranslation> = {
   form: { summary: '收集并校验相关答案，同时显示 GOV.UK 字段错误和错误摘要。', whenToUse: '页面包含多个需要在提交时一并校验的答案时使用。', howItWorks: 'Form.Item 将字段接入原生表单。提交时读取 FormData、校验规则、保留已输入答案、显示字段错误，并将焦点移至错误摘要。' },
   note: { summary: '突出简短的实现说明或其他补充信息。', whenToUse: '补充指导需要比普通正文更醒目，但并不表示警告或成功状态时使用。', howItWorks: '可选标题显示在内容上方。Note 接受普通 div 属性，页面可以用 className 调整局部间距。' },
   sidebar: { summary: '为相关页面或区块提供嵌套导航，并可选择展开和收起。', whenToUse: '用于一组相关文档页面。导航树较大时可启用折叠分组。', howItWorks: '链接默认渲染为锚点；分组可以包含多级子项。renderLink 可提供客户端路由链接，当前分支会高亮。' },
+  'showcase-box': { summary: '用统一的标题、说明、实时示例和相关链接展示组件或设计模式。', whenToUse: '在设计系统总览或文档页面中，需要以一致容器展示多个组件时使用。', howItWorks: '标题层级可配置，页眉和页脚插槽可接收任意 React 内容，顶部强调条跟随当前品牌色 token。' },
   'tag-box': { summary: '用于版本号等简短元信息的中性描边标签。', whenToUse: '用于不表示状态的元信息。表示状态时请使用标准 Tag 组件。', howItWorks: '它渲染 span，接受标准 span 属性以及可选的 className。' },
 }
 

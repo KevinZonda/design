@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { Divider, Empty, FancyTabs, Loading, Note, Sidebar, TagBox } from '@kevinzonda/design/extraComponents'
+import { Divider, Empty, FancyTabs, Loading, Note, ShowcaseBox, Sidebar, TagBox } from '@kevinzonda/design/extraComponents'
 import type { ApiProp } from './componentRegistry'
 import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample } from './extraExamples'
 
@@ -300,6 +300,38 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'renderLink', type: '(item, options) => ReactNode', description: 'Optional link renderer for a client-side router.' },
       { name: 'onExpandChange', type: '(key: string, expanded: boolean) => void', description: 'Called when a collapsible group is toggled.' },
       { name: 'ref', type: 'Ref<HTMLElement>', description: 'Sidebar navigation root element.' },
+    ],
+  },
+  {
+    slug: 'showcase-box',
+    name: 'ShowcaseBox',
+    summary: 'Present a component or pattern with a title, description, live example and related links.',
+    whenToUse: 'Use in design system galleries or documentation pages where several components need a consistent preview container.',
+    howItWorks: 'The heading level is configurable, optional header and footer slots accept any React content, and the top accent follows the active brand colour token.',
+    code: `<ShowcaseBox
+  title="Back link"
+  description="Help users return to the previous step in a multi-page service."
+  footer={<>
+    <a href="/components/back-link/">View documentation</a>
+    <a href="#top">Back to top</a>
+  </>}
+>
+  <BackLink href="#previous">Back</BackLink>
+</ShowcaseBox>`,
+    example: () => <ShowcaseBox
+      title="Back link"
+      description="Help users return to the previous step in a multi-page service."
+      footer={<><a className="govuk-link" href="#example-title">View documentation</a><a className="govuk-link" href="#top">Back to top</a></>}
+    ><a className="govuk-back-link" href="#example-title">Back</a></ShowcaseBox>,
+    api: [
+      { name: 'title', type: 'ReactNode', description: 'Heading shown above the preview.' },
+      { name: 'description', type: 'ReactNode', description: 'Optional supporting text beneath the heading.' },
+      { name: 'children', type: 'ReactNode', description: 'The component or pattern being showcased.' },
+      { name: 'headerExtra', type: 'ReactNode', description: 'Optional content aligned opposite the heading, such as a status tag.' },
+      { name: 'footer', type: 'ReactNode', description: 'Optional links or actions beneath the preview.' },
+      { name: 'headingLevel', type: '1 | 2 | 3 | 4 | 5 | 6', defaultValue: '2', description: 'Semantic level of the showcase heading.' },
+      { name: 'styles / classNames', type: 'SemanticStyling', description: 'Overrides for named parts of the component.' },
+      { name: 'ref', type: 'Ref<HTMLElement>', description: 'Showcase article element.' },
     ],
   },
   {

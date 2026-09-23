@@ -74,7 +74,7 @@ function ApiTable({ component }: { component: ComponentDoc | ExtraComponentDoc }
     <div className="api-table-scroll"><Table rowKey="name" columns={[
       { title: message(locale, 'property'), dataIndex: 'name', rowHeader: true, render: (value) => <code>{String(value)}</code> },
       { title: message(locale, 'type'), dataIndex: 'type', render: (value) => <code>{String(value)}</code> },
-      { title: message(locale, 'default'), dataIndex: 'defaultValue', render: (value) => value ? <code>{String(value)}</code> : '—' },
+      { title: message(locale, 'default'), dataIndex: 'defaultValue', render: (value) => value ? <code>{String(value)}</code> : '-' },
       { title: message(locale, 'description'), dataIndex: 'description' },
     ]} dataSource={locale === 'zh' ? component.api.map((prop) => ({ ...prop, description: chineseApiDescription(prop.description) })) : component.api} /></div>
   </section>

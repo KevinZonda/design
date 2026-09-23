@@ -27,6 +27,22 @@ Extension components accept `style` on their outer element. Composite
 components such as `FancyTabs`, `Note`, `Sidebar`, `Dropdown` and `Modal` also
 accept typed `styles` and `classNames` objects for their named inner parts.
 
+`ShowcaseBox` presents a component or pattern with a heading, description,
+preview content and optional footer. Its top accent uses
+`--govuk-brand-colour`, so it follows the active theme.
+
+```tsx
+import { ShowcaseBox } from '@kevinzonda/design/extraComponents'
+
+<ShowcaseBox
+  title="Back link"
+  description="Help users return to the previous step."
+  footer={<a href="/components/back-link/">View documentation</a>}
+>
+  <BackLink href="/previous-step/">Back</BackLink>
+</ShowcaseBox>
+```
+
 `Note` highlights supporting content with an optional title. It accepts normal `div` attributes and forwards its ref to the root element.
 
 ```tsx
