@@ -13,6 +13,7 @@ createRoot(document.getElementById('root')!).render(
         brand: '#000000',
         templateBackground: '#eeeeee',
         surfaceBackground: '#eeeeee',
+        surfaceBorder: '#b1b4b6',
         link: '#000000' }}>
         <App />
       </ThemeProvider>
