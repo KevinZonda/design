@@ -86,26 +86,26 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
     updatePage(1)
   }
 
-  return <div className={`kvzd-fancy-table ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
-    <div className={`kvzd-fancy-table__scroll ${classNames?.scroll ?? ''}`.trim()} style={styles?.scroll}><table ref={ref} className={`govuk-table kvzd-fancy-table__table ${classNames?.table ?? ''}`.trim()} style={styles?.table}>
+  return <div className={`kvzd-design-fancy-table ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
+    <div className={`kvzd-design-fancy-table__scroll ${classNames?.scroll ?? ''}`.trim()} style={styles?.scroll}><table ref={ref} className={`govuk-table kvzd-design-fancy-table__table ${classNames?.table ?? ''}`.trim()} style={styles?.table}>
       {caption && <caption className="govuk-table__caption govuk-table__caption--m">{caption}</caption>}
       <thead className="govuk-table__head"><tr className="govuk-table__row">
-        {selectable && <th className="govuk-table__header kvzd-fancy-table__select" scope="col"><input type="checkbox" aria-label="Select all rows on this page" checked={allVisibleSelected} disabled={!visibleKeys.length} onChange={() => updateSelection(allVisibleSelected ? selected.filter((key) => !visibleKeys.includes(key)) : [...new Set([...selected, ...visibleKeys])])} /></th>}
+        {selectable && <th className="govuk-table__header kvzd-design-fancy-table__select" scope="col"><input type="checkbox" aria-label="Select all rows on this page" checked={allVisibleSelected} disabled={!visibleKeys.length} onChange={() => updateSelection(allVisibleSelected ? selected.filter((key) => !visibleKeys.includes(key)) : [...new Set([...selected, ...visibleKeys])])} /></th>}
         {columns.map((column) => <th className={`govuk-table__header ${column.numeric ? 'govuk-table__header--numeric' : ''}`} scope="col" key={column.key} aria-sort={activeSort?.columnKey === column.key ? (activeSort.order === 'ascend' ? 'ascending' : 'descending') : undefined}>
-          {column.sorter ? <button className="kvzd-fancy-table__sort" type="button" onClick={() => toggleSort(column.key)}>
+          {column.sorter ? <button className="kvzd-design-fancy-table__sort" type="button" onClick={() => toggleSort(column.key)}>
             {column.title}
-            <svg className="kvzd-fancy-table__sort-icon" data-order={activeSort?.columnKey === column.key ? activeSort.order : 'none'} viewBox="0 0 12 16" aria-hidden="true" focusable="false">
-              <polygon className="kvzd-fancy-table__sort-up" points="6,1 11,7 1,7" />
-              <polygon className="kvzd-fancy-table__sort-down" points="1,9 11,9 6,15" />
+            <svg className="kvzd-design-fancy-table__sort-icon" data-order={activeSort?.columnKey === column.key ? activeSort.order : 'none'} viewBox="0 0 12 16" aria-hidden="true" focusable="false">
+              <polygon className="kvzd-design-fancy-table__sort-up" points="6,1 11,7 1,7" />
+              <polygon className="kvzd-design-fancy-table__sort-down" points="1,9 11,9 6,15" />
             </svg>
           </button> : column.title}
-          {column.filters && column.onFilter && <select className="govuk-select kvzd-fancy-table__filter" aria-label={column.filterLabel ?? `Filter ${typeof column.title === 'string' ? column.title : column.key}`} value={activeFilters[column.key] ?? ''} onChange={(event) => updateFilter(column.key, event.target.value)}><option value="">All</option>{column.filters.map((filter) => <option key={filter.value} value={filter.value}>{filter.label}</option>)}</select>}
+          {column.filters && column.onFilter && <select className="govuk-select kvzd-design-fancy-table__filter" aria-label={column.filterLabel ?? `Filter ${typeof column.title === 'string' ? column.title : column.key}`} value={activeFilters[column.key] ?? ''} onChange={(event) => updateFilter(column.key, event.target.value)}><option value="">All</option>{column.filters.map((filter) => <option key={filter.value} value={filter.value}>{filter.label}</option>)}</select>}
         </th>)}
       </tr></thead>
       <tbody className="govuk-table__body">{visibleData.length ? visibleData.map((record, rowIndex) => {
         const key = keyFor(record)
         return <tr className="govuk-table__row" key={key}>
-          {selectable && <td className="govuk-table__cell kvzd-fancy-table__select"><input type="checkbox" aria-label={`Select row ${String(key)}`} checked={selected.includes(key)} onChange={() => updateSelection(selected.includes(key) ? selected.filter((item) => item !== key) : [...selected, key])} /></td>}
+          {selectable && <td className="govuk-table__cell kvzd-design-fancy-table__select"><input type="checkbox" aria-label={`Select row ${String(key)}`} checked={selected.includes(key)} onChange={() => updateSelection(selected.includes(key) ? selected.filter((item) => item !== key) : [...selected, key])} /></td>}
           {columns.map((column) => {
             const value = record[column.dataIndex]
             const content = column.render ? column.render(value, record, rowIndex) : String(value ?? '')
@@ -115,7 +115,7 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
         </tr>
       }) : <tr className="govuk-table__row"><td className="govuk-table__cell" colSpan={columns.length + (selectable ? 1 : 0)}>{emptyContent ?? <Empty title="No records found" />}</td></tr>}</tbody>
     </table></div>
-    {effectivePageSize && pageCount > 1 && <nav className={`kvzd-fancy-table__pagination ${classNames?.pagination ?? ''}`.trim()} style={styles?.pagination} aria-label="Table pages">
+    {effectivePageSize && pageCount > 1 && <nav className={`kvzd-design-fancy-table__pagination ${classNames?.pagination ?? ''}`.trim()} style={styles?.pagination} aria-label="Table pages">
       <button className="govuk-button govuk-button--secondary" type="button" disabled={page <= 1} onClick={() => updatePage(page - 1)}>Previous</button>
       <span aria-live="polite">Page {page} of {pageCount}</span>
       <button className="govuk-button govuk-button--secondary" type="button" disabled={page >= pageCount} onClick={() => updatePage(page + 1)}>Next</button>

@@ -19,7 +19,7 @@ export const ClickTarget = forwardRef<HTMLAnchorElement | HTMLButtonElement | HT
     return <a {...anchorProps} ref={ref as Ref<HTMLAnchorElement>} className={className} style={style ?? anchorProps?.style} href={href} onClick={(event) => onClick?.(event)}>{children}</a>
   }
   if (onClick) {
-    return <button ref={ref as Ref<HTMLButtonElement>} type="button" className={`${className ?? ''} kvzd-clickable-button`.trim()} style={style} onClick={(event) => onClick(event)} aria-current={anchorProps?.['aria-current']} aria-describedby={anchorProps?.['aria-describedby']}>{children}</button>
+    return <button ref={ref as Ref<HTMLButtonElement>} type="button" className={`${className ?? ''} kvzd-design-clickable-button`.trim()} style={style} onClick={(event) => onClick(event)} aria-current={anchorProps?.['aria-current']} aria-describedby={anchorProps?.['aria-describedby']}>{children}</button>
   }
   return <span ref={ref as Ref<HTMLSpanElement>} style={style} aria-current={anchorProps?.['aria-current']} aria-describedby={anchorProps?.['aria-describedby']}>{children}</span>
 })

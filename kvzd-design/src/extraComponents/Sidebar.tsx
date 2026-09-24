@@ -49,20 +49,20 @@ function SidebarNode({ item, currentKey, collapsible, depth, renderLink, onExpan
     : currentInChildren)
   const toggle = () => { const next = !expanded; setExpansion({ currentKey, currentInChildren, expanded: next }); onExpandChange?.(item.key, next) }
 
-  const linkClassName = 'kvzd-sidebar__link govuk-link govuk-link--no-visited-state govuk-link--no-underline'
+  const linkClassName = 'kvzd-design-sidebar__link govuk-link govuk-link--no-visited-state govuk-link--no-underline'
   const toggleLabel = typeof item.label === 'string' ? item.label : 'section'
 
-  return <li className={`kvzd-sidebar__item ${depth === 0 && (current || currentInChildren) ? 'kvzd-sidebar__item--highlighted' : ''}`.trim()}>
-    <div className={`kvzd-sidebar__row ${collapsible && hasChildren && (item.href !== undefined || item.onClick !== undefined) ? 'kvzd-sidebar__row--split' : ''}`.trim()}>
+  return <li className={`kvzd-design-sidebar__item ${depth === 0 && (current || currentInChildren) ? 'kvzd-design-sidebar__item--highlighted' : ''}`.trim()}>
+    <div className={`kvzd-design-sidebar__row ${collapsible && hasChildren && (item.href !== undefined || item.onClick !== undefined) ? 'kvzd-design-sidebar__row--split' : ''}`.trim()}>
       {item.href !== undefined || item.onClick !== undefined
         ? (renderLink
           ? renderLink(item as SidebarLinkItem, { className: linkClassName, current })
           : <ClickTarget className={linkClassName} href={item.href} onClick={item.onClick} anchorProps={{ 'aria-current': current ? 'page' : undefined }}>{item.label}</ClickTarget>)
         : hasChildren && collapsible
-          ? <button className="kvzd-sidebar__group" type="button" aria-expanded={expanded} aria-controls={childrenId} onClick={toggle}>{item.label}<span className="kvzd-sidebar__chevron" aria-hidden="true" /></button>
-          : <span className="kvzd-sidebar__group-label">{item.label}</span>}
+          ? <button className="kvzd-design-sidebar__group" type="button" aria-expanded={expanded} aria-controls={childrenId} onClick={toggle}>{item.label}<span className="kvzd-design-sidebar__chevron" aria-hidden="true" /></button>
+          : <span className="kvzd-design-sidebar__group-label">{item.label}</span>}
       {collapsible && hasChildren && (item.href !== undefined || item.onClick !== undefined) && <button
-        className="kvzd-sidebar__toggle"
+        className="kvzd-design-sidebar__toggle"
         type="button"
         aria-label={`${expanded ? 'Collapse' : 'Expand'} ${toggleLabel}`}
         aria-expanded={expanded}
@@ -70,7 +70,7 @@ function SidebarNode({ item, currentKey, collapsible, depth, renderLink, onExpan
         onClick={toggle}
       />}
     </div>
-    {hasChildren && <ul className="kvzd-sidebar__list kvzd-sidebar__list--nested" id={childrenId} hidden={!expanded}>
+    {hasChildren && <ul className="kvzd-design-sidebar__list kvzd-design-sidebar__list--nested" id={childrenId} hidden={!expanded}>
       {item.children?.map((child) => <SidebarNode key={child.key} item={child} currentKey={currentKey} collapsible={collapsible} depth={depth + 1} renderLink={renderLink} onExpandChange={onExpandChange} />)}
     </ul>}
   </li>
@@ -79,9 +79,9 @@ function SidebarNode({ item, currentKey, collapsible, depth, renderLink, onExpan
 export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar({ heading, items, currentKey, collapsible = false, className = '', classNames, style, styles, renderLink, onExpandChange }, ref) {
   const headingId = useId()
 
-  return <nav ref={ref} className={`kvzd-sidebar ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }} aria-labelledby={headingId}>
-    <h2 className={`govuk-heading-s kvzd-sidebar__heading ${classNames?.heading ?? ''}`.trim()} style={styles?.heading} id={headingId}>{heading}</h2>
-    <ul className={`kvzd-sidebar__list ${classNames?.list ?? ''}`.trim()} style={styles?.list}>
+  return <nav ref={ref} className={`kvzd-design-sidebar ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }} aria-labelledby={headingId}>
+    <h2 className={`govuk-heading-s kvzd-design-sidebar__heading ${classNames?.heading ?? ''}`.trim()} style={styles?.heading} id={headingId}>{heading}</h2>
+    <ul className={`kvzd-design-sidebar__list ${classNames?.list ?? ''}`.trim()} style={styles?.list}>
       {items.map((item) => <SidebarNode key={item.key} item={item} currentKey={currentKey} collapsible={collapsible} depth={0} renderLink={renderLink} onExpandChange={onExpandChange} />)}
     </ul>
   </nav>

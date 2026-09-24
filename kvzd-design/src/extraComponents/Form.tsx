@@ -109,7 +109,7 @@ const FormRoot = forwardRef<HTMLFormElement, FormProps>(function Form({ children
     else onFinish?.(values)
   }
 
-  return <FormContext.Provider value={{ errors: errorsByName, initialValues, prefix: `kvzd-form-${generatedId}`, register }}>
+  return <FormContext.Provider value={{ errors: errorsByName, initialValues, prefix: `kvzd-design-form-${generatedId}`, register }}>
     <form {...props} ref={ref} className={className} noValidate onSubmit={handleSubmit}>
       {errors.length > 0 && <ErrorSummary ref={summaryRef} title={errorSummaryTitle} errors={errors.map((error) => ({ href: `#${error.id}`, children: error.message }))} />}
       {children}

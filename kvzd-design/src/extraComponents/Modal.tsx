@@ -30,7 +30,7 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal({ 
       if (typeof forwardedRef === 'function') forwardedRef(node)
       else if (forwardedRef) forwardedRef.current = node
     }}
-    className={`kvzd-modal ${classNames?.root ?? ''} ${className}`.trim()}
+    className={`kvzd-design-modal ${classNames?.root ?? ''} ${className}`.trim()}
     style={{ ...styles?.root, ...style }}
     aria-labelledby={titleId}
     onCancel={(event) => { event.preventDefault(); onClose() }}
@@ -41,11 +41,11 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal({ 
       if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) onClose()
     }}
   >
-    <div className={`kvzd-modal__header ${classNames?.header ?? ''}`.trim()} style={styles?.header}>
-      <h2 className={`govuk-heading-m kvzd-modal__title ${classNames?.title ?? ''}`.trim()} style={styles?.title} id={titleId}>{title}</h2>
-      <button className={`kvzd-modal__close ${classNames?.close ?? ''}`.trim()} style={styles?.close} type="button" aria-label={closeLabel} onClick={onClose}>×</button>
+    <div className={`kvzd-design-modal__header ${classNames?.header ?? ''}`.trim()} style={styles?.header}>
+      <h2 className={`govuk-heading-m kvzd-design-modal__title ${classNames?.title ?? ''}`.trim()} style={styles?.title} id={titleId}>{title}</h2>
+      <button className={`kvzd-design-modal__close ${classNames?.close ?? ''}`.trim()} style={styles?.close} type="button" aria-label={closeLabel} onClick={onClose}>×</button>
     </div>
-    <div className={`kvzd-modal__body ${classNames?.body ?? ''}`.trim()} style={styles?.body}>{children}</div>
-    {footer && <div className={`kvzd-modal__footer ${classNames?.footer ?? ''}`.trim()} style={styles?.footer}>{footer}</div>}
+    <div className={`kvzd-design-modal__body ${classNames?.body ?? ''}`.trim()} style={styles?.body}>{children}</div>
+    {footer && <div className={`kvzd-design-modal__footer ${classNames?.footer ?? ''}`.trim()} style={styles?.footer}>{footer}</div>}
   </dialog>
 })

@@ -35,10 +35,10 @@ export const Feedback = forwardRef<HTMLElement, { onUseful?: (useful: boolean) =
   const [open, setOpen] = useState(false); const [message, setMessage] = useState(''); const [sent, setSent] = useState(false)
   return <section ref={ref} className="govuk-feedback" style={style} aria-label="Feedback">
     {sent ? <p className="govuk-body"><strong>Thank you for your feedback.</strong></p> : <>
-      <div className="govuk-feedback__prompt"><span>Is this page useful?</span><Button type="secondary" onClick={() => onUseful?.(true)}>Yes</Button><Button type="secondary" onClick={() => onUseful?.(false)}>No</Button><button className="govuk-link" type="button" onClick={() => { const next = !open; setOpen(next); onOpenChange?.(next) }}>Report a problem with this page</button></div>
-      {open && <div className="govuk-feedback__form"><label className="govuk-label govuk-label--m" htmlFor="feedback-message">What went wrong?</label><textarea id="feedback-message" className="govuk-textarea" rows={4} value={message} onChange={(event) => setMessage(event.target.value)} /><Button onClick={() => { onSubmit?.(message); setSent(true) }}>Send</Button></div>}
+      <div className="kvzd-design-feedback__prompt"><span>Is this page useful?</span><Button type="secondary" onClick={() => onUseful?.(true)}>Yes</Button><Button type="secondary" onClick={() => onUseful?.(false)}>No</Button><button className="govuk-link" type="button" onClick={() => { const next = !open; setOpen(next); onOpenChange?.(next) }}>Report a problem with this page</button></div>
+      {open && <div className="kvzd-design-feedback__form"><label className="govuk-label govuk-label--m" htmlFor="feedback-message">What went wrong?</label><textarea id="feedback-message" className="govuk-textarea" rows={4} value={message} onChange={(event) => setMessage(event.target.value)} /><Button onClick={() => { onSubmit?.(message); setSent(true) }}>Send</Button></div>}
     </>}
   </section>
 })
 
-export const Surface = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function Surface({ children, className = '', ...props }, ref) { return <div {...props} ref={ref} className={`kvzd-surface ${className}`.trim()}>{children}</div> })
+export const Surface = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function Surface({ children, className = '', ...props }, ref) { return <div {...props} ref={ref} className={`kvzd-design-surface ${className}`.trim()}>{children}</div> })

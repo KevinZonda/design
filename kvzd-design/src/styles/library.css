@@ -5,7 +5,7 @@
   transform: translate(-50%, -50%);
 }
 
-.kvzd-generic-header__logo-mark {
+.kvzd-design-generic-header__logo-mark {
   display: inline-flex;
   margin-right: 10px;
   vertical-align: top;
@@ -25,47 +25,47 @@
   background-color: var(--govuk-surface-background-colour);
 }
 
-.govuk-feedback__prompt {
+.kvzd-design-feedback__prompt {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 15px;
 }
 
-.govuk-feedback__prompt .govuk-button {
+.kvzd-design-feedback__prompt .govuk-button {
   margin-bottom: 0;
 }
 
-.govuk-feedback__form {
+.kvzd-design-feedback__form {
   max-width: 640px;
   margin-top: 20px;
 }
 
-.kvzd-surface {
+.kvzd-design-surface {
   padding: 20px;
   border: 1px solid var(--govuk-surface-border-colour);
   background: var(--govuk-surface-background-colour);
 }
 
-.kvzd-search-input__control {
+.kvzd-design-search-input__control {
   position: relative;
   width: 100%;
 }
 
-.kvzd-search-input__input {
+.kvzd-design-search-input__input {
   box-sizing: border-box;
   width: 100%;
 }
 
-.kvzd-search-input__control--left .kvzd-search-input__input {
+.kvzd-design-search-input__control--left .kvzd-design-search-input__input {
   padding-left: 42px;
 }
 
-.kvzd-search-input__control--right .kvzd-search-input__input {
+.kvzd-design-search-input__control--right .kvzd-design-search-input__input {
   padding-right: 42px;
 }
 
-.kvzd-search-input__icon {
+.kvzd-design-search-input__icon {
   position: absolute;
   top: 50%;
   display: inline-flex;
@@ -78,26 +78,26 @@
   transform: translateY(-50%);
 }
 
-.kvzd-search-input__control--left .kvzd-search-input__icon { left: 10px; }
-.kvzd-search-input__control--right .kvzd-search-input__icon { right: 10px; }
-.kvzd-search-input__icon svg { display: block; max-width: 100%; max-height: 100%; }
+.kvzd-design-search-input__control--left .kvzd-design-search-input__icon { left: 10px; }
+.kvzd-design-search-input__control--right .kvzd-design-search-input__icon { right: 10px; }
+.kvzd-design-search-input__icon svg { display: block; max-width: 100%; max-height: 100%; }
 
 /* React owns the GOV.UK service navigation disclosure state. */
-.kvzd-service-navigation__toggle {
+.kvzd-design-service-navigation__toggle {
   display: none;
 }
 
 @media (max-width: 40.0525em) {
-  .kvzd-service-navigation__toggle {
+  .kvzd-design-service-navigation__toggle {
     display: inline-flex;
   }
 
-  .kvzd-service-navigation__list--closed {
+  .kvzd-design-service-navigation__list--closed {
     display: none;
   }
 }
 /* Let click-only items keep the same appearance as their link counterparts. */
-:where(.kvzd-clickable-button) {
+:where(.kvzd-design-clickable-button) {
   appearance: none;
   border: 0;
   background: none;

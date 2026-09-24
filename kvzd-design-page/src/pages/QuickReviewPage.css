@@ -16,11 +16,11 @@
 .review-gallery__heading h2 { margin-bottom: 0; }
 .review-gallery__heading > span { margin-bottom: 8px; color: #505a5f; }
 .review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; align-items: start; }
-.review-grid .kvzd-showcase-box__header { min-height: 128px; }
-.review-grid .kvzd-showcase-box__content { min-height: 220px; }
+.review-grid .kvzd-design-showcase-box__header { min-height: 128px; }
+.review-grid .kvzd-design-showcase-box__content { min-height: 220px; }
 .review-card--wide { grid-column: 1 / -1; }
-.review-card--wide .kvzd-showcase-box__header { min-height: 0; }
-.review-card--wide .kvzd-showcase-box__content { min-height: 160px; }
+.review-card--wide .kvzd-design-showcase-box__header { min-height: 0; }
+.review-card--wide .kvzd-design-showcase-box__content { min-height: 160px; }
 .review-card__top-link { flex: none; }
 .review-empty { padding: 30px; border-left: 5px solid var(--govuk-brand-colour); background: #f3f3f3; }
 .review-empty > :last-child { margin-bottom: 0; }
@@ -28,7 +28,7 @@
 @media (max-width: 1000px) {
   .review-grid { grid-template-columns: 1fr; }
   .review-card--wide { grid-column: auto; }
-  .review-grid .kvzd-showcase-box__header { min-height: 0; }
+  .review-grid .kvzd-design-showcase-box__header { min-height: 0; }
 }
 
 @media (max-width: 800px) {

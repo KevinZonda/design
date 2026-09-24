@@ -91,6 +91,9 @@ being customised. `style` takes precedence over `styles.root`.
 Use CSS classes for responsive and interaction states; inline styles are best
 for values that depend on runtime data.
 
+Library-specific CSS classes and custom properties use the `kvzd-design-`
+prefix. GOV.UK classes and colour variables keep their `govuk-` names.
+
 ### Theme colours
 
 `ThemeProvider` overrides the colour variables for its descendants. The package

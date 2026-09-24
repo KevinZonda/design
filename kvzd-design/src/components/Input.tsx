@@ -13,7 +13,7 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ className = '', classNames, error, hint, id, label, labelSize, status, style, styles, width, ...props }, ref) {
   const generatedId = useId()
-  const inputId = id ?? `kvzd-input-${generatedId.replaceAll(':', '')}`
+  const inputId = id ?? `kvzd-design-input-${generatedId.replaceAll(':', '')}`
   const hasError = Boolean(error) || status === 'error'
   const describedBy = [hint && `${inputId}-hint`, error && `${inputId}-error`].filter(Boolean).join(' ')
   return (

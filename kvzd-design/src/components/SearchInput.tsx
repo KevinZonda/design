@@ -36,7 +36,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
   ...props
 }, ref) {
   const generatedId = useId()
-  const inputId = id ?? `kvzd-search-${generatedId.replaceAll(':', '')}`
+  const inputId = id ?? `kvzd-design-search-${generatedId.replaceAll(':', '')}`
   const hasError = Boolean(error) || status === 'error'
   const describedBy = [ariaDescribedBy, hint && `${inputId}-hint`, error && `${inputId}-error`].filter(Boolean).join(' ')
 
@@ -45,7 +45,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
       <label className={`govuk-label ${visuallyHiddenLabel ? 'govuk-visually-hidden' : labelSize ? `govuk-label--${labelSize}` : ''} ${classNames?.label ?? ''}`.trim()} style={styles?.label} htmlFor={inputId}>{label}</label>
       {hint && <div className={`govuk-hint ${classNames?.hint ?? ''}`.trim()} style={styles?.hint} id={`${inputId}-hint`}>{hint}</div>}
       {error && <p className={`govuk-error-message ${classNames?.error ?? ''}`.trim()} style={styles?.error} id={`${inputId}-error`}><span className="govuk-visually-hidden">Error:</span> {error}</p>}
-      <div className={`kvzd-search-input__control kvzd-search-input__control--${iconPosition} ${classNames?.control ?? ''}`.trim()} style={styles?.control}>
+      <div className={`kvzd-design-search-input__control kvzd-design-search-input__control--${iconPosition} ${classNames?.control ?? ''}`.trim()} style={styles?.control}>
         <input
           {...props}
           ref={ref}
@@ -53,10 +53,10 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
           type="search"
           aria-describedby={describedBy || undefined}
           aria-invalid={hasError || undefined}
-          className={`govuk-input ${hasError ? 'govuk-input--error' : ''} ${icon ? 'kvzd-search-input__input' : ''} ${classNames?.input ?? ''} ${className}`.trim()}
+          className={`govuk-input ${hasError ? 'govuk-input--error' : ''} ${icon ? 'kvzd-design-search-input__input' : ''} ${classNames?.input ?? ''} ${className}`.trim()}
           style={{ ...styles?.input, ...style }}
         />
-        {icon && <span className={`kvzd-search-input__icon ${classNames?.icon ?? ''}`.trim()} style={styles?.icon} aria-hidden="true">{icon}</span>}
+        {icon && <span className={`kvzd-design-search-input__icon ${classNames?.icon ?? ''}`.trim()} style={styles?.icon} aria-hidden="true">{icon}</span>}
       </div>
     </div>
   )

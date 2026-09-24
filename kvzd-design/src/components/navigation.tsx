@@ -42,7 +42,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ tit
     <div className={`${base}__container ${fullWidth ? `${base}__container--full-width` : 'govuk-width-container'} ${classNames?.container ?? ''} ${containerClassName}`.trim()} style={styles?.container}>
       <div className={`${base}__logo ${classNames?.logo ?? ''}`.trim()} style={styles?.logo}>
         <ClickTarget className={`${base}__homepage-link ${classNames?.homeLink ?? ''}`.trim()} style={styles?.homeLink} href={homeHref ?? (homeOnClick ? undefined : '/')} onClick={homeOnClick}>
-          {logo && <span className="kvzd-generic-header__logo-mark">{logo}</span>}{title}
+          {logo && <span className="kvzd-design-generic-header__logo-mark">{logo}</span>}{title}
         </ClickTarget>
       </div>
       {children}
@@ -76,8 +76,8 @@ export const ServiceNavigation = forwardRef<HTMLElement, ServiceNavigationProps>
     <div className="govuk-service-navigation__container">
       {serviceName && <span className="govuk-service-navigation__service-name">{serviceUrl !== undefined || serviceOnClick ? <ClickTarget href={serviceUrl} onClick={serviceOnClick} className="govuk-service-navigation__link">{serviceName}</ClickTarget> : <span className="govuk-service-navigation__text">{serviceName}</span>}</span>}
       {items.length > 0 && <nav aria-label={navigationLabel} className="govuk-service-navigation__wrapper">
-        {collapseNavigationOnMobile && <button type="button" className="govuk-service-navigation__toggle kvzd-service-navigation__toggle" aria-controls={navigationId} aria-expanded={open} onClick={toggle}>{menuLabel}</button>}
-        <ul className={`govuk-service-navigation__list ${collapseNavigationOnMobile && !open ? 'kvzd-service-navigation__list--closed' : ''}`} id={navigationId}>{items.map((item, index) => <li className={`govuk-service-navigation__item ${item.current ? 'govuk-service-navigation__item--active' : ''}`} key={item.href ?? index}><ClickTarget className="govuk-service-navigation__link" href={item.href} onClick={item.onClick} anchorProps={{ 'aria-current': item.current ? 'page' : undefined }}>{item.current ? <strong className="govuk-service-navigation__active-fallback">{item.label}</strong> : item.label}</ClickTarget></li>)}</ul>
+        {collapseNavigationOnMobile && <button type="button" className="govuk-service-navigation__toggle kvzd-design-service-navigation__toggle" aria-controls={navigationId} aria-expanded={open} onClick={toggle}>{menuLabel}</button>}
+        <ul className={`govuk-service-navigation__list ${collapseNavigationOnMobile && !open ? 'kvzd-design-service-navigation__list--closed' : ''}`} id={navigationId}>{items.map((item, index) => <li className={`govuk-service-navigation__item ${item.current ? 'govuk-service-navigation__item--active' : ''}`} key={item.href ?? index}><ClickTarget className="govuk-service-navigation__link" href={item.href} onClick={item.onClick} anchorProps={{ 'aria-current': item.current ? 'page' : undefined }}>{item.current ? <strong className="govuk-service-navigation__active-fallback">{item.label}</strong> : item.label}</ClickTarget></li>)}</ul>
       </nav>}
     </div>
     {end}

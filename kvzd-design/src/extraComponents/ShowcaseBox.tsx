@@ -24,18 +24,18 @@ export const ShowcaseBox = forwardRef<HTMLElement, ShowcaseBoxProps>(function Sh
   title,
   ...props
 }, ref) {
-  return <article {...props} ref={ref} className={`kvzd-showcase-box ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
-    <div className={`kvzd-showcase-box__header ${classNames?.header ?? ''}`.trim()} style={styles?.header}>
-      <div className={`kvzd-showcase-box__title-row ${classNames?.titleRow ?? ''}`.trim()} style={styles?.titleRow}>
+  return <article {...props} ref={ref} className={`kvzd-design-showcase-box ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
+    <div className={`kvzd-design-showcase-box__header ${classNames?.header ?? ''}`.trim()} style={styles?.header}>
+      <div className={`kvzd-design-showcase-box__title-row ${classNames?.titleRow ?? ''}`.trim()} style={styles?.titleRow}>
         {createElement(`h${headingLevel}`, {
-          className: `govuk-heading-m kvzd-showcase-box__title ${classNames?.title ?? ''}`.trim(),
+          className: `govuk-heading-m kvzd-design-showcase-box__title ${classNames?.title ?? ''}`.trim(),
           style: styles?.title,
         }, title)}
-        {headerExtra != null && <div className={`kvzd-showcase-box__header-extra ${classNames?.headerExtra ?? ''}`.trim()} style={styles?.headerExtra}>{headerExtra}</div>}
+        {headerExtra != null && <div className={`kvzd-design-showcase-box__header-extra ${classNames?.headerExtra ?? ''}`.trim()} style={styles?.headerExtra}>{headerExtra}</div>}
       </div>
-      {description != null && <div className={`govuk-body kvzd-showcase-box__description ${classNames?.description ?? ''}`.trim()} style={styles?.description}>{description}</div>}
+      {description != null && <div className={`govuk-body kvzd-design-showcase-box__description ${classNames?.description ?? ''}`.trim()} style={styles?.description}>{description}</div>}
     </div>
-    <div className={`kvzd-showcase-box__content ${classNames?.content ?? ''}`.trim()} style={styles?.content}>{children}</div>
-    {footer != null && <div className={`kvzd-showcase-box__footer ${classNames?.footer ?? ''}`.trim()} style={styles?.footer}>{footer}</div>}
+    <div className={`kvzd-design-showcase-box__content ${classNames?.content ?? ''}`.trim()} style={styles?.content}>{children}</div>
+    {footer != null && <div className={`kvzd-design-showcase-box__footer ${classNames?.footer ?? ''}`.trim()} style={styles?.footer}>{footer}</div>}
   </article>
 })

@@ -13,14 +13,14 @@ export const Fieldset = forwardRef<HTMLFieldSetElement, FieldsetProps>(function 
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'textarea'> { label: ReactNode; hint?: ReactNode; error?: ReactNode; rows?: number }
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({ 'aria-describedby': ariaDescribedBy, 'aria-invalid': ariaInvalid, className = '', classNames, error, hint, id, label, rows = 5, style, styles, ...props }, ref) {
-  const uid = useId(); const fieldId = id ?? `kvzd-textarea-${uid.replaceAll(':', '')}`; const described = [ariaDescribedBy, hint && `${fieldId}-hint`, error && `${fieldId}-error`].filter(Boolean).join(' ')
+  const uid = useId(); const fieldId = id ?? `kvzd-design-textarea-${uid.replaceAll(':', '')}`; const described = [ariaDescribedBy, hint && `${fieldId}-hint`, error && `${fieldId}-error`].filter(Boolean).join(' ')
   return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}><Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint id={`${fieldId}-hint`} className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage id={`${fieldId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}<textarea {...props} ref={ref} id={fieldId} rows={rows} aria-describedby={described || undefined} aria-invalid={error ? true : ariaInvalid} className={`govuk-textarea ${error ? 'govuk-textarea--error' : ''} ${classNames?.textarea ?? ''} ${className}`.trim()} style={{ ...styles?.textarea, ...style }} /></div>
 })
 
 export interface Option { label: ReactNode; value: string; disabled?: boolean }
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'children'>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'select'> { label: ReactNode; hint?: ReactNode; error?: ReactNode; options: Option[]; placeholder?: string }
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select({ className = '', classNames, error, hint, id, label, options, placeholder, style, styles, ...props }, ref) {
-  const uid = useId(); const fieldId = id ?? `kvzd-select-${uid.replaceAll(':', '')}`; const described = [hint && `${fieldId}-hint`, error && `${fieldId}-error`].filter(Boolean).join(' ')
+  const uid = useId(); const fieldId = id ?? `kvzd-design-select-${uid.replaceAll(':', '')}`; const described = [hint && `${fieldId}-hint`, error && `${fieldId}-error`].filter(Boolean).join(' ')
   return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}><Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint id={`${fieldId}-hint`} className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage id={`${fieldId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}<select {...props} ref={ref} id={fieldId} aria-describedby={described || undefined} className={`govuk-select ${error ? 'govuk-select--error' : ''} ${classNames?.select ?? ''} ${className}`.trim()} style={{ ...styles?.select, ...style }}>{placeholder && <option value="">{placeholder}</option>}{options.map((option) => <option key={option.value} value={option.value} disabled={option.disabled}>{option.label}</option>)}</select></div>
 })
 
@@ -49,7 +49,7 @@ export const DateInput = forwardRef<HTMLFieldSetElement, DateInputProps>(functio
 
 export interface FileUploadProps extends InputHTMLAttributes<HTMLInputElement>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'input'> { label: ReactNode; hint?: ReactNode; error?: ReactNode }
 export const FileUpload = forwardRef<HTMLInputElement, FileUploadProps>(function FileUpload({ className = '', classNames, error, hint, id, label, style, styles, ...props }, ref) {
-  const uid = useId(); const fieldId = id ?? `kvzd-upload-${uid.replaceAll(':', '')}`
+  const uid = useId(); const fieldId = id ?? `kvzd-design-upload-${uid.replaceAll(':', '')}`
   return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}><Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}<input {...props} ref={ref} id={fieldId} type="file" className={`govuk-file-upload ${error ? 'govuk-file-upload--error' : ''} ${classNames?.input ?? ''} ${className}`.trim()} style={{ ...styles?.input, ...style }} /></div>
 })
 
@@ -71,7 +71,7 @@ export const CharacterCount = forwardRef<HTMLTextAreaElement, CharacterCountProp
   ...props
 }, ref) {
   const generatedId = useId().replaceAll(':', '')
-  const fieldId = id ?? `kvzd-character-count-${generatedId}`
+  const fieldId = id ?? `kvzd-design-character-count-${generatedId}`
   const infoId = `${fieldId}-info`
   const [inner, setInner] = useState(String(defaultValue ?? ''))
   const [focused, setFocused] = useState(false)
@@ -114,6 +114,6 @@ export const CharacterCount = forwardRef<HTMLTextAreaElement, CharacterCountProp
 
 export interface PasswordInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>, SemanticStyling<'root' | 'label' | 'wrapper' | 'input' | 'toggle'> { label?: ReactNode; showText?: string; hideText?: string; onVisibilityChange?: (visible: boolean) => void }
 export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(function PasswordInput({ className = '', classNames, label = 'Password', showText = 'Show', hideText = 'Hide', onVisibilityChange, style, styles, ...props }, ref) {
-  const [visible, setVisible] = useState(false); const uid = useId(); const id = props.id ?? `kvzd-password-${uid.replaceAll(':', '')}`
+  const [visible, setVisible] = useState(false); const uid = useId(); const id = props.id ?? `kvzd-design-password-${uid.replaceAll(':', '')}`
   return <div className={`govuk-form-group govuk-password-input ${classNames?.root ?? ''}`.trim()} style={styles?.root}><Label htmlFor={id} className={classNames?.label} style={styles?.label}>{label}</Label><div className={`govuk-input__wrapper govuk-password-input__wrapper ${classNames?.wrapper ?? ''}`.trim()} style={styles?.wrapper}><input {...props} ref={ref} id={id} className={`govuk-input govuk-password-input__input ${classNames?.input ?? ''} ${className}`.trim()} style={{ ...styles?.input, ...style }} type={visible ? 'text' : 'password'} spellCheck={false} autoCapitalize="none" /><button className={`govuk-button govuk-button--secondary govuk-password-input__toggle ${classNames?.toggle ?? ''}`.trim()} style={styles?.toggle} type="button" aria-controls={id} aria-label={`${visible ? hideText : showText} password`} aria-pressed={visible} onClick={() => { const next = !visible; setVisible(next); onVisibilityChange?.(next) }}>{visible ? hideText : showText}</button></div></div>
 })

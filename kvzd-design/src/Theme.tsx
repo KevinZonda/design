@@ -65,5 +65,5 @@ export const ThemeProvider = forwardRef<HTMLDivElement, Theme.ProviderProps>(fun
     if (value !== undefined) themeStyle[colourVariables[token]] = value
   }
 
-  return <div {...props} ref={ref} className={`kvzd-theme-provider ${className}`.trim()} style={{ ...themeStyle, ...style }} />
+  return <div {...props} ref={ref} className={`kvzd-design-theme-provider ${className}`.trim()} style={{ ...themeStyle, ...style }} />
 })
