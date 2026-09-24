@@ -11,6 +11,20 @@
   vertical-align: top;
 }
 
+/* These upstream colours are fixed at build time, so follow the active theme. */
+.govuk-file-upload-button__status,
+.govuk-file-upload-button:hover .govuk-file-upload-button__status {
+  background-color: var(--govuk-brand-colour);
+}
+
+.govuk-button--inverse {
+  box-shadow: 0 2px var(--govuk-brand-colour);
+}
+
+.govuk-button--inverse:hover {
+  background-color: var(--govuk-surface-background-colour);
+}
+
 .govuk-feedback__prompt {
   display: flex;
   align-items: center;

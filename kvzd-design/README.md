@@ -93,10 +93,11 @@ for values that depend on runtime data.
 
 ### Theme colours
 
-`ThemeProvider` overrides the GOV.UK colour variables for its descendants. The
+`ThemeProvider` overrides the colour variables for its descendants. The package
+defaults to the black and grey palette used by the documentation site. The
 palette is partial, so omitted colours inherit from a parent provider or retain
-the defaults from GOV.UK Frontend. Providers can be nested to theme one section
-of an application.
+the package defaults. Providers can be nested to theme one section of an
+application.
 
 ```tsx
 import { ThemeProvider, type Theme } from '@kevinzonda/design'

@@ -1,4 +1,11 @@
 @use 'govuk-frontend' with (
   $govuk-font-family: ("Helvetica Neue", Helvetica, Arial, sans-serif),
-  $govuk-include-default-font-face: false
+  $govuk-include-default-font-face: false,
+  $govuk-functional-colours: (
+    brand: #000000,
+    template-background: #eeeeee,
+    surface-background: #eeeeee,
+    surface-border: #b1b4b6,
+    link: #000000,
+  )
 );
