@@ -22,7 +22,7 @@ const english = {
   licenseIntro: 'This site uses GOV.UK Frontend 6.5.1. Its software is released under the MIT License. The original copyright and license notice is reproduced below.',
   licenseSource: 'View the GOV.UK Frontend source and license',
   reviewIntro: 'Review every component in one place. Examples are interactive and use the same source as the individual documentation pages.',
-  baseline: 'Baseline', lockedTo: 'Locked to GOV.UK Frontend 6.5.1', componentsCovered: 'components covered',
+  baseline: 'Baseline', lockedTo: 'Based on GOV.UK Frontend 6.5.1', componentsCovered: 'components covered',
   filterComponents: 'Filter components', showing: 'Showing', of: 'of', componentIndex: 'Component index',
   allComponents: 'All components', shown: 'shown', viewDocumentation: 'View documentation',
   backToTop: 'Back to top', tryDifferent: 'Try a different component name or description.',
