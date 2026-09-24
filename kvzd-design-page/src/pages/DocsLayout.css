@@ -4,6 +4,5 @@
 
 @media (max-width: 800px) {
   .page-layout { grid-template-columns: 1fr; gap: 35px; padding-top: 15px; }
-  .docs-sidebar { margin-bottom: 0; padding: 0 0 24px; border-bottom: 1px solid #b1b4b6; }
-  .docs-sidebar .kvzd-design-sidebar__list { display: none; }
+  .docs-sidebar { display: none; }
 }
