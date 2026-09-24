@@ -278,7 +278,7 @@
   display: inline-flex;
   align-items: center;
   padding: 4px 8px 3px;
-  border: 1px solid var(--govuk-border-colour);
+  border: 1px solid currentColor;
   color: var(--govuk-text-colour);
   font-size: 14px;
   font-weight: 700;
