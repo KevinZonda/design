@@ -35,18 +35,7 @@ pnpm --filter @kevinzonda/design-page preview
 
 ## npm releases
 
-Publish the first version locally, because npm requires the package to exist
-before a Trusted Publisher can be configured:
-
-```bash
-pnpm install --frozen-lockfile
-pnpm build:lib
-cd kvzd-design
-npm pack --dry-run
-npm publish --access public
-```
-
-Then configure the npm package's Trusted Publisher for GitHub Actions with
-user `KevinZonda`, repository `design-system`, workflow `publish-npm.yml`, and
-permission to publish directly. Later releases run from version tags such as
-`v0.1.1`; the tag must match `kvzd-design/package.json`.
+The npm package is published from version tags through the `publish-npm.yml`
+GitHub Actions workflow. Its Trusted Publisher is configured for
+`KevinZonda/design`. The tag must match `kvzd-design/package.json`, for example
+`v0.1.1` for version `0.1.1`.
