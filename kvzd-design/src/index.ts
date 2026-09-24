@@ -1,4 +1,4 @@
-import './styles/frontend-arial.scss'
+import './styles/frontend-fonts.scss'
 import './styles/library.css'
 import './styles/extraComponents.css'
 

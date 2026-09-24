@@ -1,4 +1,4 @@
 @use 'govuk-frontend' with (
-  $govuk-font-family: (Arial, sans-serif),
+  $govuk-font-family: ("Helvetica Neue", Helvetica, Arial, sans-serif),
   $govuk-include-default-font-face: false
 );
