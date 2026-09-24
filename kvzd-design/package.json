@@ -2,10 +2,17 @@
   "name": "@kevinzonda/design",
   "version": "0.1.0",
   "description": "KevinZonda Design System, a usability-focused design system based on GOV.UK Design System.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KevinZonda/design-system.git",
+    "directory": "kvzd-design"
+  },
   "type": "module",
   "files": [
     "dist-lib",
-    "EXTRA_COMPONENTS.md"
+    "EXTRA_COMPONENTS.md",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "main": "./dist-lib/index.js",
   "module": "./dist-lib/index.js",

@@ -1,0 +1,43 @@
+name: Publish npm package
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 9.9.0
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - name: Ensure npm supports trusted publishing
+        run: npm install --global npm@^11.5.1
+      - name: Check tag matches package version
+        run: |
+          node -e 'const v = require("./kvzd-design/package.json").version; if (process.env.GITHUB_REF_NAME !== "v" + v) { console.error("Tag must be v" + v); process.exit(1) }'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint library
+        run: pnpm --filter @kevinzonda/design lint
+      - name: Test library
+        run: pnpm --filter @kevinzonda/design test
+      - name: Build library
+        run: pnpm build:lib
+      - name: Publish to npm
+        run: npm publish --access public
+        working-directory: kvzd-design
