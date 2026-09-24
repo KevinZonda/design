@@ -1,6 +1,6 @@
 # @kevinzonda/design
 
-React components based on GOV.UK Frontend **6.5.1**, with a compact API inspired by Ant Design.
+KevinZonda Design System, a usability-focused design system based on GOV.UK Design System.
 
 ## Install
 
@@ -53,7 +53,7 @@ import { Button, ButtonGroup } from '@kevinzonda/design/components'
   GOV.UK Frontend JavaScript on their DOM nodes; the React components own those
   interactions.
 - Controlled and uncontrolled modes are supported where they are useful.
-- GOV.UK Frontend is pinned to exactly `6.5.1`.
+- Built with GOV.UK Frontend 6.5.1.
 
 ### Styling
 

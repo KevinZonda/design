@@ -1,7 +1,7 @@
 {
   "name": "@kevinzonda/design",
   "version": "0.1.0",
-  "description": "React components based on GOV.UK Frontend 6.5.1.",
+  "description": "KevinZonda Design System, a usability-focused design system based on GOV.UK Design System.",
   "type": "module",
   "files": [
     "dist-lib",
