@@ -12,7 +12,7 @@ export const WarningText = forwardRef<HTMLDivElement, { children: ReactNode; ico
 export interface ErrorItem extends IClickBehaviour { children: ReactNode }
 export interface ErrorSummaryProps { title?: ReactNode; errors: ErrorItem[]; style?: CSSProperties }
 export const ErrorSummary = forwardRef<HTMLDivElement, ErrorSummaryProps>(function ErrorSummary({ title = 'There is a problem', errors, style }, ref) {
-  return <div ref={ref} className="govuk-error-summary" style={style} data-module="govuk-error-summary" role="alert" tabIndex={-1}><h2 className="govuk-error-summary__title">{title}</h2><div className="govuk-error-summary__body"><ul className="govuk-list govuk-error-summary__list">{errors.map((error, index) => <li key={index}><ClickTarget href={error.href} onClick={error.onClick}>{error.children}</ClickTarget></li>)}</ul></div></div>
+  return <div ref={ref} className="govuk-error-summary" style={style} role="alert" tabIndex={-1}><h2 className="govuk-error-summary__title">{title}</h2><div className="govuk-error-summary__body"><ul className="govuk-list govuk-error-summary__list">{errors.map((error, index) => <li key={index}><ClickTarget href={error.href} onClick={error.onClick}>{error.children}</ClickTarget></li>)}</ul></div></div>
 })
 
 export const NotificationBanner = forwardRef<HTMLDivElement, { children: ReactNode; title?: ReactNode; type?: 'info' | 'success'; className?: string; style?: CSSProperties }>(function NotificationBanner({ children, title, type = 'info', className = '', style }, ref) {
@@ -28,14 +28,8 @@ export const PhaseBanner = forwardRef<HTMLDivElement, { phase: ReactNode; childr
   </div>
 })
 
-export interface CookieBannerProps { title?: ReactNode; children: ReactNode; onAccept?: () => void; onReject?: () => void; acceptText?: string; rejectText?: string; style?: CSSProperties }
-export const CookieBanner = forwardRef<HTMLDivElement, CookieBannerProps>(function CookieBanner({ acceptText = 'Accept analytics cookies', children, onAccept, onReject, rejectText = 'Reject analytics cookies', style, title = 'Cookies on this service' }, ref) {
-  const [choice, setChoice] = useState<'accepted' | 'rejected' | null>(null)
-  if (choice) return <div ref={ref} className="govuk-cookie-banner" style={style} role="region" aria-label="Cookies"><div className="govuk-cookie-banner__message govuk-width-container"><div className="govuk-grid-row"><div className="govuk-grid-column-two-thirds"><p className="govuk-body">Your cookie preferences have been saved.</p></div></div></div></div>
-  return <div ref={ref} className="govuk-cookie-banner" style={style} role="region" aria-label="Cookies"><div className="govuk-cookie-banner__message govuk-width-container"><div className="govuk-grid-row"><div className="govuk-grid-column-two-thirds"><h2 className="govuk-cookie-banner__heading govuk-heading-m">{title}</h2><div className="govuk-cookie-banner__content"><p className="govuk-body">{children}</p></div></div></div><div className="govuk-button-group"><Button onClick={() => { setChoice('accepted'); onAccept?.() }}>{acceptText}</Button><Button onClick={() => { setChoice('rejected'); onReject?.() }}>{rejectText}</Button></div></div></div>
-})
-
-export const ExitThisPage = forwardRef<HTMLAnchorElement | HTMLButtonElement | HTMLSpanElement, IClickBehaviour & { children?: ReactNode; style?: CSSProperties }>(function ExitThisPage({ href, onClick, children = 'Exit this page', style }, ref) { return <ClickTarget ref={ref} href={href} onClick={onClick} className="govuk-exit-this-page__button govuk-button govuk-button--warning" style={style} anchorProps={{ role: 'button', rel: 'nofollow noreferrer' }}>{children}<span aria-hidden="true"> ⇥</span></ClickTarget> })
+export { CookieBanner, type CookieBannerProps, type CookieConsent } from './CookieBanner'
+export { ExitThisPage, type ExitThisPageProps } from './ExitThisPage'
 
 export const Feedback = forwardRef<HTMLElement, { onUseful?: (useful: boolean) => void; onSubmit?: (message: string) => void; onOpenChange?: (open: boolean) => void; style?: CSSProperties }>(function Feedback({ onUseful, onSubmit, onOpenChange, style }, ref) {
   const [open, setOpen] = useState(false); const [message, setMessage] = useState(''); const [sent, setSent] = useState(false)

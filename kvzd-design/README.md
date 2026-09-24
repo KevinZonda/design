@@ -49,6 +49,9 @@ import { Button, ButtonGroup } from '@kevinzonda/design/components'
 - Ant Design-style props such as `items`, `options`, `value`, `onChange`, `status` and `type`.
 - Semantic HTML and GOV.UK class names underneath.
 - React owns interactive state; GOV.UK's DOM-mutating JavaScript is not initialised.
+- These components do not output GOV.UK `data-module` markers. Do not initialise
+  GOV.UK Frontend JavaScript on their DOM nodes; the React components own those
+  interactions.
 - Controlled and uncontrolled modes are supported where they are useful.
 - GOV.UK Frontend is pinned to exactly `6.5.1`.
 
@@ -172,6 +175,37 @@ SummaryList, Table, Tabs, Tag, TaskList, Textarea and WarningText.
 `Header` and `Footer` provide the generic versions. `HeaderGovUk` and
 `FooterGovUk` compose them with GOV.UK branding and footer wording. Use `Header`
 where older examples used `GenericHeader`.
+
+### Cookie consent and emergency exit
+
+`CookieBanner` saves an accepted or rejected choice in a first-party cookie for
+one year. It shows a focusable confirmation message after a choice, and hides
+it when the user selects **Hide cookie message**. On a return visit it stays
+hidden. Use `cookieName` when multiple services share a host; use
+`onConsentChange` to learn the saved choice on mount and after a new choice.
+Only load non-essential cookies when the choice is `accepted`. Supply a link
+to your service's cookie settings with `settingsHref`.
+
+```tsx
+<CookieBanner
+  cookieName="my_service_cookie_consent"
+  settingsHref="/cookies"
+  onConsentChange={(choice) => setAnalyticsEnabled(choice === 'accepted')}
+>
+  We use analytics cookies to understand how you use this service.
+</CookieBanner>
+```
+
+`ExitThisPage` uses a normal link to a neutral destination so it still works
+without JavaScript. With JavaScript, clicking it, focusing its secondary link
+or pressing Shift three times within five seconds hides the current page and
+navigates in the same tab. Render only one instance per page. It does not erase
+browser history; follow the GOV.UK “Exit a page quickly” pattern when using it
+in a sensitive service.
+
+```tsx
+<ExitThisPage href="https://www.bbc.co.uk/weather" />
+```
 
 The package also includes [extra components](EXTRA_COMPONENTS.md) such as
 `Modal`, `Form`, `FancyTable` and `Dropdown`. Import them from

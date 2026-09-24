@@ -25,7 +25,7 @@ export const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, ButtonPr
   const content = <>{isStartButton ? <span>{children}</span> : children}{isStartButton && <StartIcon />}</>
   if (typeof href === 'string') {
     const { onKeyDown, ...linkProps } = props as AnchorHTMLAttributes<HTMLAnchorElement>
-    return <a {...linkProps} ref={ref as Ref<HTMLAnchorElement>} className={classes} data-module="govuk-button" href={href} role="button" draggable={linkProps.draggable ?? false} onKeyDown={(event) => { onKeyDown?.(event); if (!event.defaultPrevented && event.key === ' ') { event.preventDefault(); event.currentTarget.click() } }}>{content}</a>
+    return <a {...linkProps} ref={ref as Ref<HTMLAnchorElement>} className={classes} href={href} role="button" draggable={linkProps.draggable ?? false} onKeyDown={(event) => { onKeyDown?.(event); if (!event.defaultPrevented && event.key === ' ') { event.preventDefault(); event.currentTarget.click() } }}>{content}</a>
   }
   const { disabled, onClick, ...buttonProps } = props as ButtonHTMLAttributes<HTMLButtonElement>
   const handleClick = preventDoubleClick ? (event: MouseEvent<HTMLButtonElement>) => {
@@ -34,7 +34,7 @@ export const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, ButtonPr
     lastClickAt.current = now
     onClick?.(event)
   } : onClick
-  return <button {...buttonProps} ref={ref as Ref<HTMLButtonElement>} type={htmlType} className={classes} data-module="govuk-button" disabled={disabled} aria-disabled={disabled ? true : buttonProps['aria-disabled']} onClick={handleClick}>{content}</button>
+  return <button {...buttonProps} ref={ref as Ref<HTMLButtonElement>} type={htmlType} className={classes} disabled={disabled} aria-disabled={disabled ? true : buttonProps['aria-disabled']} onClick={handleClick}>{content}</button>
 }) as {
   (props: ButtonLinkProps & RefAttributes<HTMLAnchorElement>): ReactElement | null
   (props: ButtonActionProps & RefAttributes<HTMLButtonElement>): ReactElement | null

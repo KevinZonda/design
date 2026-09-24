@@ -1,4 +1,4 @@
-import { forwardRef, useId, useMemo, useState } from 'react'
+import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, ChangeEvent, FieldsetHTMLAttributes, InputHTMLAttributes, ReactNode, Ref, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
 import type { SemanticStyling } from './styling'
 
@@ -12,9 +12,9 @@ export const Fieldset = forwardRef<HTMLFieldSetElement, FieldsetProps>(function 
 })
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'textarea'> { label: ReactNode; hint?: ReactNode; error?: ReactNode; rows?: number }
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({ className = '', classNames, error, hint, id, label, rows = 5, style, styles, ...props }, ref) {
-  const uid = useId(); const fieldId = id ?? `kvzd-textarea-${uid.replaceAll(':', '')}`; const described = [hint && `${fieldId}-hint`, error && `${fieldId}-error`].filter(Boolean).join(' ')
-  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}><Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint id={`${fieldId}-hint`} className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage id={`${fieldId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}<textarea {...props} ref={ref} id={fieldId} rows={rows} aria-describedby={described || undefined} aria-invalid={error ? true : undefined} className={`govuk-textarea ${error ? 'govuk-textarea--error' : ''} ${classNames?.textarea ?? ''} ${className}`.trim()} style={{ ...styles?.textarea, ...style }} /></div>
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({ 'aria-describedby': ariaDescribedBy, 'aria-invalid': ariaInvalid, className = '', classNames, error, hint, id, label, rows = 5, style, styles, ...props }, ref) {
+  const uid = useId(); const fieldId = id ?? `kvzd-textarea-${uid.replaceAll(':', '')}`; const described = [ariaDescribedBy, hint && `${fieldId}-hint`, error && `${fieldId}-error`].filter(Boolean).join(' ')
+  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}><Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint id={`${fieldId}-hint`} className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage id={`${fieldId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}<textarea {...props} ref={ref} id={fieldId} rows={rows} aria-describedby={described || undefined} aria-invalid={error ? true : ariaInvalid} className={`govuk-textarea ${error ? 'govuk-textarea--error' : ''} ${classNames?.textarea ?? ''} ${className}`.trim()} style={{ ...styles?.textarea, ...style }} /></div>
 })
 
 export interface Option { label: ReactNode; value: string; disabled?: boolean }
@@ -29,14 +29,14 @@ export interface ChoiceGroupProps { name: string; legend: ReactNode; options: Ch
 export const Checkboxes = forwardRef<HTMLFieldSetElement, ChoiceGroupProps>(function Checkboxes({ defaultValue = [], error, hint, inputProps, inputRefs, legend, name, onChange, options, small = false, style, value }, ref) {
   const [inner, setInner] = useState(defaultValue); const selected = value ?? inner
   const update = (optionValue: string, checked: boolean) => { const next = checked ? [...selected, optionValue] : selected.filter((item) => item !== optionValue); if (value === undefined) setInner(next); onChange?.(next) }
-  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''}`}><Fieldset ref={ref} style={style} legend={legend} hint={hint} error={error}><div className={`govuk-checkboxes ${small ? 'govuk-checkboxes--small' : ''}`} data-module="govuk-checkboxes">{options.map((option) => <div key={option.value}><div className="govuk-checkboxes__item"><input {...inputProps} ref={inputRefs?.[option.value]} className="govuk-checkboxes__input" id={`${name}-${option.value}`} name={name} type="checkbox" value={option.value} checked={selected.includes(option.value)} disabled={option.disabled || inputProps?.disabled} onChange={(event) => update(option.value, event.target.checked)} /><label className="govuk-label govuk-checkboxes__label" htmlFor={`${name}-${option.value}`}>{option.label}</label>{option.hint && <div className="govuk-hint govuk-checkboxes__hint">{option.hint}</div>}</div>{option.conditional && selected.includes(option.value) && <div className="govuk-checkboxes__conditional">{option.conditional}</div>}</div>)}</div></Fieldset></div>
+  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''}`}><Fieldset ref={ref} style={style} legend={legend} hint={hint} error={error}><div className={`govuk-checkboxes ${small ? 'govuk-checkboxes--small' : ''}`}>{options.map((option) => <div key={option.value}><div className="govuk-checkboxes__item"><input {...inputProps} ref={inputRefs?.[option.value]} className="govuk-checkboxes__input" id={`${name}-${option.value}`} name={name} type="checkbox" value={option.value} checked={selected.includes(option.value)} disabled={option.disabled || inputProps?.disabled} onChange={(event) => update(option.value, event.target.checked)} /><label className="govuk-label govuk-checkboxes__label" htmlFor={`${name}-${option.value}`}>{option.label}</label>{option.hint && <div className="govuk-hint govuk-checkboxes__hint">{option.hint}</div>}</div>{option.conditional && selected.includes(option.value) && <div className="govuk-checkboxes__conditional">{option.conditional}</div>}</div>)}</div></Fieldset></div>
 })
 
 export interface RadioGroupProps extends Omit<ChoiceGroupProps, 'value' | 'defaultValue' | 'onChange'> { value?: string; defaultValue?: string; onChange?: (value: string) => void; inline?: boolean }
 export const Radios = forwardRef<HTMLFieldSetElement, RadioGroupProps>(function Radios({ defaultValue, error, hint, inline = false, inputProps, inputRefs, legend, name, onChange, options, small = false, style, value }, ref) {
   const [inner, setInner] = useState(defaultValue); const selected = value ?? inner
   const update = (next: string) => { if (value === undefined) setInner(next); onChange?.(next) }
-  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''}`}><Fieldset ref={ref} style={style} legend={legend} hint={hint} error={error}><div className={`govuk-radios ${inline ? 'govuk-radios--inline' : ''} ${small ? 'govuk-radios--small' : ''}`} data-module="govuk-radios">{options.map((option) => <div key={option.value}><div className="govuk-radios__item"><input {...inputProps} ref={inputRefs?.[option.value]} className="govuk-radios__input" id={`${name}-${option.value}`} name={name} type="radio" value={option.value} checked={selected === option.value} disabled={option.disabled || inputProps?.disabled} onChange={() => update(option.value)} /><label className="govuk-label govuk-radios__label" htmlFor={`${name}-${option.value}`}>{option.label}</label>{option.hint && <div className="govuk-hint govuk-radios__hint">{option.hint}</div>}</div>{option.conditional && selected === option.value && <div className="govuk-radios__conditional">{option.conditional}</div>}</div>)}</div></Fieldset></div>
+  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''}`}><Fieldset ref={ref} style={style} legend={legend} hint={hint} error={error}><div className={`govuk-radios ${inline ? 'govuk-radios--inline' : ''} ${small ? 'govuk-radios--small' : ''}`}>{options.map((option) => <div key={option.value}><div className="govuk-radios__item"><input {...inputProps} ref={inputRefs?.[option.value]} className="govuk-radios__input" id={`${name}-${option.value}`} name={name} type="radio" value={option.value} checked={selected === option.value} disabled={option.disabled || inputProps?.disabled} onChange={() => update(option.value)} /><label className="govuk-label govuk-radios__label" htmlFor={`${name}-${option.value}`}>{option.label}</label>{option.hint && <div className="govuk-hint govuk-radios__hint">{option.hint}</div>}</div>{option.conditional && selected === option.value && <div className="govuk-radios__conditional">{option.conditional}</div>}</div>)}</div></Fieldset></div>
 })
 
 export interface DateValue { day?: string; month?: string; year?: string }
@@ -54,10 +54,62 @@ export const FileUpload = forwardRef<HTMLInputElement, FileUploadProps>(function
 })
 
 export interface CharacterCountProps extends Omit<TextareaProps, 'maxLength' | 'styles' | 'classNames'>, SemanticStyling<'root' | 'formGroup' | 'label' | 'hint' | 'error' | 'textarea' | 'message'> { maxLength?: number; maxWords?: number }
-export const CharacterCount = forwardRef<HTMLTextAreaElement, CharacterCountProps>(function CharacterCount({ maxLength = 200, maxWords, onChange, value, defaultValue, classNames, styles, ...props }, ref) {
-  const [inner, setInner] = useState(String(defaultValue ?? '')); const text = String(value ?? inner)
-  const count = useMemo(() => maxWords ? text.trim().split(/\s+/).filter(Boolean).length : text.length, [maxWords, text]); const maximum = maxWords ?? maxLength; const remaining = maximum - count
-  return <div className={`govuk-character-count ${classNames?.root ?? ''}`.trim()} style={styles?.root} data-module="govuk-character-count"><Textarea {...props} styles={{ root: styles?.formGroup, label: styles?.label, hint: styles?.hint, error: styles?.error, textarea: styles?.textarea }} classNames={{ root: classNames?.formGroup, label: classNames?.label, hint: classNames?.hint, error: classNames?.error, textarea: classNames?.textarea }} ref={ref} value={text} onChange={(event) => { if (value === undefined) setInner(event.target.value); onChange?.(event) }} /><div className={`govuk-hint govuk-character-count__message ${remaining < 0 ? 'govuk-error-message' : ''} ${classNames?.message ?? ''}`.trim()} style={styles?.message} aria-live="polite">You have {Math.abs(remaining)} {maxWords ? 'word' : 'character'}{Math.abs(remaining) === 1 ? '' : 's'} {remaining < 0 ? 'too many' : 'remaining'}</div></div>
+export const CharacterCount = forwardRef<HTMLTextAreaElement, CharacterCountProps>(function CharacterCount({
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
+  className = '',
+  classNames,
+  defaultValue,
+  id,
+  maxLength = 200,
+  maxWords,
+  onBlur,
+  onChange,
+  onFocus,
+  styles,
+  value,
+  ...props
+}, ref) {
+  const generatedId = useId().replaceAll(':', '')
+  const fieldId = id ?? `kvzd-character-count-${generatedId}`
+  const infoId = `${fieldId}-info`
+  const [inner, setInner] = useState(String(defaultValue ?? ''))
+  const [focused, setFocused] = useState(false)
+  const [announcement, setAnnouncement] = useState('')
+  const changedSinceFocus = useRef(false)
+  const text = String(value ?? inner)
+  const count = useMemo(() => maxWords !== undefined ? text.match(/\S+/g)?.length ?? 0 : text.length, [maxWords, text])
+  const maximum = maxWords ?? maxLength
+  const remaining = maximum - count
+  const unit = maxWords !== undefined ? 'word' : 'character'
+  const countMessage = remaining === 0 ? `You have no ${unit}s remaining`
+    : `You have ${Math.abs(remaining)} ${unit}${Math.abs(remaining) === 1 ? '' : 's'} ${remaining < 0 ? 'too many' : 'remaining'}`
+
+  useEffect(() => {
+    if (!focused || !changedSinceFocus.current) return
+    const timeout = setTimeout(() => setAnnouncement(countMessage), 1000)
+    return () => clearTimeout(timeout)
+  }, [countMessage, focused])
+
+  return <div className={`govuk-character-count ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
+    <Textarea
+      {...props}
+      id={fieldId}
+      ref={ref}
+      value={text}
+      aria-describedby={[ariaDescribedBy, infoId].filter(Boolean).join(' ')}
+      aria-invalid={remaining < 0 ? true : ariaInvalid}
+      className={`${remaining < 0 ? 'govuk-textarea--error' : ''} ${className}`.trim()}
+      styles={{ root: styles?.formGroup, label: styles?.label, hint: styles?.hint, error: styles?.error, textarea: styles?.textarea }}
+      classNames={{ root: classNames?.formGroup, label: classNames?.label, hint: classNames?.hint, error: classNames?.error, textarea: classNames?.textarea }}
+      onFocus={(event) => { changedSinceFocus.current = false; setAnnouncement(''); setFocused(true); onFocus?.(event) }}
+      onBlur={(event) => { setFocused(false); setAnnouncement(''); onBlur?.(event) }}
+      onChange={(event) => { changedSinceFocus.current = true; if (value === undefined) setInner(event.target.value); onChange?.(event) }}
+    />
+    <div id={infoId} className="govuk-hint govuk-character-count__message govuk-visually-hidden">You can enter up to {maximum} {unit}{maximum === 1 ? '' : 's'}</div>
+    <div className={`govuk-hint govuk-character-count__message ${remaining < 0 ? 'govuk-error-message' : ''} ${classNames?.message ?? ''}`.trim()} style={styles?.message} aria-hidden="true">{countMessage}</div>
+    <div className="govuk-character-count__sr-status govuk-visually-hidden" aria-live="polite">{announcement}</div>
+  </div>
 })
 
 export interface PasswordInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>, SemanticStyling<'root' | 'label' | 'wrapper' | 'input' | 'toggle'> { label?: ReactNode; showText?: string; hideText?: string; onVisibilityChange?: (visible: boolean) => void }

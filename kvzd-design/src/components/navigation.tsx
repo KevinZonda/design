@@ -59,7 +59,7 @@ function GovUkLogo() {
 export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ title, homeHref, homeOnClick, logo, children, fullWidth = false, className = '', classNames, containerClassName = '', style, styles, variant = 'generic', ...props }, ref) {
   const govuk = variant === 'govuk'
   const base = govuk ? 'govuk-header' : 'govuk-generic-header'
-  return <header {...props} ref={ref} className={`${base} ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }} data-module={govuk ? 'govuk-header' : undefined}>
+  return <header {...props} ref={ref} className={`${base} ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
     <div className={`${base}__container ${fullWidth ? `${base}__container--full-width` : 'govuk-width-container'} ${classNames?.container ?? ''} ${containerClassName}`.trim()} style={styles?.container}>
       <div className={`${base}__logo ${classNames?.logo ?? ''}`.trim()} style={styles?.logo}>
         <ClickTarget className={`${base}__homepage-link ${classNames?.homeLink ?? ''}`.trim()} style={styles?.homeLink} href={homeHref ?? (homeOnClick ? undefined : '/')} onClick={homeOnClick}>
@@ -109,8 +109,8 @@ export const ServiceNavigation = forwardRef<HTMLElement, ServiceNavigationProps>
   </div>
   const rootClass = `govuk-service-navigation ${classNames?.root ?? ''} ${className}`.trim()
   return serviceName || end
-    ? <section ref={ref} aria-label={serviceLabel} className={rootClass} style={{ ...styles?.root, ...style }} data-module="govuk-service-navigation">{inner}</section>
-    : <div ref={ref as Ref<HTMLDivElement>} className={rootClass} style={{ ...styles?.root, ...style }} data-module="govuk-service-navigation">{inner}</div>
+    ? <section ref={ref} aria-label={serviceLabel} className={rootClass} style={{ ...styles?.root, ...style }}>{inner}</section>
+    : <div ref={ref as Ref<HTMLDivElement>} className={rootClass} style={{ ...styles?.root, ...style }}>{inner}</div>
 })
 
 export const LanguageNavigation = forwardRef<HTMLElement, { items: (LinkItem & { lang?: string })[]; ariaLabel?: string; style?: CSSProperties }>(function LanguageNavigation({ items, ariaLabel = 'Choose language', style }, ref) {
