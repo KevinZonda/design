@@ -167,14 +167,14 @@ Stateful components report changes through `onChange` (`Accordion`),
 
 Accordion, BackLink, Breadcrumbs, Button, ButtonGroup, CharacterCount, Checkboxes,
 CookieBanner, DateInput, Details, ErrorMessage, ErrorSummary, ExitThisPage,
-Feedback, Fieldset, FileUpload, Footer, FooterGovUk, Header, HeaderGovUk, Hint, Input,
+Feedback, Fieldset, FileUpload, Footer, Header, Hint, Input,
 InsetText, Label, LanguageNavigation, NotificationBanner, Pagination, Panel,
 PasswordInput, PhaseBanner, Radios, SearchInput, Select, ServiceNavigation, SkipLink,
 SummaryList, Table, Tabs, Tag, TaskList, Textarea and WarningText.
 
-`Header` and `Footer` provide the generic versions. `HeaderGovUk` and
-`FooterGovUk` compose them with GOV.UK branding and footer wording. Use `Header`
-where older examples used `GenericHeader`.
+`Header` and `Footer` provide generic layouts without GOV.UK branding or Crown
+copyright wording. Supply your own identity and footer text. Use `Header` where
+older examples used `GenericHeader`.
 
 ### Cookie consent and emergency exit
 

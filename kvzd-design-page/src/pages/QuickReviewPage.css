@@ -4,7 +4,7 @@
 .review-filter__count { margin: 0; color: #505a5f; font-size: 14px; }
 .component-index ul { margin: 0; padding: 0; list-style: none; }
 .component-index a { font-size: 18px; line-height: 1.35; font-weight: 700; }
-.main-content > h1 { margin-bottom: 20px; }
+.quick-review-page .main-content > h1 { margin-bottom: 20px; }
 .intro { max-width: 690px; }
 .release-note { display: flex; align-items: center; gap: 12px; margin: 28px 0 54px; font-weight: 700; }
 .release-note__count { margin-left: auto; color: #505a5f; font-weight: 400; }
@@ -16,6 +16,8 @@
 .review-gallery__heading h2 { margin-bottom: 0; }
 .review-gallery__heading > span { margin-bottom: 8px; color: #505a5f; }
 .review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; align-items: start; }
+.review-grid .kvzd-showcase-box__header { min-height: 128px; }
+.review-grid .kvzd-showcase-box__content { min-height: 220px; }
 .review-card--wide { grid-column: 1 / -1; }
 .review-card--wide .kvzd-showcase-box__header { min-height: 0; }
 .review-card--wide .kvzd-showcase-box__content { min-height: 160px; }
@@ -26,7 +28,7 @@
 @media (max-width: 1000px) {
   .review-grid { grid-template-columns: 1fr; }
   .review-card--wide { grid-column: auto; }
-  .kvzd-showcase-box__header { min-height: 0; }
+  .review-grid .kvzd-showcase-box__header { min-height: 0; }
 }
 
 @media (max-width: 800px) {

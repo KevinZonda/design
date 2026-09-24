@@ -1,6 +1,6 @@
 import { useMemo, useState, type MouseEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Footer, HeaderGovUk, LanguageNavigation, SearchInput, ServiceNavigation, SkipLink } from '@kevinzonda/design/components'
+import { Footer, Header, LanguageNavigation, SearchInput, ServiceNavigation, SkipLink } from '@kevinzonda/design/components'
 import { TagBox } from '@kevinzonda/design/extraComponents'
 import { componentDocs } from './componentRegistry'
 import { extraComponentDocs } from './extraComponentRegistry'
@@ -59,15 +59,14 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
 
   return <>
     <SkipLink href="#main-content">{message(locale, 'skipToContent')}</SkipLink>
-    <HeaderGovUk
+    <Header
       className="docs-header"
       containerClassName="site-width docs-header__container"
-      homepageUrl={sitePath(localizedPath('/', locale))}
-      logo={<span className="docs-brand-mark">{message(locale, 'brand')}</span>}
-      productName={<TagBox className="docs-brand-tag">{message(locale, 'basedOn')}</TagBox>}
+      homeHref={sitePath(localizedPath('/', locale))}
+      title={<><span className="docs-brand-mark">{message(locale, 'brand')}</span><TagBox className="docs-brand-tag">{message(locale, 'basedOn')}</TagBox></>}
     >
       <DocsSearch />
-    </HeaderGovUk>
+    </Header>
     <ServiceNavigation
       className="docs-service-navigation"
       containerClassName="site-width"

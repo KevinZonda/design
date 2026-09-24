@@ -25,7 +25,7 @@ export function QuickReviewPage() {
   }, [query, locale])
 
   return (
-    <div className="app-shell govuk-frontend-supported">
+    <div className="app-shell govuk-frontend-supported quick-review-page">
       <DocsHeader current="quick-review" />
 
       <div className="site-width page-layout" id="top">

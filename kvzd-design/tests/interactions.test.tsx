@@ -2,7 +2,7 @@
 import { act } from 'react'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, expect, test, vi } from 'vitest'
-import { Button, CharacterCount, Checkboxes, CookieBanner, ErrorSummary, ExitThisPage, Radios, ServiceNavigation } from '../src/components'
+import { Button, CharacterCount, Checkboxes, CookieBanner, ErrorSummary, ExitThisPage, LanguageNavigation, Radios, ServiceNavigation } from '../src/components'
 
 afterEach(() => {
   cleanup()
@@ -105,4 +105,13 @@ test('React-managed controls do not request GOV.UK JavaScript initialisation', (
     <ErrorSummary errors={[{ children: 'Enter a value', href: '#value' }]} />
   </>)
   expect(container.querySelector('[data-module]')).toBeNull()
+})
+
+test('language navigation shows the current language as text and alternatives as links', () => {
+  render(<LanguageNavigation items={[{ label: 'English', lang: 'en', href: '/en', current: true }, { label: 'Cymraeg', lang: 'cy', href: '/cy' }]} />)
+  expect(screen.queryByRole('link', { name: 'English' })).toBeNull()
+  expect(screen.getByText('English').getAttribute('aria-current')).toBe('true')
+  const alternative = screen.getByRole('link', { name: 'Cymraeg' })
+  expect(alternative.getAttribute('rel')).toBe('alternate')
+  expect(alternative.getAttribute('hreflang')).toBe('cy')
 })

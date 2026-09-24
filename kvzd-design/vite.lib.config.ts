@@ -1,10 +1,12 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import { stripGovukBranding } from '../build/stripGovukBranding.mjs'
 
 export default defineConfig({
   publicDir: false,
   plugins: [react()],
   css: {
+    postcss: { plugins: [stripGovukBranding()] },
     lightningcss: {
       errorRecovery: true,
     },

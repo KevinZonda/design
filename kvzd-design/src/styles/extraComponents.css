@@ -75,7 +75,6 @@
 }
 
 .kvzd-showcase-box__header {
-  min-height: 128px;
   padding: 24px 24px 18px;
   border-top: 5px solid var(--govuk-brand-colour);
 }
@@ -101,7 +100,6 @@
 }
 
 .kvzd-showcase-box__content {
-  min-height: 220px;
   padding: 30px;
   overflow-x: auto;
   border-top: 1px solid var(--govuk-border-colour);

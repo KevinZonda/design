@@ -6,7 +6,11 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      postcss:
+        specifier: 8.5.28
+        version: 8.5.28
 
   kvzd-design:
     dependencies:

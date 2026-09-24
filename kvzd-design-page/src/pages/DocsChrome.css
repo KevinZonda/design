@@ -1,8 +1,8 @@
 .site-width { width: calc(100% - 40px); max-width: 1100px; margin-inline: auto; }
 .docs-header__container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
-.docs-header .govuk-header__logo { margin-right: 15px; }
-.docs-header .govuk-header__homepage-link { display: inline-flex; align-items: center; max-width: 100%; margin-right: 0; white-space: normal; }
-.docs-header .govuk-header__product-name { display: inline-flex; align-items: center; align-self: center; margin: 0 0 0 14px; }
+.docs-header .govuk-generic-header__logo { margin-right: 15px; }
+.docs-header .govuk-generic-header__homepage-link { display: inline-flex; align-items: center; max-width: 100%; margin-right: 0; white-space: normal; }
+.docs-header .docs-brand-tag { display: inline-flex; align-items: center; align-self: center; margin-left: 14px; }
 .docs-brand-mark { font-size: 30px; line-height: 1; font-weight: 700; }
 .docs-header .docs-brand-tag { border-color: currentColor; color: inherit; font-size: 14px; }
 .site-search { position: relative; width: 370px; max-width: 100%; margin: 10px 0; color: var(--govuk-surface-text-colour); }
@@ -19,15 +19,14 @@
 .site-search__results p { margin: 0; padding: 12px; color: var(--govuk-secondary-text-colour); font-size: 16px; }
 .docs-nav-end { display: flex; align-items: center; gap: 18px; margin-left: auto; }
 .docs-service-navigation .govuk-language-navigation { margin: 0; font-size: 16px; }
-.docs-service-navigation .govuk-language-navigation__link[aria-current="page"] { color: var(--govuk-text-colour); font-weight: 700; text-decoration: none; }
 .version-chip { align-self: center; }
 
 @media (max-width: 40.0525em) {
   .site-width { width: calc(100% - 30px); }
   .docs-header__container { display: block; }
-  .docs-header .govuk-header__logo { margin-right: 0; }
-  .docs-header .govuk-header__homepage-link { flex-wrap: wrap; gap: 8px 0; }
-  .docs-header .govuk-header__product-name { margin-left: 0; }
+  .docs-header .govuk-generic-header__logo { margin-right: 0; }
+  .docs-header .govuk-generic-header__homepage-link { flex-wrap: wrap; gap: 8px 0; }
+  .docs-header .docs-brand-tag { margin-left: 0; }
   .docs-brand-mark { font-size: 24px; }
   .site-search { display: none; }
   .docs-service-navigation .govuk-service-navigation__container { margin-right: 0; }
