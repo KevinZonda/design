@@ -7,7 +7,7 @@
 .official-component-list li > a { margin-right: 10px; font-size: 21px; line-height: 1.2; font-weight: 700; }
 .official-component-list .govuk-tag { vertical-align: 3px; }
 .official-component-list p { margin: 9px 0 0; color: #505a5f; font-size: 16px; line-height: 1.45; }
-.doc-breadcrumbs { margin-bottom: 38px; }
+.doc-breadcrumbs { margin: 5px 0; }
 .component-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; }
 .component-title-row .govuk-heading-xl, .component-title-row .govuk-tag { margin-bottom: 16px; }
 .component-summary { max-width: 680px; margin-bottom: 48px; }
