@@ -1,6 +1,8 @@
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, ChangeEvent, FieldsetHTMLAttributes, InputHTMLAttributes, ReactNode, Ref, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
 import type { SemanticStyling } from './styling'
+import { dateOrder } from './dateOrder'
+import type { DateInputOrder } from './dateOrder'
 
 export const Hint = forwardRef<HTMLDivElement, { id?: string; children: ReactNode; className?: string; style?: CSSProperties }>(function Hint({ id, children, className = '', style }, ref) { return <div ref={ref} id={id} className={`govuk-hint ${className}`.trim()} style={style}>{children}</div> })
 export const Label = forwardRef<HTMLLabelElement, { htmlFor?: string; children: ReactNode; size?: 's' | 'm' | 'l' | 'xl'; className?: string; style?: CSSProperties }>(function Label({ htmlFor, children, size, className = '', style }, ref) { return <label ref={ref} className={`govuk-label ${size ? `govuk-label--${size}` : ''} ${className}`.trim()} htmlFor={htmlFor} style={style}>{children}</label> })
@@ -40,11 +42,16 @@ export const Radios = forwardRef<HTMLFieldSetElement, RadioGroupProps>(function 
 })
 
 export interface DateValue { day?: string; month?: string; year?: string }
-export interface DateInputProps { value?: DateValue; defaultValue?: DateValue; onChange?: (value: DateValue) => void; legend?: ReactNode; hint?: ReactNode; error?: ReactNode; namePrefix?: string; style?: CSSProperties; inputRefs?: Partial<Record<keyof DateValue, Ref<HTMLInputElement>>>; inputProps?: Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'defaultValue' | 'onChange' | 'name' | 'id'> }
-export const DateInput = forwardRef<HTMLFieldSetElement, DateInputProps>(function DateInput({ value, defaultValue = {}, onChange, legend = 'Date', hint, error, namePrefix = 'date', inputProps, inputRefs, style }, ref) {
+export interface DateInputProps { value?: DateValue; defaultValue?: DateValue; onChange?: (value: DateValue) => void; order?: DateInputOrder; legend?: ReactNode; hint?: ReactNode; error?: ReactNode; namePrefix?: string; style?: CSSProperties; inputRefs?: Partial<Record<keyof DateValue, Ref<HTMLInputElement>>>; inputProps?: Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'defaultValue' | 'onChange' | 'name' | 'id'> }
+const dateFields = { day: ['Day', 2], month: ['Month', 2], year: ['Year', 4] } as const
+const dmy = ['day', 'month', 'year'] as const
+const mdy = ['month', 'day', 'year'] as const
+const ymd = ['year', 'month', 'day'] as const
+const dateFieldOrder: Record<DateInputOrder, readonly (keyof DateValue)[]> = { DMY: dmy, MDY: mdy, YMD: ymd, GBR: dmy, USA: mdy, CHN: ymd }
+export const DateInput = forwardRef<HTMLFieldSetElement, DateInputProps>(function DateInput({ value, defaultValue = {}, onChange, order = dateOrder.DMY, legend = 'Date', hint, error, namePrefix = 'date', inputProps, inputRefs, style }, ref) {
   const [inner, setInner] = useState(defaultValue); const current = value ?? inner
   const change = (key: keyof DateValue) => (event: ChangeEvent<HTMLInputElement>) => { const next = { ...current, [key]: event.target.value }; if (value === undefined) setInner(next); onChange?.(next) }
-  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''}`}><Fieldset ref={ref} style={style} legend={legend} hint={hint} error={error}><div className="govuk-date-input">{([['day', 'Day', 2], ['month', 'Month', 2], ['year', 'Year', 4]] as const).map(([key, label, width]) => <div className="govuk-date-input__item" key={key}><label className="govuk-label govuk-date-input__label" htmlFor={`${namePrefix}-${key}`}>{label}</label><input {...inputProps} ref={inputRefs?.[key]} className={`govuk-input govuk-date-input__input govuk-input--width-${width} ${error ? 'govuk-input--error' : ''}`} id={`${namePrefix}-${key}`} name={`${namePrefix}-${key}`} inputMode="numeric" value={current[key] ?? ''} onChange={change(key)} /></div>)}</div></Fieldset></div>
+  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''}`}><Fieldset ref={ref} style={style} legend={legend} hint={hint} error={error}><div className="govuk-date-input">{dateFieldOrder[order].map((key) => { const [label, width] = dateFields[key]; return <div className="govuk-date-input__item" key={key}><label className="govuk-label govuk-date-input__label" htmlFor={`${namePrefix}-${key}`}>{label}</label><input {...inputProps} ref={inputRefs?.[key]} className={`govuk-input govuk-date-input__input govuk-input--width-${width} ${error ? 'govuk-input--error' : ''}`} id={`${namePrefix}-${key}`} name={`${namePrefix}-${key}`} inputMode="numeric" value={current[key] ?? ''} onChange={change(key)} /></div> })}</div></Fieldset></div>
 })
 
 export interface FileUploadProps extends InputHTMLAttributes<HTMLInputElement>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'input'> { label: ReactNode; hint?: ReactNode; error?: ReactNode }

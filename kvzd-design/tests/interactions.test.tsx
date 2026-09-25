@@ -2,13 +2,36 @@
 import { act } from 'react'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, expect, test, vi } from 'vitest'
-import { Button, CharacterCount, Checkboxes, CookieBanner, ErrorSummary, ExitThisPage, LanguageNavigation, Radios, ServiceNavigation } from '../src/components'
+import { Button, CharacterCount, Checkboxes, CookieBanner, DateInput, dateOrder, ErrorSummary, ExitThisPage, LanguageNavigation, Radios, ServiceNavigation } from '../src/components'
 
 afterEach(() => {
   cleanup()
   vi.useRealTimers()
   document.cookie = 'kvzd_test_consent=; Max-Age=0; Path=/'
   document.body.className = ''
+})
+
+test('date input changes field order without changing the date value keys', () => {
+  const onChange = vi.fn()
+  const props = { legend: 'Date of birth', defaultValue: { day: '25', month: '09', year: '2026' }, onChange }
+  const view = render(<DateInput {...props} />)
+  const fields = () => Array.from(view.container.querySelectorAll<HTMLInputElement>('.govuk-date-input input'))
+  expect(fields().map((field) => field.name)).toEqual(['date-day', 'date-month', 'date-year'])
+
+  view.rerender(<DateInput {...props} order={dateOrder.CHN} />)
+  expect(fields().map((field) => [field.name, field.value])).toEqual([
+    ['date-year', '2026'], ['date-month', '09'], ['date-day', '25'],
+  ])
+  fireEvent.change(fields()[0], { target: { value: '2027' } })
+  expect(onChange).toHaveBeenLastCalledWith({ day: '25', month: '09', year: '2027' })
+
+  view.rerender(<DateInput {...props} order={dateOrder.USA} />)
+  expect(fields().map((field) => [field.name, field.value])).toEqual([
+    ['date-month', '09'], ['date-day', '25'], ['date-year', '2027'],
+  ])
+
+  view.rerender(<DateInput {...props} order={dateOrder.GBR} />)
+  expect(fields().map((field) => field.name)).toEqual(['date-day', 'date-month', 'date-year'])
 })
 
 test('cookie choice persists, confirmation receives focus and can be hidden', async () => {

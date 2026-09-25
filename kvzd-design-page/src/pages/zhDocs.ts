@@ -16,7 +16,7 @@ const componentText: Record<string, DocTranslation> = {
   'character-count': { summary: '在严格限制字数时告知用户还可以输入多少内容。', whenToUse: '仅在服务确实限制字符数或词数时使用。用户开始输入前应解释限制。', howItWorks: '根据文本框的值计算实时字数，并以非打断方式通知辅助技术。' },
   checkboxes: { summary: '让用户从列表中选择一个或多个选项。', whenToUse: '允许选择多个答案时使用。只能选择一个答案时使用单选按钮。', howItWorks: '每个复选框都有可见标签；选项还可以包含提示文字和条件内容。' },
   'cookie-banner': { summary: '征求用户设置非必要 Cookie 的许可。', whenToUse: '服务使用分析或其他非必要 Cookie 时使用。等待用户选择期间不要阻止其访问服务。', howItWorks: '选择保存在一年期 Cookie 中；确认消息可关闭，回访时不再显示。应用可通过 onConsentChange 获得已保存的选择。' },
-  'date-input': { summary: '通过日、月、年字段询问用户熟悉或已知的日期。', whenToUse: '用于出生日期等用户已经知道的日期。只有需要从可选日期中挑选时才使用日历控件。', howItWorks: '三个数字输入框由一个带图例的 fieldset 分组，返回单个日期值对象。' },
+  'date-input': { summary: '通过日、月、年字段询问用户熟悉或已知的日期。', whenToUse: '用于出生日期等用户已经知道的日期。只有需要从可选日期中挑选时才使用日历控件。', howItWorks: '三个数字输入框由一个带图例的 fieldset 分组。可用 DMY、MDY、YMD 或 GBR、USA、CHN 别名调整显示顺序；返回值始终是包含日、月、年的对象。' },
   details: { summary: '让次要信息可供查看，而不默认显示。', whenToUse: '用于只有部分用户需要的信息。不要隐藏多数用户完成任务必须阅读的内容。', howItWorks: '使用原生 details 和 summary 元素，因此基本交互无需 JavaScript。' },
   'error-message': { summary: '在相关字段附近告诉用户哪里出错以及如何修正。', whenToUse: '在每个有错字段旁显示，并在错误摘要中重复相同的表述。', howItWorks: '视觉隐藏的前缀确保辅助技术将其读作错误，而不只依靠颜色。' },
   'error-summary': { summary: '在页面顶部汇总验证错误并链接到各个字段。', whenToUse: '验证失败时始终显示错误摘要，即使只有一个错误也一样。', howItWorks: '使用标准标题，链接文字与字段旁错误一致，并在提交失败后将焦点移到摘要。' },
