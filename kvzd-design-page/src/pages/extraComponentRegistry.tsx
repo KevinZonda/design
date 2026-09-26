@@ -393,7 +393,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     name: 'Switch',
     summary: 'A binary toggle for a setting that takes effect immediately.',
     whenToUse: 'Use for on/off settings that apply as soon as they are changed. Use checkboxes or radios when the choice is submitted with a form.',
-    howItWorks: 'The toggle is a button with role switch and an aria-checked state. A string child becomes a visually hidden label. Loading shows a spinner in the handle and blocks interaction.',
+    howItWorks: 'The toggle is a button with role switch and an aria-checked state. A string child becomes a visually hidden label. The track shows On and Off text beside the knob by default; customise it with checkedChildren and unCheckedChildren. Loading shows a spinner in the handle and blocks interaction.',
     code: `<Switch defaultChecked onChange={(checked) => save(checked)}>
   Email notifications
 </Switch>`,
@@ -405,6 +405,8 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Prevent interaction.' },
       { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show a spinner in the handle and block interaction.' },
       { name: 'size', type: "'s' | 'm' | 'l'", defaultValue: 'm', description: 'Toggle size.' },
+      { name: 'checkedChildren', type: 'ReactNode', defaultValue: "'On'", description: 'Text shown in the track while checked.' },
+      { name: 'unCheckedChildren', type: 'ReactNode', defaultValue: "'Off'", description: 'Text shown in the track while unchecked.' },
       { name: 'children', type: 'ReactNode', description: 'A string becomes a visually hidden label; other content renders beside the toggle.' },
       { name: 'aria-label', type: 'string', description: 'Accessible name when children are not a plain string.' },
       { name: 'name', type: 'string', description: 'Render a hidden input so the checked state submits with a native form.' },

@@ -55,6 +55,14 @@ test('switch renders size and checked class', () => {
   expect(sw.className).toContain('kvzd-design-switch--checked')
 })
 
+test('switch shows On and Off text in the track by default', () => {
+  const { unmount } = render(<Switch defaultChecked aria-label="Enable" />)
+  expect(screen.getByRole('switch').textContent).toContain('On')
+  unmount()
+  render(<Switch aria-label="Enable" />)
+  expect(screen.getByRole('switch').textContent).toContain('Off')
+})
+
 test('switch uses string children as accessible label', () => {
   render(<Switch>Airplane mode</Switch>)
   expect(screen.getByRole('switch', { name: 'Airplane mode' })).toBeTruthy()
