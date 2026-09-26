@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { H1, H2, H3, Paragraph } from '@kevinzonda/design'
-import { Link as GovLink } from '@kevinzonda/design/components'
-import { SearchInput, Tag } from '@kevinzonda/design/components'
+import { Link, SearchInput, Tag } from '@kevinzonda/design/components'
 import { ShowcaseBox, Sidebar } from '@kevinzonda/design/extraComponents'
 import './QuickReviewPage.css'
 import { DocsFooter, DocsHeader } from './DocsChrome'
+import { DocsLink } from './DocsLink'
 import { componentDocs } from './componentRegistry'
 import { localizedPath, message, pageTitle, useLocale } from './i18n'
 import { localizedComponent } from './zhDocs'
@@ -64,7 +63,7 @@ export function QuickReviewPage() {
             <H2 variant="l" id="index-title">{message(locale, 'componentIndex')}</H2>
             <ul>
               {filteredComponents.map((component) => (
-                <li key={component.slug}><GovLink href={`#${component.slug}`} noVisitedState>{component.name}</GovLink></li>
+                <li key={component.slug}><Link href={`#${component.slug}`} noVisitedState>{component.name}</Link></li>
               ))}
             </ul>
           </section>
@@ -85,10 +84,10 @@ export function QuickReviewPage() {
                     classNames={{ content: component.wide ? 'example-canvas--wide' : undefined }}
                     description={localizedComponent(component, locale).summary}
                     footer={<>
-                      <Link className="govuk-link" to={localizedPath(`/components/${component.slug}/`, locale)}>
+                      <DocsLink className="govuk-link" to={localizedPath(`/components/${component.slug}/`, locale)}>
                         {message(locale, 'viewDocumentation')}
-                      </Link>
-                      <GovLink href="#top" className="review-card__top-link">{message(locale, 'backToTop')}</GovLink>
+                      </DocsLink>
+                      <Link href="#top" className="review-card__top-link">{message(locale, 'backToTop')}</Link>
                     </>}
                     headerExtra={component.status === 'trial' ? <Tag color="orange">{message(locale, 'trial')}</Tag> : undefined}
                     headingLevel={3}

@@ -1,12 +1,12 @@
 import { useEffect, type ReactNode } from 'react'
-import { Link, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { H1, H2, Paragraph } from '@kevinzonda/design'
-import { Link as GovLink } from '@kevinzonda/design/components'
-import { Breadcrumbs, Button, Pagination, Table, Tag } from '@kevinzonda/design/components'
+import { Breadcrumbs, Button, Link, Pagination, Table, Tag } from '@kevinzonda/design/components'
 import { FancyTabs, Note, Sidebar, CodeBox } from '@kevinzonda/design/extraComponents'
 import { componentBySlug, componentDocs, type ComponentDoc } from './componentRegistry'
 import { extraComponentBySlug, extraComponentDocs, type ExtraComponentDoc } from './extraComponentRegistry'
 import { DocsFooter, DocsHeader } from './DocsChrome'
+import { DocsLink } from './DocsLink'
 import { QuickReviewPage } from './QuickReviewPage'
 import { LicensePage } from './LicensePage'
 import { TypographyPage } from './TypographyPage'
@@ -47,7 +47,7 @@ function SideNavigation({ currentSlug, section }: { currentSlug?: string; sectio
         ['paragraphs', 'typographyParagraphs'],
         ['api', 'reactApi'],
       ] as const).map(([key, labelKey]) => ({ key, label: message(locale, labelKey), href: `#${key}` }))}
-      renderLink={(item, { className }) => <Link className={className} to={{ hash: item.href }}>{item.label}</Link>}
+      renderLink={(item, { className }) => <DocsLink className={className} to={item.href ?? '#'}>{item.label}</DocsLink>}
     />
   }
   const items = section === 'extra-components'
@@ -60,7 +60,7 @@ function SideNavigation({ currentSlug, section }: { currentSlug?: string; sectio
     items={items}
     activeKey={currentSlug}
     renderLink={(item, { className, current }) => item.href !== undefined
-      ? <Link className={className} to={item.href} onClick={item.onClick} aria-current={current ? 'page' : undefined}>{item.label}</Link>
+      ? <DocsLink className={className} to={item.href} onClick={item.onClick} anchorProps={{ 'aria-current': current ? 'page' : undefined }}>{item.label}</DocsLink>
       : <button className={className} type="button" onClick={item.onClick} aria-current={current ? 'page' : undefined}>{item.label}</button>}
   />
 }
@@ -74,7 +74,7 @@ function OverviewPage() {
       <Paragraph variant="l">{message(locale, 'componentsIntro')}</Paragraph>
       <Paragraph>{message(locale, 'componentsDetail')}</Paragraph>
       <div className="overview-actions"><Button href={sitePath(localizedPath('/quick-review/', locale))}>{message(locale, 'openQuickReview')}</Button><span>{message(locale, 'quickReviewHint')}</span></div>
-      <ul className="official-component-list">{componentDocs.map((component) => <li key={component.slug}><Link className="govuk-link" to={localizedPath(`/components/${component.slug}/`, locale)}>{component.name}</Link>{component.status === 'trial' && <Tag color="orange">{message(locale, 'trial')}</Tag>}<p>{localizedComponent(component, locale).summary}</p></li>)}</ul>
+      <ul className="official-component-list">{componentDocs.map((component) => <li key={component.slug}><DocsLink className="govuk-link" to={localizedPath(`/components/${component.slug}/`, locale)}>{component.name}</DocsLink>{component.status === 'trial' && <Tag color="orange">{message(locale, 'trial')}</Tag>}<p>{localizedComponent(component, locale).summary}</p></li>)}</ul>
     </div>
   </DocsLayout>
 }
@@ -82,7 +82,7 @@ function OverviewPage() {
 function ExampleBlock({ component, guidanceUrl }: { component: ComponentDoc | ExtraComponentDoc; guidanceUrl?: string }) {
   const locale = useLocale()
   return <section className="component-example" aria-labelledby="example-title">
-    <div className="example-heading"><H2 variant="l" id="example-title">{message(locale, 'example')}</H2>{guidanceUrl && <GovLink href={guidanceUrl} anchorProps={{ target: '_blank', rel: 'noreferrer' }}>{message(locale, 'guidance')}</GovLink>}</div>
+    <div className="example-heading"><H2 variant="l" id="example-title">{message(locale, 'example')}</H2>{guidanceUrl && <Link href={guidanceUrl} anchorProps={{ target: '_blank', rel: 'noreferrer' }}>{message(locale, 'guidance')}</Link>}</div>
     <FancyTabs items={[
       { key: 'example', label: message(locale, 'preview'), children: <div className={`example-canvas ${component.wide ? 'example-canvas--wide' : ''}`}>{component.example()}</div> },
       { key: 'react', label: 'React', children: <CodeBlock slug={component.slug} code={component.code} /> },
@@ -136,7 +136,7 @@ function ExtraOverviewPage() {
       <H1 variant="xl">{message(locale, 'extraComponents')}</H1>
       <Paragraph variant="l">{message(locale, 'extraIntro')}</Paragraph>
       <Paragraph>{message(locale, 'extraDetail')}</Paragraph>
-      <ul className="official-component-list">{extraComponentDocs.map((component) => <li key={component.slug}><Link className="govuk-link" to={localizedPath(`/extra-components/${component.slug}/`, locale)}>{component.name}</Link><p>{localizedExtraComponent(component, locale).summary}</p></li>)}</ul>
+      <ul className="official-component-list">{extraComponentDocs.map((component) => <li key={component.slug}><DocsLink className="govuk-link" to={localizedPath(`/extra-components/${component.slug}/`, locale)}>{component.name}</DocsLink><p>{localizedExtraComponent(component, locale).summary}</p></li>)}</ul>
     </div>
   </DocsLayout>
 }
@@ -170,7 +170,7 @@ function NotFoundPage({ section = 'components' }: { section?: DocsSection }) {
   const locale = useLocale()
   useEffect(() => { document.title = pageTitle(message(locale, 'notFound'), locale) }, [locale])
   const sectionLabel = message(locale, section === 'extra-components' ? 'extraComponents' : 'components')
-  return <DocsLayout currentSection={section}><H1 variant="xl">{message(locale, 'notFound')}</H1><Paragraph>{message(locale, 'notFoundDetail')}</Paragraph><Link className="govuk-link" to={localizedPath(section === 'extra-components' ? '/extra-components/' : '/components/', locale)}>{message(locale, 'returnTo')}{locale === 'zh' ? '' : ' '}{sectionLabel}</Link></DocsLayout>
+  return <DocsLayout currentSection={section}><H1 variant="xl">{message(locale, 'notFound')}</H1><Paragraph>{message(locale, 'notFoundDetail')}</Paragraph><DocsLink className="govuk-link" to={localizedPath(section === 'extra-components' ? '/extra-components/' : '/components/', locale)}>{message(locale, 'returnTo')}{locale === 'zh' ? '' : ' '}{sectionLabel}</DocsLink></DocsLayout>
 }
 
 function ComponentRoute() {

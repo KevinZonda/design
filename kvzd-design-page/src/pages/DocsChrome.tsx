@@ -1,8 +1,9 @@
 import { useMemo, useState, type MouseEvent } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Footer, Header, LanguageNavigation, SearchInput, ServiceNavigation, SkipLink } from '@kevinzonda/design/components'
 import { TagBox } from '@kevinzonda/design/extraComponents'
 import { componentDocs } from './componentRegistry'
+import { DocsLink } from './DocsLink'
 import { extraComponentDocs } from './extraComponentRegistry'
 import { localizedPath, message, pathInLocale, useLocale } from './i18n'
 import { localizedComponent, localizedExtraComponent } from './zhDocs'
@@ -43,7 +44,7 @@ function DocsSearch() {
       setOpen(true)
     }} />
     {showResults && <div className="site-search__results" id="site-search-results" role="listbox">
-      {matches.length > 0 ? matches.map((component, index) => <Link id={`site-search-result-${component.resultId}`} role="option" aria-selected={index === activeIndex} className={index === activeIndex ? 'is-active' : undefined} to={localizedPath(component.path, locale)} key={component.resultId} onMouseEnter={() => setActiveIndex(index)}><strong>{component.name}</strong><span>{locale === 'zh' ? component.zhSummary : component.summary}</span></Link>) : <p>{message(locale, 'noComponents')}</p>}
+      {matches.length > 0 ? matches.map((component, index) => <DocsLink to={localizedPath(component.path, locale)} key={component.resultId} className={index === activeIndex ? 'is-active' : undefined} anchorProps={{ id: `site-search-result-${component.resultId}`, role: 'option', 'aria-selected': index === activeIndex, onMouseEnter: () => setActiveIndex(index) }}><strong>{component.name}</strong><span>{locale === 'zh' ? component.zhSummary : component.summary}</span></DocsLink>) : <p>{message(locale, 'noComponents')}</p>}
     </div>}
   </form>
 }

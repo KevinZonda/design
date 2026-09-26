@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
 import { Paragraph } from '@kevinzonda/design'
-import { BackLink, Button, Link as GovLink } from '@kevinzonda/design/components'
+import { BackLink, Button, Link } from '@kevinzonda/design/components'
 import { Divider, Empty, FancyTabs, Loading, Note, ShowcaseBox, Sidebar, TagBox, CodeBox } from '@kevinzonda/design/extraComponents'
 import type { ApiProp } from './componentRegistry'
+import { DocsLink } from './DocsLink'
 import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample, AlertExample, ProgressExample, ResultExample, AvatarExample, StepsExample, SwitchExample, TooltipExample } from './extraExamples'
 
 export interface ExtraComponentDoc {
@@ -282,7 +282,7 @@ return <>
     slug: 'fancy-tabs',
     name: 'FancyTabs',
     summary: 'A stronger tab treatment for switching between views such as a live preview and its React source.',
-    whenToUse: <>Use when an interface needs a more prominent tab treatment than the standard <Link className="govuk-link" to="/en/components/tabs/">Tabs</Link> component.</>,
+    whenToUse: <>Use when an interface needs a more prominent tab treatment than the standard <DocsLink className="govuk-link" to="/en/components/tabs/">Tabs</DocsLink> component.</>,
     howItWorks: 'It shares the standard Tabs props and manages the selected panel in React. Arrow keys move between tabs.',
     code: fancyTabsCode,
     example: () => <FancyTabs items={[
@@ -419,7 +419,7 @@ return <>
     example: () => <ShowcaseBox
       title="Back link"
       description="Help users return to the previous step in a multi-page service."
-      footer={<><GovLink href="#example-title">View documentation</GovLink><GovLink href="#top">Back to top</GovLink></>}
+      footer={<><Link href="#example-title">View documentation</Link><Link href="#top">Back to top</Link></>}
     ><BackLink href="#example-title">Back</BackLink></ShowcaseBox>,
     api: [
       { name: 'title', type: 'ReactNode', description: 'Heading shown above the preview.' },
@@ -436,7 +436,7 @@ return <>
     slug: 'tag-box',
     name: 'TagBox',
     summary: 'A neutral outlined label for short metadata such as a version number.',
-    whenToUse: <>Use for metadata that does not communicate a status. Use the standard <Link className="govuk-link" to="/en/components/tag/">Tag</Link> when the label communicates a status.</>,
+    whenToUse: <>Use for metadata that does not communicate a status. Use the standard <DocsLink className="govuk-link" to="/en/components/tag/">Tag</DocsLink> when the label communicates a status.</>,
     howItWorks: 'It renders a span and accepts standard span attributes and an optional className.',
     code: `<div className="tag-box-example">\n  <TagBox>6.5.1</TagBox>\n  <TagBox>Release candidate</TagBox>\n</div>`,
     example: () => <div className="tag-box-example"><TagBox>6.5.1</TagBox><TagBox>Release candidate</TagBox></div>,
