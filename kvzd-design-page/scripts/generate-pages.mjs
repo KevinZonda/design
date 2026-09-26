@@ -44,6 +44,7 @@ async function createEntry(path, title, language = 'en') {
 }
 
 await createEntry('components', 'Components – KevinZonda Design System')
+await createEntry('typography', 'Typography – KevinZonda Design System')
 await createEntry('quick-review', 'Quick Review – KevinZonda Design System')
 await createEntry('license', 'License – KevinZonda Design System')
 await Promise.all(slugs.map((slug) => createEntry(`components/${slug}`, `${displayName(slug)} – KevinZonda Design System`)))
@@ -52,6 +53,7 @@ await createEntry('extra-components', 'Extra Components – KevinZonda Design Sy
 await Promise.all(extraSlugs.map((slug) => createEntry(`extra-components/${slug}`, `${displayName(slug)} – KevinZonda Design System`)))
 await createEntry('en', 'Quick Review – KevinZonda Design System')
 await createEntry('en/components', 'Components – KevinZonda Design System')
+await createEntry('en/typography', 'Typography – KevinZonda Design System')
 await createEntry('en/quick-review', 'Quick Review – KevinZonda Design System')
 await createEntry('en/license', 'License – KevinZonda Design System')
 await Promise.all(slugs.map((slug) => createEntry(`en/components/${slug}`, `${displayName(slug)} – KevinZonda Design System`)))
@@ -59,6 +61,7 @@ await createEntry('en/extra-components', 'Extra Components – KevinZonda Design
 await Promise.all(extraSlugs.map((slug) => createEntry(`en/extra-components/${slug}`, `${displayName(slug)} – KevinZonda Design System`)))
 await createEntry('zh', '快速总览｜KevinZonda 设计系统', 'zh')
 await createEntry('zh/components', '组件｜KevinZonda 设计系统', 'zh')
+await createEntry('zh/typography', '排版｜KevinZonda 设计系统', 'zh')
 await createEntry('zh/quick-review', '快速总览｜KevinZonda 设计系统', 'zh')
 await createEntry('zh/license', '授权｜KevinZonda 设计系统', 'zh')
 await Promise.all(slugs.map((slug) => createEntry(`zh/components/${slug}`, `${displayName(slug)}｜KevinZonda 设计系统`, 'zh')))

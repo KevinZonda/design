@@ -13,7 +13,9 @@ await build({
     contents: `
       import { componentDocs } from './src/pages/componentRegistry'
       import { extraComponentDocs } from './src/pages/extraComponentRegistry'
+      import { typographyCodeSamples } from './src/pages/typographyDoc'
       export const codes = Object.fromEntries([...componentDocs, ...extraComponentDocs].map((c) => [c.slug, c.code]))
+      Object.assign(codes, typographyCodeSamples)
     `,
     resolveDir: root,
     loader: 'ts',

@@ -10,6 +10,7 @@ import { sitePath } from './sitePath'
 import './DocsChrome.css'
 
 const searchItems = [
+  { name: 'Typography', summary: 'Semantic headings, body text and captions on the GOV.UK type scale.', zhSummary: '基于 GOV.UK 字体比例尺的语义化标题、正文与说明文字。', path: '/typography/', resultId: 'typography' },
   ...componentDocs.map((component) => ({ ...component, zhSummary: localizedComponent(component, 'zh').summary, path: `/components/${component.slug}/`, resultId: `component-${component.slug}` })),
   ...extraComponentDocs.map((component) => ({ ...component, zhSummary: localizedExtraComponent(component, 'zh').summary, path: `/extra-components/${component.slug}/`, resultId: `extra-component-${component.slug}` })),
 ]
@@ -47,7 +48,7 @@ function DocsSearch() {
   </form>
 }
 
-export function DocsHeader({ current = 'components' }: { current?: 'components' | 'extra-components' | 'quick-review' | 'license' }) {
+export function DocsHeader({ current = 'components' }: { current?: 'components' | 'extra-components' | 'quick-review' | 'license' | 'typography' }) {
   const locale = useLocale()
   const location = useLocation()
   const navigate = useNavigate()
@@ -77,6 +78,7 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
         { label: message(locale, 'quickReview'), href: sitePath(localizedPath('/quick-review/', locale)), onClick: navigateOnClick(localizedPath('/quick-review/', locale)), current: current === 'quick-review' },
         { label: message(locale, 'components'), href: sitePath(localizedPath('/components/', locale)), onClick: navigateOnClick(localizedPath('/components/', locale)), current: current === 'components' },
         { label: message(locale, 'extraComponents'), href: sitePath(localizedPath('/extra-components/', locale)), onClick: navigateOnClick(localizedPath('/extra-components/', locale)), current: current === 'extra-components' },
+        { label: message(locale, 'typography'), href: sitePath(localizedPath('/typography/', locale)), onClick: navigateOnClick(localizedPath('/typography/', locale)), current: current === 'typography' },
         { label: message(locale, 'source'), href: 'https://github.com/KevinZonda/design' },
         { label: message(locale, 'govukLicense'), href: sitePath(localizedPath('/license/', locale)), onClick: navigateOnClick(localizedPath('/license/', locale)), current: current === 'license' },
       ]}

@@ -45,7 +45,7 @@ function SideNavigation({ currentSlug, section }: { currentSlug?: string; sectio
         ['paragraphs', 'typographyParagraphs'],
         ['api', 'reactApi'],
       ] as const).map(([key, labelKey]) => ({ key, label: message(locale, labelKey), href: `#${key}` }))}
-      renderLink={(item, { className }) => <a className={className} href={item.href}>{item.label}</a>}
+      renderLink={(item, { className }) => <Link className={className} to={{ hash: item.href }}>{item.label}</Link>}
     />
   }
   const items = section === 'extra-components'
