@@ -50,7 +50,7 @@ const chinese: Record<keyof typeof english, string> = {
   implementationDetail: '状态变化由 React 管理。渲染结果使用 GOV.UK 类名和语义化 HTML，无需初始化会修改 DOM 的 GOV.UK JavaScript。',
   componentPages: '组件页面', extraComponentPages: '扩展组件页面', previousComponent: '上一个组件', nextComponent: '下一个组件',
   notFound: '找不到页面', notFoundDetail: '你请求的组件页面不存在。', returnTo: '返回',
-  footerDescription: '一个可用性有限的设计系统，基于 GOV.UK 设计系统。', govukLicense: '授权',
+  footerDescription: '一个可用性优先的设计系统，基于 GOV.UK 设计系统。', govukLicense: '授权',
   typographyIntro: '与 GOV.UK 字体比例尺对齐的语义化标题、正文与说明文字。',
   typographyDetail: 'Title 渲染真正的 h1–h6 并套用 GOV.UK 标题类；Text 是承载正文排版的行内 span；Paragraph 渲染块级正文。相邻正文与标题之间的间距由 GOV.UK Frontend 处理。',
   typographyHeadings: '标题', typographyHeadingsDetail: '用 level 表达文档结构，用 variant 控制视觉字号。标题使用句首大写（sentence case），并保持层级与字号对应关系一致。',
