@@ -15,6 +15,8 @@
 .example-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
 .example-heading .govuk-heading-l { margin-bottom: 18px; }
 .example-canvas { min-height: 130px; padding: 30px; border: 1px solid #b1b4b6; border-top: 0; background: #fff; }
+/* FancyTabs supplies the top edge for tabbed examples; stacked ones need their own. */
+.component-example > .example-canvas { border-top: 1px solid #b1b4b6; }
 .example-canvas > * { position: relative; }
 .example-canvas--wide { padding: 20px; }
 .example-canvas--wide > :is(.govuk-generic-header, .govuk-footer, .govuk-service-navigation, .govuk-cookie-banner) { margin-inline: -20px; }

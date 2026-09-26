@@ -1,5 +1,6 @@
 import { forwardRef, useId, useRef, useState } from 'react'
 import type { ChangeEvent, InputHTMLAttributes, ReactNode } from 'react'
+import { ErrorMessage } from './forms'
 import type { SemanticStyling } from './styling'
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'input' | 'wrapper' | 'prefix' | 'suffix' | 'count'> {
@@ -46,7 +47,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ '
       <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
         <label className={`govuk-label ${labelSize ? `govuk-label--${labelSize}` : ''} ${classNames?.label ?? ''}`.trim()} style={styles?.label} htmlFor={inputId}>{label}</label>
         {hint && <div className={`govuk-hint ${classNames?.hint ?? ''}`.trim()} style={styles?.hint} id={`${inputId}-hint`}>{hint}</div>}
-        {error && <p className={`govuk-error-message ${classNames?.error ?? ''}`.trim()} style={styles?.error} id={`${inputId}-error`}><span className="govuk-visually-hidden">Error:</span> {error}</p>}
+        {error && <ErrorMessage id={`${inputId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}
         {inputElement}
         {countElement}
       </div>
@@ -56,7 +57,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ '
     <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
       <label className={`govuk-label ${labelSize ? `govuk-label--${labelSize}` : ''} ${classNames?.label ?? ''}`.trim()} style={styles?.label} htmlFor={inputId}>{label}</label>
       {hint && <div className={`govuk-hint ${classNames?.hint ?? ''}`.trim()} style={styles?.hint} id={`${inputId}-hint`}>{hint}</div>}
-      {error && <p className={`govuk-error-message ${classNames?.error ?? ''}`.trim()} style={styles?.error} id={`${inputId}-error`}><span className="govuk-visually-hidden">Error:</span> {error}</p>}
+      {error && <ErrorMessage id={`${inputId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}
       <div className={`kvzd-design-input__wrapper ${classNames?.wrapper ?? ''}`.trim()} style={styles?.wrapper}>
         {prefix && <span className={`kvzd-design-input__prefix ${classNames?.prefix ?? ''}`.trim()} style={styles?.prefix} aria-hidden="true">{prefix}</span>}
         {inputElement}

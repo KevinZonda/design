@@ -1,5 +1,6 @@
 import { forwardRef, useId, useState } from 'react'
 import type { ChangeEvent, KeyboardEvent, ReactNode } from 'react'
+import { ErrorMessage } from './forms'
 import type { InputProps } from './Input'
 import type { SemanticStyling } from './styling'
 
@@ -94,7 +95,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
     <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
       <label className={`govuk-label ${visuallyHiddenLabel ? 'govuk-visually-hidden' : labelSize ? `govuk-label--${labelSize}` : ''} ${classNames?.label ?? ''}`.trim()} style={styles?.label} htmlFor={inputId}>{label}</label>
       {hint && <div className={`govuk-hint ${classNames?.hint ?? ''}`.trim()} style={styles?.hint} id={`${inputId}-hint`}>{hint}</div>}
-      {error && <p className={`govuk-error-message ${classNames?.error ?? ''}`.trim()} style={styles?.error} id={`${inputId}-error`}><span className="govuk-visually-hidden">Error:</span> {error}</p>}
+      {error && <ErrorMessage id={`${inputId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}
       {enterButton === undefined ? field : (
         <div className="kvzd-design-search-input__combo">
           {field}
