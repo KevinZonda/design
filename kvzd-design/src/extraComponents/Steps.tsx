@@ -19,9 +19,11 @@ export interface StepsProps extends Omit<HTMLAttributes<HTMLOListElement>, 'onCh
   onChange?: (index: number) => void
   direction?: 'horizontal' | 'vertical'
   size?: 's' | 'm'
+  /** Render dot indicators instead of numbered circles; finished steps keep a check. */
+  progressDot?: boolean
 }
 
-export const Steps = forwardRef<HTMLOListElement, StepsProps>(function Steps({ items, current, defaultCurrent = 0, onChange, direction = 'horizontal', size = 'm', className = '', classNames, style, styles, ...props }, ref) {
+export const Steps = forwardRef<HTMLOListElement, StepsProps>(function Steps({ items, current, defaultCurrent = 0, onChange, direction = 'horizontal', size = 'm', progressDot = false, className = '', classNames, style, styles, ...props }, ref) {
   const [inner, setInner] = useState(defaultCurrent)
   const active = current ?? inner
 
@@ -30,7 +32,7 @@ export const Steps = forwardRef<HTMLOListElement, StepsProps>(function Steps({ i
   return <ol
     {...props}
     ref={ref}
-    className={`kvzd-design-steps kvzd-design-steps--${direction} kvzd-design-steps--${size} ${classNames?.root ?? ''} ${className}`.trim()}
+    className={`kvzd-design-steps kvzd-design-steps--${direction} kvzd-design-steps--${size} ${progressDot ? 'kvzd-design-steps--dot' : ''} ${classNames?.root ?? ''} ${className}`.trim()}
     style={{ ...styles?.root, ...style }}
   >
     {items.map((item, index) => {
@@ -43,8 +45,10 @@ export const Steps = forwardRef<HTMLOListElement, StepsProps>(function Steps({ i
         onClick={item.disabled ? undefined : () => { if (current === undefined) setInner(index); onChange?.(index) }}
       >
         <span className={`kvzd-design-steps__tail`} aria-hidden="true" />
-        <span className={`kvzd-design-steps__icon ${classNames?.icon ?? ''}`.trim()} style={styles?.icon}>
-          {item.icon ?? (status === 'finish' ? <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg> : index + 1)}
+        <span className={`kvzd-design-steps__icon ${progressDot ? 'kvzd-design-steps__icon--dot' : ''} ${classNames?.icon ?? ''}`.trim()} style={styles?.icon}>
+          {item.icon ?? (progressDot && status !== 'finish'
+            ? <span className="kvzd-design-steps__dot" />
+            : status === 'finish' ? <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg> : index + 1)}
         </span>
         <span className="kvzd-design-steps__text">
           <span className={`kvzd-design-steps__title ${classNames?.title ?? ''}`.trim()} style={styles?.title}>{item.title}</span>

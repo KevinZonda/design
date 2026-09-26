@@ -67,6 +67,8 @@ const extraText: Record<string, DocTranslation> = {
   alert: { summary: '显示操作后的成功、信息、警告或错误消息。', whenToUse: '用于页面上某个操作的结果，例如保存完成或请求失败。表单校验错误请使用错误摘要组件。', howItWorks: '错误和警告使用 alert 角色以便立即播报；成功和信息使用 status 角色。可选图标与类型对应；可关闭的警告会显示关闭按钮。' },
   steps: { summary: '向用户展示其在简短线性步骤序列中的位置。', whenToUse: '用于设置或提交流程等简短的线性步骤。较长或非线性的流程应拆分为多个页面。', howItWorks: '当前索引之前的步骤视为完成，之后的视为等待，除非条目显式指定状态。点击步骤会调用 onChange 并传入其索引；当前步骤带 aria-current。' },
   progress: { summary: '显示任务、上传或加载操作的进度。', whenToUse: '用于可测量的进度，例如文件上传或多步保存。等待时间未知百分比时使用 Loading 组件。', howItWorks: '进度条带 role progressbar，aria-valuenow 为截断到 0-100 的百分比。达到 100 及以上时自动使用成功样式。' },
+  result: { summary: '展示页面级操作的结果，例如已提交的申请或失败的付款。', whenToUse: '表单提交、付款或异步操作得到明确结果后使用。文案保持简短，并提供最可能的下一步操作。', howItWorks: '每种状态渲染对应的图标和颜色，也可传入自定义图标。错误和警告使用 alert 角色以便立即播报；extra 区域放置主要和次要操作。' },
+  avatar: { summary: '以图片、首字母或备用图标显示用户或实体。', whenToUse: '用于页眉、记录行或评论列表中标识个人或组织。对象不确定时优先使用首字母或文字而非图片。', howItWorks: '图片 src 优先，其次是首字母等文字内容，最后是通用人物图标。形状支持圆形或方形，尺寸支持命名档位或像素值。' },
 }
 
 export function localizedComponent(component: ComponentDoc, locale: Locale): ComponentDoc {

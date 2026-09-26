@@ -1,6 +1,6 @@
 import { useState, type Key } from 'react'
 import { Button, Input } from '@kevinzonda/design/components'
-import { Alert, Dropdown, FancyTable, Form, Menu, Modal, Progress, Steps, Switch, Tooltip } from '@kevinzonda/design/extraComponents'
+import { Alert, Avatar, Dropdown, FancyTable, Form, Menu, Modal, Progress, Result, Steps, Switch, Tooltip } from '@kevinzonda/design/extraComponents'
 
 export function FormExample() {
   const [submitted, setSubmitted] = useState('')
@@ -162,5 +162,31 @@ export function ProgressExample() {
     <Progress percent={100} />
     <Progress percent={45} status="exception" />
     <Progress percent={75} strokeColor="#1d70b8" size="s" />
+  </div>
+}
+
+export function ResultExample() {
+  return <div className="result-example">
+    <Result
+      status="success"
+      title="Application submitted"
+      subTitle="Reference KZ-2026-0917. We have emailed a copy of your answers."
+      extra={<><button className="govuk-button" type="button">View status</button><button className="govuk-button govuk-button--secondary" type="button">Start another</button></>}
+    />
+    <Result
+      status="404"
+      title="Page not found"
+      subTitle="Check the web address or return to the service home page."
+    />
+  </div>
+}
+
+export function AvatarExample() {
+  return <div className="avatar-example">
+    <Avatar src={"data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="#b1b4b6"/><circle cx="32" cy="24" r="12" fill="#ffffff"/><ellipse cx="32" cy="52" rx="20" ry="14" fill="#ffffff"/></svg>')} alt="Ada Lovelace" size="l" />
+    <Avatar size="l" bgColor="#1d70b8">AK</Avatar>
+    <Avatar shape="square" size="l" />
+    <Avatar size="s" />
+    <span className="govuk-body">Image, initials, square fallback and small sizes</span>
   </div>
 }

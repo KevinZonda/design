@@ -9,6 +9,8 @@ export interface ModalProps extends SemanticStyling<'root' | 'header' | 'title' 
   footer?: ReactNode | null
   closeLabel?: string
   closeOnBackdrop?: boolean
+  /** Show the default dark backdrop. Pass false to let the page show through. */
+  mask?: boolean
   keyboard?: boolean
   closable?: boolean
   width?: number | string
@@ -24,7 +26,7 @@ export interface ModalProps extends SemanticStyling<'root' | 'header' | 'title' 
   style?: CSSProperties
 }
 
-export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal({ open, title, children, onClose, footer, closeLabel = 'Close', closeOnBackdrop = true, keyboard = true, closable = true, width, centered = false, okText = 'Confirm', cancelText = 'Cancel', onOk, confirmLoading = false, destroyOnClose = false, afterOpenChange, afterClose, className = '', classNames, style, styles }, forwardedRef) {
+export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal({ open, title, children, onClose, footer, closeLabel = 'Close', closeOnBackdrop = true, mask = true, keyboard = true, closable = true, width, centered = false, okText = 'Confirm', cancelText = 'Cancel', onOk, confirmLoading = false, destroyOnClose = false, afterOpenChange, afterClose, className = '', classNames, style, styles }, forwardedRef) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const restoreFocusRef = useRef<Element | null>(null)
   const titleId = useId()
@@ -70,7 +72,7 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal({ 
       if (typeof forwardedRef === 'function') forwardedRef(node)
       else if (forwardedRef) forwardedRef.current = node
     }}
-    className={`kvzd-design-modal ${centered ? 'kvzd-design-modal--centered' : ''} ${classNames?.root ?? ''} ${className}`.trim()}
+    className={`kvzd-design-modal ${centered ? 'kvzd-design-modal--centered' : ''} ${mask ? '' : 'kvzd-design-modal--no-mask'} ${classNames?.root ?? ''} ${className}`.trim()}
     style={{ width: width !== undefined ? (typeof width === 'number' ? `${width}px` : width) : undefined, ...styles?.root, ...style }}
     aria-labelledby={titleId}
     onCancel={(event) => { if (!keyboard) { event.preventDefault(); return } event.preventDefault(); onClose() }}

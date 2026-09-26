@@ -3,10 +3,12 @@ import type { SemanticStyling } from '../components/index'
 
 export type AlertType = 'success' | 'info' | 'warning' | 'error'
 
-export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>, SemanticStyling<'root' | 'icon' | 'title' | 'message' | 'description' | 'close'> {
+export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>, SemanticStyling<'root' | 'icon' | 'title' | 'message' | 'description' | 'action' | 'close'> {
   type?: AlertType
   title?: ReactNode
   description?: ReactNode
+  /** Action area aligned to the right of the alert, such as an undo button. */
+  action?: ReactNode
   closable?: boolean
   onClose?: () => void
   closeText?: string
@@ -20,7 +22,7 @@ const ICONS: Record<AlertType, ReactNode> = {
   error: <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /></svg>,
 }
 
-export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert({ type = 'info', title, description, closable = false, onClose, closeText, showIcon = true, children, className = '', classNames, style, styles, ...props }, ref) {
+export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert({ type = 'info', title, description, action, closable = false, onClose, closeText, showIcon = true, children, className = '', classNames, style, styles, ...props }, ref) {
   return <div
     {...props}
     ref={ref}
@@ -34,6 +36,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert({ typ
       {children && <div className={`kvzd-design-alert__message ${classNames?.message ?? ''}`.trim()} style={styles?.message}>{children}</div>}
       {description && <div className={`kvzd-design-alert__description ${classNames?.description ?? ''}`.trim()} style={styles?.description}>{description}</div>}
     </div>
+    {action && <div className={`kvzd-design-alert__action ${classNames?.action ?? ''}`.trim()} style={styles?.action}>{action}</div>}
     {closable && <button type="button" className={`kvzd-design-alert__close ${classNames?.close ?? ''}`.trim()} style={styles?.close} aria-label="Close" onClick={onClose}>{closeText ?? '×'}</button>}
   </div>
 })

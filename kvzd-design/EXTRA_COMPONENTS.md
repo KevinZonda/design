@@ -159,3 +159,37 @@ import { Progress } from '@kevinzonda/design/extraComponents'
 
 <Progress percent={45} status="active" />
 ```
+
+`Result` presents the outcome of a page-level operation such as a submitted application or a failed payment. Pass a `status` (`'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'`), a required `title`, optional `subTitle`, `extra` actions and any supporting `children`. Each status renders a matching icon unless you override it with `icon`. Error and warning results use the alert role so they are announced immediately.
+
+```tsx
+import { Result } from '@kevinzonda/design/extraComponents'
+
+<Result
+  status="success"
+  title="Application submitted"
+  subTitle="Reference KZ-2026-0917"
+  extra={<Button onClick={viewStatus}>View status</Button>}
+/>
+```
+
+`Avatar` displays a user or entity as an image, initials or a fallback icon. Pass `src` for an image, text `children` for initials, or nothing for a generic person icon. Use `shape` (`'circle' | 'square'`), `size` (a named `'s' | 'm' | 'l' | 'xl'` or a pixel number) and `bgColor` / `color` to match your context.
+
+```tsx
+import { Avatar } from '@kevinzonda/design/extraComponents'
+
+<Avatar src="/team/ada.png" alt="Ada Lovelace" size="l" />
+<Avatar shape="square" bgColor="#000000">AK</Avatar>
+```
+
+`CodeBox` renders a bordered code block with syntax highlighting. Pass raw
+`code` (and optionally `lang`) and the component highlights it on demand with
+Shiki; or pass `highlightedHtml` produced at build time to skip the runtime
+highlighter entirely. The block uses a white background and GitHub Light token
+colours, so it fits GOV.UK pages without a dark panel.
+
+```tsx
+import { CodeBox } from '@kevinzonda/design/extraComponents'
+
+<CodeBox code={`<Button onClick={save}>Save and continue</Button>`} lang="tsx" />
+```

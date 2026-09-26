@@ -35,7 +35,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
 
 export interface Option { label: ReactNode; value: string; disabled?: boolean }
 interface SelectBaseProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'children' | 'multiple' | 'value' | 'defaultValue' | 'onChange'>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'select'> { label: ReactNode; hint?: ReactNode; error?: ReactNode; options: Option[]; placeholder?: string }
-export interface SingleSelectProps extends SelectBaseProps { multiple?: false }
+export interface SingleSelectProps extends SelectBaseProps { multiple?: false; value?: string; defaultValue?: string; onChange?: (value: string) => void; showSearch?: boolean; loading?: boolean }
 export interface MultipleSelectProps extends SelectBaseProps { multiple: true; value?: string[]; defaultValue?: string[]; onChange?: (value: string[]) => void; showSearch?: boolean; loading?: boolean; hiddenInput?: boolean }
 export type SelectProps = SingleSelectProps | MultipleSelectProps
 
@@ -46,9 +46,35 @@ const selectSpinner = (
   </svg>
 )
 
-const SelectSingle = forwardRef<HTMLSelectElement, SingleSelectProps>(function SelectSingle({ className = '', classNames, error, hint, id, label, options, placeholder, style, styles, ...props }, ref) {
+const SelectSingle = forwardRef<HTMLSelectElement, SingleSelectProps>(function SelectSingle({ className = '', classNames, defaultValue, error, hint, id, label, loading: _loading, onChange, options, placeholder, showSearch = false, style, styles, value, ...props }, ref) {
   const uid = useId(); const fieldId = id ?? `kvzd-design-select-${uid.replaceAll(':', '')}`; const described = [hint && `${fieldId}-hint`, error && `${fieldId}-error`].filter(Boolean).join(' ')
-  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}><Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint id={`${fieldId}-hint`} className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage id={`${fieldId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}<select {...props} ref={ref} id={fieldId} aria-describedby={described || undefined} className={`govuk-select ${error ? 'govuk-select--error' : ''} ${classNames?.select ?? ''} ${className}`.trim()} style={{ ...styles?.select, ...style }}>{placeholder && <option value="">{placeholder}</option>}{options.map((option) => <option key={option.value} value={option.value} disabled={option.disabled}>{option.label}</option>)}</select></div>
+  if (showSearch) return <SelectSingleSearchable {...props} className={className} classNames={classNames} defaultValue={defaultValue} error={error} fieldId={fieldId} hint={hint} id={id} label={label} onChange={onChange} options={options} placeholder={placeholder} described={described} style={style} styles={styles} value={value} ref={ref} />
+  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}><Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint id={`${fieldId}-hint`} className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage id={`${fieldId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}<select {...props} ref={ref} id={fieldId} defaultValue={defaultValue} value={value} onChange={onChange ? (event) => onChange(event.target.value) : undefined} aria-describedby={described || undefined} className={`govuk-select ${error ? 'govuk-select--error' : ''} ${classNames?.select ?? ''} ${className}`.trim()} style={{ ...styles?.select, ...style }}>{placeholder && <option value="">{placeholder}</option>}{options.map((option) => <option key={option.value} value={option.value} disabled={option.disabled}>{option.label}</option>)}</select></div>
+})
+
+interface SelectSingleSearchableProps extends Omit<SingleSelectProps, 'showSearch' | 'id'> { fieldId: string; described: string; id?: string }
+
+const SelectSingleSearchable = forwardRef<HTMLSelectElement, SelectSingleSearchableProps>(function SelectSingleSearchable({ className = '', classNames, defaultValue = '', described, disabled, error, fieldId, hint, label, loading = false, name, onChange, options, placeholder = '', style, styles, value }, ref) {
+  const [inner, setInner] = useState(defaultValue); const selected = value ?? inner
+  const [open, setOpen] = useState(false); const [query, setQuery] = useState('')
+  const rootRef = useRef<HTMLDivElement>(null); const triggerRef = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    if (!open) return
+    const outside = (event: PointerEvent) => { if (!rootRef.current?.contains(event.target as Node)) setOpen(false) }
+    document.addEventListener('pointerdown', outside)
+    return () => document.removeEventListener('pointerdown', outside)
+  }, [open])
+  const choose = (optionValue: string) => { if (value === undefined) setInner(optionValue); onChange?.(optionValue); setOpen(false); triggerRef.current?.focus() }
+  const filtered = query.trim() ? options.filter((option) => String(option.label).toLowerCase().includes(query.trim().toLowerCase())) : options
+  const selectedOption = options.find((option) => option.value === selected)
+  const labelText = selectedOption ? String(selectedOption.label) : placeholder
+  return <div ref={rootRef} className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} kvzd-design-select ${classNames?.root ?? ''}`.trim()} style={{ ...styles?.root, ...style }}>{name !== undefined && <input type="hidden" name={name} value={selected} />}<Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint id={`${fieldId}-hint`} className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage id={`${fieldId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}
+    <button ref={(node) => { triggerRef.current = node; if (typeof ref === 'function') ref(null); else if (ref) (ref as { current: HTMLSelectElement | null }).current = node as unknown as HTMLSelectElement }} type="button" id={fieldId} disabled={disabled} aria-describedby={described || undefined} aria-haspopup="listbox" aria-expanded={open} aria-disabled={disabled || undefined} className={`govuk-select kvzd-design-select__trigger ${error ? 'govuk-select--error' : ''} ${open ? 'kvzd-design-select__trigger--open' : ''} ${classNames?.select ?? ''} ${className}`.trim()} style={styles?.select} onClick={() => setOpen(!open)} onKeyDown={(event) => { if (event.key === 'Escape') { setOpen(false); triggerRef.current?.focus() } }}><span className="kvzd-design-select__value">{labelText}</span>{loading && <span className="kvzd-design-select__spinner">{selectSpinner}</span>}<span className="kvzd-design-select__chevron" aria-hidden="true" /></button>
+    {open && <div className="kvzd-design-select__popup" role="listbox" aria-labelledby={fieldId} onKeyDown={(event) => { if (event.key === 'Escape') { setOpen(false); triggerRef.current?.focus() } }}>
+      <input type="text" className="govuk-input govuk-input--width-20 kvzd-design-select__search" placeholder="Search" value={query} onChange={(event) => setQuery(event.target.value)} />
+      {loading ? <div className="kvzd-design-select__loading">Loading…</div> : filtered.length === 0 ? <div className="kvzd-design-select__loading">No matches</div> : filtered.map((option) => <div key={option.value} className="kvzd-design-select__option"><button type="button" role="option" aria-selected={selected === option.value} disabled={option.disabled} className={`kvzd-design-select__choice ${selected === option.value ? 'kvzd-design-select__choice--selected' : ''}`} onClick={() => choose(option.value)}>{option.label}</button></div>)}
+    </div>}
+  </div>
 })
 
 const SelectMultiple = forwardRef<HTMLSelectElement, MultipleSelectProps>(function SelectMultiple({ className = '', classNames, defaultValue = [], disabled, error, hiddenInput = true, hint, id, label, loading = false, name, onChange, options, placeholder = '', showSearch = false, style, styles, value }, ref) {

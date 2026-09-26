@@ -66,6 +66,9 @@ export interface FormItemProps {
   multiple?: boolean
   focusId?: string
   dependencies?: string[]
+  label?: ReactNode
+  help?: ReactNode
+  extra?: ReactNode
 }
 
 export interface FormListField {
@@ -455,17 +458,18 @@ const FormRoot = forwardRef<HTMLFormElement, FormProps>(function Form({ children
   </FormContext.Provider>
 })
 
-function FormItem({ children, dependencies, focusId, multiple = false, name, rules = [] }: FormItemProps) {
+function FormItem({ children, dependencies, extra, focusId, help, label, multiple = false, name, rules = [] }: FormItemProps) {
   const context = useContext(FormContext)
   if (!context) throw new Error('Form.Item must be used inside Form')
 
   const { register, registerDependencies } = context
   const childProps = children.props
   const id = (childProps.id as string | undefined) ?? `${context.prefix}-${name.replaceAll(/[^a-zA-Z0-9_-]/g, '-')}`
-  const label = typeof childProps.label === 'string' ? childProps.label : typeof childProps.legend === 'string' ? childProps.legend : name
+  const itemLabel = label ?? (childProps.label as ReactNode | undefined) ?? (childProps.legend as ReactNode | undefined) ?? name
+  const messageLabel = typeof itemLabel === 'string' ? itemLabel : name
   const listDefault = context.listDefault(name)
   const initialValue = (childProps.defaultValue as FormValue | undefined) ?? context.initialValues?.[name] ?? listDefault
-  useEffect(() => register({ name, label, id: focusId ?? id, multiple, rules, initialValue }), [register, focusId, id, label, multiple, name, rules, initialValue])
+  useEffect(() => register({ name, label: messageLabel, id: focusId ?? id, multiple, rules, initialValue }), [register, focusId, id, messageLabel, multiple, name, rules, initialValue])
   useEffect(() => {
     if (!dependencies || dependencies.length === 0) return
     return registerDependencies(name, dependencies)
@@ -482,16 +486,23 @@ function FormItem({ children, dependencies, focusId, multiple = false, name, rul
   const injected: Record<string, unknown> = {
     id,
     name,
-    error: context.errors[name] ?? childProps.error,
+    error: help === undefined ? context.errors[name] ?? childProps.error : undefined,
     onChange: handleTrigger('onChange'),
     onBlur: handleTrigger('onBlur'),
   }
+  if (label !== undefined && childProps.label === undefined) injected.label = label
   if (context.disabled && childProps.disabled === undefined) injected.disabled = true
   const fallbackDefault = context.initialValues?.[name] ?? listDefault
   if (childProps.value === undefined && childProps.defaultValue === undefined && fallbackDefault !== undefined) {
     injected.defaultValue = fallbackDefault
   }
-  return cloneElement(children, injected)
+  const field = cloneElement(children, injected)
+  if (help === undefined && extra === undefined) return field
+  return <div className="kvzd-design-form-item">
+    {field}
+    {help !== undefined && <div className="kvzd-design-form-item__help">{help}</div>}
+    {extra !== undefined && <div className="kvzd-design-form-item__extra">{extra}</div>}
+  </div>
 }
 
 function FormList({ children, name }: FormListProps) {

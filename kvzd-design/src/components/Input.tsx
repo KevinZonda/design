@@ -2,19 +2,20 @@ import { forwardRef, useId, useRef, useState } from 'react'
 import type { ChangeEvent, InputHTMLAttributes, ReactNode } from 'react'
 import type { SemanticStyling } from './styling'
 
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'input' | 'wrapper' | 'prefix' | 'suffix'> {
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'input' | 'wrapper' | 'prefix' | 'suffix' | 'count'> {
   allowClear?: boolean
   error?: ReactNode
   hint?: ReactNode
   label: ReactNode
   labelSize?: 's' | 'm' | 'l' | 'xl'
   prefix?: ReactNode
+  showCount?: boolean | { max?: number }
   status?: 'error' | 'warning'
   suffix?: ReactNode
   width?: 2 | 3 | 4 | 5 | 10 | 20 | 30
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ allowClear = false, className = '', classNames, defaultValue, disabled, error, hint, id, label, labelSize, onChange, prefix, readOnly, status, style, styles, suffix, value, width, ...props }, ref) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ allowClear = false, className = '', classNames, defaultValue, disabled, error, hint, id, label, labelSize, onChange, prefix, readOnly, showCount = false, status, style, styles, suffix, value, width, ...props }, ref) {
   const generatedId = useId()
   const inputId = id ?? `kvzd-design-input-${generatedId.replaceAll(':', '')}`
   const hasError = Boolean(error) || status === 'error'
@@ -39,6 +40,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ a
     input.focus()
   }
   const inputElement = <input {...props} ref={setRefs} id={inputId} value={currentValue} disabled={disabled} readOnly={readOnly} onChange={handleChange} aria-describedby={describedBy || undefined} aria-invalid={hasError || undefined} className={`govuk-input ${hasError ? 'govuk-input--error' : ''} ${hasWarning ? 'kvzd-design-input--warning' : ''} ${width ? `govuk-input--width-${width}` : ''} ${(prefix || suffix || allowClear) ? 'kvzd-design-input__input' : ''} ${classNames?.input ?? ''} ${className}`.trim()} style={{ ...styles?.input, ...style }} />
+  const countElement = showCount
+    ? <div className={`kvzd-design-input__count ${classNames?.count ?? ''}`.trim()} style={styles?.count} aria-hidden="true">{String(currentValue ?? '').length}{typeof showCount === 'object' && showCount.max !== undefined ? ` / ${showCount.max}` : ''}</div>
+    : null
   if (!prefix && !suffix && !allowClear) {
     return (
       <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${hasWarning ? 'kvzd-design-form-group--warning' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
@@ -46,6 +50,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ a
         {hint && <div className={`govuk-hint ${classNames?.hint ?? ''}`.trim()} style={styles?.hint} id={`${inputId}-hint`}>{hint}</div>}
         {error && <p className={`govuk-error-message ${classNames?.error ?? ''}`.trim()} style={styles?.error} id={`${inputId}-error`}><span className="govuk-visually-hidden">Error:</span> {error}</p>}
         {inputElement}
+        {countElement}
       </div>
     )
   }
@@ -59,6 +64,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ a
         {inputElement}
         {(suffix || showClear) && <span className={`kvzd-design-input__suffix ${classNames?.suffix ?? ''}`.trim()} style={styles?.suffix}>{suffix}{showClear && <button type="button" className="kvzd-design-input__clear" aria-label="Clear" onClick={clear}>×</button>}</span>}
       </div>
+      {countElement}
     </div>
   )
 })

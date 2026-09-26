@@ -44,5 +44,5 @@ test('progress shows percent text by default and hides with showInfo', () => {
 
 test('progress strokeColor overrides bar background', () => {
   render(<Progress percent={50} strokeColor="#ff00ff" />)
-  expect(getBar().style.background).toContain('rgb(255, 0, 255)')
+  expect(getBar().style.backgroundColor).toContain('rgb(255, 0, 255)')
 })

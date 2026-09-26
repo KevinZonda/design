@@ -19,8 +19,7 @@
 .example-canvas--wide { padding: 20px; }
 .example-canvas--wide > :is(.govuk-generic-header, .govuk-footer, .govuk-service-navigation, .govuk-cookie-banner) { margin-inline: -20px; }
 .example-canvas--wide > :is(.govuk-generic-header, .govuk-footer, .govuk-service-navigation, .govuk-cookie-banner) > .govuk-width-container { width: calc(100% - 60px); margin-inline: auto; }
-.code-block { min-height: 130px; margin: 0; padding: 28px; overflow-x: auto; border: 1px solid #b1b4b6; border-top: 0; color: var(--govuk-inverse-text-colour); background: #263238; font: 15px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre; }
-.code-block code { font: inherit; }
+.component-example .kvzd-design-code-box__pre { padding: 28px; border-top: 0; }
 .extra-loading-example { display: grid; gap: 32px; max-width: 450px; }
 .component-api { margin-bottom: 52px; }
 .api-table-scroll { overflow-x: auto; }
@@ -59,3 +58,7 @@
 @media (max-width: 40.0525em) {
   .example-canvas--wide > :is(.govuk-generic-header, .govuk-footer, .govuk-service-navigation, .govuk-cookie-banner) > .govuk-width-container { width: calc(100% - 30px); }
 }
+
+.result-example { display: grid; gap: 24px; }
+.avatar-example { display: flex; align-items: center; gap: 16px; }
+.avatar-example .govuk-body { margin-bottom: 0; margin-left: 8px; }

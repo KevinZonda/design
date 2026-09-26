@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Divider, Empty, FancyTabs, Loading, Note, ShowcaseBox, Sidebar, TagBox } from '@kevinzonda/design/extraComponents'
 import type { ApiProp } from './componentRegistry'
-import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample, AlertExample, ProgressExample, StepsExample, SwitchExample, TooltipExample } from './extraExamples'
+import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample, AlertExample, ProgressExample, ResultExample, AvatarExample, StepsExample, SwitchExample, TooltipExample } from './extraExamples'
 
 export interface ExtraComponentDoc {
   slug: string
@@ -82,6 +82,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'footer', type: 'ReactNode', description: 'Optional action area; when omitted and onOk or custom okText or cancelText is supplied, a built-in footer is rendered.' },
       { name: 'onClose', type: '() => void', description: 'Called when the user requests closure; update open in the parent.' },
       { name: 'closeOnBackdrop', type: 'boolean', defaultValue: 'true', description: 'Allow backdrop clicks to request closure.' },
+      { name: 'mask', type: 'boolean', defaultValue: 'true', description: 'Show the default dark backdrop; pass false to let the page show through.' },
       { name: 'closeLabel', type: 'string', defaultValue: 'Close', description: 'Accessible name of the close button.' },
       { name: 'width', type: 'number | string', description: 'Dialog width in pixels or any CSS length.' },
       { name: 'centered', type: 'boolean', defaultValue: 'false', description: 'Centre the dialog vertically.' },
@@ -284,6 +285,9 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'Form.Item name', type: 'string', description: 'Native field name used to read its submitted value.' },
       { name: 'Form.Item rules', type: 'FormRule[]', description: 'Required, pattern, min, max, len, type, whitespace or custom rules; checked according to validateTrigger.' },
       { name: 'Form.Item dependencies', type: 'string[]', description: 'Re-validate this field when one of the listed fields changes.' },
+      { name: 'Form.Item label', type: 'ReactNode', description: 'Label injected into the field when it has none; also used in validation messages.' },
+      { name: 'Form.Item help', type: 'ReactNode', description: 'Custom help text; when set it replaces the validation error display.' },
+      { name: 'Form.Item extra', type: 'ReactNode', description: 'Supplementary text always shown beneath the field.' },
       { name: 'Form.Item multiple', type: 'boolean', defaultValue: 'false', description: 'Read all values for a checkbox group.' },
       { name: 'Form.Item focusId', type: 'string', description: 'ID targeted from the error summary for grouped fields.' },
       { name: 'ref', type: 'Ref<HTMLFormElement>', description: 'Native form element.' },
@@ -446,6 +450,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'trigger', type: "'hover' | 'focus' | 'click'", defaultValue: 'hover', description: 'Interaction that shows the tooltip.' },
       { name: 'open / defaultOpen', type: 'boolean', description: 'Controlled or initial open state.' },
       { name: 'onOpenChange', type: '(open: boolean) => void', description: 'Called when the tooltip requests a state change.' },
+      { name: 'getPopupContainer', type: '() => HTMLElement', description: 'Mount the popup into a custom container with fixed positioning; useful inside overflow-clipping scroll areas.' },
       { name: 'ref', type: 'Ref<HTMLSpanElement>', description: 'Tooltip wrapper element.' },
     ],
   },
@@ -466,6 +471,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'onClose', type: '() => void', description: 'Called when the close button is pressed.' },
       { name: 'closeText', type: 'string', description: 'Custom close button text; defaults to a multiplication sign.' },
       { name: 'showIcon', type: 'boolean', defaultValue: 'true', description: 'Show the icon matching the alert type.' },
+      { name: 'action', type: 'ReactNode', description: 'Action area aligned to the right of the alert, such as an undo button.' },
       { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Alert root element.' },
     ],
   },
@@ -488,6 +494,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'onChange', type: '(index: number) => void', description: 'Called with the index of the step the user selected.' },
       { name: 'direction', type: "'horizontal' | 'vertical'", defaultValue: 'horizontal', description: 'Layout of the step list.' },
       { name: 'size', type: "'s' | 'm'", defaultValue: 'm', description: 'Step indicator size.' },
+      { name: 'progressDot', type: 'boolean', defaultValue: 'false', description: 'Render dot indicators instead of numbered circles; finished steps keep a check.' },
       { name: 'ref', type: 'Ref<HTMLOListElement>', description: 'Steps list element.' },
     ],
   },
@@ -505,7 +512,52 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'showInfo', type: 'boolean', defaultValue: 'true', description: 'Show the percentage next to the bar.' },
       { name: 'size', type: "'s' | 'm'", defaultValue: 'm', description: 'Bar size.' },
       { name: 'strokeColor', type: 'string', description: 'Custom colour of the filled portion.' },
+      { name: 'type', type: "'line' | 'circle' | 'dashboard' | 'steps'", defaultValue: 'line', description: 'Visual treatment: line, circle, dashboard or steps.' },
+      { name: 'width', type: 'number', description: 'Width and height of circle and dashboard types in pixels.' },
+      { name: 'gapDegree', type: 'number', defaultValue: '8', description: 'Gap of the dashboard type as a percentage of the circumference.' },
+      { name: 'stepsCount', type: 'number', description: 'Number of segments for the steps type.' },
       { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Progress root element.' },
+    ],
+  },
+  {
+    slug: 'result',
+    name: 'Result',
+    summary: 'Present the outcome of a page-level operation such as a submitted application or a failed payment.',
+    whenToUse: 'Use after a form submission, payment or async operation resolves to a clear outcome. Keep the message short and offer the most likely next action.',
+    howItWorks: 'Each status renders a matching icon and colour unless you supply your own. Error and warning results use the alert role so they are announced immediately; the extra area holds primary and secondary actions.',
+    code: `<Result status="success" title="Application submitted"
+  subTitle="Reference KZ-2026-0917"
+  extra={<Button onClick={viewStatus}>View status</Button>} />`,
+    example: () => <ResultExample />,
+    api: [
+      { name: 'status', type: "'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'", defaultValue: 'info', description: 'Result status; one of success, error, info, warning, 403, 404 or 500.' },
+      { name: 'title', type: 'ReactNode', description: 'Main result heading.' },
+      { name: 'subTitle', type: 'ReactNode', description: 'Optional supporting text beneath the title.' },
+      { name: 'icon', type: 'ReactNode', description: 'Override the built-in status icon.' },
+      { name: 'extra', type: 'ReactNode', description: 'Action area such as primary and secondary buttons.' },
+      { name: 'children', type: 'ReactNode', description: 'Optional supporting content beneath the actions.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Result root element.' },
+    ],
+  },
+  {
+    slug: 'avatar',
+    name: 'Avatar',
+    summary: 'Display a user or entity as an image, initials or a fallback icon.',
+    whenToUse: 'Use in headers, record rows or comment lists to identify a person or organisation. Prefer initials or text over images alone when the audience is unknown.',
+    howItWorks: 'An image src takes precedence, then text children such as initials, then a generic person icon. The shape accepts circle or square, and size accepts a named token or a pixel value.',
+    code: `<Avatar src="/team/ada.png" alt="Ada Lovelace" size="l" />
+<Avatar shape="square" bgColor="#000000">AK</Avatar>`,
+    example: () => <AvatarExample />,
+    api: [
+      { name: 'src', type: 'string', description: 'Image source; initials or a fallback icon are shown otherwise.' },
+      { name: 'alt', type: 'string', defaultValue: "''", description: 'Accessible name for the image variant.' },
+      { name: 'icon', type: 'ReactNode', description: 'Fallback icon when there is no image or text.' },
+      { name: 'children', type: 'ReactNode', description: 'Initials or short text shown when there is no image.' },
+      { name: 'shape', type: "'circle' | 'square'", defaultValue: 'circle', description: 'Circle or square outline.' },
+      { name: 'size', type: "number | 's' | 'm' | 'l' | 'xl'", defaultValue: "'m'", description: 'Named size or pixel size of the avatar.' },
+      { name: 'bgColor', type: 'string', description: 'Background colour for text or icon avatars.' },
+      { name: 'color', type: 'string', description: 'Text and icon colour for text or icon avatars.' },
+      { name: 'ref', type: 'Ref<HTMLSpanElement>', description: 'Avatar root element.' },
     ],
   },
 ]
