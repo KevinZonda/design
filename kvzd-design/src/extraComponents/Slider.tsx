@@ -14,6 +14,8 @@ export interface SliderProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onCha
   step?: number
   /** Render two handles for selecting a [lower, upper] range. */
   range?: boolean
+  /** Anchor the fill at the right edge so it drains as the value grows. */
+  reverse?: boolean
   value?: number | [number, number]
   defaultValue?: number | [number, number]
   onChange?: (value: number | [number, number]) => void
@@ -48,6 +50,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider({
   max = 100,
   step = 1,
   range = false,
+  reverse = false,
   value,
   defaultValue,
   onChange,
@@ -79,12 +82,17 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider({
     const f = ((clampTo(to, 0, 100) - clampTo(from, 0, 100)) / 100).toFixed(4)
     return `calc((100% - var(--kvzd-design-slider-thumb-size)) * ${f})`
   }
-  /* The fill anchors to the track's left edge: at the minimum there is
-     nothing to show, and the thumb itself covers the junction. */
-  const fillLeft = range && lo !== min ? along(percent(lo)) : '0'
-  const fillWidth = range
-    ? lo !== min ? spanLength(percent(lo), percent(hi)) : along(percent(hi))
-    : along(percent(lo))
+  /* Fill interval in display space. Single sliders grow from the track's
+     left edge; reverse anchors the fill at the right edge instead, so it
+     drains as the value grows. Range sliders span the handles. */
+  const fillFromValue = range || reverse ? percent(lo) : 0
+  const fillToValue = range ? percent(hi) : reverse ? 100 : percent(lo)
+  const fillFrom = Math.min(fillFromValue, fillToValue)
+  const fillTo = Math.max(fillFromValue, fillToValue)
+  const fillLeft = fillFrom === 0 ? '0' : along(fillFrom)
+  const fillWidth = fillFrom === fillTo ? '0' : fillTo === 100
+    ? `calc(100% - ${fillLeft})`
+    : fillFrom === 0 ? along(fillTo) : spanLength(fillFrom, fillTo)
 
   const handleSingle = (event: ChangeEvent<HTMLInputElement>) => {
     const next = clampTo(Number(event.target.value), min, max)
@@ -141,7 +149,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider({
     <div
       {...props}
       ref={ref}
-      className={`kvzd-design-slider ${range ? 'kvzd-design-slider--range' : ''} ${disabled ? 'kvzd-design-slider--disabled' : ''} kvzd-design-slider--tooltip-${tooltip} ${classNames?.root ?? ''} ${className}`.trim()}
+      className={`kvzd-design-slider ${range ? 'kvzd-design-slider--range' : ''} ${reverse ? 'kvzd-design-slider--reverse' : ''} ${disabled ? 'kvzd-design-slider--disabled' : ''} kvzd-design-slider--tooltip-${tooltip} ${classNames?.root ?? ''} ${className}`.trim()}
       style={{ ...styles?.root, ...style }}
     >
       <div className={`kvzd-design-slider__track ${classNames?.track ?? ''}`.trim()} style={styles?.track}>

@@ -178,3 +178,39 @@ test('handle gets a pressed class while the pointer is down', () => {
   fireEvent.pointerUp(slider)
   expect(slider.className).not.toContain('kvzd-design-slider__input--pressed')
 })
+
+test('reverse slider anchors the fill at the right edge and keeps normal geometry', () => {
+  render(<Slider ariaLabel="Volume" reverse min={0} max={100} defaultValue={25} tooltip="always" marks={[{ value: 0 }, { value: 100 }]} />)
+  const root = document.querySelector('.kvzd-design-slider')
+  expect(root.className).toContain('kvzd-design-slider--reverse')
+
+  // jsdom cannot round-trip calc() with var() through the CSSOM, so assert
+  // on the raw style attribute text instead of the parsed declarations.
+  const styleAttr = (el: Element) => el.getAttribute('style') ?? ''
+
+  // tooltip follows the thumb at its normal position
+  const tooltip = document.querySelector('.kvzd-design-slider__tooltip')
+  expect(tooltip.textContent).toBe('25')
+  expect(styleAttr(tooltip)).toContain('* 0.2500')
+
+  // fill spans from the thumb to the right edge
+  const fill = document.querySelector('.kvzd-design-slider__fill')
+  const fillLeft = 'calc(var(--kvzd-design-slider-thumb-half) + (100% - var(--kvzd-design-slider-thumb-size)) * 0.2500)'
+  expect(styleAttr(fill)).toContain(fillLeft)
+  expect(styleAttr(fill)).toContain(`width: calc(100% - ${fillLeft})`)
+
+  // values stay left-to-right: mark 0 renders at display 0%
+  const firstMark = document.querySelector('.kvzd-design-slider__mark')
+  expect(styleAttr(firstMark)).toContain('* 0.0000')
+})
+
+test('reverse slider fills the whole track at the minimum and empties at the maximum', () => {
+  const { unmount } = render(<Slider ariaLabel="Volume" reverse min={0} max={100} defaultValue={0} />)
+  const fullStyle = document.querySelector('.kvzd-design-slider__fill').getAttribute('style') ?? ''
+  expect(fullStyle).toContain('width:')
+  expect(fullStyle).toContain('100%')
+  unmount()
+
+  render(<Slider ariaLabel="Volume" reverse min={0} max={100} defaultValue={100} />)
+  expect(document.querySelector('.kvzd-design-slider__fill').getAttribute('style')).toContain('width: 0')
+})

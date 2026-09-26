@@ -291,6 +291,7 @@ const rangeMarks = [
 export function SliderExample() {
   const [volume, setVolume] = useState(40)
   const [budget, setBudget] = useState<[number, number]>([20, 80])
+  const [remaining, setRemaining] = useState(60)
   return <div className="slider-example">
     <Slider
       ariaLabel="Case volume"
@@ -302,6 +303,15 @@ export function SliderExample() {
       onChange={(value) => setVolume(value as number)}
     />
     <Slider
+      ariaLabel="Time remaining"
+      reverse
+      min={0}
+      max={100}
+      marks={sliderMarks}
+      value={remaining}
+      onChange={(value) => setRemaining(value as number)}
+    />
+    <Slider
       ariaLabel="Budget"
       range
       min={0}
@@ -311,7 +321,7 @@ export function SliderExample() {
       onChange={(value) => setBudget(value as [number, number])}
     />
     <Paragraph className="govuk-!-margin-top-4" aria-live="polite">
-      Case volume {volume}. Budget between £{budget[0]} and £{budget[1]}.
+      Case volume {volume}. Time remaining {remaining}. Budget between £{budget[0]} and £{budget[1]}.
     </Paragraph>
   </div>
 }

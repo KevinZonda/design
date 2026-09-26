@@ -380,6 +380,7 @@ const descriptions: Record<string, string> = {
   'Minimum and maximum selectable values.': '最小和最大可选值。',
   'Increment between selectable values.': '可选值之间的步进增量。',
   'Render two handles for selecting a [lower, upper] range.': '渲染两个手柄，用于选择 [下限, 上限] 区间。',
+  'Anchor the fill at the right edge so it drains as the value grows (depletion style).': '将填充锚定在右端，随数值增大向右收缩（耗尽式）。',
   'Selected value, or [lower, upper] in range mode (controlled).': '选中的值，区间模式下为 [下限, 上限]（受控）。',
   'Initial value when uncontrolled; defaults to min, or [min, max] in range mode.': '非受控模式下的初始值；默认为 min，区间模式下默认为 [min, max]。',
   'Called with the new value when a handle moves.': '手柄移动时以新值调用。',

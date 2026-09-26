@@ -811,9 +811,10 @@ return <Transfer
     name: 'Slider',
     summary: 'Pick a single value or a [lower, upper] range from a track, with optional tick marks and a value tooltip.',
     whenToUse: <>Use for coarse adjustments where the exact number does not matter, such as a volume or an approximate budget. GOV.UK advises sliders only for approximate values; when the user must enter a precise value, use the <DocsLink className="govuk-link" to="/en/components/text-input/">Text input</DocsLink> or <DocsLink className="govuk-link" to="/en/components/select/">Select</DocsLink> component instead.</>,
-    howItWorks: 'The track contains one or two native range inputs. The value and range can each be controlled or left internal; in range mode the lower handle cannot pass the upper one. Marks render ticks with optional labels under the track, and the tooltip shows the current value on hover, always or never. Arrow keys move by step and screen readers announce each handle, with minimum and maximum labels in range mode.',
+    howItWorks: 'The track contains one or two native range inputs. The value and range can each be controlled or left internal; in range mode the lower handle cannot pass the upper one. Marks render ticks with optional labels under the track, and the tooltip shows the current value on hover, always or never. Set reverse to anchor the fill at the right edge, so it drains as the value grows. Arrow keys move by step and screen readers announce each handle, with minimum and maximum labels in range mode.',
     code: `const [volume, setVolume] = useState(40)
 const [budget, setBudget] = useState<[number, number]>([20, 80])
+const [remaining, setRemaining] = useState(60)
 return <div className="slider-example">
   <Slider
     ariaLabel="Case volume"
@@ -829,6 +830,19 @@ return <div className="slider-example">
     onChange={(value) => setVolume(value as number)}
   />
   <Slider
+    ariaLabel="Time remaining"
+    reverse
+    min={0}
+    max={100}
+    marks={[
+      { value: 0, label: '0' },
+      { value: 50, label: '50' },
+      { value: 100, label: '100' },
+    ]}
+    value={remaining}
+    onChange={(value) => setRemaining(value as number)}
+  />
+  <Slider
     ariaLabel="Budget"
     range
     min={0}
@@ -842,7 +856,7 @@ return <div className="slider-example">
     onChange={(value) => setBudget(value as [number, number])}
   />
   <Paragraph className="govuk-!-margin-top-4" aria-live="polite">
-    Case volume {volume}. Budget between £{budget[0]} and £{budget[1]}.
+    Case volume {volume}. Time remaining {remaining}. Budget between £{budget[0]} and £{budget[1]}.
   </Paragraph>
 </div>`,
     example: () => <SliderExample />,
@@ -850,6 +864,7 @@ return <div className="slider-example">
       { name: 'min / max', type: 'number', defaultValue: '0 / 100', description: 'Minimum and maximum selectable values.' },
       { name: 'step', type: 'number', defaultValue: '1', description: 'Increment between selectable values.' },
       { name: 'range', type: 'boolean', defaultValue: 'false', description: 'Render two handles for selecting a [lower, upper] range.' },
+      { name: 'reverse', type: 'boolean', defaultValue: 'false', description: 'Anchor the fill at the right edge so it drains as the value grows (depletion style).' },
       { name: 'value', type: 'number | [number, number]', description: 'Selected value, or [lower, upper] in range mode (controlled).' },
       { name: 'defaultValue', type: 'number | [number, number]', description: 'Initial value when uncontrolled; defaults to min, or [min, max] in range mode.' },
       { name: 'onChange', type: '(value: number | [number, number]) => void', description: 'Called with the new value when a handle moves.' },
