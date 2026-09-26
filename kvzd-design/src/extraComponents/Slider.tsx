@@ -79,6 +79,12 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider({
     const f = ((clampTo(to, 0, 100) - clampTo(from, 0, 100)) / 100).toFixed(4)
     return `calc((100% - var(--kvzd-design-slider-thumb-size)) * ${f})`
   }
+  /* The fill anchors to the track's left edge: at the minimum there is
+     nothing to show, and the thumb itself covers the junction. */
+  const fillLeft = range && lo !== min ? along(percent(lo)) : '0'
+  const fillWidth = range
+    ? lo !== min ? spanLength(percent(lo), percent(hi)) : along(percent(hi))
+    : along(percent(lo))
 
   const handleSingle = (event: ChangeEvent<HTMLInputElement>) => {
     const next = clampTo(Number(event.target.value), min, max)
@@ -143,7 +149,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider({
         <div
           className={`kvzd-design-slider__fill ${classNames?.fill ?? ''}`.trim()}
           aria-hidden="true"
-          style={{ left: along(percent(range ? lo : min)), width: spanLength(percent(range ? lo : min), percent(range ? hi : lo)), ...styles?.fill }}
+          style={{ left: fillLeft, width: fillWidth, ...styles?.fill }}
         />
         {range ? (
           <>
