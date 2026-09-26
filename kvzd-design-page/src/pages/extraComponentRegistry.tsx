@@ -155,6 +155,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     code: `<Menu ariaLabel="Record actions" items={[
   { key: 'view', label: 'View record', onClick: viewRecord },
   { key: 'edit', label: 'Edit record', onClick: editRecord },
+  { key: 'delete', label: 'Delete record', disabled: true },
 ]} />`,
     example: () => <MenuExample />,
     api: [
@@ -173,7 +174,11 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     whenToUse: 'Use when several secondary actions share a single place in a toolbar or record row.',
     howItWorks: 'The trigger exposes its expanded state. The menu opens with focus on its first action and closes on selection, Escape or an outside click.',
     code: `<Dropdown label="Actions" menuLabel="Application actions"
-  items={[{ key: 'view', label: 'View application', onClick: viewApplication }]}
+  items={[
+    { key: 'view', label: 'View application' },
+    { key: 'download', label: 'Download details' },
+  ]}
+  onAction={(key) => handleAction(key)}
 />`,
     example: () => <DropdownExample />,
     api: [
@@ -419,9 +424,20 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'A short label that appears next to an element to explain it.',
     whenToUse: 'Use for brief explanations of icons, buttons or status text. Do not hide information users must read to complete a task; use visible hint text instead.',
     howItWorks: 'The single child element is cloned and given the trigger handlers. With plain text or number content, the trigger receives aria-describedby while the popup is open, and the popup itself has role tooltip.',
-    code: `<Tooltip title="Copy to clipboard" placement="right">
-  <Button type="secondary">Copy</Button>
-</Tooltip>`,
+    code: `<div className="tooltip-example">
+  <Tooltip title="Opens above the trigger" placement="top">
+    <button className="govuk-button govuk-button--secondary" type="button">Top</button>
+  </Tooltip>
+  <Tooltip title="Opens below the trigger" placement="bottom">
+    <button className="govuk-button govuk-button--secondary" type="button">Bottom</button>
+  </Tooltip>
+  <Tooltip title="Opens to the left" placement="left">
+    <button className="govuk-button govuk-button--secondary" type="button">Left</button>
+  </Tooltip>
+  <Tooltip title="Opens to the right" placement="right">
+    <button className="govuk-button govuk-button--secondary" type="button">Right</button>
+  </Tooltip>
+</div>`,
     example: () => <TooltipExample />,
     api: [
       { name: 'title', type: 'ReactNode', description: 'Content of the tooltip.' },

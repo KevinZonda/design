@@ -180,7 +180,7 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Make secondary information available without showing it by default.',
     whenToUse: 'Use for information only some users need. Do not hide information most users must read to complete the task.',
     howItWorks: 'This uses the native details and summary elements, so the basic interaction works without JavaScript.',
-    code: `<Details summary="Help with nationality">We need this information to...</Details>`,
+    code: `<Details summary="Help with nationality">We need to know your nationality so we can work out which elections you are entitled to vote in.</Details>`,
     example: () => <Details summary="Help with nationality">We need to know your nationality so we can work out which elections you are entitled to vote in.</Details>,
     api: [text('summary', 'Visible disclosure label.'), text('children', 'Content revealed when expanded.'), { name: 'open', type: 'boolean', description: 'Initial native open state.' }, { name: 'onToggle', type: 'ReactEventHandler<HTMLDetailsElement>', description: 'Native toggle event; read currentTarget.open for the new state.' }, { name: 'ref', type: 'Ref<HTMLDetailsElement>', description: 'Native details element.' }],
   },
