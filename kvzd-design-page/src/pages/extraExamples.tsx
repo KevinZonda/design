@@ -41,29 +41,29 @@ export function SwitchExample() {
   return <div className="switch-example">
     <div className="switch-example__row">
       <Switch aria-label="Small email notifications switch" size="s" checked={email} onChange={setEmail} />
-      <Text>Small</Text>
+      <Text style={{ marginBottom: 0 }}>Small</Text>
     </div>
     <div className="switch-example__row">
       <Switch aria-label="Medium SMS notifications switch" checked={sms} onChange={setSms} checkedChildren="On" unCheckedChildren="Off">SMS notifications</Switch>
-      <Text>Medium with checked and unchecked text</Text>
+      <Text style={{ marginBottom: 0 }}>Medium with checked and unchecked text</Text>
     </div>
     <div className="switch-example__row">
       <Switch aria-label="Large loading switch" size="l" loading />
-      <Text>Large and loading</Text>
+      <Text style={{ marginBottom: 0 }}>Large and loading</Text>
     </div>
     <div className="switch-example__row">
       <Switch aria-label="Disabled switch" disabled />
-      <Text>Disabled</Text>
+      <Text style={{ marginBottom: 0 }}>Disabled</Text>
     </div>
   </div>
 }
 
 export function TooltipExample() {
   return <div className="tooltip-example">
-    <Tooltip title="Opens above the trigger" placement="top"><Button variant="secondary">Top</Button></Tooltip>
-    <Tooltip title="Opens below the trigger" placement="bottom"><Button variant="secondary">Bottom</Button></Tooltip>
-    <Tooltip title="Opens to the left" placement="left"><Button variant="secondary">Left</Button></Tooltip>
-    <Tooltip title="Opens to the right" placement="right"><Button variant="secondary">Right</Button></Tooltip>
+    <Tooltip title="Opens above the trigger" placement="top"><Button variant="secondary" style={{ marginBottom: 0 }}>Top</Button></Tooltip>
+    <Tooltip title="Opens below the trigger" placement="bottom"><Button variant="secondary" style={{ marginBottom: 0 }}>Bottom</Button></Tooltip>
+    <Tooltip title="Opens to the left" placement="left"><Button variant="secondary" style={{ marginBottom: 0 }}>Left</Button></Tooltip>
+    <Tooltip title="Opens to the right" placement="right"><Button variant="secondary" style={{ marginBottom: 0 }}>Right</Button></Tooltip>
   </div>
 }
 
@@ -190,6 +190,6 @@ export function AvatarExample() {
     <Avatar size="l" bgColor="#1d70b8">AK</Avatar>
     <Avatar shape="square" size="l" />
     <Avatar size="s" />
-    <Text>Image, initials, square fallback and small sizes</Text>
+    <Text style={{ marginBottom: 0, marginLeft: 8 }}>Image, initials, square fallback and small sizes</Text>
   </div>
 }

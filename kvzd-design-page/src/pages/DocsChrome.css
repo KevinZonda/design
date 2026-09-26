@@ -6,9 +6,7 @@
 .docs-brand-mark { font-size: 30px; line-height: 1; font-weight: 700; }
 .docs-header .docs-brand-tag { color: inherit; font-size: 14px; }
 .site-search { position: relative; width: 370px; max-width: 100%; margin: 10px 0; color: var(--govuk-surface-text-colour); }
-.site-search .govuk-form-group { margin: 0; }
-.site-search input { box-sizing: border-box; width: 100%; height: 40px; margin: 0; border: 2px solid var(--govuk-body-background-colour); border-radius: 0; appearance: none; color: var(--govuk-surface-text-colour); background: var(--govuk-body-background-colour); font: inherit; font-size: 19px; }
-.site-search input:focus { outline: 3px solid var(--govuk-focus-colour); outline-offset: 0; box-shadow: inset 0 0 0 1px var(--govuk-input-border-colour); }
+.site-search__input:focus { outline: 3px solid var(--govuk-focus-colour); outline-offset: 0; box-shadow: inset 0 0 0 1px var(--govuk-input-border-colour); }
 .site-search__results { position: absolute; z-index: 20; top: calc(100% + 4px); right: 0; left: 0; border: 2px solid var(--govuk-input-border-colour); background: var(--govuk-body-background-colour); box-shadow: 0 4px 0 color-mix(in srgb, var(--govuk-surface-text-colour) 20%, transparent); }
 .site-search__results a { display: block; padding: 10px 12px 9px; border-bottom: 1px solid var(--govuk-surface-border-colour); color: var(--govuk-link-colour); text-decoration: none; }
 .site-search__results a:last-child { border-bottom: 0; }

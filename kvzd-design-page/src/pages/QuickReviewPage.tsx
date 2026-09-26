@@ -48,6 +48,7 @@ export function QuickReviewPage() {
           <div className="review-filter">
             <SearchInput
               className="review-filter__search"
+              styles={{ root: { marginBottom: 10 } }}
               id="component-search"
               label={message(locale, 'filterComponents')}
               labelSize="s"

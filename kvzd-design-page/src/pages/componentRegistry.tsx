@@ -132,14 +132,14 @@ export const componentDocs: ComponentDoc[] = [
 </ButtonGroup>
 
 <div className="button-examples__variants">
-  <Button disabled>Disabled button</Button>
-  <Button variant="warning">Delete account</Button>
+  <Button disabled style={{ marginBottom: 0 }}>Disabled button</Button>
+  <Button variant="warning" style={{ marginBottom: 0 }}>Delete account</Button>
   <div className="button-examples__inverse">
-    <Button variant="inverse">Create an account</Button>
+    <Button variant="inverse" style={{ marginBottom: 0 }}>Create an account</Button>
   </div>
 </div>
 </div>`,
-    example: () => <div className="button-examples"><Button href="#start" startButton>Start now</Button><ButtonGroup><Button htmlType="submit">Save and continue</Button><Button variant="secondary">Save as draft</Button><Link href="#cancel">Cancel</Link></ButtonGroup><div className="button-examples__variants"><Button disabled>Disabled button</Button><Button variant="warning">Delete account</Button><div className="button-examples__inverse"><Button variant="inverse">Create an account</Button></div></div></div>,
+    example: () => <div className="button-examples"><Button href="#start" startButton>Start now</Button><ButtonGroup><Button htmlType="submit">Save and continue</Button><Button variant="secondary">Save as draft</Button><Link href="#cancel">Cancel</Link></ButtonGroup><div className="button-examples__variants"><Button disabled style={{ marginBottom: 0 }}>Disabled button</Button><Button variant="warning" style={{ marginBottom: 0 }}>Delete account</Button><div className="button-examples__inverse"><Button variant="inverse" style={{ marginBottom: 0 }}>Create an account</Button></div></div></div>,
     api: [text('children', 'Button label.'), { name: 'variant', type: `'primary' | 'secondary' | 'warning' | 'inverse'`, defaultValue: 'primary', description: 'Visual hierarchy.' }, { name: 'href', type: 'string', description: 'Renders a link styled as a button.' }, { name: 'htmlType', type: `'button' | 'submit' | 'reset'`, defaultValue: 'button', description: 'Native button type when href is not supplied.' }, { name: 'startButton', type: 'boolean', defaultValue: 'false', description: 'Use start button styling and the arrow icon.' }, { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show a spinner, block clicks and set aria-busy while work is in progress.' }, { name: 'icon', type: 'ReactNode', description: 'Icon rendered inside the button; replaced by the spinner while loading.' }, { name: 'iconPosition', type: `'left' | 'right'`, defaultValue: 'left', description: 'Side of the label where the icon appears.' }, { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disables the button and adds aria-disabled. Links render inert and ignore clicks.' }, { name: 'preventDoubleClick', type: 'boolean', defaultValue: 'false', description: 'Ignore another button click within one second. Not applied to links.' }],
   },
   {
@@ -352,8 +352,8 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Let users enter a search query with a recognisable icon.',
     whenToUse: 'Use for searching or filtering content. Give the field a specific label; place result suggestions and search behaviour in the parent.',
     howItWorks: 'The native search input keeps keyboard and browser behaviour. The icon is decorative and can sit on either side, be replaced or be hidden.',
-    code: `<div className="search-input-examples">\n  <SearchInput label="Search services" name="query" placeholder="Enter a service" />\n  <SearchInput label="Filter results" iconPosition="right" placeholder="Filter by keyword" />\n</div>`,
-    example: () => <div className="search-input-examples"><SearchInput label="Search services" name="query" placeholder="Enter a service" /><SearchInput label="Filter results" iconPosition="right" placeholder="Filter by keyword" /></div>,
+    code: `<div className="search-input-examples">\n  <SearchInput label="Search services" name="query" placeholder="Enter a service" />\n  <SearchInput label="Filter results" iconPosition="right" placeholder="Filter by keyword" styles={{ root: { marginBottom: 0 } }} />\n</div>`,
+    example: () => <div className="search-input-examples"><SearchInput label="Search services" name="query" placeholder="Enter a service" /><SearchInput label="Filter results" iconPosition="right" placeholder="Filter by keyword" styles={{ root: { marginBottom: 0 } }} /></div>,
     api: [text('label', 'Accessible search field label.'), { name: 'iconPosition', type: `'left' | 'right'`, defaultValue: 'left', description: 'Side of the input containing the icon.' }, { name: 'icon', type: 'ReactNode', defaultValue: 'Search icon', description: 'Decorative icon. Pass null to hide it.' }, { name: 'visuallyHiddenLabel', type: 'boolean', defaultValue: 'false', description: 'Hide the label visually while keeping it available to assistive technology.' }, text('hint', 'Optional supporting guidance.'), text('error', 'Validation error.'), { name: 'status', type: `'error' | 'warning'`, description: 'Visual state; error also sets aria-invalid, warning only changes the border colour.' }, { name: 'value / onChange', type: 'native input props', description: 'Use controlled or uncontrolled search input behaviour.' }, { name: 'onSearch', type: '(value: string) => void', description: 'Called with the current value when Enter is pressed or the search button is clicked.' }, { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show a spinner in place of the icon.' }, { name: 'enterButton', type: 'ReactNode', description: 'Content of a dedicated search button shown beside the field; pressing it triggers onSearch.' }],
   },
   {

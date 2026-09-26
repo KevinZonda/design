@@ -42,7 +42,7 @@ function ApiSection() {
   return <section className="component-api" aria-labelledby="api">
     <H2 variant="l" id="api">{message(locale, 'reactApi')}</H2>
     <Paragraph>{message(locale, 'apiIntro')}</Paragraph>
-    <div className="api-table-scroll"><Table rowKey={(row) => `${row.component}-${row.name}`} columns={[
+    <div className="api-table-scroll"><Table styles={{ root: { minWidth: 680 } }} rowKey={(row) => `${row.component}-${row.name}`} columns={[
       { title: message(locale, 'property'), dataIndex: 'name', rowHeader: true, render: (value) => <code>{String(value)}</code> },
       { title: message(locale, 'type'), dataIndex: 'type', render: (value) => <code>{String(value)}</code> },
       { title: message(locale, 'default'), dataIndex: 'defaultValue', render: (value) => value ? <code>{String(value)}</code> : '-' },
