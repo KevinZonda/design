@@ -1,6 +1,6 @@
 import { useEffect, type ReactNode } from 'react'
 import { Link, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
-import { Typography } from '@kevinzonda/design'
+import { H1, H2, Paragraph } from '@kevinzonda/design'
 import { Breadcrumbs, Button, Pagination, Table, Tag } from '@kevinzonda/design/components'
 import { FancyTabs, Note, Sidebar, CodeBox } from '@kevinzonda/design/extraComponents'
 import { componentBySlug, componentDocs, type ComponentDoc } from './componentRegistry'
@@ -69,9 +69,9 @@ function OverviewPage() {
   useEffect(() => { document.title = pageTitle(message(locale, 'components'), locale) }, [locale])
   return <DocsLayout>
     <div className="component-overview">
-      <Typography.Title level={1} variant="xl">{message(locale, 'components')}</Typography.Title>
-      <Typography.Paragraph variant="l">{message(locale, 'componentsIntro')}</Typography.Paragraph>
-      <Typography.Paragraph>{message(locale, 'componentsDetail')}</Typography.Paragraph>
+      <H1 variant="xl">{message(locale, 'components')}</H1>
+      <Paragraph variant="l">{message(locale, 'componentsIntro')}</Paragraph>
+      <Paragraph>{message(locale, 'componentsDetail')}</Paragraph>
       <div className="overview-actions"><Button href={sitePath(localizedPath('/quick-review/', locale))}>{message(locale, 'openQuickReview')}</Button><span>{message(locale, 'quickReviewHint')}</span></div>
       <ul className="official-component-list">{componentDocs.map((component) => <li key={component.slug}><Link className="govuk-link" to={localizedPath(`/components/${component.slug}/`, locale)}>{component.name}</Link>{component.status === 'trial' && <Tag color="orange">{message(locale, 'trial')}</Tag>}<p>{localizedComponent(component, locale).summary}</p></li>)}</ul>
     </div>
@@ -81,7 +81,7 @@ function OverviewPage() {
 function ExampleBlock({ component, guidanceUrl }: { component: ComponentDoc | ExtraComponentDoc; guidanceUrl?: string }) {
   const locale = useLocale()
   return <section className="component-example" aria-labelledby="example-title">
-    <div className="example-heading"><Typography.Title level={2} variant="l" id="example-title">{message(locale, 'example')}</Typography.Title>{guidanceUrl && <a className="govuk-link" href={guidanceUrl} target="_blank" rel="noreferrer">{message(locale, 'guidance')}</a>}</div>
+    <div className="example-heading"><H2 variant="l" id="example-title">{message(locale, 'example')}</H2>{guidanceUrl && <a className="govuk-link" href={guidanceUrl} target="_blank" rel="noreferrer">{message(locale, 'guidance')}</a>}</div>
     <FancyTabs items={[
       { key: 'example', label: message(locale, 'preview'), children: <div className={`example-canvas ${component.wide ? 'example-canvas--wide' : ''}`}>{component.example()}</div> },
       { key: 'react', label: 'React', children: <CodeBlock slug={component.slug} code={component.code} /> },
@@ -92,8 +92,8 @@ function ExampleBlock({ component, guidanceUrl }: { component: ComponentDoc | Ex
 function ApiTable({ component }: { component: ComponentDoc | ExtraComponentDoc }) {
   const locale = useLocale()
   return <section className="component-api" aria-labelledby="api-title">
-    <Typography.Title level={2} variant="l" id="api-title">React API</Typography.Title>
-    <Typography.Paragraph>{message(locale, 'apiIntro')}</Typography.Paragraph>
+    <H2 variant="l" id="api-title">React API</H2>
+    <Paragraph>{message(locale, 'apiIntro')}</Paragraph>
     <div className="api-table-scroll"><Table rowKey="name" columns={[
       { title: message(locale, 'property'), dataIndex: 'name', rowHeader: true, render: (value) => <code>{String(value)}</code> },
       { title: message(locale, 'type'), dataIndex: 'type', render: (value) => <code>{String(value)}</code> },
@@ -113,12 +113,12 @@ function ComponentPage({ component }: { component: ComponentDoc }) {
   return <DocsLayout currentSlug={component.slug}>
     <article className="component-doc">
       <Breadcrumbs className="doc-breadcrumbs" items={[{ label: message(locale, 'components'), href: sitePath(localizedPath('/components/', locale)) }, { label: component.name, current: true }]} />
-      <div className="component-title-row"><Typography.Title level={1} variant="xl">{component.name}</Typography.Title>{component.status === 'trial' && <Tag color="orange">{message(locale, 'trial')}</Tag>}</div>
-      <Typography.Paragraph variant="l" className="component-summary">{doc.summary}</Typography.Paragraph>
+      <div className="component-title-row"><H1 variant="xl">{component.name}</H1>{component.status === 'trial' && <Tag color="orange">{message(locale, 'trial')}</Tag>}</div>
+      <Paragraph variant="l" className="component-summary">{doc.summary}</Paragraph>
       <ExampleBlock component={component} guidanceUrl={component.guidanceUrl === null ? undefined : component.guidanceUrl ?? `https://design-system.service.gov.uk/components/${component.slug}/`} />
       <ApiTable component={component} />
-      <section className="guidance-section"><Typography.Title level={2} variant="l">{message(locale, 'whenToUse')}</Typography.Title><Typography.Paragraph>{doc.whenToUse}</Typography.Paragraph></section>
-      <section className="guidance-section"><Typography.Title level={2} variant="l">{message(locale, 'howItWorks')}</Typography.Title><Typography.Paragraph>{doc.howItWorks}</Typography.Paragraph><Note className="implementation-note" title={message(locale, 'implementation')}><p>{message(locale, 'implementationDetail')}</p></Note></section>
+      <section className="guidance-section"><H2 variant="l">{message(locale, 'whenToUse')}</H2><Paragraph>{doc.whenToUse}</Paragraph></section>
+      <section className="guidance-section"><H2 variant="l">{message(locale, 'howItWorks')}</H2><Paragraph>{doc.howItWorks}</Paragraph><Note className="implementation-note" title={message(locale, 'implementation')}><p>{message(locale, 'implementationDetail')}</p></Note></section>
       <Pagination className="component-pagination" label={message(locale, 'componentPages')} previous={previous ? { href: pathFor(previous.slug, locale), text: message(locale, 'previousComponent'), label: previous.name } : undefined} next={next ? { href: pathFor(next.slug, locale), text: message(locale, 'nextComponent'), label: next.name } : undefined} />
     </article>
   </DocsLayout>
@@ -132,9 +132,9 @@ function ExtraOverviewPage() {
   if (extraComponentBySlug.has(legacySlug)) return <Navigate to={localizedPath(`/extra-components/${legacySlug}/${hash.endsWith('-api') ? '#api-title' : ''}`, locale)} replace />
   return <DocsLayout currentSection="extra-components">
     <div className="component-overview">
-      <Typography.Title level={1} variant="xl">{message(locale, 'extraComponents')}</Typography.Title>
-      <Typography.Paragraph variant="l">{message(locale, 'extraIntro')}</Typography.Paragraph>
-      <Typography.Paragraph>{message(locale, 'extraDetail')}</Typography.Paragraph>
+      <H1 variant="xl">{message(locale, 'extraComponents')}</H1>
+      <Paragraph variant="l">{message(locale, 'extraIntro')}</Paragraph>
+      <Paragraph>{message(locale, 'extraDetail')}</Paragraph>
       <ul className="official-component-list">{extraComponentDocs.map((component) => <li key={component.slug}><Link className="govuk-link" to={localizedPath(`/extra-components/${component.slug}/`, locale)}>{component.name}</Link><p>{localizedExtraComponent(component, locale).summary}</p></li>)}</ul>
     </div>
   </DocsLayout>
@@ -150,12 +150,12 @@ function ExtraComponentPage({ component }: { component: ExtraComponentDoc }) {
   return <DocsLayout currentSection="extra-components" currentSlug={component.slug}>
     <article className="component-doc">
       <Breadcrumbs className="doc-breadcrumbs" items={[{ label: message(locale, 'extraComponents'), href: sitePath(localizedPath('/extra-components/', locale)) }, { label: component.name, current: true }]} />
-      <Typography.Title level={1} variant="xl">{component.name}</Typography.Title>
-      <Typography.Paragraph variant="l" className="component-summary">{doc.summary}</Typography.Paragraph>
+      <H1 variant="xl">{component.name}</H1>
+      <Paragraph variant="l" className="component-summary">{doc.summary}</Paragraph>
       <ExampleBlock component={component} />
       <ApiTable component={component} />
-      <section className="guidance-section" aria-labelledby="guidance-title"><Typography.Title level={2} variant="l" id="guidance-title">{message(locale, 'whenToUse')}</Typography.Title><Typography.Paragraph>{doc.whenToUse}</Typography.Paragraph></section>
-      <section className="guidance-section"><Typography.Title level={2} variant="l">{message(locale, 'howItWorks')}</Typography.Title><Typography.Paragraph>{doc.howItWorks}</Typography.Paragraph></section>
+      <section className="guidance-section" aria-labelledby="guidance-title"><H2 variant="l" id="guidance-title">{message(locale, 'whenToUse')}</H2><Paragraph>{doc.whenToUse}</Paragraph></section>
+      <section className="guidance-section"><H2 variant="l">{message(locale, 'howItWorks')}</H2><Paragraph>{doc.howItWorks}</Paragraph></section>
       <Pagination className="component-pagination" label={message(locale, 'extraComponentPages')} previous={previous ? { href: extraPathFor(previous.slug, locale), text: message(locale, 'previousComponent'), label: previous.name } : undefined} next={next ? { href: extraPathFor(next.slug, locale), text: message(locale, 'nextComponent'), label: next.name } : undefined} />
     </article>
   </DocsLayout>
@@ -169,7 +169,7 @@ function NotFoundPage({ section = 'components' }: { section?: DocsSection }) {
   const locale = useLocale()
   useEffect(() => { document.title = pageTitle(message(locale, 'notFound'), locale) }, [locale])
   const sectionLabel = message(locale, section === 'extra-components' ? 'extraComponents' : 'components')
-  return <DocsLayout currentSection={section}><Typography.Title level={1} variant="xl">{message(locale, 'notFound')}</Typography.Title><Typography.Paragraph>{message(locale, 'notFoundDetail')}</Typography.Paragraph><Link className="govuk-link" to={localizedPath(section === 'extra-components' ? '/extra-components/' : '/components/', locale)}>{message(locale, 'returnTo')}{locale === 'zh' ? '' : ' '}{sectionLabel}</Link></DocsLayout>
+  return <DocsLayout currentSection={section}><H1 variant="xl">{message(locale, 'notFound')}</H1><Paragraph>{message(locale, 'notFoundDetail')}</Paragraph><Link className="govuk-link" to={localizedPath(section === 'extra-components' ? '/extra-components/' : '/components/', locale)}>{message(locale, 'returnTo')}{locale === 'zh' ? '' : ' '}{sectionLabel}</Link></DocsLayout>
 }
 
 function ComponentRoute() {

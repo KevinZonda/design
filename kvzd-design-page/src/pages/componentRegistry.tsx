@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Typography } from '@kevinzonda/design'
+import { H2, Paragraph } from '@kevinzonda/design'
 import {
   Accordion,
   BackLink,
@@ -69,7 +69,7 @@ const value = (description = 'Controlled value.'): ApiProp => ({ name: 'value', 
 const onChange = (description = 'Called when the value changes.'): ApiProp => ({ name: 'onChange', type: '(value) => void', description })
 
 const caseTable = (title: string, rows: Array<{ manager: string; opened: number; closed: number }>) => <>
-  <Typography.Title level={2} variant="l">{title}</Typography.Title>
+  <H2 variant="l">{title}</H2>
   <Table columns={[{ title: 'Case manager', dataIndex: 'manager' }, { title: 'Cases opened', dataIndex: 'opened' }, { title: 'Cases closed', dataIndex: 'closed' }]} dataSource={rows} />
 </>
 
@@ -89,12 +89,12 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Let users show and hide sections of related content on a page.',
     whenToUse: 'Use an accordion when users need only a few sections at a time and the page would otherwise be difficult to scan. Prefer normal headings when most users need all the content.',
     howItWorks: 'Each section has a real button, exposes its expanded state and keeps the content in the document. React owns the state, including the show-all control.',
-    code: `<Accordion items={[\n  { key: 'writing', heading: 'Writing well for the web', children: <Typography.Paragraph>This is the content for Writing well for the web.</Typography.Paragraph> },\n  { key: 'specialists', heading: 'Writing well for specialists', children: <Typography.Paragraph>This is the content for Writing well for specialists.</Typography.Paragraph> },\n  { key: 'audience', heading: 'Know your audience', children: <Typography.Paragraph>This is the content for Know your audience.</Typography.Paragraph> },\n  { key: 'reading', heading: 'How people read', children: <Typography.Paragraph>This is the content for How people read.</Typography.Paragraph> },\n]} />`,
+    code: `<Accordion items={[\n  { key: 'writing', heading: 'Writing well for the web', children: <Paragraph>This is the content for Writing well for the web.</Paragraph> },\n  { key: 'specialists', heading: 'Writing well for specialists', children: <Paragraph>This is the content for Writing well for specialists.</Paragraph> },\n  { key: 'audience', heading: 'Know your audience', children: <Paragraph>This is the content for Know your audience.</Paragraph> },\n  { key: 'reading', heading: 'How people read', children: <Paragraph>This is the content for How people read.</Paragraph> },\n]} />`,
     example: () => <Accordion items={[
-      { key: 'writing', heading: 'Writing well for the web', children: <Typography.Paragraph>This is the content for Writing well for the web.</Typography.Paragraph> },
-      { key: 'specialists', heading: 'Writing well for specialists', children: <Typography.Paragraph>This is the content for Writing well for specialists.</Typography.Paragraph> },
-      { key: 'audience', heading: 'Know your audience', children: <Typography.Paragraph>This is the content for Know your audience.</Typography.Paragraph> },
-      { key: 'reading', heading: 'How people read', children: <Typography.Paragraph>This is the content for How people read.</Typography.Paragraph> },
+      { key: 'writing', heading: 'Writing well for the web', children: <Paragraph>This is the content for Writing well for the web.</Paragraph> },
+      { key: 'specialists', heading: 'Writing well for specialists', children: <Paragraph>This is the content for Writing well for specialists.</Paragraph> },
+      { key: 'audience', heading: 'Know your audience', children: <Paragraph>This is the content for Know your audience.</Paragraph> },
+      { key: 'reading', heading: 'How people read', children: <Paragraph>This is the content for How people read.</Paragraph> },
     ]} />,
     api: [items('Accordion sections with a key, heading, optional summary and content.'), { name: 'showAllText', type: 'string', defaultValue: 'Show all sections', description: 'Label used to expand every section.' }, { name: 'openKeys', type: 'string[]', description: 'Optional controlled list of expanded section keys.' }, { name: 'onChange', type: '(openKeys: string[]) => void', description: 'Called after a section or the show-all control is toggled.' }, { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Accordion root element.' }],
   },
@@ -291,8 +291,8 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Tell users about an important change or successful action.',
     whenToUse: 'Use at the top of the main content for information needing attention. Use the success variant only after a completed action.',
     howItWorks: 'The success variant uses an alert role; informational banners use a labelled region to avoid unnecessary interruption.',
-    code: `<NotificationBanner type="success">\n  <h3 className="govuk-notification-banner__heading">Your application has been sent.</h3>\n  <Typography.Paragraph>You will receive a confirmation email.</Typography.Paragraph>\n</NotificationBanner>`,
-    example: () => <NotificationBanner type="success"><h3 className="govuk-notification-banner__heading">Your application has been sent.</h3><Typography.Paragraph>You will receive a confirmation email.</Typography.Paragraph></NotificationBanner>,
+    code: `<NotificationBanner type="success">\n  <h3 className="govuk-notification-banner__heading">Your application has been sent.</h3>\n  <Paragraph>You will receive a confirmation email.</Paragraph>\n</NotificationBanner>`,
+    example: () => <NotificationBanner type="success"><h3 className="govuk-notification-banner__heading">Your application has been sent.</h3><Paragraph>You will receive a confirmation email.</Paragraph></NotificationBanner>,
     api: [{ name: 'type', type: `'info' | 'success'`, defaultValue: 'info', description: 'Semantic banner type.' }, text('title', 'Banner heading.'), text('children', 'Banner content.')],
   },
   {
@@ -313,10 +313,10 @@ export const componentDocs: ComponentDoc[] = [
 <Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel>
 
 <Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" variant="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}>
-  <Typography.Paragraph>You entered your age as <strong>109</strong>.</Typography.Paragraph>
+  <Paragraph>You entered your age as <strong>109</strong>.</Paragraph>
 </Panel>
 </div>`,
-    example: () => <div style={{ display: 'grid', gap: 30 }}><Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel><Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" variant="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}><Typography.Paragraph>You entered your age as <strong>109</strong>.</Typography.Paragraph></Panel></div>,
+    example: () => <div style={{ display: 'grid', gap: 30 }}><Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel><Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" variant="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}><Paragraph>You entered your age as <strong>109</strong>.</Paragraph></Panel></div>,
     api: [text('title', 'Panel heading.'), { name: 'variant', type: `'confirmation' | 'interruption'`, defaultValue: 'confirmation', description: 'Panel style and purpose.' }, { name: 'headingLevel', type: '1 | 2 | 3 | 4 | 5 | 6', defaultValue: '1', description: 'Semantic heading level.' }, text('children', 'Supporting panel content.'), { name: 'actions', type: 'ReactNode', description: 'Buttons or links shown in the panel actions area; use inverse styles for interruption panels.' }],
   },
   {
@@ -416,7 +416,7 @@ export const componentDocs: ComponentDoc[] = [
     whenToUse: 'Use when users benefit from comparing a small number of peer sections. Avoid tabs for sequential steps.',
     howItWorks: 'At tablet widths and above, the selected tab controls a labelled panel. On smaller screens the component becomes a table of contents and shows every panel in order.',
     code: `const caseTable = (title, rows) => <>
-  <Typography.Title level={2} variant="l">{title}</Typography.Title>
+  <H2 variant="l">{title}</H2>
   <Table columns={[
     { title: 'Case manager', dataIndex: 'manager' },
     { title: 'Cases opened', dataIndex: 'opened' },
@@ -436,15 +436,15 @@ export const componentDocs: ComponentDoc[] = [
     { manager: 'Rita Patel', opened: 24, closed: 27 },
   ]) },
   { key: 'past-year', label: 'Past year', children: <>
-    <Typography.Title level={2} variant="l">Past year</Typography.Title>
-    <Typography.Paragraph>There is no data for this year yet, check back later</Typography.Paragraph>
+    <H2 variant="l">Past year</H2>
+    <Paragraph>There is no data for this year yet, check back later</Paragraph>
   </> },
 ]} />`,
     example: () => <Tabs items={[
       { key: 'past-day', label: 'Past day', children: caseTable('Past day', [{ manager: 'David Francis', opened: 3, closed: 0 }, { manager: 'Paul Farmer', opened: 1, closed: 0 }, { manager: 'Rita Patel', opened: 2, closed: 0 }]) },
       { key: 'past-week', label: 'Past week', children: caseTable('Past week', [{ manager: 'David Francis', opened: 24, closed: 18 }, { manager: 'Paul Farmer', opened: 16, closed: 20 }, { manager: 'Rita Patel', opened: 24, closed: 27 }]) },
       { key: 'past-month', label: 'Past month', children: caseTable('Past month', [{ manager: 'David Francis', opened: 98, closed: 95 }, { manager: 'Paul Farmer', opened: 122, closed: 131 }, { manager: 'Rita Patel', opened: 126, closed: 142 }]) },
-      { key: 'past-year', label: 'Past year', children: <><Typography.Title level={2} variant="l">Past year</Typography.Title><Typography.Paragraph>There is no data for this year yet, check back later</Typography.Paragraph></> },
+      { key: 'past-year', label: 'Past year', children: <><H2 variant="l">Past year</H2><Paragraph>There is no data for this year yet, check back later</Paragraph></> },
     ]} />,
     api: [items('Tab keys, labels and panel content. Items can be disabled to make their tab non-interactive.'), { name: 'activeKey', type: 'string', description: 'Controlled active tab.' }, { name: 'defaultActiveKey', type: 'string', description: 'Initial active tab.' }, onChange('Called with the selected tab key.'), { name: 'destroyOnClose', type: 'boolean', defaultValue: 'false', description: 'Remove inactive panel content from the DOM instead of hiding it.' }],
     wide: true,

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Typography } from '@kevinzonda/design'
+import { H1, H2, H3, Paragraph } from '@kevinzonda/design'
 import { SearchInput, Tag } from '@kevinzonda/design/components'
 import { ShowcaseBox, Sidebar } from '@kevinzonda/design/extraComponents'
 import './QuickReviewPage.css'
@@ -37,8 +37,8 @@ export function QuickReviewPage() {
         }))} />
 
         <main id="main-content" className="main-content">
-          <Typography.Title level={1} variant="xl">{message(locale, 'quickReview')}</Typography.Title>
-          <Typography.Paragraph variant="l" className="intro">{message(locale, 'reviewIntro')}</Typography.Paragraph>
+          <H1 variant="xl">{message(locale, 'quickReview')}</H1>
+          <Paragraph variant="l" className="intro">{message(locale, 'reviewIntro')}</Paragraph>
           <div className="release-note">
             <Tag color="blue">{message(locale, 'baseline')}</Tag>
             <span>{message(locale, 'lockedTo')}</span>
@@ -60,7 +60,7 @@ export function QuickReviewPage() {
           </div>
 
           <section className="component-index" aria-labelledby="index-title">
-            <Typography.Title level={2} variant="l" id="index-title">{message(locale, 'componentIndex')}</Typography.Title>
+            <H2 variant="l" id="index-title">{message(locale, 'componentIndex')}</H2>
             <ul>
               {filteredComponents.map((component) => (
                 <li key={component.slug}><a className="govuk-link govuk-link--no-visited-state" href={`#${component.slug}`}>{component.name}</a></li>
@@ -71,7 +71,7 @@ export function QuickReviewPage() {
           <section className="review-gallery" aria-labelledby="review-gallery-title">
             <div className="review-gallery__heading">
               <div>
-                <Typography.Title level={2} variant="l" id="review-gallery-title">{message(locale, 'allComponents')}</Typography.Title>
+                <H2 variant="l" id="review-gallery-title">{message(locale, 'allComponents')}</H2>
               </div>
               <span aria-live="polite">{filteredComponents.length} {message(locale, 'shown')}</span>
             </div>
@@ -101,8 +101,8 @@ export function QuickReviewPage() {
               </div>
             ) : (
               <div className="review-empty" role="status">
-                <Typography.Title level={3} variant="m">{message(locale, 'noComponents')}</Typography.Title>
-                <Typography.Paragraph>{message(locale, 'tryDifferent')}</Typography.Paragraph>
+                <H3 variant="m">{message(locale, 'noComponents')}</H3>
+                <Paragraph>{message(locale, 'tryDifferent')}</Paragraph>
               </div>
             )}
           </section>

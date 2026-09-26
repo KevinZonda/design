@@ -1,5 +1,5 @@
 import { useState, type Key } from 'react'
-import { Typography } from '@kevinzonda/design'
+import { Paragraph, Text } from '@kevinzonda/design'
 import { Button, Input } from '@kevinzonda/design/components'
 import { Alert, Avatar, Dropdown, FancyTable, Form, Menu, Modal, Progress, Result, Steps, Switch, Tooltip } from '@kevinzonda/design/extraComponents'
 
@@ -15,7 +15,7 @@ export function FormExample() {
       </Form.Item>
       <Button htmlType="submit">Continue</Button>
     </Form>
-    {submitted && <Typography.Paragraph role="status">{submitted}</Typography.Paragraph>}
+    {submitted && <Paragraph role="status">{submitted}</Paragraph>}
   </>
 }
 
@@ -30,7 +30,7 @@ export function ModalExample() {
         setConfirming(true)
         setTimeout(() => { setConfirming(false); setOpen(false) }, 1200)
       }}>
-      <Typography.Paragraph>Check the details before continuing. The built-in footer confirm button shows a loading state while the request runs.</Typography.Paragraph>
+      <Paragraph>Check the details before continuing. The built-in footer confirm button shows a loading state while the request runs.</Paragraph>
     </Modal>
   </>
 }
@@ -41,19 +41,19 @@ export function SwitchExample() {
   return <div className="switch-example">
     <div className="switch-example__row">
       <Switch aria-label="Small email notifications switch" size="s" checked={email} onChange={setEmail} />
-      <Typography.Text>Small</Typography.Text>
+      <Text>Small</Text>
     </div>
     <div className="switch-example__row">
       <Switch aria-label="Medium SMS notifications switch" checked={sms} onChange={setSms} checkedChildren="On" unCheckedChildren="Off">SMS notifications</Switch>
-      <Typography.Text>Medium with checked and unchecked text</Typography.Text>
+      <Text>Medium with checked and unchecked text</Text>
     </div>
     <div className="switch-example__row">
       <Switch aria-label="Large loading switch" size="l" loading />
-      <Typography.Text>Large and loading</Typography.Text>
+      <Text>Large and loading</Text>
     </div>
     <div className="switch-example__row">
       <Switch aria-label="Disabled switch" disabled />
-      <Typography.Text>Disabled</Typography.Text>
+      <Text>Disabled</Text>
     </div>
   </div>
 }
@@ -73,7 +73,7 @@ export function MenuExample() {
     { key: 'view', label: 'View record', onClick: () => setSelected('View record selected') },
     { key: 'edit', label: 'Edit record', onClick: () => setSelected('Edit record selected') },
     { key: 'delete', label: 'Delete record', disabled: true },
-  ]} /><Typography.Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected}</Typography.Paragraph></>
+  ]} /><Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected}</Paragraph></>
 }
 
 export function DropdownExample() {
@@ -82,7 +82,7 @@ export function DropdownExample() {
     { key: 'view', label: 'View application' },
     { key: 'download', label: 'Download details' },
   ]} onAction={(key) => setSelected(key === 'view' ? 'View application selected' : 'Download details selected')} />
-    <Typography.Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected}</Typography.Paragraph></>
+    <Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected}</Paragraph></>
 }
 
 const exampleRows = [
@@ -104,7 +104,7 @@ export function FancyTableExample() {
     onSelectionChange={setSelected}
     pageSize={3}
     expandable={{
-      expandedRowRender: (record) => <Typography.Text>Application {record.id} is currently <strong>{record.status.toLowerCase()}</strong>.</Typography.Text>,
+      expandedRowRender: (record) => <Text>Application {record.id} is currently <strong>{record.status.toLowerCase()}</strong>.</Text>,
     }}
     columns={[
       { key: 'id', title: 'Reference', dataIndex: 'id', rowHeader: true, sorter: (a, b) => a.id.localeCompare(b.id) },
@@ -115,7 +115,7 @@ export function FancyTableExample() {
         { label: 'Approved', value: 'Approved' },
       ], onFilter: (value, row) => row.status === value },
     ]}
-  /><Typography.Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected.length} selected</Typography.Paragraph></>
+  /><Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected.length} selected</Paragraph></>
 }
 
 export function AlertExample() {
@@ -190,6 +190,6 @@ export function AvatarExample() {
     <Avatar size="l" bgColor="#1d70b8">AK</Avatar>
     <Avatar shape="square" size="l" />
     <Avatar size="s" />
-    <Typography.Text>Image, initials, square fallback and small sizes</Typography.Text>
+    <Text>Image, initials, square fallback and small sizes</Text>
   </div>
 }
