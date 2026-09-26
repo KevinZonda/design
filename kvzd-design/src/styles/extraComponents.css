@@ -492,14 +492,14 @@
 /* Steps */
 .kvzd-design-steps { display: flex; margin: 0 0 20px; padding: 0; list-style: none; font-family: "GDS Transport", arial, sans-serif; }
 .kvzd-design-steps--vertical { flex-direction: column; }
-.kvzd-design-steps__item { position: relative; flex: 1; display: flex; gap: 8px; padding-bottom: 4px; cursor: pointer; }
+.kvzd-design-steps__item { position: relative; flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding-bottom: 4px; cursor: pointer; }
 .kvzd-design-steps__item--disabled { cursor: not-allowed; color: var(--govuk-secondary-text-colour, #505a5f); }
-.kvzd-design-steps--vertical .kvzd-design-steps__item { flex: none; padding-bottom: 16px; }
-.kvzd-design-steps__tail { position: absolute; top: 12px; left: 24px; right: 4px; height: 2px; background: var(--govuk-border-colour, #b1b4b6); }
+.kvzd-design-steps--vertical .kvzd-design-steps__item { flex: none; flex-direction: row; align-items: flex-start; padding-bottom: 16px; }
+.kvzd-design-steps__tail { position: absolute; top: 11px; left: 24px; right: 4px; height: 2px; background: var(--govuk-border-colour, #b1b4b6); }
 .kvzd-design-steps__item:last-child .kvzd-design-steps__tail { display: none; }
-.kvzd-design-steps--vertical .kvzd-design-steps__tail { top: 26px; left: 11px; right: auto; width: 2px; height: calc(100% - 28px); }
+.kvzd-design-steps--vertical .kvzd-design-steps__tail { top: 26px; left: 11px; right: auto; width: 2px; height: calc(100% - 30px); }
 .kvzd-design-steps--s .kvzd-design-steps__icon { width: 20px; height: 20px; font-size: 0.75rem; }
-.kvzd-design-steps--s .kvzd-design-steps__tail { top: 9px; left: 10px; }
+.kvzd-design-steps--s .kvzd-design-steps__tail { top: 9px; left: 20px; }
 .kvzd-design-steps--s .kvzd-design-steps__title { font-size: 0.875rem; }
 .kvzd-design-steps--s .kvzd-design-steps__description { font-size: 0.75rem; }
 .kvzd-design-steps__icon { position: relative; z-index: 1; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: 2px solid var(--govuk-border-colour, #b1b4b6); border-radius: 50%; background: #ffffff; font-size: 0.875rem; font-weight: 700; line-height: 1; color: var(--govuk-secondary-text-colour, #505a5f); }
