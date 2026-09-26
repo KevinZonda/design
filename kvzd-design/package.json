@@ -37,7 +37,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "vite build --config vite.lib.config.ts && tsc -p tsconfig.lib.json",
+    "build": "vite build --config vite.lib.config.ts && tsc -p tsconfig.lib.json && node scripts/entry-types.mjs",
     "lint": "oxlint src",
     "test": "vitest run"
   },
