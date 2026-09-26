@@ -1,5 +1,6 @@
 import { createElement, forwardRef } from 'react'
 import type { HTMLAttributes, ReactNode } from 'react'
+import { Link } from '../components/Link'
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 export type HeadingVariant = 'xl' | 'l' | 'm' | 's'
@@ -76,4 +77,4 @@ export const Paragraph = forwardRef<HTMLParagraphElement, ParagraphProps>(functi
   ].filter(Boolean).join(' ').trim()} />
 })
 
-export const Typography = { Paragraph, Text, Title }
+export const Typography = { Link, Paragraph, Text, Title }

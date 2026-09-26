@@ -58,6 +58,11 @@ import { Typography } from '@kevinzonda/design'
 <Typography.Paragraph>Use body text for most content.</Typography.Paragraph>
 ```
 
+`Typography.Link` (also exported as `Link`) renders a GOV.UK link: an anchor
+with `href`, a button with only `onClick`, or plain text with neither. Flags
+such as `noVisitedState`, `muted` and `inverse` map to the GOV.UK link
+variants.
+
 ## API principles
 
 - Ant Design-style props such as `items`, `options`, `value`, `onChange`, `status` and `type`.
@@ -186,7 +191,7 @@ Stateful components report changes through `onChange` (`Accordion`),
 Accordion, BackLink, Breadcrumbs, Button, ButtonGroup, CharacterCount, Checkboxes,
 CookieBanner, DateInput, Details, ErrorMessage, ErrorSummary, ExitThisPage,
 Feedback, Fieldset, FileUpload, Footer, Header, Hint, Input,
-InsetText, Label, LanguageNavigation, NotificationBanner, Pagination, Panel,
+InsetText, Label, LanguageNavigation, Link, NotificationBanner, Pagination, Panel,
 PasswordInput, PhaseBanner, Radios, SearchInput, Select, ServiceNavigation, SkipLink,
 SummaryList, Table, Tabs, Tag, TaskList, Textarea and WarningText.
 

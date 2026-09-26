@@ -1,5 +1,6 @@
 export * from './Button'
 export * from './clickBehaviour'
+export * from './Link'
 export * from './Input'
 export * from './SearchInput'
 export * from './styling'
