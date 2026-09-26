@@ -23,7 +23,7 @@ export function ModalExample() {
   const [open, setOpen] = useState(false)
   const [confirming, setConfirming] = useState(false)
   return <>
-    <button className="govuk-button" type="button" onClick={() => setOpen(true)}>Open modal</button>
+    <Button onClick={() => setOpen(true)}>Open modal</Button>
     <Modal open={open} title="Confirm your action" onClose={() => setOpen(false)}
       okText="Confirm" cancelText="Cancel" confirmLoading={confirming}
       onOk={() => {
@@ -60,10 +60,10 @@ export function SwitchExample() {
 
 export function TooltipExample() {
   return <div className="tooltip-example">
-    <Tooltip title="Opens above the trigger" placement="top"><button className="govuk-button govuk-button--secondary" type="button">Top</button></Tooltip>
-    <Tooltip title="Opens below the trigger" placement="bottom"><button className="govuk-button govuk-button--secondary" type="button">Bottom</button></Tooltip>
-    <Tooltip title="Opens to the left" placement="left"><button className="govuk-button govuk-button--secondary" type="button">Left</button></Tooltip>
-    <Tooltip title="Opens to the right" placement="right"><button className="govuk-button govuk-button--secondary" type="button">Right</button></Tooltip>
+    <Tooltip title="Opens above the trigger" placement="top"><Button variant="secondary">Top</Button></Tooltip>
+    <Tooltip title="Opens below the trigger" placement="bottom"><Button variant="secondary">Bottom</Button></Tooltip>
+    <Tooltip title="Opens to the left" placement="left"><Button variant="secondary">Left</Button></Tooltip>
+    <Tooltip title="Opens to the right" placement="right"><Button variant="secondary">Right</Button></Tooltip>
   </div>
 }
 
@@ -125,7 +125,7 @@ export function AlertExample() {
     <Alert type="info" title="New version available">Refresh the page to get the latest changes.</Alert>
     <Alert type="warning" title="Session ending soon">You will be signed out in 5 minutes.</Alert>
     {closed
-      ? <button className="govuk-button govuk-button--secondary" type="button" onClick={() => setClosed(false)}>Restore error alert</button>
+      ? <Button variant="secondary" onClick={() => setClosed(false)}>Restore error alert</Button>
       : <Alert type="error" title="There is a problem" closable onClose={() => setClosed(true)}>Check the details you entered and try again.</Alert>}
   </div>
 }
@@ -171,7 +171,7 @@ export function ResultExample() {
     <Result
       status="success"
       title="Application submitted"
-      extra={<><button className="govuk-button" type="button">View status</button><button className="govuk-button govuk-button--secondary" type="button">Start another</button></>}
+      extra={<><Button>View status</Button><Button variant="secondary">Start another</Button></>}
     >
       Reference KZ-2026-0917. We have emailed a copy of your answers.
     </Result>

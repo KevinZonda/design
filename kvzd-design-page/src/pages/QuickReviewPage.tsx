@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { H1, H2, H3, Paragraph } from '@kevinzonda/design'
+import { Link as GovLink } from '@kevinzonda/design/components'
 import { SearchInput, Tag } from '@kevinzonda/design/components'
 import { ShowcaseBox, Sidebar } from '@kevinzonda/design/extraComponents'
 import './QuickReviewPage.css'
@@ -63,7 +64,7 @@ export function QuickReviewPage() {
             <H2 variant="l" id="index-title">{message(locale, 'componentIndex')}</H2>
             <ul>
               {filteredComponents.map((component) => (
-                <li key={component.slug}><a className="govuk-link govuk-link--no-visited-state" href={`#${component.slug}`}>{component.name}</a></li>
+                <li key={component.slug}><GovLink href={`#${component.slug}`} noVisitedState>{component.name}</GovLink></li>
               ))}
             </ul>
           </section>
@@ -87,7 +88,7 @@ export function QuickReviewPage() {
                       <Link className="govuk-link" to={localizedPath(`/components/${component.slug}/`, locale)}>
                         {message(locale, 'viewDocumentation')}
                       </Link>
-                      <a className="govuk-link review-card__top-link" href="#top">{message(locale, 'backToTop')}</a>
+                      <GovLink href="#top" className="review-card__top-link">{message(locale, 'backToTop')}</GovLink>
                     </>}
                     headerExtra={component.status === 'trial' ? <Tag color="orange">{message(locale, 'trial')}</Tag> : undefined}
                     headingLevel={3}

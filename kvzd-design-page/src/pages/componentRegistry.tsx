@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { H2, Paragraph } from '@kevinzonda/design'
+import { Link } from '@kevinzonda/design/components'
 import {
   Accordion,
   BackLink,
@@ -127,7 +128,7 @@ export const componentDocs: ComponentDoc[] = [
 <ButtonGroup>
   <Button htmlType="submit">Save and continue</Button>
   <Button variant="secondary">Save as draft</Button>
-  <a className="govuk-link" href="#cancel">Cancel</a>
+  <Link href="#cancel">Cancel</Link>
 </ButtonGroup>
 
 <div className="button-examples__variants">
@@ -138,7 +139,7 @@ export const componentDocs: ComponentDoc[] = [
   </div>
 </div>
 </div>`,
-    example: () => <div className="button-examples"><Button href="#start" startButton>Start now</Button><ButtonGroup><Button htmlType="submit">Save and continue</Button><Button variant="secondary">Save as draft</Button><a className="govuk-link" href="#cancel">Cancel</a></ButtonGroup><div className="button-examples__variants"><Button disabled>Disabled button</Button><Button variant="warning">Delete account</Button><div className="button-examples__inverse"><Button variant="inverse">Create an account</Button></div></div></div>,
+    example: () => <div className="button-examples"><Button href="#start" startButton>Start now</Button><ButtonGroup><Button htmlType="submit">Save and continue</Button><Button variant="secondary">Save as draft</Button><Link href="#cancel">Cancel</Link></ButtonGroup><div className="button-examples__variants"><Button disabled>Disabled button</Button><Button variant="warning">Delete account</Button><div className="button-examples__inverse"><Button variant="inverse">Create an account</Button></div></div></div>,
     api: [text('children', 'Button label.'), { name: 'variant', type: `'primary' | 'secondary' | 'warning' | 'inverse'`, defaultValue: 'primary', description: 'Visual hierarchy.' }, { name: 'href', type: 'string', description: 'Renders a link styled as a button.' }, { name: 'htmlType', type: `'button' | 'submit' | 'reset'`, defaultValue: 'button', description: 'Native button type when href is not supplied.' }, { name: 'startButton', type: 'boolean', defaultValue: 'false', description: 'Use start button styling and the arrow icon.' }, { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show a spinner, block clicks and set aria-busy while work is in progress.' }, { name: 'icon', type: 'ReactNode', description: 'Icon rendered inside the button; replaced by the spinner while loading.' }, { name: 'iconPosition', type: `'left' | 'right'`, defaultValue: 'left', description: 'Side of the label where the icon appears.' }, { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disables the button and adds aria-disabled. Links render inert and ignore clicks.' }, { name: 'preventDoubleClick', type: 'boolean', defaultValue: 'false', description: 'Ignore another button click within one second. Not applied to links.' }],
   },
   {
@@ -312,11 +313,11 @@ export const componentDocs: ComponentDoc[] = [
     code: `<div style={{ display: 'grid', gap: 30 }}>
 <Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel>
 
-<Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" variant="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}>
+<Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" variant="inverse">Yes, this is correct</Button><Link href="#change" inverse>No, change my age</Link></ButtonGroup>}>
   <Paragraph>You entered your age as <strong>109</strong>.</Paragraph>
 </Panel>
 </div>`,
-    example: () => <div style={{ display: 'grid', gap: 30 }}><Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel><Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" variant="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}><Paragraph>You entered your age as <strong>109</strong>.</Paragraph></Panel></div>,
+    example: () => <div style={{ display: 'grid', gap: 30 }}><Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel><Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" variant="inverse">Yes, this is correct</Button><Link href="#change" inverse>No, change my age</Link></ButtonGroup>}><Paragraph>You entered your age as <strong>109</strong>.</Paragraph></Panel></div>,
     api: [text('title', 'Panel heading.'), { name: 'variant', type: `'confirmation' | 'interruption'`, defaultValue: 'confirmation', description: 'Panel style and purpose.' }, { name: 'headingLevel', type: '1 | 2 | 3 | 4 | 5 | 6', defaultValue: '1', description: 'Semantic heading level.' }, text('children', 'Supporting panel content.'), { name: 'actions', type: 'ReactNode', description: 'Buttons or links shown in the panel actions area; use inverse styles for interruption panels.' }],
   },
   {
@@ -333,8 +334,8 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Tell users a service is new or still being improved.',
     whenToUse: 'Use an alpha or beta banner while a service is being tested and provide a route for feedback.',
     howItWorks: 'A compact status tag is followed by a short explanation and feedback link.',
-    code: `<PhaseBanner phase="Alpha">This is a new service - your <a className="govuk-link" href="#feedback">feedback</a> will help us to improve it.</PhaseBanner>`,
-    example: () => <PhaseBanner phase="Alpha">This is a new service - your <a className="govuk-link" href="#feedback">feedback</a> will help us to improve it.</PhaseBanner>,
+    code: `<PhaseBanner phase="Alpha">This is a new service - your <Link href="#feedback">feedback</Link> will help us to improve it.</PhaseBanner>`,
+    example: () => <PhaseBanner phase="Alpha">This is a new service - your <Link href="#feedback">feedback</Link> will help us to improve it.</PhaseBanner>,
     api: [{ name: 'phase', type: 'ReactNode', description: 'Phase label, usually Alpha or Beta.' }, text('children', 'Short explanation and feedback link.'), { name: 'className', type: 'string', description: 'Additional class for the banner container.' }],
   },
   {

@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { Link, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { H1, H2, Paragraph } from '@kevinzonda/design'
+import { Link as GovLink } from '@kevinzonda/design/components'
 import { Breadcrumbs, Button, Pagination, Table, Tag } from '@kevinzonda/design/components'
 import { FancyTabs, Note, Sidebar, CodeBox } from '@kevinzonda/design/extraComponents'
 import { componentBySlug, componentDocs, type ComponentDoc } from './componentRegistry'
@@ -81,7 +82,7 @@ function OverviewPage() {
 function ExampleBlock({ component, guidanceUrl }: { component: ComponentDoc | ExtraComponentDoc; guidanceUrl?: string }) {
   const locale = useLocale()
   return <section className="component-example" aria-labelledby="example-title">
-    <div className="example-heading"><H2 variant="l" id="example-title">{message(locale, 'example')}</H2>{guidanceUrl && <a className="govuk-link" href={guidanceUrl} target="_blank" rel="noreferrer">{message(locale, 'guidance')}</a>}</div>
+    <div className="example-heading"><H2 variant="l" id="example-title">{message(locale, 'example')}</H2>{guidanceUrl && <GovLink href={guidanceUrl} anchorProps={{ target: '_blank', rel: 'noreferrer' }}>{message(locale, 'guidance')}</GovLink>}</div>
     <FancyTabs items={[
       { key: 'example', label: message(locale, 'preview'), children: <div className={`example-canvas ${component.wide ? 'example-canvas--wide' : ''}`}>{component.example()}</div> },
       { key: 'react', label: 'React', children: <CodeBlock slug={component.slug} code={component.code} /> },

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Paragraph } from '@kevinzonda/design'
+import { BackLink, Button, Link as GovLink } from '@kevinzonda/design/components'
 import { Divider, Empty, FancyTabs, Loading, Note, ShowcaseBox, Sidebar, TagBox, CodeBox } from '@kevinzonda/design/extraComponents'
 import type { ApiProp } from './componentRegistry'
 import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample, AlertExample, ProgressExample, ResultExample, AvatarExample, StepsExample, SwitchExample, TooltipExample } from './extraExamples'
@@ -74,7 +75,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     code: `const [open, setOpen] = useState(false)
 const [confirming, setConfirming] = useState(false)
 return <>
-  <button className="govuk-button" type="button" onClick={() => setOpen(true)}>Open modal</button>
+  <Button onClick={() => setOpen(true)}>Open modal</Button>
   <Modal open={open} title="Confirm your action" onClose={() => setOpen(false)}
     okText="Confirm" cancelText="Cancel" confirmLoading={confirming}
     onOk={() => {
@@ -114,10 +115,10 @@ return <>
     summary: 'A clear state for a list, table or search with no records to display.',
     whenToUse: 'Show when a view has no data or a filter returns no results. Explain the reason or offer a next step when useful.',
     howItWorks: 'A visible heading, main content and optional actions sit inside a neutral surface. Pass the main content as children and actions through the actions prop. The illustration is decorative and can be replaced.',
-    code: `<Empty title="No applications found" actions={<button className="govuk-button" type="button">Clear filters</button>}>
+    code: `<Empty title="No applications found" actions={<Button>Clear filters</Button>}>
   Try changing your filters.
 </Empty>`,
-    example: () => <Empty title="No applications found" actions={<button className="govuk-button" type="button">Clear filters</button>}>Try changing your filters.</Empty>,
+    example: () => <Empty title="No applications found" actions={<Button>Clear filters</Button>}>Try changing your filters.</Empty>,
     api: [
       { name: 'title', type: 'ReactNode', defaultValue: 'No results found', description: 'Short explanation of the empty state.' },
       { name: 'children', type: 'ReactNode', description: 'Main content beneath the title.' },
@@ -409,17 +410,17 @@ return <>
   title="Back link"
   description="Help users return to the previous step in a multi-page service."
   footer={<>
-    <a className="govuk-link" href="#example-title">View documentation</a>
-    <a className="govuk-link" href="#top">Back to top</a>
+    <Link href="#example-title">View documentation</Link>
+    <Link href="#top">Back to top</Link>
   </>}
 >
-  <a className="govuk-back-link" href="#example-title">Back</a>
+  <BackLink href="#example-title">Back</BackLink>
 </ShowcaseBox>`,
     example: () => <ShowcaseBox
       title="Back link"
       description="Help users return to the previous step in a multi-page service."
-      footer={<><a className="govuk-link" href="#example-title">View documentation</a><a className="govuk-link" href="#top">Back to top</a></>}
-    ><a className="govuk-back-link" href="#example-title">Back</a></ShowcaseBox>,
+      footer={<><GovLink href="#example-title">View documentation</GovLink><GovLink href="#top">Back to top</GovLink></>}
+    ><BackLink href="#example-title">Back</BackLink></ShowcaseBox>,
     api: [
       { name: 'title', type: 'ReactNode', description: 'Heading shown above the preview.' },
       { name: 'description', type: 'ReactNode', description: 'Optional supporting text beneath the heading.' },
@@ -493,10 +494,10 @@ return <div className="switch-example">
     whenToUse: 'Use for brief explanations of icons, buttons or status text. Do not hide information users must read to complete a task; use visible hint text instead.',
     howItWorks: 'The single child element is cloned and given the trigger handlers. With plain text or number content, the trigger receives aria-describedby while the popup is open, and the popup itself has role tooltip.',
     code: `<div className="tooltip-example">
-  <Tooltip title="Opens above the trigger" placement="top"><button className="govuk-button govuk-button--secondary" type="button">Top</button></Tooltip>
-  <Tooltip title="Opens below the trigger" placement="bottom"><button className="govuk-button govuk-button--secondary" type="button">Bottom</button></Tooltip>
-  <Tooltip title="Opens to the left" placement="left"><button className="govuk-button govuk-button--secondary" type="button">Left</button></Tooltip>
-  <Tooltip title="Opens to the right" placement="right"><button className="govuk-button govuk-button--secondary" type="button">Right</button></Tooltip>
+  <Tooltip title="Opens above the trigger" placement="top"><Button variant="secondary">Top</Button></Tooltip>
+  <Tooltip title="Opens below the trigger" placement="bottom"><Button variant="secondary">Bottom</Button></Tooltip>
+  <Tooltip title="Opens to the left" placement="left"><Button variant="secondary">Left</Button></Tooltip>
+  <Tooltip title="Opens to the right" placement="right"><Button variant="secondary">Right</Button></Tooltip>
 </div>`,
     example: () => <TooltipExample />,
     api: [
@@ -522,7 +523,7 @@ return <div className="alert-example">
   <Alert type="info" title="New version available">Refresh the page to get the latest changes.</Alert>
   <Alert type="warning" title="Session ending soon">You will be signed out in 5 minutes.</Alert>
   {closed
-    ? <button className="govuk-button govuk-button--secondary" type="button" onClick={() => setClosed(false)}>Restore error alert</button>
+    ? <Button variant="secondary" onClick={() => setClosed(false)}>Restore error alert</Button>
     : <Alert type="error" title="There is a problem" closable onClose={() => setClosed(true)}>Check the details you entered and try again.</Alert>}
 </div>`,
     example: () => <AlertExample />,
@@ -617,7 +618,7 @@ return <div className="steps-example">
   <Result
     status="success"
     title="Application submitted"
-    extra={<><button className="govuk-button" type="button">View status</button><button className="govuk-button govuk-button--secondary" type="button">Start another</button></>}
+    extra={<><Button>View status</Button><Button variant="secondary">Start another</Button></>}
   >
     Reference KZ-2026-0917. We have emailed a copy of your answers.
   </Result>
