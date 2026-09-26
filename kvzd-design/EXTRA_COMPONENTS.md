@@ -124,3 +124,38 @@ import { Tooltip } from '@kevinzonda/design/extraComponents'
   <button type="button">Copy</button>
 </Tooltip>
 ```
+
+
+`Alert` is an antd-style inline alert with GOV.UK styling. It supports `type` (`'success' | 'info' | 'warning' | 'error'`, default `'info'`), an optional bold `title`, `children` as the message body, a secondary `description`, and `showIcon` (default `true`). Error and warning alerts use `role="alert"`; success and info use `role="status"`. Set `closable` to show a close button (customise its text with `closeText`) and handle it with `onClose`.
+
+```tsx
+import { Alert } from '@kevinzonda/design/extraComponents'
+
+<Alert type="success" title="Application submitted" closable onClose={() => console.log('closed')}>
+  Your reference number is HDJ2123F.
+</Alert>
+```
+
+`Steps` is an antd-style step bar. Pass `items` with `key`, `title`, optional `description`, `status`, `disabled` and `icon`. It supports controlled (`current`) and uncontrolled (`defaultCurrent`, default `0`) usage; clicking a step calls `onChange` with its index and disabled steps are not clickable. Steps before the current one render as finished unless they set an explicit `status`. The current step carries `aria-current="step"`. Use `direction` (`'horizontal' | 'vertical'`) and `size` (`'s' | 'm'`) to change the layout.
+
+```tsx
+import { Steps } from '@kevinzonda/design/extraComponents'
+
+<Steps
+  current={1}
+  onChange={(index) => console.log(index)}
+  items={[
+    { key: 'account', title: 'Account' },
+    { key: 'details', title: 'Details', description: 'Enter your address' },
+    { key: 'confirm', title: 'Confirm', disabled: true },
+  ]}
+/>
+```
+
+`Progress` is an antd-style linear progress bar. It takes `percent` (0-100, clamped automatically), `status` (`'normal' | 'active' | 'success' | 'exception'`), `showInfo` (default `true`, renders the percentage on the right), `size` (`'s' | 'm'`) and `strokeColor` to override the bar colour. A full bar automatically becomes `success`. The bar exposes `role="progressbar"` with matching `aria-valuenow`; the `active` status animates a moving stripe unless the user prefers reduced motion.
+
+```tsx
+import { Progress } from '@kevinzonda/design/extraComponents'
+
+<Progress percent={45} status="active" />
+```

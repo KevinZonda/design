@@ -5,6 +5,7 @@ export interface SwitchProps extends SemanticStyling<'root' | 'handle'> {
   checked?: boolean
   defaultChecked?: boolean
   onChange?: (checked: boolean) => void
+  name?: string
   disabled?: boolean
   loading?: boolean
   size?: 's' | 'm' | 'l'
@@ -16,7 +17,7 @@ export interface SwitchProps extends SemanticStyling<'root' | 'handle'> {
   style?: ButtonHTMLAttributes<HTMLButtonElement>['style']
 }
 
-export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch({ checked, defaultChecked = false, onChange, disabled = false, loading = false, size = 'm', checkedChildren, unCheckedChildren, children, className = '', classNames, style, styles, ...props }, ref) {
+export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch({ checked, defaultChecked = false, onChange, name, disabled = false, loading = false, size = 'm', checkedChildren, unCheckedChildren, children, className = '', classNames, style, styles, ...props }, ref) {
   const [inner, setInner] = useState(defaultChecked)
   const isChecked = checked ?? inner
   const blocked = disabled || loading
@@ -40,6 +41,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
     style={{ ...styles?.root, ...style }}
     onClick={toggle}
   >
+    {name !== undefined && <input type="hidden" name={name} value={isChecked ? 'true' : 'false'} />}
     <span className="kvzd-design-switch__inner" aria-hidden="true">
       <span className="kvzd-design-switch__text kvzd-design-switch__text--checked">{checkedChildren}</span>
       <span className="kvzd-design-switch__text kvzd-design-switch__text--unchecked">{unCheckedChildren}</span>

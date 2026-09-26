@@ -1,6 +1,6 @@
 import { useState, type Key } from 'react'
 import { Button, Input } from '@kevinzonda/design/components'
-import { Dropdown, FancyTable, Form, Menu, Modal, Switch, Tooltip } from '@kevinzonda/design/extraComponents'
+import { Alert, Dropdown, FancyTable, Form, Menu, Modal, Progress, Steps, Switch, Tooltip } from '@kevinzonda/design/extraComponents'
 
 export function FormExample() {
   const [submitted, setSubmitted] = useState('')
@@ -115,4 +115,52 @@ export function FancyTableExample() {
       ], onFilter: (value, row) => row.status === value },
     ]}
   /><p className="govuk-body govuk-!-margin-top-4" aria-live="polite">{selected.length} selected</p></>
+}
+
+export function AlertExample() {
+  const [closed, setClosed] = useState(false)
+  return <div className="alert-example">
+    <Alert type="success" title="Application sent" description="You will receive a confirmation email." />
+    <Alert type="info" title="New version available" description="Refresh the page to get the latest changes." />
+    <Alert type="warning" title="Session ending soon" description="You will be signed out in 5 minutes." />
+    {closed
+      ? <button className="govuk-button govuk-button--secondary" type="button" onClick={() => setClosed(false)}>Restore error alert</button>
+      : <Alert type="error" title="There is a problem" description="Check the details you entered and try again." closable onClose={() => setClosed(true)} />}
+  </div>
+}
+
+export function StepsExample() {
+  const [current, setCurrent] = useState(1)
+  return <div className="steps-example">
+    <Steps
+      current={current}
+      onChange={setCurrent}
+      items={[
+        { key: 'details', title: 'Your details', description: 'Name and address' },
+        { key: 'upload', title: 'Upload evidence' },
+        { key: 'check', title: 'Check answers', disabled: true },
+        { key: 'submit', title: 'Submit' },
+      ]}
+    />
+    <Steps
+      direction="vertical"
+      size="s"
+      defaultCurrent={1}
+      items={[
+        { key: 'account', title: 'Create account' },
+        { key: 'verify', title: 'Verify email', status: 'error', description: 'The link has expired' },
+        { key: 'start', title: 'Start application' },
+      ]}
+    />
+  </div>
+}
+
+export function ProgressExample() {
+  return <div className="progress-example">
+    <Progress percent={30} />
+    <Progress percent={60} status="active" />
+    <Progress percent={100} />
+    <Progress percent={45} status="exception" />
+    <Progress percent={75} strokeColor="#1d70b8" size="s" />
+  </div>
 }

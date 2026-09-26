@@ -57,6 +57,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
   const generatedId = useId()
   const inputId = id ?? `kvzd-design-search-${generatedId.replaceAll(':', '')}`
   const hasError = Boolean(error) || status === 'error'
+  const hasWarning = status === 'warning'
   const describedBy = [ariaDescribedBy, hint && `${inputId}-hint`, error && `${inputId}-error`].filter(Boolean).join(' ')
   const [inner, setInner] = useState(String(defaultValue ?? ''))
   const currentValue = String(value ?? inner)
@@ -78,7 +79,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
         onKeyDown={handleKeyDown}
         aria-describedby={describedBy || undefined}
         aria-invalid={hasError || undefined}
-        className={`govuk-input ${hasError ? 'govuk-input--error' : ''} ${shownIcon ? 'kvzd-design-search-input__input' : ''} ${classNames?.input ?? ''} ${className}`.trim()}
+        className={`govuk-input ${hasError ? 'govuk-input--error' : ''} ${hasWarning ? 'kvzd-design-input--warning' : ''} ${shownIcon ? 'kvzd-design-search-input__input' : ''} ${classNames?.input ?? ''} ${className}`.trim()}
         style={{ ...styles?.input, ...style }}
       />
       {shownIcon && <span className={`kvzd-design-search-input__icon ${classNames?.icon ?? ''}`.trim()} style={styles?.icon} aria-hidden="true">{shownIcon}</span>}
@@ -86,7 +87,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
   )
 
   return (
-    <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
+    <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${hasWarning ? 'kvzd-design-form-group--warning' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
       <label className={`govuk-label ${visuallyHiddenLabel ? 'govuk-visually-hidden' : labelSize ? `govuk-label--${labelSize}` : ''} ${classNames?.label ?? ''}`.trim()} style={styles?.label} htmlFor={inputId}>{label}</label>
       {hint && <div className={`govuk-hint ${classNames?.hint ?? ''}`.trim()} style={styles?.hint} id={`${inputId}-hint`}>{hint}</div>}
       {error && <p className={`govuk-error-message ${classNames?.error ?? ''}`.trim()} style={styles?.error} id={`${inputId}-error`}><span className="govuk-visually-hidden">Error:</span> {error}</p>}

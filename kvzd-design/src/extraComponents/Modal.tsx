@@ -18,11 +18,13 @@ export interface ModalProps extends SemanticStyling<'root' | 'header' | 'title' 
   onOk?: () => void | Promise<void>
   confirmLoading?: boolean
   destroyOnClose?: boolean
+  afterOpenChange?: (open: boolean) => void
+  afterClose?: () => void
   className?: string
   style?: CSSProperties
 }
 
-export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal({ open, title, children, onClose, footer, closeLabel = 'Close', closeOnBackdrop = true, keyboard = true, closable = true, width, centered = false, okText = 'Confirm', cancelText = 'Cancel', onOk, confirmLoading = false, destroyOnClose = false, className = '', classNames, style, styles }, forwardedRef) {
+export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal({ open, title, children, onClose, footer, closeLabel = 'Close', closeOnBackdrop = true, keyboard = true, closable = true, width, centered = false, okText = 'Confirm', cancelText = 'Cancel', onOk, confirmLoading = false, destroyOnClose = false, afterOpenChange, afterClose, className = '', classNames, style, styles }, forwardedRef) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const restoreFocusRef = useRef<Element | null>(null)
   const titleId = useId()
@@ -37,8 +39,13 @@ export const Modal = forwardRef<HTMLDialogElement, ModalProps>(function Modal({ 
       restoreFocusRef.current = document.activeElement
       dialog.showModal()
       setHasOpened(true)
+      afterOpenChange?.(true)
     }
-    if (!open && dialog.open) dialog.close()
+    if (!open && dialog.open) {
+      dialog.close()
+      afterOpenChange?.(false)
+      afterClose?.()
+    }
   }, [open])
 
   const handleOk = () => {

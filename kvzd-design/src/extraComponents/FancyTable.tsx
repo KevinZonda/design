@@ -1,4 +1,4 @@
-import { forwardRef, Fragment, useEffect, useMemo, useState, type CSSProperties, type HTMLAttributes, type Key, type ReactElement, type ReactNode, type Ref, type RefAttributes, type TdHTMLAttributes } from 'react'
+import { forwardRef, Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type HTMLAttributes, type Key, type ReactElement, type ReactNode, type Ref, type RefAttributes, type TdHTMLAttributes } from 'react'
 import type { SemanticStyling } from '../components/index'
 import { Empty } from './Empty'
 import { Loading } from './Loading'
@@ -56,6 +56,7 @@ export interface FancyTableProps<T> extends SemanticStyling<'root' | 'scroll' | 
   showSizeChanger?: boolean
   pageSizeOptions?: number[]
   onPageSizeChange?: (size: number) => void
+  onChange?: (change: { page: number; pageSize: number | undefined; sort: FancyTableSort | null; filters: FancyTableFilterValues }) => void
   emptyContent?: ReactNode
   className?: string
   style?: CSSProperties
@@ -66,7 +67,7 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
   sort, defaultSort = null, onSortChange, filterValues, defaultFilterValues = {}, onFilterChange,
   expandable, rowClassName, onRow,
   pageSize, currentPage, onPageChange, showTotal = false, showSizeChanger = false, pageSizeOptions = [10, 20, 50], onPageSizeChange,
-  emptyContent, className = '', classNames, style, styles,
+  onChange, emptyContent, className = '', classNames, style, styles,
 }: FancyTableProps<T>, ref: Ref<HTMLTableElement>) {
   const [innerSelected, setInnerSelected] = useState<Key[]>(defaultSelectedRowKeys)
   const [innerSort, setInnerSort] = useState<FancyTableSort | null>(defaultSort)
@@ -161,6 +162,14 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
     onPageSizeChange?.(size)
     updatePage(1)
   }
+
+  const onChangeRef = useRef(onChange)
+  onChangeRef.current = onChange
+  const firstRenderRef = useRef(true)
+  useEffect(() => {
+    if (firstRenderRef.current) { firstRenderRef.current = false; return }
+    onChangeRef.current?.({ page, pageSize: effectivePageSize, sort: activeSort, filters: activeFilters })
+  }, [page, effectivePageSize, activeSort, activeFilters])
 
   return <div className={`kvzd-design-fancy-table ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
     <div className={`kvzd-design-fancy-table__scroll ${classNames?.scroll ?? ''}`.trim()} style={styles?.scroll}><table ref={ref} className={`govuk-table kvzd-design-fancy-table__table ${classNames?.table ?? ''}`.trim()} style={styles?.table} aria-busy={loading || undefined}>
