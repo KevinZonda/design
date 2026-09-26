@@ -197,3 +197,110 @@ import { CodeBox } from '@kevinzonda/design/extraComponents'
 
 <CodeBox code={`<Button onClick={save}>Save and continue</Button>`} lang="tsx" />
 ```
+
+`Grid` lays out page content in columns and is a thin wrapper over the GOV.UK
+grid. `Row` renders the `govuk-grid-row` class; `Col` renders
+`govuk-grid-column-<width>` for one of six fractions (`'full'`, `'one-half'`,
+`'one-third'`, `'two-thirds'`, `'one-quarter'`, `'three-quarters'`). Set
+`fromDesktop` on a column to use the `-from-desktop` variant, which spans the
+full row below the desktop breakpoint.
+
+```tsx
+import { Col, Row } from '@kevinzonda/design/extraComponents'
+
+<Row>
+  <Col width="one-third">Sidebar</Col>
+  <Col width="two-thirds">Main content</Col>
+</Row>
+```
+
+`Card` groups related content in a container with an optional header, body and
+footer. Pass `title` for the header heading and `extra` for right-aligned
+header content; `children` render in the body and `actions` render in a footer
+separated by a top border. Set `hoverable` to highlight the border with the
+brand colour on hover. Use `Panel` instead when showing the confirmed result of
+a transaction.
+
+```tsx
+import { Card } from '@kevinzonda/design/extraComponents'
+
+<Card title="Application overview" extra={<Tag>Active</Tag>} hoverable actions={<a href="#">Attach a file</a>}>
+  Reference KZ-2026-0917 was submitted on 12 September 2026.
+</Card>
+```
+
+`Calendar` picks a single day from a month view. The selected day and the
+visible month can each be controlled (`value`, `month`) or left internal
+(`defaultValue`, `defaultMonth`). Arrow keys move by day or week, Home/End jump
+to the ends of the week, and PageUp/PageDown move by month or, with Shift, by
+year. `min` and `max` disable out-of-range days, `dateCellRender` adds a marker
+in the corner of a day cell, and `locale` controls the weekday and month names.
+Pair it with `DateInput` when the user already knows the date.
+
+```tsx
+import { Calendar } from '@kevinzonda/design/extraComponents'
+
+const [selected, setSelected] = useState<Date | null>(null)
+return <Calendar value={selected} onChange={setSelected} />
+```
+
+`Transfer` moves items between a source and a target list. Items carry a `key`
+with optional `label`, `description` and `disabled`; disabled items cannot be
+checked or moved. `targetKeys` and `selectedKeys` support controlled usage, and
+`onChange` reports the next target keys, the direction and the moved keys. Set
+`showSearch` to filter both lists with `filterOption` (default: case-insensitive
+label match). The move buttons are a green Add (▶) that moves checked items to
+the target and a red Remove (◀) that moves them back; `operations` only changes
+their labels, not the direction triangles. A one-way mode is not supported yet.
+
+```tsx
+import { Transfer } from '@kevinzonda/design/extraComponents'
+
+<Transfer
+  dataSource={[
+    { key: 'passport', label: 'Passport', description: 'Certified copy of the photo page' },
+    { key: 'dbs', label: 'DBS check', description: 'Basic disclosure certificate', disabled: true },
+  ]}
+  titles={['Available documents', 'Documents to upload']}
+  showSearch
+/>
+```
+
+`Slider` picks a single value or a `[lower, upper]` range from a track. Set
+`range` for two handles that cannot pass each other, `marks` for labelled tick
+marks under the track, and `tooltip` to control when the current value bubble
+shows. Values can be controlled (`value`) or left internal (`defaultValue`).
+Give the native inputs a `name` to include the slider in form submissions; in
+`range` mode the handles submit as `<name>-lower` and `<name>-upper`.
+GOV.UK advises sliders only for approximate values; when the user must enter a
+precise value, use `Input` or `Select` instead.
+
+```tsx
+import { Slider } from '@kevinzonda/design/extraComponents'
+
+const [budget, setBudget] = useState<[number, number]>([20, 80])
+return <Slider
+  ariaLabel="Budget"
+  range
+  min={0}
+  max={100}
+  marks={[{ value: 0, label: '£0' }, { value: 50, label: '£50' }, { value: 100, label: '£100' }]}
+  value={budget}
+  onChange={(value) => setBudget(value as [number, number])}
+/>
+```
+
+`TimePicker` enters or picks a time of day in 24-hour `HH:mm` format. The
+input accepts loose `H:mm` text and normalises it when uncontrolled; focusing
+the input or pressing the clock toggle opens a two-column hour and minute
+panel trimmed by `hourStep` and `minuteStep`. Arrow keys move between options
+and Escape closes the panel. Use separate hour and minute `Select` components
+when users must enter a memorable or approximate time, or a 12-hour AM/PM
+format.
+
+```tsx
+import { TimePicker } from '@kevinzonda/design/extraComponents'
+
+const [time, setTime] = useState('09:30')
+return <TimePicker label="Appointment time" hint="For example, 09:30" value={time} onChange={setTime} minuteStep={15} allowClear />
+```

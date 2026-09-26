@@ -1,0 +1,128 @@
+.kvzd-design-transfer {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.kvzd-design-transfer__panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid var(--govuk-border-colour);
+  background: var(--govuk-body-background-colour);
+}
+
+.kvzd-design-transfer__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--govuk-border-colour);
+  background: var(--govuk-surface-background-colour);
+}
+
+.kvzd-design-transfer__title {
+  font-weight: 700;
+  font-size: 1.1875rem;
+}
+
+.kvzd-design-transfer__count {
+  color: var(--govuk-secondary-text-colour);
+  font-size: 1rem;
+}
+
+.kvzd-design-transfer__search {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--govuk-border-colour);
+}
+
+.kvzd-design-transfer__search-input {
+  width: 100%;
+}
+
+.kvzd-design-transfer__body {
+  flex: 1 1 auto;
+  min-height: 120px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.kvzd-design-transfer__list {
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+}
+
+.kvzd-design-transfer__item {
+  padding: 2px 12px;
+}
+
+.kvzd-design-transfer__item:hover {
+  background: var(--govuk-surface-background-colour);
+}
+
+.kvzd-design-transfer__item--checked {
+  background: var(--govuk-surface-background-colour);
+}
+
+.kvzd-design-transfer__item-label {
+  display: block;
+  font-weight: 700;
+}
+
+.kvzd-design-transfer__item-description {
+  display: block;
+  color: var(--govuk-secondary-text-colour);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.kvzd-design-transfer__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  color: var(--govuk-secondary-text-colour);
+  font-size: 1rem;
+}
+
+.kvzd-design-transfer__operations {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  gap: 8px;
+}
+
+/* Prefixed with .kvzd-design-transfer for specificity: govuk-frontend re-declares
+   .govuk-button inside a media query later in the cascade. */
+.kvzd-design-transfer .kvzd-design-transfer__operation {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 28px;
+  padding-left: 28px;
+  margin-bottom: 0;
+}
+
+/* The label centres on its own width; the triangle is a decorative extra that
+   sits in the widened padding, so the two never overlap. */
+.kvzd-design-transfer .kvzd-design-transfer__operation-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.kvzd-design-transfer .kvzd-design-transfer__operation--add .kvzd-design-transfer__operation-icon {
+  right: 10px;
+}
+
+.kvzd-design-transfer .kvzd-design-transfer__operation--remove .kvzd-design-transfer__operation-icon {
+  left: 10px;
+}
+
+.kvzd-design-transfer--disabled {
+  opacity: 0.6;
+}

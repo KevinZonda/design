@@ -1,0 +1,161 @@
+.kvzd-design-slider {
+  --kvzd-design-slider-thumb-size: 24px;
+  --kvzd-design-slider-track-height: 6px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 28px 0 4px;
+}
+
+.kvzd-design-slider--disabled { opacity: .55; }
+
+.kvzd-design-slider__track { position: relative; height: var(--kvzd-design-slider-thumb-size); }
+
+.kvzd-design-slider__rail {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: var(--kvzd-design-slider-track-height);
+  transform: translateY(-50%);
+  background: var(--govuk-border-colour);
+}
+
+.kvzd-design-slider__fill {
+  position: absolute;
+  top: 50%;
+  height: var(--kvzd-design-slider-track-height);
+  transform: translateY(-50%);
+  background: var(--govuk-brand-colour);
+}
+
+.kvzd-design-slider__input {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: none;
+}
+
+.kvzd-design-slider__input:disabled { cursor: not-allowed; }
+
+.kvzd-design-slider__input::-webkit-slider-runnable-track {
+  height: var(--kvzd-design-slider-track-height);
+  background: transparent;
+}
+
+.kvzd-design-slider__input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--kvzd-design-slider-thumb-size);
+  height: var(--kvzd-design-slider-thumb-size);
+  margin-top: calc((var(--kvzd-design-slider-track-height) - var(--kvzd-design-slider-thumb-size)) / 2);
+  border: 2px solid var(--govuk-text-colour);
+  background: var(--govuk-body-background-colour);
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.kvzd-design-slider__input::-moz-range-track {
+  height: var(--kvzd-design-slider-track-height);
+  background: transparent;
+}
+
+.kvzd-design-slider__input::-moz-range-thumb {
+  width: calc(var(--kvzd-design-slider-thumb-size) - 4px);
+  height: calc(var(--kvzd-design-slider-thumb-size) - 4px);
+  border: 2px solid var(--govuk-text-colour);
+  border-radius: 0;
+  background: var(--govuk-body-background-colour);
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.kvzd-design-slider__input:focus { outline: none; }
+
+/* Bring the active handle above the other so overlapping thumbs stay grabbable. */
+.kvzd-design-slider__input:focus,
+.kvzd-design-slider__input:active { z-index: 1; }
+
+/* Hover feedback. */
+.kvzd-design-slider__input:not(:disabled)::-webkit-slider-thumb:hover { background: var(--govuk-text-colour); }
+.kvzd-design-slider__input:not(:disabled)::-moz-range-thumb:hover { background: var(--govuk-text-colour); }
+
+/* Focused handle (keyboard tab or click): GOV.UK focus colours. */
+.kvzd-design-slider__input:not(:disabled):focus::-webkit-slider-thumb {
+  border-color: var(--govuk-focus-text-colour);
+  background: var(--govuk-focus-colour);
+  box-shadow: 0 0 0 3px var(--govuk-focus-colour);
+}
+
+.kvzd-design-slider__input:not(:disabled):focus::-moz-range-thumb {
+  border-color: var(--govuk-focus-text-colour);
+  background: var(--govuk-focus-colour);
+  box-shadow: 0 0 0 3px var(--govuk-focus-colour);
+}
+
+/* While pressed, darken the thumb; after release the focus colours above stay
+   as the clicked-state cue. Kept last so it wins during the press. The pressed
+   state is driven by pointer handlers in Slider.tsx, not :active: the input
+   has pointer-events:none, so neither element-level nor thumb-level :active
+   ever matches in Blink. */
+.kvzd-design-slider__input--pressed::-webkit-slider-thumb,
+.kvzd-design-slider__input--pressed::-moz-range-thumb {
+  background: var(--govuk-text-colour);
+  cursor: grabbing;
+}
+
+.kvzd-design-slider--disabled .kvzd-design-slider__input::-webkit-slider-thumb { border-color: var(--govuk-secondary-text-colour); cursor: not-allowed; }
+.kvzd-design-slider--disabled .kvzd-design-slider__input::-moz-range-thumb { border-color: var(--govuk-secondary-text-colour); cursor: not-allowed; }
+
+.kvzd-design-slider__tooltip {
+  position: absolute;
+  bottom: calc(100% + 2px);
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border: 1px solid var(--govuk-border-colour);
+  color: var(--govuk-text-colour);
+  background: var(--govuk-body-background-colour);
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.kvzd-design-slider--tooltip-hover .kvzd-design-slider__tooltip { opacity: 0; transition: opacity 120ms ease; }
+.kvzd-design-slider--tooltip-hover:hover .kvzd-design-slider__tooltip,
+.kvzd-design-slider--tooltip-hover:focus-within .kvzd-design-slider__tooltip { opacity: 1; }
+
+/* Lift one bubble when the two range handles (and their tooltips) sit close together. */
+.kvzd-design-slider__tooltip--raised { bottom: calc(100% + 18px); }
+
+.kvzd-design-slider__marks { position: relative; height: 20px; margin-top: 2px; }
+
+.kvzd-design-slider__mark {
+  position: absolute;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Keep edge labels inside the container instead of overflowing it. */
+.kvzd-design-slider__mark--first { transform: translateX(0); align-items: flex-start; }
+.kvzd-design-slider__mark--last { transform: translateX(-100%); align-items: flex-end; }
+
+.kvzd-design-slider__mark-dot { width: 4px; height: 4px; background: var(--govuk-border-colour); }
+.kvzd-design-slider__mark-label { font-size: 14px; line-height: 1; color: var(--govuk-secondary-text-colour); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .kvzd-design-slider--tooltip-hover .kvzd-design-slider__tooltip { transition: none; }
+}

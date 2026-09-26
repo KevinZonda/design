@@ -1,0 +1,176 @@
+.kvzd-design-calendar {
+  display: inline-block;
+  padding: 16px;
+  border: 1px solid var(--govuk-border-colour);
+  background: var(--govuk-body-background-colour);
+  font-family: var(--govuk-font-family);
+}
+
+.kvzd-design-calendar__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.kvzd-design-calendar__nav {
+  display: flex;
+  gap: 4px;
+}
+
+.kvzd-design-calendar__nav-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  color: var(--govuk-text-colour);
+  background: transparent;
+  cursor: pointer;
+}
+
+.kvzd-design-calendar__nav-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.kvzd-design-calendar__nav-button:hover {
+  color: var(--govuk-link-hover-colour);
+  background: var(--govuk-surface-background-colour);
+}
+
+.kvzd-design-calendar__nav-button:focus {
+  color: var(--govuk-focus-text-colour);
+  background: var(--govuk-focus-colour);
+  outline: 3px solid transparent;
+  box-shadow: 0 -2px var(--govuk-focus-colour), 0 4px var(--govuk-focus-text-colour);
+}
+
+.kvzd-design-calendar__title {
+  flex: 1;
+  font-weight: 700;
+  font-size: 1.1875rem;
+  text-align: center;
+}
+
+.kvzd-design-calendar__today {
+  padding: 6px 10px;
+  border: 0;
+  color: var(--govuk-link-colour);
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.kvzd-design-calendar__today:hover {
+  color: var(--govuk-link-hover-colour);
+}
+
+.kvzd-design-calendar__today:focus {
+  color: var(--govuk-focus-text-colour);
+  background: var(--govuk-focus-colour);
+  outline: 3px solid transparent;
+  box-shadow: 0 -2px var(--govuk-focus-colour), 0 4px var(--govuk-focus-text-colour);
+  text-decoration: none;
+}
+
+.kvzd-design-calendar__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kvzd-design-calendar__weekdays,
+.kvzd-design-calendar__week {
+  display: grid;
+  grid-template-columns: repeat(7, 40px);
+  gap: 2px;
+}
+
+.kvzd-design-calendar__weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  color: var(--govuk-secondary-text-colour);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.kvzd-design-calendar__cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 0;
+  color: var(--govuk-text-colour);
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.kvzd-design-calendar__cell:hover {
+  background: var(--govuk-surface-background-colour);
+}
+
+.kvzd-design-calendar__cell:focus {
+  position: relative;
+  z-index: 1;
+  color: var(--govuk-focus-text-colour);
+  background: var(--govuk-focus-colour);
+  outline: 3px solid transparent;
+  box-shadow: 0 -2px var(--govuk-focus-colour), 0 4px var(--govuk-focus-text-colour);
+}
+
+.kvzd-design-calendar__cell--today {
+  border-color: var(--govuk-brand-colour);
+  font-weight: 700;
+}
+
+.kvzd-design-calendar__cell--outside {
+  color: var(--govuk-secondary-text-colour);
+}
+
+.kvzd-design-calendar__cell--selected,
+.kvzd-design-calendar__cell--selected:hover {
+  border-color: var(--govuk-brand-colour);
+  color: var(--govuk-body-background-colour);
+  background: var(--govuk-brand-colour);
+  font-weight: 700;
+}
+
+/* A focused selected cell keeps its selected colours; focus is shown with
+   an outer focus-colour frame instead of repainting the cell. */
+.kvzd-design-calendar__cell--selected:focus {
+  color: var(--govuk-body-background-colour);
+  background: var(--govuk-brand-colour);
+  outline: 3px solid var(--govuk-focus-colour);
+  outline-offset: 0;
+  box-shadow: none;
+}
+
+.kvzd-design-calendar__cell:disabled,
+.kvzd-design-calendar__cell--disabled {
+  color: var(--govuk-secondary-text-colour);
+  background: transparent;
+  opacity: 0.4;
+  cursor: default;
+}
+
+.kvzd-design-calendar__cell-marker {
+  position: absolute;
+  right: 2px;
+  bottom: 0;
+  font-size: 0.625rem;
+  line-height: 1;
+  pointer-events: none;
+}

@@ -1,8 +1,8 @@
 import { useState, type Key } from 'react'
 import { Paragraph, Text } from '@kevinzonda/design'
 import { kss } from '@kevinzonda/design/kss'
-import { Button, Input } from '@kevinzonda/design/components'
-import { Alert, Avatar, Dropdown, FancyTable, Form, Menu, Modal, Progress, Result, Steps, Switch, Tooltip } from '@kevinzonda/design/extraComponents'
+import { Button, Input, Link, Tag } from '@kevinzonda/design/components'
+import { Alert, Avatar, Calendar, Card, Col, Dropdown, FancyTable, Form, Menu, Modal, Progress, Result, Row, Slider, Steps, Switch, TimePicker, Tooltip, Transfer } from '@kevinzonda/design/extraComponents'
 
 export function FormExample() {
   const [submitted, setSubmitted] = useState('')
@@ -192,5 +192,143 @@ export function AvatarExample() {
     <Avatar shape="square" size="l" />
     <Avatar size="s" />
     <Text style={kss('mb0', 'ml8')}>Image, initials, square fallback and small sizes</Text>
+  </div>
+}
+
+export function GridExample() {
+  return <div className="grid-example">
+    <Row>
+      <Col width="one-half"><div className="grid-example-cell">one-half</div></Col>
+      <Col width="one-half"><div className="grid-example-cell">one-half</div></Col>
+    </Row>
+    <Row>
+      <Col width="one-third"><div className="grid-example-cell">one-third</div></Col>
+      <Col width="two-thirds"><div className="grid-example-cell">two-thirds</div></Col>
+    </Row>
+    <Row>
+      <Col width="one-quarter" fromDesktop><div className="grid-example-cell">one-quarter fromDesktop</div></Col>
+      <Col width="three-quarters" fromDesktop><div className="grid-example-cell">three-quarters fromDesktop</div></Col>
+    </Row>
+  </div>
+}
+
+export function CardExample() {
+  return <div className="card-example">
+    <Card title="Application overview" extra={<Tag color="green">Active</Tag>} hoverable>
+      <Paragraph className="govuk-!-margin-bottom-0">Reference KZ-2026-0917 was submitted on 12 September 2026 and is being reviewed.</Paragraph>
+    </Card>
+    <Card title="Supporting evidence" actions={<Link href="#example-title">Attach a file</Link>}>
+      <Paragraph className="govuk-!-margin-bottom-0">Upload documents that support your application. Each file must be smaller than 10 MB.</Paragraph>
+    </Card>
+  </div>
+}
+
+export function CalendarExample() {
+  const [selected, setSelected] = useState<Date | null>(() => {
+    const date = new Date()
+    date.setDate(date.getDate() + 2)
+    return date
+  })
+  const [min, max] = (() => {
+    const start = new Date()
+    start.setDate(start.getDate() - 1)
+    const end = new Date()
+    end.setDate(end.getDate() + 27)
+    return [start, end]
+  })()
+  return <div className="calendar-example">
+    <Calendar
+      value={selected}
+      onChange={setSelected}
+      min={min}
+      max={max}
+      dateCellRender={(date) => date.getDay() === 0 || date.getDay() === 6 ? '·' : null}
+    />
+    <Paragraph className="govuk-!-margin-top-4" aria-live="polite">
+      {selected ? `Selected ${selected.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}. Weekends show a marker; only the next 28 days are selectable.` : 'No date selected.'}
+    </Paragraph>
+  </div>
+}
+
+const transferData = [
+  { key: 'passport', label: 'Passport', description: 'Certified copy of the photo page' },
+  { key: 'payslips', label: 'Payslips', description: 'Covering the last 3 months' },
+  { key: 'bank', label: 'Bank statements', description: 'Statements for the last 3 months' },
+  { key: 'dbs', label: 'DBS check', description: 'Basic disclosure certificate', disabled: true },
+  { key: 'reference', label: 'Reference letter', description: 'From your current employer' },
+  { key: 'degree', label: 'Degree certificate', description: 'Copy of your highest qualification' },
+  { key: 'utility', label: 'Utility bill', description: 'Dated within the last 3 months' },
+]
+
+export function TransferExample() {
+  const [targetKeys, setTargetKeys] = useState<Key[]>(['passport'])
+  const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
+  return <><Transfer
+    dataSource={transferData}
+    titles={['Available documents', 'Documents to upload']}
+    targetKeys={targetKeys}
+    selectedKeys={selectedKeys}
+    onChange={(next) => setTargetKeys(next)}
+    onSelectChange={(next) => setSelectedKeys(next)}
+    showSearch
+  />
+    <Paragraph className="govuk-!-margin-top-4" aria-live="polite">{targetKeys.length} of {transferData.length} documents selected for upload</Paragraph>
+  </>
+}
+
+const sliderMarks = [
+  { value: 0, label: '0' },
+  { value: 50, label: '50' },
+  { value: 100, label: '100' },
+]
+
+const rangeMarks = [
+  { value: 0, label: '£0' },
+  { value: 50, label: '£50' },
+  { value: 100, label: '£100' },
+]
+
+export function SliderExample() {
+  const [volume, setVolume] = useState(40)
+  const [budget, setBudget] = useState<[number, number]>([20, 80])
+  return <div className="slider-example">
+    <Slider
+      ariaLabel="Case volume"
+      min={0}
+      max={100}
+      step={5}
+      marks={sliderMarks}
+      value={volume}
+      onChange={(value) => setVolume(value as number)}
+    />
+    <Slider
+      ariaLabel="Budget"
+      range
+      min={0}
+      max={100}
+      marks={rangeMarks}
+      value={budget}
+      onChange={(value) => setBudget(value as [number, number])}
+    />
+    <Paragraph className="govuk-!-margin-top-4" aria-live="polite">
+      Case volume {volume}. Budget between £{budget[0]} and £{budget[1]}.
+    </Paragraph>
+  </div>
+}
+
+export function TimePickerExample() {
+  const [time, setTime] = useState('09:30')
+  return <div className="timepicker-example">
+    <TimePicker
+      label="Appointment time"
+      hint="For example, 09:30"
+      value={time}
+      onChange={setTime}
+      minuteStep={15}
+      allowClear
+    />
+    <Paragraph className="govuk-!-margin-top-4" aria-live="polite">
+      {time ? `Selected time: ${time}` : 'No time selected.'}
+    </Paragraph>
   </div>
 }

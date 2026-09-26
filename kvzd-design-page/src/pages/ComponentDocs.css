@@ -52,3 +52,9 @@
 
 .result-example { display: grid; gap: 24px; }
 .avatar-example { display: flex; align-items: center; gap: 16px; }
+.grid-example { display: grid; gap: 16px; }
+.grid-example-cell { padding: 20px; background: var(--govuk-brand-colour, #1d70b8); color: #ffffff; text-align: center; }
+.card-example { display: grid; gap: 24px; max-width: 640px; }
+.calendar-example { max-width: 420px; }
+.slider-example { display: grid; gap: 48px; max-width: 640px; padding: 12px 8px 0; }
+.timepicker-example { max-width: 420px; }

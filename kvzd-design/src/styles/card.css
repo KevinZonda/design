@@ -1,0 +1,58 @@
+.kvzd-design-card {
+  border: 1px solid var(--govuk-surface-border-colour);
+  border-radius: 0;
+  background: var(--govuk-surface-background-colour);
+}
+
+.kvzd-design-card--hoverable {
+  cursor: pointer;
+}
+
+.kvzd-design-card--hoverable:hover {
+  border-color: var(--govuk-brand-colour);
+}
+
+.kvzd-design-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 20px 16px;
+}
+
+.kvzd-design-card__title {
+  margin: 0;
+  font-size: 1.1875rem;
+  font-weight: 700;
+  line-height: 1.3158;
+}
+
+.kvzd-design-card__extra {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.kvzd-design-card__body {
+  padding: 20px;
+}
+
+.kvzd-design-card__body--with-header {
+  padding-top: 0;
+}
+
+.kvzd-design-card__body > :first-child {
+  margin-top: 0;
+}
+
+.kvzd-design-card__body > :last-child {
+  margin-bottom: 0;
+}
+
+.kvzd-design-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--govuk-surface-border-colour);
+}

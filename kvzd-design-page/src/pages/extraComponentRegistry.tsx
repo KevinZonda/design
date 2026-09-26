@@ -4,7 +4,7 @@ import { BackLink, Button, Link } from '@kevinzonda/design/components'
 import { Divider, Empty, FancyTabs, Loading, Note, ShowcaseBox, Sidebar, TagBox, CodeBox } from '@kevinzonda/design/extraComponents'
 import type { ApiProp } from './componentRegistry'
 import { DocsLink } from './DocsLink'
-import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample, AlertExample, ProgressExample, ResultExample, AvatarExample, StepsExample, SwitchExample, TooltipExample } from './extraExamples'
+import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample, AlertExample, ProgressExample, ResultExample, AvatarExample, StepsExample, SwitchExample, TooltipExample, GridExample, CardExample, CalendarExample, TransferExample, SliderExample, TimePickerExample } from './extraExamples'
 
 export interface ExtraComponentDoc {
   slug: string
@@ -683,6 +683,222 @@ return <div className="steps-example">
       { name: 'highlightedHtml', type: 'string', description: 'Pre-highlighted HTML; skips the runtime highlighter when provided.' },
       { name: 'className / style', type: 'string / CSSProperties', description: 'Root element overrides.' },
       { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'CodeBox root element.' },
+    ],
+  },
+  {
+    slug: 'grid',
+    name: 'Grid',
+    summary: 'Lay out page content in columns with Row and Col, a thin wrapper over the GOV.UK grid.',
+    whenToUse: 'Use to structure page content into columns with familiar GOV.UK widths and breakpoints. For form alignment the standard components already handle their own layout.',
+    howItWorks: 'Row renders the govuk-grid-row class and Col renders govuk-grid-column-<width> for one of six fractions. Set fromDesktop to use the -from-desktop variant, which spans the full row below the desktop breakpoint. Both accept standard div attributes and className.',
+    code: `<Row>
+  <Col width="one-half"><div className="grid-example-cell">one-half</div></Col>
+  <Col width="one-half"><div className="grid-example-cell">one-half</div></Col>
+</Row>
+<Row>
+  <Col width="one-third"><div className="grid-example-cell">one-third</div></Col>
+  <Col width="two-thirds"><div className="grid-example-cell">two-thirds</div></Col>
+</Row>
+<Row>
+  <Col width="one-quarter" fromDesktop><div className="grid-example-cell">one-quarter fromDesktop</div></Col>
+  <Col width="three-quarters" fromDesktop><div className="grid-example-cell">three-quarters fromDesktop</div></Col>
+</Row>`,
+    example: () => <GridExample />,
+    api: [
+      { name: 'Row children', type: 'ReactNode', description: 'Columns and other content inside the grid row.' },
+      { name: 'Col width', type: "'full' | 'one-half' | 'one-third' | 'two-thirds' | 'one-quarter' | 'three-quarters'", defaultValue: "'full'", description: 'Column width mapped to the matching govuk-grid-column class.' },
+      { name: 'Col fromDesktop', type: 'boolean', defaultValue: 'false', description: 'Apply the width only from the desktop breakpoint up; below it the column spans the full row.' },
+      { name: 'Col children', type: 'ReactNode', description: 'Content inside the column.' },
+      { name: 'className', type: 'string', description: 'Extra classes merged onto the row or column div.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Row or column div element.' },
+    ],
+  },
+  {
+    slug: 'card',
+    name: 'Card',
+    summary: 'Group related content in a container with an optional header, footer actions and hover highlight.',
+    whenToUse: <>Use to group related information, summaries or actions on a page. Use the <DocsLink className="govuk-link" to="/en/components/panel/">Panel</DocsLink> component when showing the confirmed result of a transaction.</>,
+    howItWorks: 'The title and extra render in a header row, children in the body, and actions in a footer separated by a top border. Set hoverable to highlight the border with the brand colour on hover. classNames and styles target the root, header, title, extra, body and actions parts.',
+    code: `<div className="card-example">
+  <Card title="Application overview" extra={<Tag color="green">Active</Tag>} hoverable>
+    <Paragraph>Reference KZ-2026-0917 was submitted on 12 September 2026 and is being reviewed.</Paragraph>
+  </Card>
+  <Card title="Supporting evidence" actions={<Link href="#">Attach a file</Link>}>
+    <Paragraph>Upload documents that support your application. Each file must be smaller than 10 MB.</Paragraph>
+  </Card>
+</div>`,
+    example: () => <CardExample />,
+    api: [
+      { name: 'title', type: 'ReactNode', description: 'Heading shown in the card header.' },
+      { name: 'extra', type: 'ReactNode', description: 'Right-aligned content in the header, next to the title.' },
+      { name: 'children', type: 'ReactNode', description: 'Body content of the card.' },
+      { name: 'actions', type: 'ReactNode', description: 'Footer content separated from the body by a top border.' },
+      { name: 'hoverable', type: 'boolean', defaultValue: 'false', description: 'Highlight the border with the brand colour on hover.' },
+      { name: 'styles / classNames', type: 'SemanticStyling', description: 'Overrides for the root, header, title, extra, body and actions parts.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Card root element.' },
+    ],
+  },
+  {
+    slug: 'calendar',
+    name: 'Calendar',
+    summary: 'Pick a single day from a month view with keyboard navigation, min and max limits.',
+    whenToUse: <>Use when users must choose a day from a limited set, such as an appointment slot. When the user already knows the date, the <DocsLink className="govuk-link" to="/en/components/date-input/">DateInput</DocsLink> component is usually faster.</>,
+    howItWorks: 'The selected day and the visible month can each be controlled or left internal, with previous and next buttons and an optional Today button. Arrow keys move by day or week, Home and End jump to the week ends, and PageUp and PageDown move by month or, with Shift, by year. min and max disable out-of-range days, dateCellRender adds a marker in the corner of a day cell, and locale controls weekday and month names.',
+    code: `const [selected, setSelected] = useState(initialDate)
+return <>
+  <Calendar
+    value={selected}
+    onChange={setSelected}
+    min={minDate}
+    max={maxDate}
+    dateCellRender={(date) => isWeekend(date) ? '·' : null}
+  />
+  <Paragraph aria-live="polite">{selected ? selected.toLocaleDateString('en-GB') : 'No date selected'}</Paragraph>
+</>`,
+    example: () => <CalendarExample />,
+    api: [
+      { name: 'value', type: 'Date | null', description: 'Selected day (controlled); pass null for no selection.' },
+      { name: 'defaultValue', type: 'Date | null', defaultValue: 'null', description: 'Initially selected day when uncontrolled.' },
+      { name: 'onChange', type: '(date: Date) => void', description: 'Called with the selected day.' },
+      { name: 'min / max', type: 'Date', description: 'Earliest and latest selectable day; out-of-range days are disabled.' },
+      { name: 'dateCellRender', type: '(date: Date) => ReactNode', description: 'Extra marker rendered in the bottom-right corner of a day cell.' },
+      { name: 'month', type: 'Date', description: 'Displayed month (controlled).' },
+      { name: 'defaultMonth', type: 'Date', description: 'Initially displayed month when uncontrolled; defaults to the selected day or today.' },
+      { name: 'onMonthChange', type: '(month: Date) => void', description: 'Called when the visible month changes.' },
+      { name: 'showToday', type: 'boolean', defaultValue: 'true', description: 'Show a Today button that jumps back to the current month and day.' },
+      { name: 'locale', type: 'string', defaultValue: "'en-GB'", description: 'BCP 47 locale used for weekday and month names; the week starts on Monday.' },
+      { name: 'styles / classNames', type: 'SemanticStyling', description: 'Overrides for the root, header, nav, title, grid, weekdays and cell parts.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Calendar root element.' },
+    ],
+  },
+  {
+    slug: 'transfer',
+    name: 'Transfer',
+    summary: 'Move items between a source and a target list with checkboxes and optional search.',
+    whenToUse: 'Use when users pick a subset of items from a larger set, such as assigning permissions or choosing table columns. Use checkboxes or a select for a single choice.',
+    howItWorks: 'Items are split by targetKeys between two panels; checked items move with the Add and Remove buttons. Disabled items cannot be checked or moved. showSearch filters both lists through filterOption, which defaults to a case-insensitive label match. targetKeys and selectedKeys support controlled usage. A one-way mode is not supported yet.',
+    code: `const [targetKeys, setTargetKeys] = useState(['passport'])
+const [selectedKeys, setSelectedKeys] = useState([])
+return <Transfer
+  dataSource={transferData}
+  titles={['Available documents', 'Documents to upload']}
+  targetKeys={targetKeys}
+  selectedKeys={selectedKeys}
+  onChange={(next) => setTargetKeys(next)}
+  onSelectChange={(next) => setSelectedKeys(next)}
+  showSearch
+/>`,
+    example: () => <TransferExample />,
+    api: [
+      { name: 'dataSource', type: 'TransferItem[]', description: 'Items with key, optional label, description and disabled.' },
+      { name: 'targetKeys', type: 'Key[]', description: 'Keys of items shown in the right-hand target panel (controlled).' },
+      { name: 'defaultTargetKeys', type: 'Key[]', defaultValue: '[]', description: 'Initial target keys when uncontrolled.' },
+      { name: 'onChange', type: '(targetKeys: Key[], direction: TransferDirection, movedKeys: Key[]) => void', description: 'Called after items move between panels.' },
+      { name: 'selectedKeys', type: 'Key[]', description: 'Keys of checked items across both panels (controlled).' },
+      { name: 'defaultSelectedKeys', type: 'Key[]', defaultValue: '[]', description: 'Initial checked keys when uncontrolled.' },
+      { name: 'onSelectChange', type: '(selectedKeys: Key[], direction: TransferDirection) => void', description: 'Called when the checked items change.' },
+      { name: 'titles', type: '[ReactNode, ReactNode]', defaultValue: "['Source', 'Target']", description: 'Panel titles for the source and target lists.' },
+      { name: 'showSearch', type: 'boolean', defaultValue: 'false', description: 'Show a search input above each list.' },
+      { name: 'filterOption', type: '(input: string, item: TransferItem) => boolean', description: 'Custom filter used by both search inputs; defaults to a case-insensitive label match.' },
+      { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable the whole component.' },
+      { name: 'operations', type: '[ReactNode, ReactNode]', defaultValue: "['Add', 'Remove']", description: 'Labels of the two move buttons. A direction triangle always renders beside the label.' },
+      { name: 'styles / classNames', type: 'SemanticStyling', description: 'Overrides for the root, panel, header, body, list, item, search, operations and operation parts.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Transfer root element.' },
+    ],
+  },
+  {
+    slug: 'slider',
+    name: 'Slider',
+    summary: 'Pick a single value or a [lower, upper] range from a track, with optional tick marks and a value tooltip.',
+    whenToUse: <>Use for coarse adjustments where the exact number does not matter, such as a volume or an approximate budget. GOV.UK advises sliders only for approximate values; when the user must enter a precise value, use the <DocsLink className="govuk-link" to="/en/components/text-input/">Text input</DocsLink> or <DocsLink className="govuk-link" to="/en/components/select/">Select</DocsLink> component instead.</>,
+    howItWorks: 'The track contains one or two native range inputs. The value and range can each be controlled or left internal; in range mode the lower handle cannot pass the upper one. Marks render ticks with optional labels under the track, and the tooltip shows the current value on hover, always or never. Arrow keys move by step and screen readers announce each handle, with minimum and maximum labels in range mode.',
+    code: `const [volume, setVolume] = useState(40)
+const [budget, setBudget] = useState<[number, number]>([20, 80])
+return <div className="slider-example">
+  <Slider
+    ariaLabel="Case volume"
+    min={0}
+    max={100}
+    step={5}
+    marks={[
+      { value: 0, label: '0' },
+      { value: 50, label: '50' },
+      { value: 100, label: '100' },
+    ]}
+    value={volume}
+    onChange={(value) => setVolume(value as number)}
+  />
+  <Slider
+    ariaLabel="Budget"
+    range
+    min={0}
+    max={100}
+    marks={[
+      { value: 0, label: '£0' },
+      { value: 50, label: '£50' },
+      { value: 100, label: '£100' },
+    ]}
+    value={budget}
+    onChange={(value) => setBudget(value as [number, number])}
+  />
+  <Paragraph className="govuk-!-margin-top-4" aria-live="polite">
+    Case volume {volume}. Budget between £{budget[0]} and £{budget[1]}.
+  </Paragraph>
+</div>`,
+    example: () => <SliderExample />,
+    api: [
+      { name: 'min / max', type: 'number', defaultValue: '0 / 100', description: 'Minimum and maximum selectable values.' },
+      { name: 'step', type: 'number', defaultValue: '1', description: 'Increment between selectable values.' },
+      { name: 'range', type: 'boolean', defaultValue: 'false', description: 'Render two handles for selecting a [lower, upper] range.' },
+      { name: 'value', type: 'number | [number, number]', description: 'Selected value, or [lower, upper] in range mode (controlled).' },
+      { name: 'defaultValue', type: 'number | [number, number]', description: 'Initial value when uncontrolled; defaults to min, or [min, max] in range mode.' },
+      { name: 'onChange', type: '(value: number | [number, number]) => void', description: 'Called with the new value when a handle moves.' },
+      { name: 'marks', type: 'SliderMark[]', description: 'Tick marks rendered under the track, with optional labels.' },
+      { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Prevent interaction.' },
+      { name: 'tooltip', type: "'hover' | 'always' | 'never'", defaultValue: "'hover'", description: 'When to show the current value bubble.' },
+      { name: 'ariaLabel', type: 'string', description: 'Accessible name; in range mode each handle gets `${ariaLabel} minimum` / `maximum`.' },
+      { name: 'styles / classNames', type: 'SemanticStyling', description: 'Overrides for the root, track, rail, fill, thumb, mark and tooltip parts.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Slider root element.' },
+    ],
+  },
+  {
+    slug: 'timepicker',
+    name: 'TimePicker',
+    summary: 'Enter or pick a time of day in 24-hour HH:mm format, with an optional two-column hour and minute panel.',
+    whenToUse: <>Use for recent or frequent times where typing HH:mm or picking from a short panel is faster than three separate selects, such as an appointment start. When users must enter a memorable or approximate time, or you need a 12-hour AM/PM format, the standard <DocsLink className="govuk-link" to="/en/components/select/">Select</DocsLink> component with separate hour and minute selects (the GOV.UK approach for memorable dates) may be easier to explain; Text input alone is better when no panel is wanted.</>,
+    howItWorks: 'The input accepts loose H:mm text and normalises it to HH:mm when uncontrolled. Focusing the input or pressing the clock toggle opens a 24-hour listbox with an hour and a minute column, trimmed by hourStep and minuteStep; ArrowUp and ArrowDown move between options, Escape closes the panel and returns focus to the input, and choosing an option commits the value. The label, hint and error are wired through aria-describedby, and status adds an extra described line.',
+    code: `const [time, setTime] = useState('09:30')
+return <>
+  <TimePicker
+    label="Appointment time"
+    hint="For example, 09:30"
+    value={time}
+    onChange={setTime}
+    minuteStep={15}
+    allowClear
+  />
+  <Paragraph className="govuk-!-margin-top-4" aria-live="polite">
+    {time ? \`Selected time: \${time}\` : 'No time selected.'}
+  </Paragraph>
+</>`,
+    example: () => <TimePickerExample />,
+    api: [
+      { name: 'value', type: 'string', description: 'Controlled value in HH:mm (24-hour) format.' },
+      { name: 'defaultValue', type: 'string', description: 'Initial value when uncontrolled.' },
+      { name: 'onChange', type: '(value: string) => void', description: 'Called with the raw text while typing and the committed HH:mm value when a time is picked or cleared.' },
+      { name: 'minuteStep / hourStep', type: 'number', defaultValue: '1 / 1', description: 'Step between minute and hour options in the panel.' },
+      { name: 'allowClear', type: 'boolean', defaultValue: 'false', description: 'Show a clear button that empties the value.' },
+      { name: 'placeholder', type: 'string', defaultValue: "'HH:mm'", description: 'Placeholder text shown in the empty input.' },
+      { name: 'label', type: 'ReactNode', description: 'Visible and accessible input label.' },
+      { name: 'hint', type: 'ReactNode', description: 'Optional supporting guidance.' },
+      { name: 'error', type: 'ReactNode', description: 'Validation error.' },
+      { name: 'status', type: 'ReactNode', description: 'Extra status line rendered after the error and included in aria-describedby.' },
+      { name: 'width', type: '2 | 3 | 4 | 5 | 10 | 20 | 30', description: 'Expected-answer width.' },
+      { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Prevent interaction.' },
+      { name: 'visuallyHiddenLabel', type: 'boolean', defaultValue: 'false', description: 'Keep the accessible label while hiding it visually.' },
+      { name: 'inputProps', type: 'InputHTMLAttributes', description: 'Extra props spread onto the native input.' },
+      { name: 'styles / classNames', type: 'SemanticStyling', description: 'Overrides for the root, label, hint, error, status, control, input, list, option, clear and toggle parts.' },
+      { name: 'ref', type: 'Ref<HTMLInputElement>', description: 'Native input element.' },
     ],
   },
 ]
