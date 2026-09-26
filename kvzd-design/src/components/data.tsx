@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useId, useRef, useState } from 'react'
 import type { CSSProperties, Key, ReactElement, ReactNode, Ref, RefAttributes } from 'react'
 import { Tag } from './Tag'
-import { ClickTarget, type IClickBehaviour } from './clickBehaviour'
+import { ClickTarget, type ClickBehaviourProps } from './clickBehaviour'
 import type { SemanticStyling } from './styling'
 
 export interface TableColumn<T> { title: ReactNode; dataIndex: keyof T; key?: string; numeric?: boolean; rowHeader?: boolean; render?: (value: T[keyof T], record: T, index: number) => ReactNode }
@@ -33,7 +33,7 @@ const TableWithRef = forwardRef(function Table<T extends object>({ caption, colu
 })
 export const Table = TableWithRef as <T extends object>(props: TableProps<T> & RefAttributes<HTMLTableElement>) => ReactElement | null
 
-export interface SummaryAction extends IClickBehaviour { label: ReactNode; visuallyHiddenText?: string }
+export interface SummaryAction extends ClickBehaviourProps { label: ReactNode; visuallyHiddenText?: string }
 export interface SummaryItem { key: ReactNode; value: ReactNode; actions?: SummaryAction[] }
 export interface SummaryListProps extends SemanticStyling<'root' | 'row' | 'key' | 'value' | 'actions' | 'link'> { items: SummaryItem[]; bordered?: boolean; className?: string; style?: CSSProperties }
 export const SummaryList = forwardRef<HTMLDListElement, SummaryListProps>(function SummaryList({ items, bordered = true, className = '', style, styles, classNames }, ref) {
@@ -48,7 +48,7 @@ export const SummaryList = forwardRef<HTMLDListElement, SummaryListProps>(functi
   </dl>
 })
 
-export interface TaskItem extends IClickBehaviour { title: ReactNode; status: ReactNode; hint?: ReactNode; statusColor?: Parameters<typeof Tag>[0]['color'] }
+export interface TaskItem extends ClickBehaviourProps { title: ReactNode; status: ReactNode; hint?: ReactNode; statusColor?: Parameters<typeof Tag>[0]['color'] }
 export interface TaskListProps extends SemanticStyling<'root' | 'item' | 'nameAndHint' | 'link' | 'hint' | 'status'> { items: TaskItem[]; className?: string; style?: CSSProperties }
 export const TaskList = forwardRef<HTMLUListElement, TaskListProps>(function TaskList({ items, className = '', style, styles, classNames }, ref) {
   return <ul ref={ref} className={`govuk-task-list ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
@@ -63,7 +63,7 @@ export const TaskList = forwardRef<HTMLUListElement, TaskListProps>(function Tas
 })
 
 export interface TabItem { key: string; label: ReactNode; children: ReactNode; disabled?: boolean }
-export interface TabsProps extends SemanticStyling<'root' | 'title' | 'list' | 'tab' | 'panel'> { items: TabItem[]; activeKey?: string; defaultActiveKey?: string; onChange?: (key: string) => void; destroyOnInactive?: boolean; style?: CSSProperties }
+export interface TabsProps extends SemanticStyling<'root' | 'title' | 'list' | 'tab' | 'panel'> { items: TabItem[]; activeKey?: string; defaultActiveKey?: string; onChange?: (key: string) => void; destroyOnClose?: boolean; className?: string; style?: CSSProperties }
 
 function useTabsEnhanced() {
   const query = '(min-width: 40.0625em)'
@@ -80,7 +80,7 @@ function useTabsEnhanced() {
   return enhanced
 }
 
-export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs({ items, activeKey, defaultActiveKey, onChange, destroyOnInactive = false, style, styles, classNames }, ref) {
+export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs({ items, activeKey, defaultActiveKey, onChange, destroyOnClose = false, className = '', style, styles, classNames }, ref) {
   const enhanced = useTabsEnhanced()
   const [inner, setInner] = useState(defaultActiveKey ?? items[0]?.key)
   const current = activeKey ?? inner
@@ -95,7 +95,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs({ items,
     }
     return undefined
   }
-  return <div className={`govuk-tabs ${classNames?.root ?? ''}`.trim()} style={{ ...styles?.root, ...style }} ref={ref}>
+  return <div className={`govuk-tabs ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }} ref={ref}>
     <h2 className={`govuk-tabs__title ${classNames?.title ?? ''}`.trim()} style={styles?.title}>Contents</h2>
     <ul className={`govuk-tabs__list ${classNames?.list ?? ''}`.trim()} style={styles?.list} role={enhanced ? 'tablist' : undefined}>
       {items.map((item, index) => {
@@ -127,7 +127,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs({ items,
     </ul>
     {items.map((item) => {
       const selected = item.key === current
-      if (destroyOnInactive && !selected) return null
+      if (destroyOnClose && !selected) return null
       const panelId = `${id}-panel-${item.key}`
       return <section
         className={`govuk-tabs__panel ${enhanced && !selected ? 'govuk-tabs__panel--hidden' : ''} ${classNames?.panel ?? ''}`.trim()}
@@ -142,16 +142,16 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs({ items,
   </div>
 })
 
-export interface AccordionItem { key: string; heading: ReactNode; summary?: ReactNode; children: ReactNode; expanded?: boolean }
-export interface AccordionProps { items: AccordionItem[]; showAllText?: string; hideAllText?: string; openKeys?: string[]; onChange?: (openKeys: string[]) => void; style?: CSSProperties }
-export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Accordion({ items, showAllText = 'Show all sections', hideAllText = 'Hide all sections', openKeys: controlledOpenKeys, onChange, style }, ref) {
+export interface AccordionItem { key: string; heading: ReactNode; summary?: ReactNode; children: ReactNode; /** Initial expanded state in uncontrolled mode; ignored when `openKeys` is set. */ defaultExpanded?: boolean }
+export interface AccordionProps { items: AccordionItem[]; showAllText?: string; hideAllText?: string; openKeys?: string[]; onChange?: (openKeys: string[]) => void; className?: string; style?: CSSProperties }
+export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Accordion({ items, showAllText = 'Show all sections', hideAllText = 'Hide all sections', openKeys: controlledOpenKeys, onChange, className = '', style }, ref) {
   const accordionId = useId().replaceAll(':', '')
-  const [innerOpenKeys, setInnerOpenKeys] = useState(() => items.filter((item) => item.expanded).map((item) => item.key))
+  const [innerOpenKeys, setInnerOpenKeys] = useState(() => items.filter((item) => item.defaultExpanded).map((item) => item.key))
   const openKeys = controlledOpenKeys ?? innerOpenKeys
   const allOpen = items.every((item) => openKeys.includes(item.key))
   const update = (next: string[]) => { if (controlledOpenKeys === undefined) setInnerOpenKeys(next); onChange?.(next) }
   const toggle = (key: string) => update(openKeys.includes(key) ? openKeys.filter((item) => item !== key) : [...openKeys, key])
-  return <div className="govuk-accordion" id={accordionId} ref={ref} style={style}>
+  return <div className={`govuk-accordion ${className}`.trim()} id={accordionId} ref={ref} style={style}>
     <div className="govuk-accordion__controls">
       <button className="govuk-accordion__show-all" type="button" aria-expanded={allOpen} onClick={() => update(allOpen ? [] : items.map((item) => item.key))}>
         <span className={`govuk-accordion-nav__chevron ${allOpen ? '' : 'govuk-accordion-nav__chevron--down'}`} aria-hidden="true" />

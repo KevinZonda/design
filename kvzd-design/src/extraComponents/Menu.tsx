@@ -1,7 +1,7 @@
-import { forwardRef, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react'
-import type { IClickBehaviour, SemanticStyling } from '../components/index'
+import { forwardRef, useEffect, useRef, useState, type HTMLAttributes, type KeyboardEvent, type ReactNode } from 'react'
+import type { ClickBehaviourProps, SemanticStyling } from '../components/index'
 
-export interface MenuItem extends IClickBehaviour {
+export interface MenuItem extends ClickBehaviourProps {
   key: string
   label: ReactNode
   disabled?: boolean
@@ -10,17 +10,15 @@ export interface MenuItem extends IClickBehaviour {
   type?: 'item' | 'divider'
 }
 
-export interface MenuProps extends SemanticStyling<'root' | 'item'> {
+export interface MenuProps extends HTMLAttributes<HTMLDivElement>, SemanticStyling<'root' | 'item'> {
   items: MenuItem[]
   ariaLabel: string
   autoFocus?: boolean
   onAction?: (key: string) => void
   onEscape?: () => void
-  className?: string
-  style?: CSSProperties
 }
 
-export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ items, ariaLabel, autoFocus = false, onAction, onEscape, className = '', classNames, style, styles }, forwardedRef) {
+export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ items, ariaLabel, autoFocus = false, onAction, onEscape, className = '', classNames, style, styles, onKeyDown, ...props }, forwardedRef) {
   const menuRef = useRef<HTMLDivElement>(null)
   const [activeKey, setActiveKey] = useState(items.find((item) => item.type !== 'divider' && !item.disabled)?.key)
 
@@ -28,7 +26,9 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ items,
     if (autoFocus) menuRef.current?.querySelector<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])')?.focus()
   }, [autoFocus])
 
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    onKeyDown?.(event)
+    if (event.defaultPrevented) return
     if (event.key === 'Escape') { event.stopPropagation(); onEscape?.(); return }
     if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return
     const controls = Array.from(menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])') ?? [])
@@ -50,7 +50,8 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ items,
     style={{ ...styles?.root, ...style }}
     role="menu"
     aria-label={ariaLabel}
-    onKeyDown={onKeyDown}
+    onKeyDown={handleKeyDown}
+    {...props}
   >{items.map((item) => item.type === 'divider'
       ? <hr className="kvzd-design-menu__divider" role="separator" key={item.key} />
       : item.href !== undefined && !item.onClick && !item.disabled

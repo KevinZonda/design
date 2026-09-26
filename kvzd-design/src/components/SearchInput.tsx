@@ -3,7 +3,7 @@ import type { ChangeEvent, KeyboardEvent, ReactNode } from 'react'
 import type { InputProps } from './Input'
 import type { SemanticStyling } from './styling'
 
-export interface SearchInputProps extends Omit<InputProps, 'type' | 'width' | 'prefix' | 'suffix' | 'allowClear' | 'styles' | 'classNames'>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'control' | 'input' | 'icon' | 'button'> {
+export interface SearchInputProps extends Omit<InputProps, 'type' | 'prefix' | 'suffix' | 'allowClear' | 'styles' | 'classNames'>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'control' | 'input' | 'icon' | 'button'> {
   /** Decorative icon shown inside the field. Pass null to hide it. Replaced by the loading spinner while loading. */
   icon?: ReactNode
   iconPosition?: 'left' | 'right'
@@ -15,6 +15,8 @@ export interface SearchInputProps extends Omit<InputProps, 'type' | 'width' | 'p
   loading?: boolean
   /** Render a submit-style button after the field. Pass true for the default "Search" label. */
   enterButton?: ReactNode
+  /** Native type of the enter button. Defaults to 'button'. */
+  enterButtonHtmlType?: 'button' | 'submit' | 'reset'
 }
 
 const defaultSearchIcon = (
@@ -33,11 +35,13 @@ const spinner = (
 
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(function SearchInput({
   'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   className = '',
   classNames,
   defaultValue,
   error,
   enterButton,
+  enterButtonHtmlType = 'button',
   hint,
   icon = defaultSearchIcon,
   iconPosition = 'left',
@@ -46,24 +50,24 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
   labelSize,
   loading = false,
   onChange,
+  onKeyDown,
   onSearch,
-  status,
   style,
   styles,
   value,
   visuallyHiddenLabel = false,
+  width,
   ...props
 }, ref) {
   const generatedId = useId()
   const inputId = id ?? `kvzd-design-search-${generatedId.replaceAll(':', '')}`
-  const hasError = Boolean(error) || status === 'error'
-  const hasWarning = status === 'warning'
+  const hasError = Boolean(error)
   const describedBy = [ariaDescribedBy, hint && `${inputId}-hint`, error && `${inputId}-error`].filter(Boolean).join(' ')
   const [inner, setInner] = useState(String(defaultValue ?? ''))
   const currentValue = String(value ?? inner)
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => { if (value === undefined) setInner(event.target.value); onChange?.(event) }
   const search = () => onSearch?.(currentValue)
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => { if (event.key === 'Enter') onSearch?.(currentValue) }
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => { onKeyDown?.(event); if (event.key === 'Enter') onSearch?.(currentValue) }
   const shownIcon = loading ? spinner : icon
 
   const field = (
@@ -78,8 +82,8 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         aria-describedby={describedBy || undefined}
-        aria-invalid={hasError || undefined}
-        className={`govuk-input ${hasError ? 'govuk-input--error' : ''} ${hasWarning ? 'kvzd-design-input--warning' : ''} ${shownIcon ? 'kvzd-design-search-input__input' : ''} ${classNames?.input ?? ''} ${className}`.trim()}
+        aria-invalid={hasError ? true : ariaInvalid}
+        className={`govuk-input ${hasError ? 'govuk-input--error' : ''} ${width ? `govuk-input--width-${width}` : ''} ${shownIcon ? 'kvzd-design-search-input__input' : ''} ${classNames?.input ?? ''} ${className}`.trim()}
         style={{ ...styles?.input, ...style }}
       />
       {shownIcon && <span className={`kvzd-design-search-input__icon ${classNames?.icon ?? ''}`.trim()} style={styles?.icon} aria-hidden="true">{shownIcon}</span>}
@@ -87,14 +91,14 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
   )
 
   return (
-    <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${hasWarning ? 'kvzd-design-form-group--warning' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
+    <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
       <label className={`govuk-label ${visuallyHiddenLabel ? 'govuk-visually-hidden' : labelSize ? `govuk-label--${labelSize}` : ''} ${classNames?.label ?? ''}`.trim()} style={styles?.label} htmlFor={inputId}>{label}</label>
       {hint && <div className={`govuk-hint ${classNames?.hint ?? ''}`.trim()} style={styles?.hint} id={`${inputId}-hint`}>{hint}</div>}
       {error && <p className={`govuk-error-message ${classNames?.error ?? ''}`.trim()} style={styles?.error} id={`${inputId}-error`}><span className="govuk-visually-hidden">Error:</span> {error}</p>}
       {enterButton === undefined ? field : (
         <div className="kvzd-design-search-input__combo">
           {field}
-          <button type="button" className={`govuk-button kvzd-design-search-input__button ${classNames?.button ?? ''}`.trim()} style={styles?.button} onClick={search}>{enterButton === true ? 'Search' : enterButton}</button>
+          <button type={enterButtonHtmlType} className={`govuk-button kvzd-design-search-input__button ${classNames?.button ?? ''}`.trim()} style={styles?.button} onClick={search}>{enterButton === true ? 'Search' : enterButton}</button>
         </div>
       )}
     </div>

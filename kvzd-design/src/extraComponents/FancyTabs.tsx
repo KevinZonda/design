@@ -1,9 +1,12 @@
-import { forwardRef, useId, useRef, useState } from 'react'
+import { forwardRef, useId, useRef, useState, type HTMLAttributes } from 'react'
 import type { SemanticStyling, TabsProps } from '../components/index'
 
-export type FancyTabsProps = Omit<TabsProps, 'styles' | 'classNames'> & SemanticStyling<'root' | 'list' | 'tab' | 'panel'>
+export type FancyTabsProps = Omit<TabsProps, 'styles' | 'classNames' | 'destroyOnClose'>
+  & Omit<HTMLAttributes<HTMLDivElement>, 'onChange' | 'children' | 'style' | 'className'>
+  & SemanticStyling<'root' | 'list' | 'tab' | 'panel'>
+  & { destroyOnClose?: boolean }
 
-export const FancyTabs = forwardRef<HTMLDivElement, FancyTabsProps>(function FancyTabs({ items, activeKey, defaultActiveKey, onChange, destroyOnInactive = false, style, styles, classNames }, ref) {
+export const FancyTabs = forwardRef<HTMLDivElement, FancyTabsProps>(function FancyTabs({ items, activeKey, defaultActiveKey, onChange, destroyOnClose = false, style, styles, classNames, className = '', ...props }, ref) {
   const [inner, setInner] = useState(defaultActiveKey ?? items.find((item) => !item.disabled)?.key)
   const current = activeKey ?? inner
   const id = useId().replaceAll(':', '')
@@ -28,7 +31,7 @@ export const FancyTabs = forwardRef<HTMLDivElement, FancyTabsProps>(function Fan
     return undefined
   }
 
-  return <div ref={ref} className={`kvzd-design-fancy-tabs ${classNames?.root ?? ''}`.trim()} style={{ ...styles?.root, ...style }}>
+  return <div ref={ref} className={`kvzd-design-fancy-tabs ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }} {...props}>
     <div className={`kvzd-design-fancy-tabs__list ${classNames?.list ?? ''}`.trim()} style={styles?.list} role="tablist">
       {items.map((item, index) => {
         const selected = item.key === current
@@ -58,7 +61,7 @@ export const FancyTabs = forwardRef<HTMLDivElement, FancyTabsProps>(function Fan
     </div>
     {items.map((item) => {
       const selected = item.key === current
-      if (destroyOnInactive && !selected) return null
+      if (destroyOnClose && !selected) return null
       return <div
         className={`kvzd-design-fancy-tabs__panel ${classNames?.panel ?? ''}`.trim()}
         style={styles?.panel}

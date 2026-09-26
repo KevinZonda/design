@@ -1,8 +1,8 @@
-import { Children, cloneElement, forwardRef, useEffect, useId, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from 'react'
+import { Children, cloneElement, forwardRef, useEffect, useId, useRef, useState, type CSSProperties, type HTMLAttributes, type MouseEvent, type ReactElement, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import type { SemanticStyling } from '../components/index'
 
-export interface TooltipProps extends SemanticStyling<'root' | 'popup'> {
+export interface TooltipProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'title' | 'children'>, SemanticStyling<'root' | 'popup'> {
   title: ReactNode
   children: ReactElement
   placement?: 'top' | 'bottom' | 'left' | 'right'
@@ -12,8 +12,6 @@ export interface TooltipProps extends SemanticStyling<'root' | 'popup'> {
   onOpenChange?: (open: boolean) => void
   /** Mount the popup into a custom container with fixed positioning; useful inside overflow-clipping scroll areas. */
   getPopupContainer?: () => HTMLElement
-  className?: string
-  style?: CSSProperties
 }
 
 const fixedOffset: Record<TooltipProps['placement'] & string, { top?: string; left?: string; right?: string; transform: string }> = {
@@ -23,7 +21,7 @@ const fixedOffset: Record<TooltipProps['placement'] & string, { top?: string; le
   right: { transform: 'translate(8px, -50%)' },
 }
 
-export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Tooltip({ title, children, placement = 'top', trigger = 'hover', open, defaultOpen = false, onOpenChange, getPopupContainer, className = '', classNames, style, styles }, ref) {
+export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Tooltip({ title, children, placement = 'top', trigger = 'hover', open, defaultOpen = false, onOpenChange, getPopupContainer, className = '', classNames, style, styles, ...props }, ref) {
   const [inner, setInner] = useState(defaultOpen)
   const expanded = open ?? inner
   const id = useId().replaceAll(':', '')
@@ -54,17 +52,24 @@ export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Toolti
   const plainTitle = typeof title === 'string' || typeof title === 'number'
   const child = Children.only(children)
   const childProps = child.props as Record<string, unknown>
-  const describedBy: Record<string, string | undefined> = { 'aria-describedby': expanded && plainTitle ? id : undefined }
+  // Keep the child's own aria-describedby when the tooltip is closed; only override it while the popup is showing.
+  const describedBy: Record<string, string | undefined> = { 'aria-describedby': expanded && plainTitle ? id : childProps['aria-describedby'] as string | undefined }
+  // Run the child's original handler before the tooltip's own logic so userland handlers are never dropped.
+  const chain = (name: string, handler: (event: MouseEvent) => void) => (event: MouseEvent) => {
+    const original = childProps[name]
+    if (typeof original === 'function') (original as (event: MouseEvent) => void)(event)
+    handler(event)
+  }
 
   const handlers = trigger === 'click'
-    ? { onClick: () => setExpanded(!expanded) }
+    ? { onClick: chain('onClick', () => setExpanded(!expanded)) }
     : trigger === 'focus'
-      ? { onFocus: () => setExpanded(true), onBlur: () => setExpanded(false) }
+      ? { onFocus: chain('onFocus', () => setExpanded(true)), onBlur: chain('onBlur', () => setExpanded(false)) }
       : {
-          onMouseEnter: () => { hoverCount.current += 1; setExpanded(true) },
-          onMouseLeave: () => { hoverCount.current = Math.max(0, hoverCount.current - 1); if (!hoverCount.current) setExpanded(false) },
-          onFocus: () => setExpanded(true),
-          onBlur: () => setExpanded(false),
+          onMouseEnter: chain('onMouseEnter', () => { hoverCount.current += 1; setExpanded(true) }),
+          onMouseLeave: chain('onMouseLeave', () => { hoverCount.current = Math.max(0, hoverCount.current - 1); if (!hoverCount.current) setExpanded(false) }),
+          onFocus: chain('onFocus', () => setExpanded(true)),
+          onBlur: chain('onBlur', () => setExpanded(false)),
         }
 
   const popup = expanded ? <span id={id} role="tooltip" className={`kvzd-design-tooltip__popup kvzd-design-tooltip--${placement} ${getPopupContainer ? 'kvzd-design-tooltip__popup--fixed' : ''} ${classNames?.popup ?? ''}`.trim()} style={{ ...styles?.popup, ...(getPopupContainer ? fixedStyle : {}) }}>
@@ -72,8 +77,8 @@ export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(function Toolti
     <span className="kvzd-design-tooltip__arrow" aria-hidden="true" />
   </span> : null
 
-  return <span ref={(node) => { rootRef.current = node; if (typeof ref === 'function') ref(node); else if (ref) (ref as { current: HTMLSpanElement | null }).current = node }} className={`kvzd-design-tooltip ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
-    {cloneElement(child, { ...describedBy, ...handlers, ...childProps })}
+  return <span ref={(node) => { rootRef.current = node; if (typeof ref === 'function') ref(node); else if (ref) (ref as { current: HTMLSpanElement | null }).current = node }} className={`kvzd-design-tooltip ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }} {...props}>
+    {cloneElement(child, { ...childProps, ...describedBy, ...handlers })}
     {getPopupContainer && popup ? createPortal(popup, getPopupContainer()) : popup}
   </span>
 })

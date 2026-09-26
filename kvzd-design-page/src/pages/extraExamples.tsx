@@ -77,7 +77,7 @@ export function MenuExample() {
 
 export function DropdownExample() {
   const [selected, setSelected] = useState('Choose an action')
-  return <><Dropdown label="Actions" menuLabel="Application actions" items={[
+  return <><Dropdown label="Actions" ariaLabel="Application actions" items={[
     { key: 'view', label: 'View application' },
     { key: 'download', label: 'Download details' },
   ]} onAction={(key) => setSelected(key === 'view' ? 'View application selected' : 'Download details selected')} />
@@ -161,7 +161,7 @@ export function ProgressExample() {
     <Progress percent={60} status="active" />
     <Progress percent={100} />
     <Progress percent={45} status="exception" />
-    <Progress percent={75} strokeColor="#1d70b8" size="s" />
+    <Progress percent={75} color="#1d70b8" size="s" />
   </div>
 }
 

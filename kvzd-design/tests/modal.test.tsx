@@ -87,9 +87,27 @@ test('footer={null} renders no footer and a custom footer node takes priority ov
   expect(screen.queryByRole('button', { name: 'Confirm' })).toBeNull()
 })
 
-test('no footer props means no footer', () => {
+test('no footer props means no footer, cancelText alone does not render a footer', () => {
   const { view } = renderModal()
   expect(view.container.querySelector('.kvzd-design-modal__footer')).toBeNull()
+  cleanup()
+
+  renderModal({ cancelText: 'Discard' })
+  expect(screen.queryByRole('button', { name: 'Discard' })).toBeNull()
+  expect(document.querySelector('.kvzd-design-modal__footer')).toBeNull()
+})
+
+test('defaultOpen opens without the open prop and closes via the close button', () => {
+  render(<Modal defaultOpen title="T" onClose={() => {}}><p>Body</p></Modal>)
+  expect(document.querySelector('dialog')!.hasAttribute('open')).toBe(true)
+  fireEvent.click(screen.getByRole('button', { name: 'Close' }))
+  expect(document.querySelector('dialog')!.hasAttribute('open')).toBe(false)
+})
+
+test('okButtonProps and cancelButtonProps reach the builtin footer buttons', () => {
+  render(<Modal open title="T" onClose={() => {}} onOk={() => {}} okButtonProps={{ 'data-testid': 'ok-btn' }} cancelButtonProps={{ className: 'cancel-x' }}>Body</Modal>)
+  expect(screen.getByTestId('ok-btn')).toBeTruthy()
+  expect(screen.getByRole('button', { name: 'Cancel' }).className).toContain('cancel-x')
 })
 
 test('destroyOnClose unmounts body content after first close and restores it on reopen', () => {

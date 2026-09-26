@@ -20,17 +20,22 @@ test('Form.Item label is injected into the field and used for validation message
   expect(screen.getByText('Full name', { selector: 'label' })).toBeTruthy()
 })
 
-test('Form.Item help overrides the error display and extra renders supplementary text', () => {
+test('Form.Item help renders as a hint and yields to validation errors, extra renders supplementary text', async () => {
   render(
     <Form>
-      <Form.Item name="email" help="We will only use this to contact you." extra="No spam, ever.">
+      <Form.Item name="email" help="We will only use this to contact you." extra="No spam, ever." rules={[{ required: true }]}>
         <Input label="Email" />
       </Form.Item>
+      <button type="submit">Send</button>
     </Form>,
   )
   expect(screen.getByText('We will only use this to contact you.')).toBeTruthy()
   expect(screen.getByText('No spam, ever.')).toBeTruthy()
   expect(document.querySelector('.kvzd-design-form-item')).toBeTruthy()
+
+  fireEvent.click(screen.getByText('Send'))
+  expect(screen.queryByText('We will only use this to contact you.')).toBeNull()
+  expect((await screen.findAllByText('Enter Email')).length).toBeGreaterThan(0)
 })
 
 test('Select single with showSearch filters options and selects a value', () => {
@@ -51,7 +56,7 @@ test('Select single with showSearch filters options and selects a value', () => 
   fireEvent.change(screen.getByPlaceholderText('Search'), { target: { value: 'ger' } })
   expect(screen.queryByText('France')).toBeNull()
   fireEvent.click(screen.getByText('Germany'))
-  expect(onChange).toHaveBeenCalledWith('de')
+  expect(onChange).toHaveBeenCalledWith('de', expect.anything())
   const hidden = document.querySelector('input[type="hidden"][name="country"]')
   expect(hidden && (hidden as HTMLInputElement).value).toBe('de')
 })

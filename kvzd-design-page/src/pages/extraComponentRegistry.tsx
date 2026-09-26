@@ -33,7 +33,7 @@ const sidebarCode = `<p className="govuk-body"><strong>Nested navigation</strong
 <div className="sidebar-example">
   <Sidebar
     heading="Pages in this section"
-    currentKey="history"
+    activeKey="history"
     items={[
       { key: 'accordion', label: 'Accordion', href: '#example-title', children: [
         { key: 'history', label: 'History', href: '#api-title' },
@@ -48,7 +48,7 @@ const sidebarCode = `<p className="govuk-body"><strong>Nested navigation</strong
   <Sidebar
     heading="Documentation"
     collapsible
-    currentKey="sidebar-api"
+    activeKey="sidebar-api"
     items={[
       { key: 'examples', label: 'Examples', children: [
         { key: 'fancy-tabs', label: 'FancyTabs', href: '#example-title' },
@@ -191,7 +191,7 @@ return <>
     howItWorks: 'The trigger exposes its expanded state. The menu opens with focus on its first action and closes on selection, Escape or an outside click.',
     code: `const [selected, setSelected] = useState('Choose an action')
 return <>
-  <Dropdown label="Actions" menuLabel="Application actions" items={[
+  <Dropdown label="Actions" ariaLabel="Application actions" items={[
     { key: 'view', label: 'View application' },
     { key: 'download', label: 'Download details' },
   ]} onAction={(key) => setSelected(key === 'view' ? 'View application selected' : 'Download details selected')} />
@@ -200,7 +200,7 @@ return <>
     example: () => <DropdownExample />,
     api: [
       { name: 'label', type: 'ReactNode', description: 'Trigger button content.' },
-      { name: 'menuLabel', type: 'string', description: 'Accessible name for the action menu.' },
+      { name: 'ariaLabel', type: 'string', description: 'Accessible name for the action menu.' },
       { name: 'items', type: 'MenuItem[]', description: 'Actions shown in the menu.' },
       { name: 'open / defaultOpen', type: 'boolean', description: 'Controlled or initial open state.' },
       { name: 'onOpenChange', type: '(open: boolean) => void', description: 'Called when the menu requests a state change.' },
@@ -292,7 +292,7 @@ return <>
       { name: 'activeKey', type: 'string', description: 'Controlled active tab.' },
       { name: 'defaultActiveKey', type: 'string', description: 'Initial active tab.' },
       { name: 'onChange', type: '(key: string) => void', description: 'Called with the selected tab key.' },
-      { name: 'destroyOnInactive', type: 'boolean', defaultValue: 'false', description: 'Remove inactive panel content from the DOM instead of hiding it.' },
+      { name: 'destroyOnClose', type: 'boolean', defaultValue: 'false', description: 'Remove inactive panel content from the DOM instead of hiding it.' },
     ],
   },
   {
@@ -335,7 +335,7 @@ return <>
       { name: 'Form.Item help', type: 'ReactNode', description: 'Custom help text; when set it replaces the validation error display.' },
       { name: 'Form.Item extra', type: 'ReactNode', description: 'Supplementary text always shown beneath the field.' },
       { name: 'Form.Item multiple', type: 'boolean', defaultValue: 'false', description: 'Read all values for a checkbox group.' },
-      { name: 'Form.Item focusId', type: 'string', description: 'ID targeted from the error summary for grouped fields.' },
+      { name: 'Form.Item focusTargetId', type: 'string', description: 'ID targeted from the error summary for grouped fields.' },
       { name: 'ref', type: 'Ref<HTMLFormElement>', description: 'Native form element.' },
     ],
   },
@@ -366,7 +366,7 @@ return <>
     example: () => <>
       <p className="govuk-body"><strong>Nested navigation</strong></p>
       <div className="sidebar-example">
-        <Sidebar heading="Pages in this section" currentKey="history" items={[
+        <Sidebar heading="Pages in this section" activeKey="history" items={[
           { key: 'accordion', label: 'Accordion', href: '#example-title', children: [
             { key: 'history', label: 'History', href: '#api-title' },
           ] },
@@ -375,7 +375,7 @@ return <>
       </div>
       <p className="govuk-body"><strong>Collapsible navigation</strong></p>
       <div className="sidebar-example">
-        <Sidebar heading="Documentation" collapsible currentKey="sidebar-api" items={[
+        <Sidebar heading="Documentation" collapsible activeKey="sidebar-api" items={[
           { key: 'examples', label: 'Examples', children: [
             { key: 'fancy-tabs', label: 'FancyTabs', href: '#example-title' },
             { key: 'sidebar', label: 'Sidebar', href: '#example-title', children: [
@@ -391,7 +391,7 @@ return <>
     api: [
       { name: 'heading', type: 'ReactNode', description: 'Visible heading and navigation label.' },
       { name: 'items', type: 'SidebarItem[]', description: 'Links can have nested children; items without href or onClick are group headings.' },
-      { name: 'currentKey', type: 'string', description: 'Key of the current link and branch.' },
+      { name: 'activeKey', type: 'string', description: 'Key of the current link and branch.' },
       { name: 'collapsible', type: 'boolean', defaultValue: 'false', description: 'Add expand and collapse controls to items with children.' },
       { name: 'renderLink', type: '(item, options) => ReactNode', description: 'Optional link renderer for a client-side router.' },
       { name: 'onExpandChange', type: '(key: string, expanded: boolean) => void', description: 'Called when a collapsible group is toggled.' },
@@ -590,7 +590,7 @@ return <div className="steps-example">
   <Progress percent={60} status="active" />
   <Progress percent={100} />
   <Progress percent={45} status="exception" />
-  <Progress percent={75} strokeColor="#1d70b8" size="s" />
+  <Progress percent={75} color="#1d70b8" size="s" />
 </div>`,
     example: () => <ProgressExample />,
     api: [
@@ -598,7 +598,7 @@ return <div className="steps-example">
       { name: 'status', type: "'normal' | 'active' | 'success' | 'exception'", defaultValue: 'normal', description: 'Visual state of the bar; 100% or more always renders as success.' },
       { name: 'showInfo', type: 'boolean', defaultValue: 'true', description: 'Show the percentage next to the bar.' },
       { name: 'size', type: "'s' | 'm'", defaultValue: 'm', description: 'Bar size.' },
-      { name: 'strokeColor', type: 'string', description: 'Custom colour of the filled portion.' },
+      { name: 'color', type: 'string', description: 'Custom colour of the filled portion.' },
       { name: 'type', type: "'line' | 'circle' | 'dashboard' | 'steps'", defaultValue: 'line', description: 'Visual treatment: line, circle, dashboard or steps.' },
       { name: 'width', type: 'number', description: 'Width and height of circle and dashboard types in pixels.' },
       { name: 'gapDegree', type: 'number', defaultValue: '8', description: 'Gap of the dashboard type as a percentage of the circumference.' },

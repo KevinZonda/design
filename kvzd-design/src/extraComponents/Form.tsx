@@ -1,5 +1,5 @@
 import { cloneElement, createContext, forwardRef, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from 'react'
-import type { FormEvent, FormHTMLAttributes, ReactElement, ReactNode } from 'react'
+import type { CSSProperties, FormEvent, FormHTMLAttributes, ReactElement, ReactNode } from 'react'
 import { ErrorSummary } from '../components/index'
 
 export type FormValue = FormDataEntryValue | FormDataEntryValue[] | undefined
@@ -27,8 +27,8 @@ export interface FormError {
 export interface FormInstance {
   getFieldValue: (name: string) => FormValue
   getFieldsValue: () => FormValues
-  setFieldValue: (name: string, value: FormDataEntryValue | string[]) => void
-  setFieldsValue: (values: Record<string, FormDataEntryValue | string[]>) => void
+  setFieldValue: (name: string, value: FormDataEntryValue | FormDataEntryValue[]) => void
+  setFieldsValue: (values: Record<string, FormDataEntryValue | FormDataEntryValue[]>) => void
   validateFields: () => Promise<FormValues>
   resetFields: () => void
   submit: () => void
@@ -48,7 +48,7 @@ const defaultMessages = {
 
 export interface FormProps extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit' | 'noValidate'> {
   form?: FormInstance
-  initialValues?: Record<string, string | string[]>
+  initialValues?: FormValues
   messages?: Partial<Record<keyof typeof defaultMessages, string>>
   onFinish?: (values: FormValues) => void
   onFinishFailed?: (errors: FormError[], values: FormValues) => void
@@ -64,11 +64,17 @@ export interface FormItemProps {
   children: ReactElement<Record<string, unknown>>
   rules?: readonly FormRule[]
   multiple?: boolean
-  focusId?: string
+  /** id of the element to focus when validation of this field fails; defaults to the field element's own id. */
+  focusTargetId?: string
   dependencies?: string[]
   label?: ReactNode
+  /** Hint shown below the field; hidden while the field has a validation error so the error stays visible. */
   help?: ReactNode
   extra?: ReactNode
+  className?: string
+  style?: CSSProperties
+  /** id applied to the wrapper element around the field. */
+  id?: string
 }
 
 export interface FormListField {
@@ -78,7 +84,7 @@ export interface FormListField {
 }
 
 export interface FormListOperations {
-  add: (defaultValue?: FormDataEntryValue | string[]) => void
+  add: (defaultValue?: FormDataEntryValue | FormDataEntryValue[]) => void
   remove: (index: number) => void
 }
 
@@ -108,9 +114,9 @@ interface FormContextValue {
   validateFieldValue: (name: string, value: FormValue) => void
   getListLength: (name: string) => number
   getListKeys: (name: string) => readonly number[]
-  addListItem: (name: string, defaultValue?: FormDataEntryValue | string[]) => void
+  addListItem: (name: string, defaultValue?: FormDataEntryValue | FormDataEntryValue[]) => void
   removeListItem: (name: string, index: number) => void
-  listDefault: (name: string) => FormDataEntryValue | string[] | undefined
+  listDefault: (name: string) => FormDataEntryValue | FormDataEntryValue[] | undefined
 }
 
 interface BoundFormInstance extends FormInstance {
@@ -271,7 +277,7 @@ const FormRoot = forwardRef<HTMLFormElement, FormProps>(function Form({ children
   const summaryRef = useRef<HTMLDivElement>(null)
   const pendingFocus = useRef<'summary' | 'field' | null>(null)
   const dependentsRef = useRef(new Map<string, readonly string[]>())
-  const pendingDefaultsRef = useRef(new Map<string, FormDataEntryValue | string[]>())
+  const pendingDefaultsRef = useRef(new Map<string, FormDataEntryValue | FormDataEntryValue[]>())
   const listKeysRef = useRef(new Map<string, number[]>())
   const listKeyCounter = useRef(0)
   const [errors, setErrors] = useState<FormError[]>([])
@@ -309,7 +315,7 @@ const FormRoot = forwardRef<HTMLFormElement, FormProps>(function Form({ children
 
   const getListLength = useCallback((name: string) => listLengths[name] ?? 0, [listLengths])
   const getListKeys = useCallback((name: string) => listKeysRef.current.get(name) ?? [], [])
-  const addListItem = useCallback((name: string, defaultValue?: FormDataEntryValue | string[]) => {
+  const addListItem = useCallback((name: string, defaultValue?: FormDataEntryValue | FormDataEntryValue[]) => {
     const keys = listKeysRef.current.get(name) ?? []
     listKeyCounter.current += 1
     listKeysRef.current.set(name, [...keys, listKeyCounter.current])
@@ -325,7 +331,7 @@ const FormRoot = forwardRef<HTMLFormElement, FormProps>(function Form({ children
     listKeysRef.current.set(name, keys.filter((_, i) => i !== index))
     for (let i = index; i < length - 1; i++) valuesRef.current[`${name}.${i}`] = valuesRef.current[`${name}.${i + 1}`]
     delete valuesRef.current[`${name}.${length - 1}`]
-    const pending = new Map<string, FormDataEntryValue | string[]>()
+    const pending = new Map<string, FormDataEntryValue | FormDataEntryValue[]>()
     for (const [key, value] of pendingDefaultsRef.current) {
       if (!key.startsWith(`${name}.`)) { pending.set(key, value); continue }
       const i = Number(key.slice(name.length + 1))
@@ -337,7 +343,7 @@ const FormRoot = forwardRef<HTMLFormElement, FormProps>(function Form({ children
   }, [])
   const listDefault = useCallback((name: string) => pendingDefaultsRef.current.get(name), [])
 
-  const applyFieldValue = (name: string, value: FormDataEntryValue | string[]) => {
+  const applyFieldValue = (name: string, value: FormDataEntryValue | FormDataEntryValue[]) => {
     valuesRef.current[name] = value
     const field = fieldsRef.current.get(name)
     if (field) writeFieldValue(field, value)
@@ -458,18 +464,18 @@ const FormRoot = forwardRef<HTMLFormElement, FormProps>(function Form({ children
   </FormContext.Provider>
 })
 
-function FormItem({ children, dependencies, extra, focusId, help, label, multiple = false, name, rules = [] }: FormItemProps) {
+function FormItem({ children, className, dependencies, extra, focusTargetId, help, id, label, multiple = false, name, rules = [], style }: FormItemProps) {
   const context = useContext(FormContext)
   if (!context) throw new Error('Form.Item must be used inside Form')
 
   const { register, registerDependencies } = context
   const childProps = children.props
-  const id = (childProps.id as string | undefined) ?? `${context.prefix}-${name.replaceAll(/[^a-zA-Z0-9_-]/g, '-')}`
+  const fieldId = (childProps.id as string | undefined) ?? `${context.prefix}-${name.replaceAll(/[^a-zA-Z0-9_-]/g, '-')}`
   const itemLabel = label ?? (childProps.label as ReactNode | undefined) ?? (childProps.legend as ReactNode | undefined) ?? name
   const messageLabel = typeof itemLabel === 'string' ? itemLabel : name
   const listDefault = context.listDefault(name)
   const initialValue = (childProps.defaultValue as FormValue | undefined) ?? context.initialValues?.[name] ?? listDefault
-  useEffect(() => register({ name, label: messageLabel, id: focusId ?? id, multiple, rules, initialValue }), [register, focusId, id, messageLabel, multiple, name, rules, initialValue])
+  useEffect(() => register({ name, label: messageLabel, id: focusTargetId ?? fieldId, multiple, rules, initialValue }), [register, focusTargetId, fieldId, messageLabel, multiple, name, rules, initialValue])
   useEffect(() => {
     if (!dependencies || dependencies.length === 0) return
     return registerDependencies(name, dependencies)
@@ -484,9 +490,9 @@ function FormItem({ children, dependencies, extra, focusId, help, label, multipl
   }
 
   const injected: Record<string, unknown> = {
-    id,
+    id: fieldId,
     name,
-    error: help === undefined ? context.errors[name] ?? childProps.error : undefined,
+    error: context.errors[name] ?? childProps.error,
     onChange: handleTrigger('onChange'),
     onBlur: handleTrigger('onBlur'),
   }
@@ -497,10 +503,12 @@ function FormItem({ children, dependencies, extra, focusId, help, label, multipl
     injected.defaultValue = fallbackDefault
   }
   const field = cloneElement(children, injected)
-  if (help === undefined && extra === undefined) return field
-  return <div className="kvzd-design-form-item">
+  // Validation errors take priority: while the field has an error the help hint is hidden so the error stays visible.
+  const showHelp = help !== undefined && context.errors[name] === undefined
+  if (help === undefined && extra === undefined && className === undefined && style === undefined && id === undefined) return field
+  return <div id={id} className={`kvzd-design-form-item ${className ?? ''}`.trim()} style={style}>
     {field}
-    {help !== undefined && <div className="kvzd-design-form-item__help">{help}</div>}
+    {showHelp && <div className="kvzd-design-form-item__help">{help}</div>}
     {extra !== undefined && <div className="kvzd-design-form-item__extra">{extra}</div>}
   </div>
 }

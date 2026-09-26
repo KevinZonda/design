@@ -12,6 +12,10 @@ export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
   closable?: boolean
   onClose?: () => void
   closeText?: string
+  /** Accessible label of the close button. */
+  closeLabel?: string
+  /** Override the built-in type icon. */
+  icon?: ReactNode
   showIcon?: boolean
 }
 
@@ -57,7 +61,7 @@ const renderIcon = (type: AlertType, maskId: string): ReactNode => {
   }
 }
 
-export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert({ type = 'info', title, description, action, closable = false, onClose, closeText, showIcon = true, children, className = '', classNames, style, styles, ...props }, ref) {
+export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert({ type = 'info', title, description, action, closable = false, onClose, closeText, closeLabel = 'Close', icon, showIcon = true, children, className = '', classNames, style, styles, ...props }, ref) {
   const iconMaskId = `kvzd-alert-icon-${useId().replaceAll(':', '')}`
   return <div
     {...props}
@@ -66,13 +70,13 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert({ typ
     className={`kvzd-design-alert kvzd-design-alert--${type} ${classNames?.root ?? ''} ${className}`.trim()}
     style={{ ...styles?.root, ...style }}
   >
-    {showIcon && <span className={`kvzd-design-alert__icon ${classNames?.icon ?? ''}`.trim()} style={styles?.icon}>{renderIcon(type, iconMaskId)}</span>}
+    {showIcon && <span className={`kvzd-design-alert__icon ${classNames?.icon ?? ''}`.trim()} style={styles?.icon}>{icon ?? renderIcon(type, iconMaskId)}</span>}
     <div className="kvzd-design-alert__body">
       {title && <p className={`kvzd-design-alert__title ${classNames?.title ?? ''}`.trim()} style={styles?.title}>{title}</p>}
       {children && <div className={`kvzd-design-alert__message ${classNames?.message ?? ''}`.trim()} style={styles?.message}>{children}</div>}
       {description && <div className={`kvzd-design-alert__description ${classNames?.description ?? ''}`.trim()} style={styles?.description}>{description}</div>}
     </div>
     {action && <div className={`kvzd-design-alert__action ${classNames?.action ?? ''}`.trim()} style={styles?.action}>{action}</div>}
-    {closable && <button type="button" className={`kvzd-design-alert__close ${classNames?.close ?? ''}`.trim()} style={styles?.close} aria-label="Close" onClick={onClose}>{closeText ?? '×'}</button>}
+    {closable && <button type="button" className={`kvzd-design-alert__close ${classNames?.close ?? ''}`.trim()} style={styles?.close} aria-label={closeLabel} onClick={onClose}>{closeText ?? '×'}</button>}
   </div>
 })

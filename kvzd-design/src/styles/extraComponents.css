@@ -572,3 +572,20 @@
 
 .kvzd-design-code-box__pre { margin: 0; padding: 20px; overflow-x: auto; border: 1px solid var(--govuk-border-colour); color: #1f2328; background: var(--govuk-body-background-colour); font: 15px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre; }
 .kvzd-design-code-box__pre code { font: inherit; }
+
+/* Select loading spinner (native branch renders it outside the trigger button) */
+.kvzd-design-select__spinner { display: inline-flex; align-items: center; }
+.govuk-form-group > select + .kvzd-design-select__spinner { margin-top: 6px; }
+
+/* Divider small size (GOV.UK section breaks only ship m/l/xl) */
+.kvzd-design-divider--s { margin-bottom: 10px; }
+
+/* Progress large size */
+.kvzd-design-progress--l .kvzd-design-progress__bar { height: 12px; }
+.kvzd-design-progress--l .kvzd-design-progress__info { font-size: 1.125rem; }
+.kvzd-design-progress--l .kvzd-design-progress__segment { height: 12px; }
+
+/* CodeBox title bar and line-number gutter */
+.kvzd-design-code-box__title { padding: 10px 20px; border: 1px solid var(--govuk-border-colour); border-bottom: 0; font-weight: 700; }
+.kvzd-design-code-box__title + .kvzd-design-code-box__pre { border-top: 0; }
+.kvzd-design-code-box__line-number { display: inline-block; min-width: 3ch; margin-right: 2ch; color: var(--govuk-secondary-text-colour); text-align: right; user-select: none; }

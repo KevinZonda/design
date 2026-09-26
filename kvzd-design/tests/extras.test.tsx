@@ -63,8 +63,8 @@ test('tabs skip disabled items and do not activate them', () => {
   expect(onChange).not.toHaveBeenCalled()
 })
 
-test('tabs with destroyOnInactive do not render inactive panels', () => {
-  render(<Tabs destroyOnInactive items={[
+test('tabs with destroyOnClose do not render inactive panels', () => {
+  render(<Tabs destroyOnClose items={[
     { key: 'a', label: 'Tab A', children: <p>Panel A content</p> },
     { key: 'b', label: 'Tab B', children: <p>Panel B content</p> },
   ]} />)
@@ -77,7 +77,7 @@ test('tabs with destroyOnInactive do not render inactive panels', () => {
 
 test('fancy tabs skip disabled items and destroy inactive panels on demand', () => {
   const onChange = vi.fn()
-  render(<FancyTabs destroyOnInactive items={[
+  render(<FancyTabs destroyOnClose items={[
     { key: 'a', label: 'Tab A', children: <p>Panel A content</p> },
     { key: 'b', label: 'Tab B', children: <p>Panel B content</p>, disabled: true },
     { key: 'c', label: 'Tab C', children: <p>Panel C content</p> },
@@ -93,7 +93,7 @@ test('fancy tabs skip disabled items and destroy inactive panels on demand', () 
 })
 
 test('dropdown opens on hover and honours placement class', () => {
-  render(<Dropdown trigger="hover" placement="top" label="Actions" menuLabel="Actions" items={[{ key: 'a', label: 'Item A' }]} />)
+  render(<Dropdown trigger="hover" placement="top" label="Actions" ariaLabel="Actions" items={[{ key: 'a', label: 'Item A' }]} />)
   const root = document.querySelector('.kvzd-design-dropdown') as HTMLElement
   fireEvent.mouseEnter(root)
   expect(screen.getByRole('menu')).toBeTruthy()
@@ -103,7 +103,7 @@ test('dropdown opens on hover and honours placement class', () => {
 })
 
 test('dropdown keeps click trigger and outside click dismissal', () => {
-  render(<><Dropdown label="Actions" menuLabel="Actions" items={[{ key: 'a', label: 'Item A' }]} /><button type="button">Outside</button></>)
+  render(<><Dropdown label="Actions" ariaLabel="Actions" items={[{ key: 'a', label: 'Item A' }]} /><button type="button">Outside</button></>)
   fireEvent.click(screen.getByRole('button', { name: /Actions/ }))
   expect(screen.getByRole('menu')).toBeTruthy()
   fireEvent.pointerDown(screen.getByRole('button', { name: 'Outside' }))

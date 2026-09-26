@@ -83,21 +83,22 @@ test('exclusive option renders a divider before it with configurable text', () =
   expect(document.querySelector('.govuk-checkboxes__divider')?.textContent).toBe('oder')
 })
 
-test('input status="warning" adds warning classes without aria-invalid', () => {
-  render(<Input label="Name" status="warning" />)
+test('input merges a user-provided aria-describedby with the hint and error ids', () => {
+  render(<Input label="Name" hint="As written on your passport" error="Enter your name" aria-describedby="extra-description" />)
   const input = document.querySelector('input') as HTMLInputElement
-  expect(input.className).toContain('kvzd-design-input--warning')
-  expect(input.className).not.toContain('govuk-input--error')
-  expect(input.hasAttribute('aria-invalid')).toBe(false)
-  expect(document.querySelector('.kvzd-design-form-group--warning')).toBeTruthy()
-  expect(document.querySelector('.govuk-form-group--error')).toBeNull()
+  expect(input.getAttribute('aria-describedby')).toBe(`extra-description ${input.id}-hint ${input.id}-error`)
 })
 
-test('input status="error" keeps existing error behaviour', () => {
-  render(<Input label="Name" status="error" />)
-  const input = document.querySelector('input') as HTMLInputElement
-  expect(input.className).toContain('govuk-input--error')
-  expect(input.className).not.toContain('kvzd-design-input--warning')
+test('input error forces aria-invalid while a user-provided aria-invalid is kept otherwise', () => {
+  const { rerender } = render(<Input label="Name" aria-invalid={true} />)
+  let input = document.querySelector('input') as HTMLInputElement
   expect(input.getAttribute('aria-invalid')).toBe('true')
+  expect(input.className).not.toContain('govuk-input--error')
+  expect(document.querySelector('.govuk-form-group--error')).toBeNull()
+
+  rerender(<Input label="Name" error="Enter your name" aria-invalid={false} />)
+  input = document.querySelector('input') as HTMLInputElement
+  expect(input.getAttribute('aria-invalid')).toBe('true')
+  expect(input.className).toContain('govuk-input--error')
   expect(document.querySelector('.govuk-form-group--error')).toBeTruthy()
 })

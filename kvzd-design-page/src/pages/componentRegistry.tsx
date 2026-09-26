@@ -121,24 +121,24 @@ export const componentDocs: ComponentDoc[] = [
     whenToUse: 'Use one clear primary action per page. Use a start button on a service start page, and group related actions together. Avoid disabled buttons unless user research supports them.',
     howItWorks: 'Supply href for navigation or htmlType for a native form button. Start buttons include the GOV.UK arrow. ButtonGroup aligns buttons and links. Disabled form buttons receive both disabled and aria-disabled; a loading button shows a spinner, blocks clicks and sets aria-busy.',
     code: `<div className="button-examples">
-<Button href="#start" isStartButton>Start now</Button>
+<Button href="#start" startButton>Start now</Button>
 
 <ButtonGroup>
   <Button htmlType="submit">Save and continue</Button>
-  <Button type="secondary">Save as draft</Button>
+  <Button variant="secondary">Save as draft</Button>
   <a className="govuk-link" href="#cancel">Cancel</a>
 </ButtonGroup>
 
 <div className="button-examples__variants">
   <Button disabled>Disabled button</Button>
-  <Button danger>Delete account</Button>
+  <Button variant="warning">Delete account</Button>
   <div className="button-examples__inverse">
-    <Button type="inverse">Create an account</Button>
+    <Button variant="inverse">Create an account</Button>
   </div>
 </div>
 </div>`,
-    example: () => <div className="button-examples"><Button href="#start" isStartButton>Start now</Button><ButtonGroup><Button htmlType="submit">Save and continue</Button><Button type="secondary">Save as draft</Button><a className="govuk-link" href="#cancel">Cancel</a></ButtonGroup><div className="button-examples__variants"><Button disabled>Disabled button</Button><Button danger>Delete account</Button><div className="button-examples__inverse"><Button type="inverse">Create an account</Button></div></div></div>,
-    api: [text('children', 'Button label.'), { name: 'type', type: `'primary' | 'secondary' | 'warning' | 'inverse'`, defaultValue: 'primary', description: 'Visual hierarchy.' }, { name: 'href', type: 'string', description: 'Renders a link styled as a button.' }, { name: 'htmlType', type: `'button' | 'submit' | 'reset'`, defaultValue: 'button', description: 'Native button type when href is not supplied.' }, { name: 'isStartButton', type: 'boolean', defaultValue: 'false', description: 'Use start button styling and the arrow icon.' }, { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show a spinner, block clicks and set aria-busy while work is in progress.' }, { name: 'icon', type: 'ReactNode', description: 'Icon rendered inside the button; replaced by the spinner while loading.' }, { name: 'iconPosition', type: `'left' | 'right'`, defaultValue: 'left', description: 'Side of the label where the icon appears.' }, { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disables the button and adds aria-disabled. Links render inert and ignore clicks.' }, { name: 'preventDoubleClick', type: 'boolean', defaultValue: 'false', description: 'Ignore another button click within one second. Not applied to links.' }, { name: 'danger', type: 'boolean', defaultValue: 'false', description: 'Shortcut for the warning treatment.' }],
+    example: () => <div className="button-examples"><Button href="#start" startButton>Start now</Button><ButtonGroup><Button htmlType="submit">Save and continue</Button><Button variant="secondary">Save as draft</Button><a className="govuk-link" href="#cancel">Cancel</a></ButtonGroup><div className="button-examples__variants"><Button disabled>Disabled button</Button><Button variant="warning">Delete account</Button><div className="button-examples__inverse"><Button variant="inverse">Create an account</Button></div></div></div>,
+    api: [text('children', 'Button label.'), { name: 'variant', type: `'primary' | 'secondary' | 'warning' | 'inverse'`, defaultValue: 'primary', description: 'Visual hierarchy.' }, { name: 'href', type: 'string', description: 'Renders a link styled as a button.' }, { name: 'htmlType', type: `'button' | 'submit' | 'reset'`, defaultValue: 'button', description: 'Native button type when href is not supplied.' }, { name: 'startButton', type: 'boolean', defaultValue: 'false', description: 'Use start button styling and the arrow icon.' }, { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show a spinner, block clicks and set aria-busy while work is in progress.' }, { name: 'icon', type: 'ReactNode', description: 'Icon rendered inside the button; replaced by the spinner while loading.' }, { name: 'iconPosition', type: `'left' | 'right'`, defaultValue: 'left', description: 'Side of the label where the icon appears.' }, { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disables the button and adds aria-disabled. Links render inert and ignore clicks.' }, { name: 'preventDoubleClick', type: 'boolean', defaultValue: 'false', description: 'Ignore another button click within one second. Not applied to links.' }],
   },
   {
     slug: 'character-count', name: 'Character count',
@@ -311,11 +311,11 @@ export const componentDocs: ComponentDoc[] = [
     code: `<div style={{ display: 'grid', gap: 30 }}>
 <Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel>
 
-<Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" type="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}>
+<Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" variant="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}>
   <p className="govuk-body">You entered your age as <strong>109</strong>.</p>
 </Panel>
 </div>`,
-    example: () => <div style={{ display: 'grid', gap: 30 }}><Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel><Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" type="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}><p className="govuk-body">You entered your age as <strong>109</strong>.</p></Panel></div>,
+    example: () => <div style={{ display: 'grid', gap: 30 }}><Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel><Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" variant="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}><p className="govuk-body">You entered your age as <strong>109</strong>.</p></Panel></div>,
     api: [text('title', 'Panel heading.'), { name: 'variant', type: `'confirmation' | 'interruption'`, defaultValue: 'confirmation', description: 'Panel style and purpose.' }, { name: 'headingLevel', type: '1 | 2 | 3 | 4 | 5 | 6', defaultValue: '1', description: 'Semantic heading level.' }, text('children', 'Supporting panel content.'), { name: 'actions', type: 'ReactNode', description: 'Buttons or links shown in the panel actions area; use inverse styles for interruption panels.' }],
   },
   {
@@ -370,7 +370,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'The service name and current navigation item are clearly distinguished inside a labelled navigation landmark.',
     code: `<ServiceNavigation serviceName="Apply for a passport" items={[\n  { label: 'Home', href: '#', current: true },\n  { label: 'Your applications', href: '#' },\n  { label: 'Messages', href: '#' }\n]} />`,
     example: () => <ServiceNavigation serviceName="Apply for a passport" items={[{ label: 'Home', href: '#', current: true }, { label: 'Your applications', href: '#' }, { label: 'Messages', href: '#' }]} />,
-    api: [text('serviceName', 'Service identity.'), { name: 'serviceUrl', type: 'string', description: 'Optional service home destination.' }, { name: 'serviceOnClick', type: 'IClickBehaviour["onClick"]', description: 'Optional click handler for the service name.' }, items('Navigation items accept optional href and onClick. The handler can prevent navigation.'), { name: 'menuOpen', type: 'boolean', description: 'Optional controlled state of the mobile menu.' }, { name: 'onMenuToggle', type: '(open: boolean) => void', description: 'Called when the mobile menu button is pressed.' }, { name: 'ref', type: 'Ref<HTMLElement>', description: 'Service navigation root element.' }],
+    api: [text('serviceName', 'Service identity.'), { name: 'serviceUrl', type: 'string', description: 'Optional service home destination.' }, { name: 'serviceOnClick', type: 'ClickBehaviourProps["onClick"]', description: 'Optional click handler for the service name.' }, items('Navigation items accept optional href and onClick. The handler can prevent navigation.'), { name: 'menuOpen', type: 'boolean', description: 'Optional controlled state of the mobile menu.' }, { name: 'onMenuToggle', type: '(open: boolean) => void', description: 'Called when the mobile menu button is pressed.' }, { name: 'ref', type: 'Ref<HTMLElement>', description: 'Service navigation root element.' }],
     wide: true,
   },
   {
@@ -445,7 +445,7 @@ export const componentDocs: ComponentDoc[] = [
       { key: 'past-month', label: 'Past month', children: caseTable('Past month', [{ manager: 'David Francis', opened: 98, closed: 95 }, { manager: 'Paul Farmer', opened: 122, closed: 131 }, { manager: 'Rita Patel', opened: 126, closed: 142 }]) },
       { key: 'past-year', label: 'Past year', children: <><h2 className="govuk-heading-l">Past year</h2><p className="govuk-body">There is no data for this year yet, check back later</p></> },
     ]} />,
-    api: [items('Tab keys, labels and panel content. Items can be disabled to make their tab non-interactive.'), { name: 'activeKey', type: 'string', description: 'Controlled active tab.' }, { name: 'defaultActiveKey', type: 'string', description: 'Initial active tab.' }, onChange('Called with the selected tab key.'), { name: 'destroyOnInactive', type: 'boolean', defaultValue: 'false', description: 'Remove inactive panel content from the DOM instead of hiding it.' }],
+    api: [items('Tab keys, labels and panel content. Items can be disabled to make their tab non-interactive.'), { name: 'activeKey', type: 'string', description: 'Controlled active tab.' }, { name: 'defaultActiveKey', type: 'string', description: 'Initial active tab.' }, onChange('Called with the selected tab key.'), { name: 'destroyOnClose', type: 'boolean', defaultValue: 'false', description: 'Remove inactive panel content from the DOM instead of hiding it.' }],
     wide: true,
   },
   {

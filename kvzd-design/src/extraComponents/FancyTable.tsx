@@ -1,4 +1,4 @@
-import { forwardRef, Fragment, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type HTMLAttributes, type Key, type ReactElement, type ReactNode, type Ref, type RefAttributes, type TdHTMLAttributes } from 'react'
+import { forwardRef, Fragment, useEffect, useId, useMemo, useRef, useState, type HTMLAttributes, type Key, type ReactElement, type ReactNode, type Ref, type RefAttributes, type TdHTMLAttributes } from 'react'
 import type { SemanticStyling } from '../components/index'
 import { Empty } from './Empty'
 import { Loading } from './Loading'
@@ -30,7 +30,56 @@ export interface FancyTableExpandable<T> {
   onExpandedRowsChange?: (keys: Key[]) => void
 }
 
-export interface FancyTableProps<T> extends SemanticStyling<'root' | 'scroll' | 'table' | 'pagination'> {
+/** Localisable UI strings for FancyTable pagination and built-in controls. */
+export interface FancyTableLocale {
+  /** Pagination button text. */
+  previous?: string
+  next?: string
+  /** aria-label of each page number button. */
+  page?: (page: number) => string
+  /** aria-label of the page size select. */
+  rowsPerPage?: string
+  /** Label of each page size option. */
+  rowsOption?: (size: number) => string
+  /** Total record count rendered by showTotal; receives the total and the [start, end] range of the current page. */
+  total?: (total: number, range: [number, number]) => ReactNode
+  /** Accessible label of the loading indicator. */
+  loading?: string
+  /** Visually hidden label of the select-all checkbox. */
+  selectAll?: string
+  /** Visually hidden label of a row checkbox. */
+  selectRow?: (key: string) => string
+  /** aria-label of the row expand button. */
+  expandRow?: string
+  collapseRow?: string
+  /** Text of the multi-filter trigger button. */
+  filter?: string
+  /** Empty option of the single-value filter select. */
+  all?: string
+}
+
+const defaultLocale: Required<FancyTableLocale> = {
+  previous: 'Previous',
+  next: 'Next',
+  page: (page) => `Page ${page}`,
+  rowsPerPage: 'Rows per page',
+  rowsOption: (size) => `${size} rows`,
+  total: (total, [start, end]) => (total === 0 ? `0 of ${total} records` : `${start}-${end} of ${total} records`),
+  loading: 'Loading',
+  selectAll: 'Select all rows on this page',
+  selectRow: (key) => `Select row ${key}`,
+  expandRow: 'Expand row',
+  collapseRow: 'Collapse row',
+  filter: 'Filter',
+  all: 'All',
+}
+
+// Module-level defaults shared across instances; the component never mutates them.
+const DEFAULT_SELECTED_ROW_KEYS: Key[] = []
+const DEFAULT_FILTER_VALUES: FancyTableFilterValues = {}
+const DEFAULT_PAGE_SIZE_OPTIONS: number[] = [10, 20, 50]
+
+export interface FancyTableProps<T> extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'>, SemanticStyling<'root' | 'scroll' | 'table' | 'pagination'> {
   columns: FancyTableColumn<T>[]
   dataSource: T[]
   rowKey: keyof T | ((record: T) => Key)
@@ -52,14 +101,15 @@ export interface FancyTableProps<T> extends SemanticStyling<'root' | 'scroll' | 
   pageSize?: number
   currentPage?: number
   onPageChange?: (page: number) => void
+  /** Set false to hide the pagination bar and show every row. */
+  pagination?: boolean
   showTotal?: boolean | ((total: number, range: [number, number]) => ReactNode)
   showSizeChanger?: boolean
   pageSizeOptions?: number[]
   onPageSizeChange?: (size: number) => void
   onChange?: (change: { page: number; pageSize: number | undefined; sort: FancyTableSort | null; filters: FancyTableFilterValues }) => void
+  locale?: FancyTableLocale
   emptyContent?: ReactNode
-  className?: string
-  style?: CSSProperties
 }
 
 interface SmallCheckboxProps {
@@ -80,13 +130,14 @@ function SmallCheckbox({ id, checked, disabled, label, onChange }: SmallCheckbox
 }
 
 const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
-  columns, dataSource, rowKey, caption, loading = false, selectable = false, selectedRowKeys, defaultSelectedRowKeys = [], onSelectionChange,
-  sort, defaultSort = null, onSortChange, filterValues, defaultFilterValues = {}, onFilterChange,
+  columns, dataSource, rowKey, caption, loading = false, selectable = false, selectedRowKeys, defaultSelectedRowKeys = DEFAULT_SELECTED_ROW_KEYS, onSelectionChange,
+  sort, defaultSort = null, onSortChange, filterValues, defaultFilterValues = DEFAULT_FILTER_VALUES, onFilterChange,
   expandable, rowClassName, onRow,
-  pageSize, currentPage, onPageChange, showTotal = false, showSizeChanger = false, pageSizeOptions = [10, 20, 50], onPageSizeChange,
-  onChange, emptyContent, className = '', classNames, style, styles,
+  pageSize, currentPage, onPageChange, pagination = true, showTotal = false, showSizeChanger = false, pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS, onPageSizeChange,
+  onChange, locale, emptyContent, className = '', classNames, style, styles, ...props
 }: FancyTableProps<T>, ref: Ref<HTMLTableElement>) {
   const uid = useId().replace(/:/g, '')
+  const t = useMemo(() => ({ ...defaultLocale, ...locale }), [locale])
   const [innerSelected, setInnerSelected] = useState<Key[]>(defaultSelectedRowKeys)
   const [innerSort, setInnerSort] = useState<FancyTableSort | null>(defaultSort)
   const [innerFilters, setInnerFilters] = useState<FancyTableFilterValues>(defaultFilterValues)
@@ -129,13 +180,14 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
 
   const activePageSize = pageSize ?? innerPageSize
   const effectivePageSize = activePageSize && Number.isFinite(activePageSize) && activePageSize >= 1 ? Math.floor(activePageSize) : undefined
-  const pageCount = effectivePageSize ? Math.max(1, Math.ceil(sortedData.length / effectivePageSize)) : 1
+  const paginate = pagination && effectivePageSize !== undefined
+  const pageCount = paginate ? Math.max(1, Math.ceil(sortedData.length / effectivePageSize!)) : 1
   const page = Math.min(Math.max(1, currentPage ?? innerPage), pageCount)
-  const visibleData = effectivePageSize ? sortedData.slice((page - 1) * effectivePageSize, page * effectivePageSize) : sortedData
+  const visibleData = paginate ? sortedData.slice((page - 1) * effectivePageSize!, page * effectivePageSize!) : sortedData
   const visibleKeys = visibleData.map(keyFor)
   const allVisibleSelected = visibleKeys.length > 0 && visibleKeys.every((key) => selected.includes(key))
   const pageItems: (number | 'ellipsis')[] = []
-  if (effectivePageSize) {
+  if (paginate) {
     pageItems.push(1)
     const windowStart = Math.max(2, page - 1)
     const windowEnd = Math.min(pageCount - 1, page + 1)
@@ -145,10 +197,10 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
     if (pageCount > 1) pageItems.push(pageCount)
   }
   const totalCount = sortedData.length
-  const rangeStart = totalCount === 0 || !effectivePageSize ? 0 : (page - 1) * effectivePageSize + 1
-  const rangeEnd = effectivePageSize ? Math.min(page * effectivePageSize, totalCount) : totalCount
+  const rangeStart = totalCount === 0 || !paginate ? 0 : (page - 1) * effectivePageSize! + 1
+  const rangeEnd = paginate ? Math.min(page * effectivePageSize!, totalCount) : totalCount
   const totalContent = typeof showTotal === 'function' ? showTotal(totalCount, [rangeStart, rangeEnd])
-    : showTotal ? (totalCount === 0 ? `0 of ${totalCount} records` : `${rangeStart}-${rangeEnd} of ${totalCount} records`) : null
+    : showTotal ? t.total(totalCount, [rangeStart, rangeEnd]) : null
 
   const updateSelection = (keys: Key[]) => { if (selectedRowKeys === undefined) setInnerSelected(keys); onSelectionChange?.(keys) }
   const updatePage = (next: number) => { if (currentPage === undefined) setInnerPage(next); onPageChange?.(next) }
@@ -186,15 +238,15 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
   const firstRenderRef = useRef(true)
   useEffect(() => {
     if (firstRenderRef.current) { firstRenderRef.current = false; return }
-    onChangeRef.current?.({ page, pageSize: effectivePageSize, sort: activeSort, filters: activeFilters })
-  }, [page, effectivePageSize, activeSort, activeFilters])
+    onChangeRef.current?.({ page, pageSize: paginate ? effectivePageSize : undefined, sort: activeSort, filters: activeFilters })
+  }, [page, effectivePageSize, paginate, activeSort, activeFilters])
 
-  return <div className={`kvzd-design-fancy-table ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
+  return <div className={`kvzd-design-fancy-table ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }} {...props}>
     <div className={`kvzd-design-fancy-table__scroll ${classNames?.scroll ?? ''}`.trim()} style={styles?.scroll}><table ref={ref} className={`govuk-table kvzd-design-fancy-table__table ${classNames?.table ?? ''}`.trim()} style={styles?.table} aria-busy={loading || undefined}>
       {caption && <caption className="govuk-table__caption govuk-table__caption--m">{caption}</caption>}
       <thead className="govuk-table__head"><tr className="govuk-table__row">
         {expandableColumn && <th className="govuk-table__header kvzd-design-fancy-table__expand" scope="col" />}
-        {selectable && <th className="govuk-table__header kvzd-design-fancy-table__select" scope="col"><SmallCheckbox id={`${uid}-select-all`} checked={allVisibleSelected} disabled={!visibleKeys.length || loading} label={<span className="govuk-visually-hidden">Select all rows on this page</span>} onChange={() => updateSelection(allVisibleSelected ? selected.filter((key) => !visibleKeys.includes(key)) : [...new Set([...selected, ...visibleKeys])])} /></th>}
+        {selectable && <th className="govuk-table__header kvzd-design-fancy-table__select" scope="col"><SmallCheckbox id={`${uid}-select-all`} checked={allVisibleSelected} disabled={!visibleKeys.length || loading} label={<span className="govuk-visually-hidden">{t.selectAll}</span>} onChange={() => updateSelection(allVisibleSelected ? selected.filter((key) => !visibleKeys.includes(key)) : [...new Set([...selected, ...visibleKeys])])} /></th>}
         {columns.map((column) => {
           const filterLabel = column.filterLabel ?? `Filter ${typeof column.title === 'string' ? column.title : column.key}`
           return <th className={`govuk-table__header ${column.numeric ? 'govuk-table__header--numeric' : ''}`} scope="col" key={column.key} aria-sort={activeSort?.columnKey === column.key ? (activeSort.order === 'ascend' ? 'ascending' : 'descending') : undefined}>
@@ -207,7 +259,7 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
             </button> : column.title}
             {column.filters && column.onFilter && (column.filterMultiple ? <span className="kvzd-design-fancy-table__filter-wrap">
               <button className="kvzd-design-fancy-table__filter-trigger" type="button" aria-label={filterLabel} aria-haspopup="true" aria-expanded={openFilter === column.key} onClick={() => setOpenFilter(openFilter === column.key ? null : column.key)}>
-                Filter
+                {t.filter}
                 <svg className="kvzd-design-fancy-table__filter-icon" viewBox="0 0 12 16" aria-hidden="true" focusable="false"><polygon points="2,6 10,6 6,11" /></svg>
               </button>
               {openFilter === column.key && <div className="kvzd-design-fancy-table__filter-panel" role="group" aria-label={filterLabel}>
@@ -218,11 +270,11 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
                   return <SmallCheckbox key={filter.value} id={filterId} checked={values.includes(filter.value)} label={filter.label} onChange={(checked) => toggleMultiFilter(column.key, filter.value, checked)} />
                 })}
               </div>}
-            </span> : <select className="govuk-select kvzd-design-fancy-table__filter" aria-label={filterLabel} value={typeof activeFilters[column.key] === 'string' ? activeFilters[column.key] as string : ''} onChange={(event) => updateFilter(column.key, event.target.value)}><option value="">All</option>{column.filters.map((filter) => <option key={filter.value} value={filter.value}>{filter.label}</option>)}</select>)}
+            </span> : <select className="govuk-select kvzd-design-fancy-table__filter" aria-label={filterLabel} value={typeof activeFilters[column.key] === 'string' ? activeFilters[column.key] as string : ''} onChange={(event) => updateFilter(column.key, event.target.value)}><option value="">{t.all}</option>{column.filters.map((filter) => <option key={filter.value} value={filter.value}>{filter.label}</option>)}</select>)}
           </th>
         })}
       </tr></thead>
-      <tbody className="govuk-table__body">{loading ? <tr className="govuk-table__row kvzd-design-fancy-table__loading-row"><td className="govuk-table__cell" colSpan={columnCount}><Loading variant="spinner" label="Loading" /></td></tr>
+      <tbody className="govuk-table__body">{loading ? <tr className="govuk-table__row kvzd-design-fancy-table__loading-row"><td className="govuk-table__cell" colSpan={columnCount}><Loading variant="spinner" label={t.loading} /></td></tr>
         : visibleData.length ? visibleData.map((record, rowIndex) => {
           const key = keyFor(record)
           const isExpanded = expandableColumn && activeExpanded.includes(key)
@@ -231,10 +283,10 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
           const rowClass = `govuk-table__row ${rowClassName?.(record, rowIndex) ?? ''} ${rowProps.className ?? ''}`.trim()
           return <Fragment key={key}>
             <tr {...rowProps} className={rowClass}>
-              {expandableColumn && <td className="govuk-table__cell kvzd-design-fancy-table__expand">{expandableRow && <button className="kvzd-design-fancy-table__expand-trigger" type="button" aria-expanded={isExpanded} aria-label={isExpanded ? 'Collapse row' : 'Expand row'} onClick={() => updateExpanded(key, !isExpanded)}>
+              {expandableColumn && <td className="govuk-table__cell kvzd-design-fancy-table__expand">{expandableRow && <button className="kvzd-design-fancy-table__expand-trigger" type="button" aria-expanded={isExpanded} aria-label={isExpanded ? t.collapseRow : t.expandRow} onClick={() => updateExpanded(key, !isExpanded)}>
                 <svg className="kvzd-design-fancy-table__expand-icon" data-expanded={isExpanded} viewBox="0 0 16 16" aria-hidden="true" focusable="false"><polygon points="5,3 11,8 5,13" /></svg>
               </button>}</td>}
-              {selectable && <td className="govuk-table__cell kvzd-design-fancy-table__select"><SmallCheckbox id={`${uid}-row-${String(key)}`} checked={selected.includes(key)} label={<span className="govuk-visually-hidden">Select row {String(key)}</span>} onChange={() => updateSelection(selected.includes(key) ? selected.filter((item) => item !== key) : [...selected, key])} /></td>}
+              {selectable && <td className="govuk-table__cell kvzd-design-fancy-table__select"><SmallCheckbox id={`${uid}-row-${String(key)}`} checked={selected.includes(key)} label={<span className="govuk-visually-hidden">{t.selectRow(String(key))}</span>} onChange={() => updateSelection(selected.includes(key) ? selected.filter((item) => item !== key) : [...selected, key])} /></td>}
               {columns.map((column) => {
                 const value = record[column.dataIndex]
                 const content = column.render ? column.render(value, record, rowIndex) : String(value ?? '')
@@ -247,17 +299,17 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
           </Fragment>
         }) : <tr className="govuk-table__row"><td className="govuk-table__cell" colSpan={columnCount}>{emptyContent ?? <Empty title="No records found" />}</td></tr>}</tbody>
     </table></div>
-    {effectivePageSize && (pageCount > 1 || showSizeChanger || showTotal) && <nav className={`kvzd-design-fancy-table__pagination ${classNames?.pagination ?? ''}`.trim()} style={styles?.pagination} aria-label="Table pages">
+    {paginate && (pageCount > 1 || showSizeChanger || showTotal) && <nav className={`kvzd-design-fancy-table__pagination ${classNames?.pagination ?? ''}`.trim()} style={styles?.pagination} aria-label="Table pages">
       {totalContent && <span className="kvzd-design-fancy-table__total">{totalContent}</span>}
       <ul className="kvzd-design-fancy-table__pages">
-        <li><button className="govuk-button govuk-button--secondary kvzd-design-fancy-table__page-button" type="button" disabled={loading || page <= 1} onClick={() => updatePage(page - 1)}>Previous</button></li>
+        <li><button className="govuk-button govuk-button--secondary kvzd-design-fancy-table__page-button" type="button" disabled={loading || page <= 1} onClick={() => updatePage(page - 1)}>{t.previous}</button></li>
         {pageItems.map((item, index) => item === 'ellipsis'
           ? <li key={`ellipsis-${index}`}><span className="kvzd-design-fancy-table__ellipsis" aria-hidden="true">&hellip;</span></li>
-          : <li key={item}><button className="govuk-button govuk-button--secondary kvzd-design-fancy-table__page-button" type="button" aria-label={`Page ${item}`} aria-current={item === page ? 'page' : undefined} disabled={loading} onClick={() => updatePage(item)}>{item}</button></li>)}
-        <li><button className="govuk-button govuk-button--secondary kvzd-design-fancy-table__page-button" type="button" disabled={loading || page >= pageCount} onClick={() => updatePage(page + 1)}>Next</button></li>
+          : <li key={item}><button className="govuk-button govuk-button--secondary kvzd-design-fancy-table__page-button" type="button" aria-label={t.page(item)} aria-current={item === page ? 'page' : undefined} disabled={loading} onClick={() => updatePage(item)}>{item}</button></li>)}
+        <li><button className="govuk-button govuk-button--secondary kvzd-design-fancy-table__page-button" type="button" disabled={loading || page >= pageCount} onClick={() => updatePage(page + 1)}>{t.next}</button></li>
       </ul>
-      {showSizeChanger && <select className="govuk-select kvzd-design-fancy-table__page-size" aria-label="Rows per page" value={effectivePageSize} disabled={loading} onChange={(event) => changePageSize(Number(event.target.value))}>
-        {pageSizeOptions.map((option) => <option key={option} value={option}>{option} rows</option>)}
+      {showSizeChanger && <select className="govuk-select kvzd-design-fancy-table__page-size" aria-label={t.rowsPerPage} value={effectivePageSize} disabled={loading} onChange={(event) => changePageSize(Number(event.target.value))}>
+        {pageSizeOptions.map((option) => <option key={option} value={option}>{t.rowsOption(option)}</option>)}
       </select>}
     </nav>}
   </div>

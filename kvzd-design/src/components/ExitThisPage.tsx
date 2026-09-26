@@ -107,11 +107,13 @@ export const ExitThisPage = forwardRef<HTMLAnchorElement, ExitThisPageProps>(fun
   }, [])
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault()
     try {
       onClick?.(event)
     } finally {
-      exit()
+      if (!event.defaultPrevented) {
+        event.preventDefault()
+        exit()
+      }
     }
   }
   const handleKeyDown = (event: KeyboardEvent<HTMLAnchorElement>) => {

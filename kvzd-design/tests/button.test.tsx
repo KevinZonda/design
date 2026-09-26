@@ -48,8 +48,8 @@ test('icon renders before children by default and after them when iconPosition i
   expect(nodes.at(-1)).toBe(button.querySelector('[data-testid="icon"]'))
 })
 
-test('isStartButton still renders its start icon alongside a custom icon', () => {
-  const { container } = render(<Button isStartButton icon={<svg data-testid="icon" />}>Start</Button>)
+test('startButton still renders its start icon alongside a custom icon', () => {
+  const { container } = render(<Button startButton icon={<svg data-testid="icon" />}>Start</Button>)
   const button = container.querySelector('button')!
   expect(button.querySelector('[data-testid="icon"]')).toBeTruthy()
   expect(button.querySelector('.govuk-button__start-icon')).toBeTruthy()

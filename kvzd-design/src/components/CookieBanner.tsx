@@ -11,13 +11,14 @@ export interface CookieBannerProps {
   onAccept?: () => void
   onReject?: () => void
   onConsentChange?: (consent: CookieConsent | null) => void
-  acceptText?: string
-  rejectText?: string
-  hideText?: string
+  acceptText?: ReactNode
+  rejectText?: ReactNode
+  hideText?: ReactNode
   acceptedText?: ReactNode
   rejectedText?: ReactNode
   settingsHref?: string
   settingsText?: string
+  className?: string
   style?: CSSProperties
 }
 
@@ -38,8 +39,9 @@ const noCookieSubscription = () => () => {}
 export const CookieBanner = forwardRef<HTMLDivElement, CookieBannerProps>(function CookieBanner({
   acceptText = 'Accept analytics cookies',
   acceptedText = "You've accepted analytics cookies.",
-  ariaLabel = 'Cookies on this service',
+  ariaLabel,
   children,
+  className = '',
   cookieName = 'kvzd_cookie_consent',
   hideText = 'Hide cookie message',
   onAccept,
@@ -84,7 +86,7 @@ export const CookieBanner = forwardRef<HTMLDivElement, CookieBannerProps>(functi
 
   if (storedConsent === undefined || phase === 'hidden' || (storedConsent && phase !== 'confirmation')) return null
 
-  return <div ref={ref} className="govuk-cookie-banner" style={style} role="region" aria-label={ariaLabel}>
+  return <div ref={ref} className={`govuk-cookie-banner ${className}`.trim()} style={style} role="region" aria-label={ariaLabel ?? (typeof title === 'string' ? title : 'Cookies on this service')}>
     {phase === 'prompt'
       ? <div className="govuk-cookie-banner__message govuk-width-container">
         <div className="govuk-grid-row"><div className="govuk-grid-column-two-thirds">

@@ -10,17 +10,15 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   labelSize?: 's' | 'm' | 'l' | 'xl'
   prefix?: ReactNode
   showCount?: boolean | { max?: number }
-  status?: 'error' | 'warning'
   suffix?: ReactNode
   width?: 2 | 3 | 4 | 5 | 10 | 20 | 30
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ allowClear = false, className = '', classNames, defaultValue, disabled, error, hint, id, label, labelSize, onChange, prefix, readOnly, showCount = false, status, style, styles, suffix, value, width, ...props }, ref) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ 'aria-describedby': ariaDescribedBy, 'aria-invalid': ariaInvalid, allowClear = false, className = '', classNames, defaultValue, disabled, error, hint, id, label, labelSize, onChange, prefix, readOnly, showCount = false, style, styles, suffix, value, width, ...props }, ref) {
   const generatedId = useId()
   const inputId = id ?? `kvzd-design-input-${generatedId.replaceAll(':', '')}`
-  const hasError = Boolean(error) || status === 'error'
-  const hasWarning = status === 'warning'
-  const describedBy = [hint && `${inputId}-hint`, error && `${inputId}-error`].filter(Boolean).join(' ')
+  const hasError = Boolean(error)
+  const describedBy = [ariaDescribedBy, hint && `${inputId}-hint`, error && `${inputId}-error`].filter(Boolean).join(' ')
   const [inner, setInner] = useState(String(defaultValue ?? ''))
   const currentValue = value ?? inner
   const showClear = allowClear && !disabled && !readOnly && currentValue !== '' && currentValue !== undefined
@@ -39,13 +37,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ a
     input.dispatchEvent(new Event('input', { bubbles: true }))
     input.focus()
   }
-  const inputElement = <input {...props} ref={setRefs} id={inputId} value={currentValue} disabled={disabled} readOnly={readOnly} onChange={handleChange} aria-describedby={describedBy || undefined} aria-invalid={hasError || undefined} className={`govuk-input ${hasError ? 'govuk-input--error' : ''} ${hasWarning ? 'kvzd-design-input--warning' : ''} ${width ? `govuk-input--width-${width}` : ''} ${(prefix || suffix || allowClear) ? 'kvzd-design-input__input' : ''} ${classNames?.input ?? ''} ${className}`.trim()} style={{ ...styles?.input, ...style }} />
+  const inputElement = <input {...props} ref={setRefs} id={inputId} value={currentValue} disabled={disabled} readOnly={readOnly} onChange={handleChange} aria-describedby={describedBy || undefined} aria-invalid={hasError ? true : ariaInvalid} className={`govuk-input ${hasError ? 'govuk-input--error' : ''} ${width ? `govuk-input--width-${width}` : ''} ${(prefix || suffix || allowClear) ? 'kvzd-design-input__input' : ''} ${classNames?.input ?? ''} ${className}`.trim()} style={{ ...styles?.input, ...style }} />
   const countElement = showCount
     ? <div className={`kvzd-design-input__count ${classNames?.count ?? ''}`.trim()} style={styles?.count} aria-hidden="true">{String(currentValue ?? '').length}{typeof showCount === 'object' && showCount.max !== undefined ? ` / ${showCount.max}` : ''}</div>
     : null
   if (!prefix && !suffix && !allowClear) {
     return (
-      <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${hasWarning ? 'kvzd-design-form-group--warning' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
+      <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
         <label className={`govuk-label ${labelSize ? `govuk-label--${labelSize}` : ''} ${classNames?.label ?? ''}`.trim()} style={styles?.label} htmlFor={inputId}>{label}</label>
         {hint && <div className={`govuk-hint ${classNames?.hint ?? ''}`.trim()} style={styles?.hint} id={`${inputId}-hint`}>{hint}</div>}
         {error && <p className={`govuk-error-message ${classNames?.error ?? ''}`.trim()} style={styles?.error} id={`${inputId}-error`}><span className="govuk-visually-hidden">Error:</span> {error}</p>}
@@ -55,7 +53,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ a
     )
   }
   return (
-    <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${hasWarning ? 'kvzd-design-form-group--warning' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
+    <div className={`govuk-form-group ${hasError ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}>
       <label className={`govuk-label ${labelSize ? `govuk-label--${labelSize}` : ''} ${classNames?.label ?? ''}`.trim()} style={styles?.label} htmlFor={inputId}>{label}</label>
       {hint && <div className={`govuk-hint ${classNames?.hint ?? ''}`.trim()} style={styles?.hint} id={`${inputId}-hint`}>{hint}</div>}
       {error && <p className={`govuk-error-message ${classNames?.error ?? ''}`.trim()} style={styles?.error} id={`${inputId}-error`}><span className="govuk-visually-hidden">Error:</span> {error}</p>}

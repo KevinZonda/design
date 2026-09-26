@@ -7,6 +7,7 @@ import { extraComponentBySlug, extraComponentDocs, type ExtraComponentDoc } from
 import { DocsFooter, DocsHeader } from './DocsChrome'
 import { QuickReviewPage } from './QuickReviewPage'
 import { LicensePage } from './LicensePage'
+import { TypographyPage } from './TypographyPage'
 import { localeFromPath, localizedPath, message, pageTitle, useLocale, type Locale } from './i18n'
 import { localizedComponent, localizedExtraComponent } from './zhDocs'
 import { chineseApiDescription } from './zhApi'
@@ -31,8 +32,22 @@ function extraPathFor(slug: string, locale: Locale) {
 
 type DocsSection = 'components' | 'extra-components'
 
-function SideNavigation({ currentSlug, section }: { currentSlug?: string; section: DocsSection }) {
+function SideNavigation({ currentSlug, section }: { currentSlug?: string; section: DocsSection | 'typography' }) {
   const locale = useLocale()
+  if (section === 'typography') {
+    return <Sidebar
+      className="docs-sidebar"
+      heading={message(locale, 'typography')}
+      items={([
+        ['headings', 'typographyHeadings'],
+        ['captions', 'typographyCaptions'],
+        ['inline-text', 'typographyInlineText'],
+        ['paragraphs', 'typographyParagraphs'],
+        ['api', 'reactApi'],
+      ] as const).map(([key, labelKey]) => ({ key, label: message(locale, labelKey), href: `#${key}` }))}
+      renderLink={(item, { className }) => <a className={className} href={item.href}>{item.label}</a>}
+    />
+  }
   const items = section === 'extra-components'
     ? extraComponentDocs.map((component) => ({ key: component.slug, label: component.name, href: localizedPath(`/extra-components/${component.slug}/`, locale) }))
     : componentDocs.map((component) => ({ key: component.slug, label: component.name, href: localizedPath(`/components/${component.slug}/`, locale) }))
@@ -41,7 +56,7 @@ function SideNavigation({ currentSlug, section }: { currentSlug?: string; sectio
     className="docs-sidebar"
     heading={message(locale, section === 'extra-components' ? 'extraComponents' : 'components')}
     items={items}
-    currentKey={currentSlug}
+    activeKey={currentSlug}
     renderLink={(item, { className, current }) => item.href !== undefined
       ? <Link className={className} to={item.href} onClick={item.onClick} aria-current={current ? 'page' : undefined}>{item.label}</Link>
       : <button className={className} type="button" onClick={item.onClick} aria-current={current ? 'page' : undefined}>{item.label}</button>}
@@ -145,7 +160,7 @@ function ExtraComponentPage({ component }: { component: ExtraComponentDoc }) {
   </DocsLayout>
 }
 
-function DocsLayout({ children, currentSlug, currentSection = 'components' }: { children: ReactNode; currentSlug?: string; currentSection?: DocsSection }) {
+function DocsLayout({ children, currentSlug, currentSection = 'components' }: { children: ReactNode; currentSlug?: string; currentSection?: DocsSection | 'typography' }) {
   return <div className="app-shell govuk-frontend-supported"><DocsHeader current={currentSection} /><div className="site-width page-layout" id="top"><SideNavigation currentSlug={currentSlug} section={currentSection} /><main className="main-content" id="main-content">{children}</main></div><DocsFooter /></div>
 }
 
@@ -184,7 +199,7 @@ function RouteScroll() {
 
 function LocaleRedirect() {
   const { pathname, search, hash } = useLocation()
-  const legacyEnglish = /^\/(?:components|extra-components|quick-review|license)(?:\/|$)/.test(pathname)
+  const legacyEnglish = /^\/(?:components|extra-components|quick-review|license|typography)(?:\/|$)/.test(pathname)
   return <Navigate to={`${localizedPath(pathname, legacyEnglish ? 'en' : 'zh')}${search}${hash}`} replace />
 }
 
@@ -197,6 +212,7 @@ export default function App() {
         <Route key={`${prefix}-home`} path={prefix} element={<QuickReviewPage />} />,
         <Route key={`${prefix}-components`} path={`${prefix}/components`} element={<OverviewPage />} />,
         <Route key={`${prefix}-component`} path={`${prefix}/components/:slug`} element={<ComponentRoute />} />,
+        <Route key={`${prefix}-typography`} path={`${prefix}/typography`} element={<DocsLayout currentSection="typography"><TypographyPage /></DocsLayout>} />,
         <Route key={`${prefix}-extras`} path={`${prefix}/extra-components`} element={<ExtraOverviewPage />} />,
         <Route key={`${prefix}-extra`} path={`${prefix}/extra-components/:slug`} element={<ExtraComponentRoute />} />,
         <Route key={`${prefix}-review`} path={`${prefix}/quick-review`} element={<QuickReviewPage />} />,

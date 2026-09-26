@@ -1,18 +1,18 @@
-import { forwardRef, useState } from 'react'
+import { forwardRef, useId, useState } from 'react'
 import type { CSSProperties, DetailsHTMLAttributes, HTMLAttributes, ReactNode } from 'react'
 import { Button } from './Button'
 import { Tag } from './Tag'
-import { ClickTarget, type IClickBehaviour } from './clickBehaviour'
+import { ClickTarget, type ClickBehaviourProps } from './clickBehaviour'
 
 export interface DetailsProps extends DetailsHTMLAttributes<HTMLDetailsElement> { summary: ReactNode }
 export const Details = forwardRef<HTMLDetailsElement, DetailsProps>(function Details({ summary, children, className = '', ...props }, ref) { return <details {...props} ref={ref} className={`govuk-details ${className}`.trim()}><summary className="govuk-details__summary"><span className="govuk-details__summary-text">{summary}</span></summary><div className="govuk-details__text">{children}</div></details> })
-export const InsetText = forwardRef<HTMLDivElement, { children: ReactNode; style?: CSSProperties }>(function InsetText({ children, style }, ref) { return <div ref={ref} className="govuk-inset-text" style={style}>{children}</div> })
-export const WarningText = forwardRef<HTMLDivElement, { children: ReactNode; iconFallbackText?: string; style?: CSSProperties }>(function WarningText({ children, iconFallbackText = 'Warning', style }, ref) { return <div ref={ref} className="govuk-warning-text" style={style}><span className="govuk-warning-text__icon" aria-hidden="true">!</span><strong className="govuk-warning-text__text"><span className="govuk-visually-hidden">{iconFallbackText}</span>{children}</strong></div> })
+export const InsetText = forwardRef<HTMLDivElement, { children: ReactNode; className?: string; style?: CSSProperties }>(function InsetText({ children, className = '', style }, ref) { return <div ref={ref} className={`govuk-inset-text ${className}`.trim()} style={style}>{children}</div> })
+export const WarningText = forwardRef<HTMLDivElement, { children: ReactNode; iconFallbackText?: string; className?: string; style?: CSSProperties }>(function WarningText({ children, iconFallbackText = 'Warning', className = '', style }, ref) { return <div ref={ref} className={`govuk-warning-text ${className}`.trim()} style={style}><span className="govuk-warning-text__icon" aria-hidden="true">!</span><strong className="govuk-warning-text__text"><span className="govuk-visually-hidden">{iconFallbackText}</span>{children}</strong></div> })
 
-export interface ErrorItem extends IClickBehaviour { children: ReactNode }
-export interface ErrorSummaryProps { title?: ReactNode; errors: ErrorItem[]; style?: CSSProperties }
-export const ErrorSummary = forwardRef<HTMLDivElement, ErrorSummaryProps>(function ErrorSummary({ title = 'There is a problem', errors, style }, ref) {
-  return <div ref={ref} className="govuk-error-summary" style={style} role="alert" tabIndex={-1}><h2 className="govuk-error-summary__title">{title}</h2><div className="govuk-error-summary__body"><ul className="govuk-list govuk-error-summary__list">{errors.map((error, index) => <li key={index}><ClickTarget href={error.href} onClick={error.onClick}>{error.children}</ClickTarget></li>)}</ul></div></div>
+export interface ErrorItem extends ClickBehaviourProps { children: ReactNode }
+export interface ErrorSummaryProps { title?: ReactNode; errors: ErrorItem[]; className?: string; style?: CSSProperties }
+export const ErrorSummary = forwardRef<HTMLDivElement, ErrorSummaryProps>(function ErrorSummary({ title = 'There is a problem', errors, className = '', style }, ref) {
+  return <div ref={ref} className={`govuk-error-summary ${className}`.trim()} style={style} role="alert" tabIndex={-1}><h2 className="govuk-error-summary__title">{title}</h2><div className="govuk-error-summary__body"><ul className="govuk-list govuk-error-summary__list">{errors.map((error, index) => <li key={index}><ClickTarget href={error.href} onClick={error.onClick}>{error.children}</ClickTarget></li>)}</ul></div></div>
 })
 
 export const NotificationBanner = forwardRef<HTMLDivElement, { children: ReactNode; title?: ReactNode; type?: 'info' | 'success'; className?: string; style?: CSSProperties }>(function NotificationBanner({ children, title, type = 'info', className = '', style }, ref) {
@@ -31,12 +31,28 @@ export const PhaseBanner = forwardRef<HTMLDivElement, { phase: ReactNode; childr
 export { CookieBanner, type CookieBannerProps, type CookieConsent } from './CookieBanner'
 export { ExitThisPage, type ExitThisPageProps } from './ExitThisPage'
 
-export const Feedback = forwardRef<HTMLElement, { onUseful?: (useful: boolean) => void; onSubmit?: (message: string) => void; onOpenChange?: (open: boolean) => void; style?: CSSProperties }>(function Feedback({ onUseful, onSubmit, onOpenChange, style }, ref) {
+export interface FeedbackProps {
+  onUseful?: (useful: boolean) => void
+  onSubmit?: (message: string) => void
+  onOpenChange?: (open: boolean) => void
+  usefulPromptText?: ReactNode
+  yesText?: ReactNode
+  noText?: ReactNode
+  reportText?: ReactNode
+  titleText?: ReactNode
+  sendText?: ReactNode
+  thankYouText?: ReactNode
+  ariaLabel?: string
+  className?: string
+  style?: CSSProperties
+}
+export const Feedback = forwardRef<HTMLElement, FeedbackProps>(function Feedback({ onUseful, onSubmit, onOpenChange, usefulPromptText = 'Is this page useful?', yesText = 'Yes', noText = 'No', reportText = 'Report a problem with this page', titleText = 'What went wrong?', sendText = 'Send', thankYouText = 'Thank you for your feedback.', ariaLabel = 'Feedback', className = '', style }, ref) {
   const [open, setOpen] = useState(false); const [message, setMessage] = useState(''); const [sent, setSent] = useState(false)
-  return <section ref={ref} className="govuk-feedback" style={style} aria-label="Feedback">
-    {sent ? <p className="govuk-body"><strong>Thank you for your feedback.</strong></p> : <>
-      <div className="kvzd-design-feedback__prompt"><span>Is this page useful?</span><Button type="secondary" onClick={() => onUseful?.(true)}>Yes</Button><Button type="secondary" onClick={() => onUseful?.(false)}>No</Button><button className="govuk-link" type="button" onClick={() => { const next = !open; setOpen(next); onOpenChange?.(next) }}>Report a problem with this page</button></div>
-      {open && <div className="kvzd-design-feedback__form"><label className="govuk-label govuk-label--m" htmlFor="feedback-message">What went wrong?</label><textarea id="feedback-message" className="govuk-textarea" rows={4} value={message} onChange={(event) => setMessage(event.target.value)} /><Button onClick={() => { onSubmit?.(message); setSent(true) }}>Send</Button></div>}
+  const messageId = `kvzd-design-feedback-${useId().replaceAll(':', '')}`
+  return <section ref={ref} className={`govuk-feedback ${className}`.trim()} style={style} aria-label={ariaLabel}>
+    {sent ? <p className="govuk-body"><strong>{thankYouText}</strong></p> : <>
+      <div className="kvzd-design-feedback__prompt"><span>{usefulPromptText}</span><Button variant="secondary" onClick={() => onUseful?.(true)}>{yesText}</Button><Button variant="secondary" onClick={() => onUseful?.(false)}>{noText}</Button><button className="govuk-link" type="button" onClick={() => { const next = !open; setOpen(next); onOpenChange?.(next) }}>{reportText}</button></div>
+      {open && <div className="kvzd-design-feedback__form"><label className="govuk-label govuk-label--m" htmlFor={messageId}>{titleText}</label><textarea id={messageId} className="govuk-textarea" rows={4} value={message} onChange={(event) => setMessage(event.target.value)} /><Button onClick={() => { onSubmit?.(message); setSent(true) }}>{sendText}</Button></div>}
     </>}
   </section>
 })

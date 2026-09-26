@@ -55,3 +55,17 @@ test('tooltip renders an arrow and wraps a single child', () => {
   fireEvent.mouseEnter(screen.getByText('Trigger'))
   expect(screen.getByRole('tooltip').querySelector('.kvzd-design-tooltip__arrow')).toBeTruthy()
 })
+
+test('tooltip chains the child original handlers and keeps its aria-describedby when closed', () => {
+  const onMouseEnter = vi.fn()
+  const onMouseLeave = vi.fn()
+  render(<Tooltip title="Tip"><button type="button" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} aria-describedby="own-desc">Trigger</button></Tooltip>)
+  const trigger = screen.getByRole('button', { name: 'Trigger' })
+  expect(trigger.getAttribute('aria-describedby')).toBe('own-desc')
+  fireEvent.mouseEnter(trigger)
+  expect(onMouseEnter).toHaveBeenCalledOnce()
+  expect(trigger.getAttribute('aria-describedby')).toBe(screen.getByRole('tooltip').id)
+  fireEvent.mouseLeave(trigger)
+  expect(onMouseLeave).toHaveBeenCalledOnce()
+  expect(trigger.getAttribute('aria-describedby')).toBe('own-desc')
+})

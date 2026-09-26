@@ -42,7 +42,16 @@ test('progress shows percent text by default and hides with showInfo', () => {
   expect(screen.queryByText('45%')).toBeNull()
 })
 
-test('progress strokeColor overrides bar background', () => {
-  render(<Progress percent={50} strokeColor="#ff00ff" />)
+test('progress color overrides bar background', () => {
+  render(<Progress percent={50} color="#ff00ff" />)
   expect(getBar().style.backgroundColor).toContain('rgb(255, 0, 255)')
+})
+
+test('progress accepts trailColor and strokeWidth', () => {
+  render(<Progress percent={50} strokeWidth={12} />)
+  expect(getBar().style.height).toBe('12px')
+  const { container } = render(<Progress type="circle" percent={50} trailColor="#eeeeee" strokeWidth={10} />)
+  const track = container.querySelector('.kvzd-design-progress__track') as SVGCircleElement
+  expect(track.getAttribute('stroke')).toBe('#eeeeee')
+  expect(track.getAttribute('stroke-width')).toBe('10')
 })

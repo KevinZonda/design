@@ -23,7 +23,7 @@ export function Example() {
         name="nationalInsuranceNumber"
         width={20}
       />
-      <Button type="primary">Save and continue</Button>
+      <Button>Save and continue</Button>
     </>
   )
 }
@@ -36,12 +36,26 @@ Start buttons, disabled buttons and button groups use the GOV.UK Frontend styles
 ```tsx
 import { Button, ButtonGroup } from '@kevinzonda/design/components'
 
-<Button href="/start" isStartButton>Start now</Button>
+<Button href="/start" startButton>Start now</Button>
 <ButtonGroup>
   <Button htmlType="submit" preventDoubleClick>Save and continue</Button>
-  <Button type="secondary">Save as draft</Button>
+  <Button variant="secondary">Save as draft</Button>
 </ButtonGroup>
 <Button disabled>Disabled button</Button>
+```
+
+## Typography
+
+`Typography` renders GOV.UK headings, body text and captions with semantic
+HTML. `Typography.Title` maps a `level` (1–6) to a real `h1`–`h6` and the
+matching `govuk-heading-*` class, with an optional `caption`. `Text` is an
+inline span for body typography and `Paragraph` renders block body text.
+
+```tsx
+import { Typography } from '@kevinzonda/design'
+
+<Typography.Title level={1} caption="Section 1">Page heading</Typography.Title>
+<Typography.Paragraph>Use body text for most content.</Typography.Paragraph>
 ```
 
 ## API principles
@@ -124,7 +138,7 @@ Use `Theme.ColourPalette` when defining a complete palette and
 
 ### Click behaviour
 
-Link items use the exported `IClickBehaviour` interface. Both `href` and
+Link items use the exported `ClickBehaviourProps` interface. Both `href` and
 `onClick` are optional. An item with `href` renders an anchor; its `onClick`
 handler runs first and can call `event.preventDefault()` to stop navigation.
 An item with only `onClick` renders a button. An item with neither renders

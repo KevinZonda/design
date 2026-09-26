@@ -9,14 +9,19 @@ export interface ProgressProps extends Omit<HTMLAttributes<HTMLDivElement>, 'tit
   status?: ProgressStatus
   type?: ProgressType
   showInfo?: boolean
-  size?: 's' | 'm'
+  size?: 's' | 'm' | 'l'
   /** Width and height of circle and dashboard types in pixels. */
   width?: number
   /** Gap of the dashboard type as a percentage of the circle circumference (0-100). */
   gapDegree?: number
   /** Number of segments for the steps type; defaults to the clamped percent. */
   stepsCount?: number
-  strokeColor?: string
+  /** Bar or ring colour; overrides the status colour. */
+  color?: string
+  /** Track (unfilled) colour of circle and dashboard types. */
+  trailColor?: string
+  /** Bar height of the line type, or ring thickness of circle/dashboard, in pixels. */
+  strokeWidth?: number
 }
 
 const statusColour: Record<ProgressStatus, string> = {
@@ -26,24 +31,24 @@ const statusColour: Record<ProgressStatus, string> = {
   exception: 'var(--govuk-error-colour, #d4351c)',
 }
 
-export const Progress = forwardRef<HTMLDivElement, ProgressProps>(function Progress({ percent, status = 'normal', type = 'line', showInfo = true, size = 'm', width, gapDegree = 8, stepsCount, strokeColor, className = '', classNames, style, styles, ...props }, ref) {
+export const Progress = forwardRef<HTMLDivElement, ProgressProps>(function Progress({ percent, status = 'normal', type = 'line', showInfo = true, size = 'm', width, gapDegree = 8, stepsCount, color, trailColor, strokeWidth, className = '', classNames, style, styles, ...props }, ref) {
   const value = Math.min(100, Math.max(0, percent))
   const effective: ProgressStatus = value >= 100 ? 'success' : status
-  const colour = strokeColor ?? statusColour[effective]
+  const colour = color ?? statusColour[effective]
 
   const info = showInfo && <span className={`kvzd-design-progress__info ${classNames?.info ?? ''}`.trim()} style={styles?.info}>{value}%</span>
   const barProps = { role: 'progressbar' as const, 'aria-valuemin': 0, 'aria-valuemax': 100, 'aria-valuenow': value }
 
   if (type === 'circle' || type === 'dashboard') {
-    const sizePx = width ?? (size === 's' ? 72 : 112)
-    const stroke = size === 's' ? 6 : 8
+    const sizePx = width ?? (size === 's' ? 72 : size === 'l' ? 160 : 112)
+    const stroke = strokeWidth ?? (size === 's' ? 6 : size === 'l' ? 12 : 8)
     const radius = (sizePx - stroke) / 2
     const circumference = 2 * Math.PI * radius
     const gap = type === 'dashboard' ? (gapDegree / 100) * circumference : 0
     const filled = (value / 100) * (circumference - gap)
     return <div {...props} ref={ref} className={`kvzd-design-progress kvzd-design-progress--circle kvzd-design-progress--${effective} ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
       <svg {...barProps} className="kvzd-design-progress__svg" width={sizePx} height={sizePx} viewBox={`0 0 ${sizePx} ${sizePx}`}>
-        <circle className="kvzd-design-progress__track" cx={sizePx / 2} cy={sizePx / 2} r={radius} fill="none" strokeWidth={stroke}
+        <circle className="kvzd-design-progress__track" cx={sizePx / 2} cy={sizePx / 2} r={radius} fill="none" stroke={trailColor} strokeWidth={stroke}
           strokeDasharray={`${circumference - gap} ${circumference}`}
           transform={type === 'dashboard' ? `rotate(${90 + (gapDegree / 2)} ${sizePx / 2} ${sizePx / 2})` : undefined} />
         <circle className="kvzd-design-progress__ring" cx={sizePx / 2} cy={sizePx / 2} r={radius} fill="none" stroke={colour} strokeWidth={stroke}
@@ -59,7 +64,7 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(function Progr
     const filledSteps = Math.round((value / 100) * count)
     return <div {...props} ref={ref} className={`kvzd-design-progress kvzd-design-progress--steps ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
       <div {...barProps} className="kvzd-design-progress__segments" style={styles?.bar}>
-        {Array.from({ length: count }, (_, index) => <span key={index} className={`kvzd-design-progress__segment ${index < filledSteps ? 'kvzd-design-progress__segment--filled' : ''}`} style={index < filledSteps ? { background: colour } : undefined} />)}
+        {Array.from({ length: count }, (_, index) => <span key={index} className={`kvzd-design-progress__segment ${index < filledSteps ? 'kvzd-design-progress__segment--filled' : ''}`} style={index < filledSteps ? { background: colour } : trailColor !== undefined ? { background: trailColor } : undefined} />)}
       </div>
       {info}
     </div>
@@ -69,7 +74,7 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(function Progr
     <div className={`kvzd-design-progress__bar ${classNames?.bar ?? ''}`.trim()} style={styles?.bar}>
       <div
         className={`kvzd-design-progress__inner ${classNames?.inner ?? ''}`.trim()}
-        style={{ width: `${value}%`, backgroundColor: colour, ...styles?.inner }}
+        style={{ width: `${value}%`, backgroundColor: colour, height: strokeWidth, ...styles?.inner }}
         {...barProps}
       />
     </div>
