@@ -180,3 +180,32 @@ test('inputProps and native attributes pass through to the input', () => {
   expect(input.required).toBe(true)
   expect(input.getAttribute('name')).toBe('arrival')
 })
+
+test('panel scrolls the selected time into view when it opens', () => {
+  const clientHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientHeight')
+  render(<TimePicker label="Time" defaultValue="09:30" />)
+
+  // jsdom reports zero geometry, so fake it: 200px-high columns, 32px-tall
+  // options stacked from the top of their column.
+  vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
+    const rect = { width: 0, height: 0, left: 0, right: 0, bottom: 0, x: 0, y: 0, top: 0, toJSON: () => ({}) } as DOMRect
+    if (this.classList.contains('kvzd-design-timepicker__column')) return { ...rect, top: 0, height: 200 }
+    if (this.getAttribute('role') === 'option') return { ...rect, top: Number(this.textContent) * 32, height: 32 }
+    return rect
+  })
+  Object.defineProperty(HTMLElement.prototype, 'clientHeight', {
+    configurable: true,
+    get() { return this.classList.contains('kvzd-design-timepicker__column') ? 200 : 0 },
+  })
+
+  try {
+    fireEvent.focus(getInput())
+    const columns = document.querySelectorAll<HTMLElement>('.kvzd-design-timepicker__column')
+    expect(columns[0].scrollTop).toBe(9 * 32 - 100) // hour 09 centred in the 200px column
+    expect(columns[1].scrollTop).toBe(30 * 32 - 100) // minute 30 centred
+  } finally {
+    vi.restoreAllMocks()
+    if (clientHeight) Object.defineProperty(HTMLElement.prototype, 'clientHeight', clientHeight)
+    else delete (HTMLElement.prototype as { clientHeight?: number }).clientHeight
+  }
+})

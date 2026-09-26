@@ -857,6 +857,7 @@ return <div className="slider-example">
       { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Prevent interaction.' },
       { name: 'tooltip', type: "'hover' | 'always' | 'never'", defaultValue: "'hover'", description: 'When to show the current value bubble.' },
       { name: 'ariaLabel', type: 'string', description: 'Accessible name; in range mode each handle gets `${ariaLabel} minimum` / `maximum`.' },
+      { name: 'name', type: 'string', description: 'Form field name; in range mode the handles submit as `${name}-lower` / `${name}-upper`.' },
       { name: 'styles / classNames', type: 'SemanticStyling', description: 'Overrides for the root, track, rail, fill, thumb, mark and tooltip parts.' },
       { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Slider root element.' },
     ],
@@ -866,7 +867,7 @@ return <div className="slider-example">
     name: 'TimePicker',
     summary: 'Enter or pick a time of day in 24-hour HH:mm format, with an optional two-column hour and minute panel.',
     whenToUse: <>Use for recent or frequent times where typing HH:mm or picking from a short panel is faster than three separate selects, such as an appointment start. When users must enter a memorable or approximate time, or you need a 12-hour AM/PM format, the standard <DocsLink className="govuk-link" to="/en/components/select/">Select</DocsLink> component with separate hour and minute selects (the GOV.UK approach for memorable dates) may be easier to explain; Text input alone is better when no panel is wanted.</>,
-    howItWorks: 'The input accepts loose H:mm text and normalises it to HH:mm when uncontrolled. Focusing the input or pressing the clock toggle opens a 24-hour listbox with an hour and a minute column, trimmed by hourStep and minuteStep; ArrowUp and ArrowDown move between options, Escape closes the panel and returns focus to the input, and choosing an option commits the value. The label, hint and error are wired through aria-describedby, and status adds an extra described line.',
+    howItWorks: 'The input accepts loose H:mm text and normalises it to HH:mm when uncontrolled. Focusing the input or pressing the clock toggle opens a 24-hour listbox with an hour and a minute column, trimmed by hourStep and minuteStep and centred on the current value; ArrowUp and ArrowDown move between options, Escape closes the panel and returns focus to the input, and choosing an option commits the value. The label, hint and error are wired through aria-describedby, and status adds an extra described line.',
     code: `const [time, setTime] = useState('09:30')
 return <>
   <TimePicker

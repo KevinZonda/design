@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useId, useRef, useState } from 'react'
+import { forwardRef, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import type { ChangeEvent, InputHTMLAttributes, KeyboardEvent, ReactNode } from 'react'
 import { ErrorMessage } from '../components/forms'
 import type { InputProps } from '../components/Input'
@@ -100,6 +100,21 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(function
     const outside = (event: PointerEvent) => { if (!rootRef.current?.contains(event.target as Node)) setOpen(false) }
     document.addEventListener('pointerdown', outside)
     return () => document.removeEventListener('pointerdown', outside)
+  }, [open])
+
+  // Centre the selected option in each column when the panel opens, so the
+  // current value is visible without scrolling. scrollTop is set directly (not
+  // scrollIntoView) to avoid scrolling the page.
+  useLayoutEffect(() => {
+    if (!open) return
+    const panel = panelRef.current
+    if (!panel) return
+    panel.querySelectorAll<HTMLElement>('.kvzd-design-timepicker__column').forEach((column) => {
+      const selected = column.querySelector<HTMLElement>('.kvzd-design-timepicker__option--selected')
+      if (!selected) return
+      const offset = selected.getBoundingClientRect().top - column.getBoundingClientRect().top + column.scrollTop
+      column.scrollTop = offset - (column.clientHeight - selected.offsetHeight) / 2
+    })
   }, [open])
 
   const setRefs = (node: HTMLInputElement | null) => {
