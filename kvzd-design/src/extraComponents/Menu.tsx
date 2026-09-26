@@ -5,6 +5,9 @@ export interface MenuItem extends IClickBehaviour {
   key: string
   label: ReactNode
   disabled?: boolean
+  icon?: ReactNode
+  danger?: boolean
+  type?: 'item' | 'divider'
 }
 
 export interface MenuProps extends SemanticStyling<'root' | 'item'> {
@@ -19,7 +22,7 @@ export interface MenuProps extends SemanticStyling<'root' | 'item'> {
 
 export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ items, ariaLabel, autoFocus = false, onAction, onEscape, className = '', classNames, style, styles }, forwardedRef) {
   const menuRef = useRef<HTMLDivElement>(null)
-  const [activeKey, setActiveKey] = useState(items.find((item) => !item.disabled)?.key)
+  const [activeKey, setActiveKey] = useState(items.find((item) => item.type !== 'divider' && !item.disabled)?.key)
 
   useEffect(() => {
     if (autoFocus) menuRef.current?.querySelector<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])')?.focus()
@@ -48,7 +51,9 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ items,
     role="menu"
     aria-label={ariaLabel}
     onKeyDown={onKeyDown}
-  >{items.map((item) => item.href !== undefined && !item.onClick && !item.disabled
-      ? <a className={`kvzd-design-menu__item ${classNames?.item ?? ''}`.trim()} style={styles?.item} role="menuitem" key={item.key} href={item.href} tabIndex={activeKey === item.key ? 0 : -1} onFocus={() => setActiveKey(item.key)} onClick={() => onAction?.(item.key)}>{item.label}</a>
-      : <button className={`kvzd-design-menu__item ${classNames?.item ?? ''}`.trim()} style={styles?.item} role="menuitem" key={item.key} type="button" tabIndex={!item.disabled && activeKey === item.key ? 0 : -1} disabled={item.disabled} aria-disabled={item.disabled || undefined} onFocus={() => setActiveKey(item.key)} onClick={(event) => { item.onClick?.(event); onAction?.(item.key) }}>{item.label}</button>)}</div>
+  >{items.map((item) => item.type === 'divider'
+      ? <hr className="kvzd-design-menu__divider" role="separator" key={item.key} />
+      : item.href !== undefined && !item.onClick && !item.disabled
+        ? <a className={`kvzd-design-menu__item ${item.danger ? 'kvzd-design-menu__item--danger' : ''} ${classNames?.item ?? ''}`.trim()} style={styles?.item} role="menuitem" key={item.key} href={item.href} tabIndex={activeKey === item.key ? 0 : -1} onFocus={() => setActiveKey(item.key)} onClick={() => onAction?.(item.key)}>{item.icon !== undefined && item.icon !== null ? <span className="kvzd-design-menu__icon" aria-hidden="true">{item.icon}</span> : null}{item.label}</a>
+        : <button className={`kvzd-design-menu__item ${item.danger ? 'kvzd-design-menu__item--danger' : ''} ${classNames?.item ?? ''}`.trim()} style={styles?.item} role="menuitem" key={item.key} type="button" tabIndex={!item.disabled && activeKey === item.key ? 0 : -1} disabled={item.disabled} aria-disabled={item.disabled || undefined} onFocus={() => setActiveKey(item.key)} onClick={(event) => { item.onClick?.(event); onAction?.(item.key) }}>{item.icon !== undefined && item.icon !== null ? <span className="kvzd-design-menu__icon" aria-hidden="true">{item.icon}</span> : null}{item.label}</button>)}</div>
 })

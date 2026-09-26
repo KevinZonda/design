@@ -104,3 +104,23 @@ import { Form } from '@kevinzonda/design/extraComponents'
 ```
 
 Use `multiple` on `Form.Item` for checkbox groups and `focusId` to point error summary links to the first choice. Form-level `validate` handles checks involving more than one field. Validation runs on submit so entered answers stay in place when a user needs to correct them.
+
+`Switch` is an antd-style toggle. It supports controlled (`checked`) and uncontrolled (`defaultChecked`) usage with `onChange`, plus `disabled`, `loading` (shows a spinner and blocks toggling), `size` (`'s' | 'm' | 'l'`), and `checkedChildren` / `unCheckedChildren` text inside the track. Pass a string via `aria-label` or `children` to label it; children are visually hidden.
+
+```tsx
+import { Switch } from '@kevinzonda/design/extraComponents'
+
+<Switch defaultChecked checkedChildren="On" unCheckedChildren="Off" onChange={(checked) => console.log(checked)}>
+  Enable notifications
+</Switch>
+```
+
+`Tooltip` shows a popup next to a single child element. It supports `placement` (`'top' | 'bottom' | 'left' | 'right'`, default `'top'`), `trigger` (`'hover' | 'focus' | 'click'`, default `'hover'`), and controlled (`open`) or uncontrolled (`defaultOpen`) usage with `onOpenChange`. When the title is plain text, the trigger element receives `aria-describedby` pointing at the popup while it is open.
+
+```tsx
+import { Tooltip } from '@kevinzonda/design/extraComponents'
+
+<Tooltip title="Copy to clipboard" placement="bottom">
+  <button type="button">Copy</button>
+</Tooltip>
+```

@@ -1,6 +1,6 @@
 import { useState, type Key } from 'react'
 import { Button, Input } from '@kevinzonda/design/components'
-import { Dropdown, FancyTable, Form, Menu, Modal } from '@kevinzonda/design/extraComponents'
+import { Dropdown, FancyTable, Form, Menu, Modal, Switch, Tooltip } from '@kevinzonda/design/extraComponents'
 
 export function FormExample() {
   const [submitted, setSubmitted] = useState('')
@@ -20,12 +20,50 @@ export function FormExample() {
 
 export function ModalExample() {
   const [open, setOpen] = useState(false)
+  const [confirming, setConfirming] = useState(false)
   return <>
     <button className="govuk-button" type="button" onClick={() => setOpen(true)}>Open modal</button>
-    <Modal open={open} title="Confirm your action" onClose={() => setOpen(false)} footer={<><button className="govuk-button" type="button" onClick={() => setOpen(false)}>Confirm</button><button className="govuk-button govuk-button--secondary" type="button" onClick={() => setOpen(false)}>Cancel</button></>}>
-      <p className="govuk-body">Check the details before continuing.</p>
+    <Modal open={open} title="Confirm your action" onClose={() => setOpen(false)}
+      okText="Confirm" cancelText="Cancel" confirmLoading={confirming}
+      onOk={() => {
+        setConfirming(true)
+        setTimeout(() => { setConfirming(false); setOpen(false) }, 1200)
+      }}>
+      <p className="govuk-body">Check the details before continuing. The built-in footer confirm button shows a loading state while the request runs.</p>
     </Modal>
   </>
+}
+
+export function SwitchExample() {
+  const [email, setEmail] = useState(true)
+  const [sms, setSms] = useState(false)
+  return <div className="switch-example">
+    <div className="switch-example__row">
+      <Switch aria-label="Small email notifications switch" size="s" checked={email} onChange={setEmail} />
+      <span className="govuk-body">Small</span>
+    </div>
+    <div className="switch-example__row">
+      <Switch aria-label="Medium SMS notifications switch" checked={sms} onChange={setSms} checkedChildren="On" unCheckedChildren="Off">SMS notifications</Switch>
+      <span className="govuk-body">Medium with checked and unchecked content</span>
+    </div>
+    <div className="switch-example__row">
+      <Switch aria-label="Large loading switch" size="l" loading />
+      <span className="govuk-body">Large and loading</span>
+    </div>
+    <div className="switch-example__row">
+      <Switch aria-label="Disabled switch" disabled />
+      <span className="govuk-body">Disabled</span>
+    </div>
+  </div>
+}
+
+export function TooltipExample() {
+  return <div className="tooltip-example">
+    <Tooltip title="Opens above the trigger" placement="top"><button className="govuk-button govuk-button--secondary" type="button">Top</button></Tooltip>
+    <Tooltip title="Opens below the trigger" placement="bottom"><button className="govuk-button govuk-button--secondary" type="button">Bottom</button></Tooltip>
+    <Tooltip title="Opens to the left" placement="left"><button className="govuk-button govuk-button--secondary" type="button">Left</button></Tooltip>
+    <Tooltip title="Opens to the right" placement="right"><button className="govuk-button govuk-button--secondary" type="button">Right</button></Tooltip>
+  </div>
 }
 
 export function MenuExample() {
@@ -64,6 +102,9 @@ export function FancyTableExample() {
     selectedRowKeys={selected}
     onSelectionChange={setSelected}
     pageSize={3}
+    expandable={{
+      expandedRowRender: (record) => <span className="govuk-body">Application {record.id} is currently <strong>{record.status.toLowerCase()}</strong>.</span>,
+    }}
     columns={[
       { key: 'id', title: 'Reference', dataIndex: 'id', rowHeader: true, sorter: (a, b) => a.id.localeCompare(b.id) },
       { key: 'applicant', title: 'Applicant', dataIndex: 'applicant', sorter: (a, b) => a.applicant.localeCompare(b.applicant) },

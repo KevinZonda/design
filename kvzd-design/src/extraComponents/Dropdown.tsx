@@ -10,11 +10,13 @@ export interface DropdownProps extends SemanticStyling<'root' | 'trigger' | 'pop
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
   onAction?: (key: string) => void
+  trigger?: 'click' | 'hover'
+  placement?: 'top' | 'bottom' | 'left' | 'right'
   className?: string
   style?: CSSProperties
 }
 
-export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropdown({ label, items, menuLabel, open, defaultOpen = false, onOpenChange, onAction, className = '', classNames, style, styles }, ref) {
+export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropdown({ label, items, menuLabel, open, defaultOpen = false, onOpenChange, onAction, trigger = 'click', placement = 'bottom', className = '', classNames, style, styles }, ref) {
   const [innerOpen, setInnerOpen] = useState(defaultOpen)
   const expanded = open ?? innerOpen
   const rootRef = useRef<HTMLDivElement>(null)
@@ -28,12 +30,18 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropd
     return () => document.removeEventListener('pointerdown', outside)
   }, [expanded, setExpanded])
 
-  return <div ref={(node) => {
-    rootRef.current = node
-    if (typeof ref === 'function') ref(node)
-    else if (ref) ref.current = node
-  }} className={`kvzd-design-dropdown ${classNames?.root ?? ''} ${className}`.trim()} style={{ ...styles?.root, ...style }}>
-    <button ref={triggerRef} className={`govuk-button govuk-button--secondary kvzd-design-dropdown__trigger ${classNames?.trigger ?? ''}`.trim()} style={styles?.trigger} type="button" aria-haspopup="menu" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>{label}<span className="kvzd-design-dropdown__chevron" aria-hidden="true" /></button>
-    {expanded && <div className={`kvzd-design-dropdown__popup ${classNames?.popup ?? ''}`.trim()} style={styles?.popup}><Menu items={items} ariaLabel={menuLabel} autoFocus onAction={(key) => { onAction?.(key); setExpanded(false); triggerRef.current?.focus() }} onEscape={() => { setExpanded(false); triggerRef.current?.focus() }} /></div>}
+  return <div
+    ref={(node) => {
+      rootRef.current = node
+      if (typeof ref === 'function') ref(node)
+      else if (ref) ref.current = node
+    }}
+    className={`kvzd-design-dropdown ${classNames?.root ?? ''} ${className}`.trim()}
+    style={{ ...styles?.root, ...style }}
+    onMouseEnter={trigger === 'hover' ? () => setExpanded(true) : undefined}
+    onMouseLeave={trigger === 'hover' ? () => setExpanded(false) : undefined}
+  >
+    <button ref={triggerRef} className={`govuk-button govuk-button--secondary kvzd-design-dropdown__trigger ${classNames?.trigger ?? ''}`.trim()} style={styles?.trigger} type="button" aria-haspopup="menu" aria-expanded={expanded} onClick={() => trigger === 'click' && setExpanded(!expanded)}>{label}<span className="kvzd-design-dropdown__chevron" aria-hidden="true" /></button>
+    {expanded && <div className={`kvzd-design-dropdown__popup kvzd-design-dropdown--${placement} ${classNames?.popup ?? ''}`.trim()} style={styles?.popup}><Menu items={items} ariaLabel={menuLabel} autoFocus onAction={(key) => { onAction?.(key); setExpanded(false); triggerRef.current?.focus() }} onEscape={() => { setExpanded(false); triggerRef.current?.focus() }} /></div>}
   </div>
 })

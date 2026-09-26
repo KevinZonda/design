@@ -12,7 +12,7 @@ const componentText: Record<string, DocTranslation> = {
   accordion: { summary: '让用户展开和收起页面中相关的内容区块。', whenToUse: '当用户一次只需查看少量区块，且完整页面难以浏览时使用。若大多数用户都需要阅读全部内容，优先使用普通标题。', howItWorks: '每个区块使用真正的按钮，公开其展开状态，内容始终保留在文档中。包括“全部展开”在内的状态由 React 管理。' },
   'back-link': { summary: '帮助用户返回多页服务中的上一步。', whenToUse: '用于问题页面及其他线性流程。放在主要内容顶部，不要与面包屑导航同时使用。', howItWorks: '组件渲染普通链接，因此仍可使用浏览器的新标签页打开等功能。' },
   breadcrumbs: { summary: '显示用户在网站层级结构中的位置。', whenToUse: '用于包含多级导航的网站。简单的线性事务流程不需要面包屑导航。', howItWorks: '按层级顺序提供条目。当前页面不设置 href，以带有 aria-current 的文字呈现。' },
-  button: { summary: '帮助用户执行保存信息或启动服务等操作。', whenToUse: '每页设置一个明确的主要操作。服务起始页使用开始按钮，相关操作可以放在一起。除非用户研究证明有必要，否则避免禁用按钮。', howItWorks: '使用 href 导航，或使用 htmlType 创建原生表单按钮。开始按钮带 GOV.UK 箭头；ButtonGroup 对齐按钮和链接。禁用按钮同时设置 disabled 和 aria-disabled。' },
+  button: { summary: '帮助用户执行保存信息或启动服务等操作。', whenToUse: '每页设置一个明确的主要操作。服务起始页使用开始按钮，相关操作可以放在一起。除非用户研究证明有必要，否则避免禁用按钮。', howItWorks: '使用 href 导航，或使用 htmlType 创建原生表单按钮。开始按钮带 GOV.UK 箭头；ButtonGroup 对齐按钮和链接。禁用按钮会设置 disabled 和 aria-disabled；加载中的按钮显示旋转指示器、阻止点击并设置 aria-busy。' },
   'character-count': { summary: '在严格限制字数时告知用户还可以输入多少内容。', whenToUse: '仅在服务确实限制字符数或词数时使用。用户开始输入前应解释限制。', howItWorks: '根据文本框的值计算实时字数，并以非打断方式通知辅助技术。' },
   checkboxes: { summary: '让用户从列表中选择一个或多个选项。', whenToUse: '允许选择多个答案时使用。只能选择一个答案时使用单选按钮。', howItWorks: '每个复选框都有可见标签；选项还可以包含提示文字和条件内容。' },
   'cookie-banner': { summary: '征求用户设置非必要 Cookie 的许可。', whenToUse: '服务使用分析或其他非必要 Cookie 时使用。等待用户选择期间不要阻止其访问服务。', howItWorks: '选择保存在一年期 Cookie 中；确认消息可关闭，回访时不再显示。应用可通过 onConsentChange 获得已保存的选择。' },
@@ -50,7 +50,7 @@ const componentText: Record<string, DocTranslation> = {
 
 const extraText: Record<string, DocTranslation> = {
   divider: { summary: '使用 GOV.UK 分隔线样式区分内容区块。', whenToUse: '当仅靠留白不足以区分内容区块时使用。不要在每个字段或段落之间都画线。', howItWorks: '渲染带有 GOV.UK 间距样式的语义化 hr。将 visible 设为 false 可只保留间距。' },
-  modal: { summary: '用于在返回页面前完成简短决定或任务的聚焦对话框。', whenToUse: '用于简短确认或聚焦任务。较长的流程应放在普通页面。', howItWorks: '原生 dialog 进入顶层并将键盘焦点限制在其中。Escape、关闭按钮和可选的背景点击通过 onClose 请求关闭。' },
+  modal: { summary: '用于在返回页面前完成简短决定或任务的聚焦对话框。', whenToUse: '用于简短确认或聚焦任务。较长的流程应放在普通页面。', howItWorks: '原生 dialog 进入顶层并将键盘焦点限制在其中。Escape、关闭按钮和可选的背景点击通过 onClose 请求关闭；关闭后焦点会回到打开对话框的元素。' },
   empty: { summary: '用于列表、表格或搜索结果为空时的清晰提示。', whenToUse: '视图无数据或筛选后没有结果时使用。适当说明原因或提供下一步操作。', howItWorks: '中性容器中显示可见标题、可选说明和操作。插图只起装饰作用，可以替换。' },
   loading: { summary: '内容加载期间使用的旋转指示器和骨架屏。', whenToUse: '短暂等待使用旋转指示器；已知待加载内容的结构时使用骨架屏。', howItWorks: '两种样式都向辅助技术公开状态标签；用户要求减少动态效果时会停止动画。' },
   menu: { summary: '支持键盘导航的紧凑操作列表。', whenToUse: '用于一组简短的相关操作。主要页面导航应使用普通导航链接。', howItWorks: '方向键和 Home／End 可在可用操作间移动焦点。条目可使用 href 或 onClick；同时提供时，onClick 优先。' },
@@ -62,6 +62,8 @@ const extraText: Record<string, DocTranslation> = {
   sidebar: { summary: '为相关页面或区块提供嵌套导航，并可选择展开和收起。', whenToUse: '用于一组相关文档页面。导航树较大时可启用折叠分组。', howItWorks: '链接默认渲染为锚点；分组可以包含多级子项。renderLink 可提供客户端路由链接，当前分支会高亮。' },
   'showcase-box': { summary: '用统一的标题、说明、实时示例和相关链接展示组件或设计模式。', whenToUse: '在设计系统总览或文档页面中，需要以一致容器展示多个组件时使用。', howItWorks: '标题层级可配置，页眉和页脚插槽可接收任意 React 内容，顶部强调条跟随当前品牌色 token。' },
   'tag-box': { summary: '用于版本号等简短元信息的中性描边标签。', whenToUse: '用于不表示状态的元信息。表示状态时请使用标准 Tag 组件。', howItWorks: '它渲染 span，接受标准 span 属性以及可选的 className。' },
+  switch: { summary: '用于立即生效设置的二元开关。', whenToUse: '用于更改后立即生效的开关设置。选项需要随表单提交时，请使用复选框或单选按钮。', howItWorks: '开关是带 role switch 和 aria-checked 状态的按钮。字符串子元素会成为视觉隐藏的标签；checkedChildren 和 unCheckedChildren 渲染在轨道内。加载状态会在滑块中显示旋转指示器并阻止交互。' },
+  tooltip: { summary: '在元素旁边显示用于解释的简短标签。', whenToUse: '用于对图标、按钮或状态文字做简短说明。不要隐藏用户完成任务必须阅读的信息，表单字段请使用可见的提示文字。', howItWorks: '唯一的子元素会被克隆并附加触发事件处理器。内容为纯文本或数字时，弹层打开期间触发器会获得 aria-describedby，弹层本身带 role tooltip。' },
 }
 
 export function localizedComponent(component: ComponentDoc, locale: Locale): ComponentDoc {

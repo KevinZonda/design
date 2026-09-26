@@ -13,17 +13,71 @@ export const Fieldset = forwardRef<HTMLFieldSetElement, FieldsetProps>(function 
   return <fieldset {...props} ref={ref} className={`govuk-fieldset ${className}`.trim()}><legend className={`govuk-fieldset__legend ${legendSize ? `govuk-fieldset__legend--${legendSize}` : ''}`.trim()}>{isPageHeading ? <h1 className="govuk-fieldset__heading">{legend}</h1> : legend}</legend>{hint && <Hint>{hint}</Hint>}{error && <ErrorMessage>{error}</ErrorMessage>}{children}</fieldset>
 })
 
-export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'textarea'> { label: ReactNode; hint?: ReactNode; error?: ReactNode; rows?: number }
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({ 'aria-describedby': ariaDescribedBy, 'aria-invalid': ariaInvalid, className = '', classNames, error, hint, id, label, rows = 5, style, styles, ...props }, ref) {
+export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'textarea'> { label: ReactNode; hint?: ReactNode; error?: ReactNode; rows?: number; autoSize?: boolean | { minRows?: number; maxRows?: number } }
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({ 'aria-describedby': ariaDescribedBy, 'aria-invalid': ariaInvalid, autoSize, className = '', classNames, error, hint, id, label, onChange, rows = 5, style, styles, ...props }, ref) {
   const uid = useId(); const fieldId = id ?? `kvzd-design-textarea-${uid.replaceAll(':', '')}`; const described = [ariaDescribedBy, hint && `${fieldId}-hint`, error && `${fieldId}-error`].filter(Boolean).join(' ')
-  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}><Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint id={`${fieldId}-hint`} className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage id={`${fieldId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}<textarea {...props} ref={ref} id={fieldId} rows={rows} aria-describedby={described || undefined} aria-invalid={error ? true : ariaInvalid} className={`govuk-textarea ${error ? 'govuk-textarea--error' : ''} ${classNames?.textarea ?? ''} ${className}`.trim()} style={{ ...styles?.textarea, ...style }} /></div>
+  const areaRef = useRef<HTMLTextAreaElement>(null)
+  const setRefs = (node: HTMLTextAreaElement | null) => { areaRef.current = node; if (typeof ref === 'function') ref(node); else if (ref) (ref as { current: HTMLTextAreaElement | null }).current = node }
+  useEffect(() => {
+    const el = areaRef.current
+    if (!el || !autoSize) return
+    el.style.height = '0px'
+    const computed = getComputedStyle(el)
+    const lineHeight = Number.parseFloat(computed.lineHeight) || Number.parseFloat(computed.fontSize) * 1.25 || 20
+    const minRows = (typeof autoSize === 'object' ? autoSize.minRows : undefined) ?? rows
+    const maxRows = typeof autoSize === 'object' ? autoSize.maxRows : undefined
+    let height = Math.max(el.scrollHeight, minRows * lineHeight)
+    if (maxRows !== undefined) { height = Math.min(height, maxRows * lineHeight); el.style.overflowY = el.scrollHeight > maxRows * lineHeight ? 'auto' : 'hidden' }
+    el.style.height = `${height}px`
+  })
+  return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}><Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint id={`${fieldId}-hint`} className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage id={`${fieldId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}<textarea {...props} ref={setRefs} id={fieldId} rows={typeof autoSize === 'object' ? autoSize.minRows ?? rows : rows} aria-describedby={described || undefined} aria-invalid={error ? true : ariaInvalid} onChange={(event) => { onChange?.(event) }} className={`govuk-textarea ${error ? 'govuk-textarea--error' : ''} ${autoSize ? 'kvzd-design-textarea--autosize' : ''} ${classNames?.textarea ?? ''} ${className}`.trim()} style={{ ...styles?.textarea, ...style }} /></div>
 })
 
 export interface Option { label: ReactNode; value: string; disabled?: boolean }
-export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'children'>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'select'> { label: ReactNode; hint?: ReactNode; error?: ReactNode; options: Option[]; placeholder?: string }
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select({ className = '', classNames, error, hint, id, label, options, placeholder, style, styles, ...props }, ref) {
+interface SelectBaseProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'children' | 'multiple' | 'value' | 'defaultValue' | 'onChange'>, SemanticStyling<'root' | 'label' | 'hint' | 'error' | 'select'> { label: ReactNode; hint?: ReactNode; error?: ReactNode; options: Option[]; placeholder?: string }
+export interface SingleSelectProps extends SelectBaseProps { multiple?: false }
+export interface MultipleSelectProps extends SelectBaseProps { multiple: true; value?: string[]; defaultValue?: string[]; onChange?: (value: string[]) => void; showSearch?: boolean; loading?: boolean }
+export type SelectProps = SingleSelectProps | MultipleSelectProps
+
+const selectSpinner = (
+  <svg className="kvzd-design-spinner" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="3" opacity="0.25" />
+    <path d="M21 12a9 9 0 0 0-9-9" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+  </svg>
+)
+
+const SelectSingle = forwardRef<HTMLSelectElement, SingleSelectProps>(function SelectSingle({ className = '', classNames, error, hint, id, label, options, placeholder, style, styles, ...props }, ref) {
   const uid = useId(); const fieldId = id ?? `kvzd-design-select-${uid.replaceAll(':', '')}`; const described = [hint && `${fieldId}-hint`, error && `${fieldId}-error`].filter(Boolean).join(' ')
   return <div className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} ${classNames?.root ?? ''}`.trim()} style={styles?.root}><Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint id={`${fieldId}-hint`} className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage id={`${fieldId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}<select {...props} ref={ref} id={fieldId} aria-describedby={described || undefined} className={`govuk-select ${error ? 'govuk-select--error' : ''} ${classNames?.select ?? ''} ${className}`.trim()} style={{ ...styles?.select, ...style }}>{placeholder && <option value="">{placeholder}</option>}{options.map((option) => <option key={option.value} value={option.value} disabled={option.disabled}>{option.label}</option>)}</select></div>
+})
+
+const SelectMultiple = forwardRef<HTMLSelectElement, MultipleSelectProps>(function SelectMultiple({ className = '', classNames, defaultValue = [], disabled, error, hint, id, label, loading = false, onChange, options, placeholder = '', showSearch = false, style, styles, value }, ref) {
+  const uid = useId(); const fieldId = id ?? `kvzd-design-select-${uid.replaceAll(':', '')}`; const described = [hint && `${fieldId}-hint`, error && `${fieldId}-error`].filter(Boolean).join(' ')
+  const [inner, setInner] = useState<string[]>(defaultValue); const selected = value ?? inner
+  const [open, setOpen] = useState(false); const [query, setQuery] = useState('')
+  const rootRef = useRef<HTMLDivElement>(null); const triggerRef = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    if (!open) return
+    const outside = (event: PointerEvent) => { if (!rootRef.current?.contains(event.target as Node)) setOpen(false) }
+    document.addEventListener('pointerdown', outside)
+    return () => document.removeEventListener('pointerdown', outside)
+  }, [open])
+  const update = (optionValue: string, checked: boolean) => { const next = checked ? [...selected, optionValue] : selected.filter((item) => item !== optionValue); if (value === undefined) setInner(next); onChange?.(next) }
+  const filtered = showSearch && query.trim() ? options.filter((option) => String(option.label).toLowerCase().includes(query.trim().toLowerCase())) : options
+  const selectedLabels = options.filter((option) => selected.includes(option.value)).map((option) => String(option.label))
+  const labelText = selectedLabels.length > 0 ? selectedLabels.join(', ') : placeholder
+  return <div ref={rootRef} className={`govuk-form-group ${error ? 'govuk-form-group--error' : ''} kvzd-design-select ${classNames?.root ?? ''}`.trim()} style={{ ...styles?.root, ...style }}><Label htmlFor={fieldId} size="m" className={classNames?.label} style={styles?.label}>{label}</Label>{hint && <Hint id={`${fieldId}-hint`} className={classNames?.hint} style={styles?.hint}>{hint}</Hint>}{error && <ErrorMessage id={`${fieldId}-error`} className={classNames?.error} style={styles?.error}>{error}</ErrorMessage>}
+    <button ref={(node) => { triggerRef.current = node; if (typeof ref === 'function') ref(null); else if (ref) (ref as { current: HTMLSelectElement | null }).current = node as unknown as HTMLSelectElement }} type="button" id={fieldId} disabled={disabled} aria-describedby={described || undefined} aria-haspopup="listbox" aria-expanded={open} aria-disabled={disabled || undefined} className={`govuk-select kvzd-design-select__trigger ${error ? 'govuk-select--error' : ''} ${open ? 'kvzd-design-select__trigger--open' : ''} ${classNames?.select ?? ''} ${className}`.trim()} style={styles?.select} onClick={() => setOpen(!open)} onKeyDown={(event) => { if (event.key === 'Escape') { setOpen(false); triggerRef.current?.focus() } }}><span className="kvzd-design-select__value">{labelText}</span>{loading && <span className="kvzd-design-select__spinner">{selectSpinner}</span>}<span className="kvzd-design-select__chevron" aria-hidden="true" /></button>
+    {open && <div className="kvzd-design-select__popup" role="listbox" aria-multiselectable="true" aria-labelledby={fieldId} onKeyDown={(event) => { if (event.key === 'Escape') { setOpen(false); triggerRef.current?.focus() } }}>
+      {showSearch && <input type="text" className="govuk-input govuk-input--width-20 kvzd-design-select__search" placeholder="Search" value={query} onChange={(event) => setQuery(event.target.value)} />}
+      {loading ? <div className="kvzd-design-select__loading">Loading…</div> : filtered.map((option) => <div key={option.value} className="govuk-checkboxes__item kvzd-design-select__option"><input className="govuk-checkboxes__input" id={`${fieldId}-${option.value}`} type="checkbox" checked={selected.includes(option.value)} disabled={option.disabled} onChange={(event) => update(option.value, event.target.checked)} /><label className="govuk-label govuk-checkboxes__label" htmlFor={`${fieldId}-${option.value}`}>{option.label}</label></div>)}
+    </div>}
+  </div>
+})
+
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(props, ref) {
+  if (props.multiple) return <SelectMultiple {...props} ref={ref} />
+  return <SelectSingle {...props} ref={ref} />
 })
 
 export interface ChoiceOption extends Option { hint?: ReactNode; conditional?: ReactNode }

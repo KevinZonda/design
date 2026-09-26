@@ -39,6 +39,11 @@
 .search-input-examples .govuk-form-group:last-child { margin-bottom: 0; }
 .sidebar-example { max-width: 280px; margin: 16px 0 36px; }
 .tag-box-example { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.switch-example { display: grid; gap: 16px; }
+.switch-example__row { display: flex; align-items: center; gap: 12px; }
+.switch-example__row > .govuk-body { margin-bottom: 0; }
+.tooltip-example { display: flex; flex-wrap: wrap; gap: 24px; padding: 70px 20px; }
+.tooltip-example .govuk-button { margin-bottom: 0; }
 
 @media (max-width: 800px) {
   .official-component-list { grid-template-columns: 1fr; }

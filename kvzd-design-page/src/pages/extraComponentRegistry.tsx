@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Divider, Empty, FancyTabs, Loading, Note, ShowcaseBox, Sidebar, TagBox } from '@kevinzonda/design/extraComponents'
 import type { ApiProp } from './componentRegistry'
-import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample } from './extraExamples'
+import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample, SwitchExample, TooltipExample } from './extraExamples'
 
 export interface ExtraComponentDoc {
   slug: string
@@ -59,9 +59,9 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     name: 'Modal',
     summary: 'A focused dialog for a short decision or task that must be completed before returning to the page.',
     whenToUse: 'Use for a brief confirmation or focused task. Keep longer journeys on normal pages.',
-    howItWorks: 'A native dialog enters the top layer and keeps keyboard focus inside it. Escape, the close button and optional backdrop clicks request closure through onClose.',
+    howItWorks: 'A native dialog enters the top layer and keeps keyboard focus inside it. Escape, the close button and optional backdrop clicks request closure through onClose, and focus returns to the element that opened the dialog.',
     code: `<Modal open={open} title="Confirm your action" onClose={() => setOpen(false)}
-  footer={<button type="button" onClick={confirm}>Confirm</button>}>
+  okText="Confirm" cancelText="Cancel" onOk={confirm}>
   <p>Check the details before continuing.</p>
 </Modal>`,
     example: () => <ModalExample />,
@@ -69,10 +69,19 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'open', type: 'boolean', description: 'Controls whether the dialog is shown.' },
       { name: 'title', type: 'ReactNode', description: 'Visible heading and accessible dialog name.' },
       { name: 'children', type: 'ReactNode', description: 'Dialog content.' },
-      { name: 'footer', type: 'ReactNode', description: 'Optional action area.' },
+      { name: 'footer', type: 'ReactNode', description: 'Optional action area; when omitted and onOk or custom okText or cancelText is supplied, a built-in footer is rendered.' },
       { name: 'onClose', type: '() => void', description: 'Called when the user requests closure; update open in the parent.' },
       { name: 'closeOnBackdrop', type: 'boolean', defaultValue: 'true', description: 'Allow backdrop clicks to request closure.' },
       { name: 'closeLabel', type: 'string', defaultValue: 'Close', description: 'Accessible name of the close button.' },
+      { name: 'width', type: 'number | string', description: 'Dialog width in pixels or any CSS length.' },
+      { name: 'centered', type: 'boolean', defaultValue: 'false', description: 'Centre the dialog vertically.' },
+      { name: 'keyboard', type: 'boolean', defaultValue: 'true', description: 'Allow Escape to request closure.' },
+      { name: 'closable', type: 'boolean', defaultValue: 'true', description: 'Show the close button.' },
+      { name: 'okText', type: 'ReactNode', defaultValue: 'Confirm', description: 'Label of the built-in footer confirm action.' },
+      { name: 'cancelText', type: 'ReactNode', defaultValue: 'Cancel', description: 'Label of the built-in footer cancel action.' },
+      { name: 'onOk', type: '() => void | Promise<void>', description: 'Called by the built-in footer confirm action; a returned promise keeps the confirm button loading until it settles.' },
+      { name: 'confirmLoading', type: 'boolean', defaultValue: 'false', description: 'Loading state of the built-in footer confirm button.' },
+      { name: 'destroyOnClose', type: 'boolean', defaultValue: 'false', description: 'Remove the dialog content from the DOM after the dialog has been closed once.' },
       { name: 'ref', type: 'Ref<HTMLDialogElement>', description: 'Native dialog element.' },
     ],
   },
@@ -108,6 +117,8 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'size', type: "'s' | 'm' | 'l'", defaultValue: 'm', description: 'Size of the spinner or skeleton rows.' },
       { name: 'label', type: 'string', defaultValue: 'Loading', description: 'Accessible loading status.' },
       { name: 'lines', type: 'number', defaultValue: '3', description: 'Number of skeleton rows.' },
+      { name: 'delay', type: 'number', defaultValue: '0', description: 'Delay in milliseconds before the loading state is shown.' },
+      { name: 'fullscreen', type: 'boolean', defaultValue: 'false', description: 'Overlay the entire viewport.' },
       { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Loading root element.' },
     ],
   },
@@ -137,7 +148,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
 ]} />`,
     example: () => <MenuExample />,
     api: [
-      { name: 'items', type: 'MenuItem[]', description: 'Actions with key, label, optional href, onClick and disabled.' },
+      { name: 'items', type: 'MenuItem[]', description: 'Actions with key, label, optional href, onClick, icon, danger styling or disabled; set type to divider for a separator.' },
       { name: 'ariaLabel', type: 'string', description: 'Accessible name for the menu.' },
       { name: 'autoFocus', type: 'boolean', defaultValue: 'false', description: 'Focus the first enabled action on mount.' },
       { name: 'onAction', type: '(key: string) => void', description: 'Called after an action is activated.' },
@@ -162,6 +173,8 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'open / defaultOpen', type: 'boolean', description: 'Controlled or initial open state.' },
       { name: 'onOpenChange', type: '(open: boolean) => void', description: 'Called when the menu requests a state change.' },
       { name: 'onAction', type: '(key: string) => void', description: 'Called after an item is activated.' },
+      { name: 'trigger', type: "'click' | 'hover'", defaultValue: 'click', description: 'Interaction that opens the menu.' },
+      { name: 'placement', type: "'top' | 'bottom' | 'left' | 'right'", defaultValue: 'bottom', description: 'Where the menu appears relative to the trigger.' },
       { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Dropdown root element.' },
     ],
   },
@@ -183,18 +196,26 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     example: () => <FancyTableExample />,
     wide: true,
     api: [
-      { name: 'columns', type: 'FancyTableColumn<T>[]', description: 'Column definitions; add sorter for sortable headers.' },
+      { name: 'columns', type: 'FancyTableColumn<T>[]', description: 'Column definitions with optional sorter, filters, onFilter, filterMultiple and onCell.' },
       { name: 'dataSource', type: 'T[]', description: 'Records displayed by the table.' },
       { name: 'rowKey', type: 'keyof T | (record: T) => Key', description: 'Stable unique key for each row.' },
+      { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Replace the body with a loading indicator and mark the table busy.' },
       { name: 'selectable', type: 'boolean', defaultValue: 'false', description: 'Show row and current-page selection controls.' },
       { name: 'selectedRowKeys / defaultSelectedRowKeys', type: 'Key[]', description: 'Controlled or initial selected row keys.' },
       { name: 'onSelectionChange', type: '(keys: Key[]) => void', description: 'Called when the selection changes.' },
       { name: 'sort / defaultSort', type: 'FancyTableSort | null', description: 'Controlled or initial column and direction.' },
       { name: 'onSortChange', type: '(sort: FancyTableSort | null) => void', description: 'Called when the sort changes.' },
-      { name: 'filterValues / defaultFilterValues', type: 'Record<string, string>', description: 'Controlled or initial filter values by column key.' },
-      { name: 'onFilterChange', type: '(values: Record<string, string>) => void', description: 'Called when a column filter changes.' },
+      { name: 'filterValues / defaultFilterValues', type: 'Record<string, string | string[]>', description: 'Controlled or initial filter values by column key.' },
+      { name: 'onFilterChange', type: '(values: Record<string, string | string[]>) => void', description: 'Called when a column filter changes.' },
+      { name: 'expandable', type: 'FancyTableExpandable<T>', description: 'Row expansion with expandedRowRender, optional rowExpandable and controlled or initial expanded row keys.' },
+      { name: 'rowClassName', type: '(record: T, index: number) => string', description: 'Additional class for each row.' },
+      { name: 'onRow', type: '(record: T, index: number) => HTMLAttributes<HTMLTableRowElement>', description: 'Native attributes and handlers applied to each row.' },
       { name: 'pageSize / currentPage', type: 'number', description: 'Local page size and optional controlled page.' },
       { name: 'onPageChange', type: '(page: number) => void', description: 'Called when the page changes.' },
+      { name: 'showTotal', type: 'boolean | ((total: number, range: [number, number]) => ReactNode)', description: 'Show record totals beside the pagination; a function renders custom text.' },
+      { name: 'showSizeChanger', type: 'boolean', defaultValue: 'false', description: 'Let users change the page size.' },
+      { name: 'pageSizeOptions', type: 'number[]', defaultValue: '[10, 20, 50]', description: 'Page sizes offered by the size changer.' },
+      { name: 'onPageSizeChange', type: '(size: number) => void', description: 'Called when the page size changes.' },
       { name: 'emptyContent', type: 'ReactNode', description: 'Content displayed when there are no records.' },
       { name: 'ref', type: 'Ref<HTMLTableElement>', description: 'Table element.' },
     ],
@@ -211,10 +232,11 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { key: 'details', label: 'Details', children: <p className="govuk-body govuk-!-margin-top-4">The application contains 3 sections.</p> },
     ]} />,
     api: [
-      { name: 'items', type: 'TabItem[]', description: 'Tab keys, labels and panel content.' },
+      { name: 'items', type: 'TabItem[]', description: 'Tab keys, labels and panel content. Items can be disabled to make their tab non-interactive.' },
       { name: 'activeKey', type: 'string', description: 'Controlled active tab.' },
       { name: 'defaultActiveKey', type: 'string', description: 'Initial active tab.' },
       { name: 'onChange', type: '(key: string) => void', description: 'Called with the selected tab key.' },
+      { name: 'destroyOnInactive', type: 'boolean', defaultValue: 'false', description: 'Remove inactive panel content from the DOM instead of hiding it.' },
     ],
   },
   {
@@ -235,9 +257,12 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'onFinish', type: '(values: FormValues) => void', description: 'Called when every field passes validation.' },
       { name: 'onFinishFailed', type: '(errors: FormError[], values: FormValues) => void', description: 'Called when submission finds errors.' },
       { name: 'validate', type: '(values: FormValues) => { name: string; message: string }[]', description: 'Optional form-level validation for related fields.' },
+      { name: 'validateTrigger', type: "'onChange' | 'onBlur' | 'submit' | array", defaultValue: 'submit', description: 'When registered rules run; pass an array to validate on several events.' },
+      { name: 'scrollToFirstError', type: 'boolean', defaultValue: 'false', description: 'Move focus to the first field with an error after a failed submission.' },
+      { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable every field inside the form.' },
       { name: 'errorSummaryTitle', type: 'ReactNode', defaultValue: 'There is a problem', description: 'Heading displayed above validation links.' },
       { name: 'Form.Item name', type: 'string', description: 'Native field name used to read its submitted value.' },
-      { name: 'Form.Item rules', type: 'FormRule[]', description: 'Required, pattern or custom validation rules checked on submit.' },
+      { name: 'Form.Item rules', type: 'FormRule[]', description: 'Required, pattern, min, max, len, type, whitespace or custom rules; checked according to validateTrigger.' },
       { name: 'Form.Item multiple', type: 'boolean', defaultValue: 'false', description: 'Read all values for a checkbox group.' },
       { name: 'Form.Item focusId', type: 'string', description: 'ID targeted from the error summary for grouped fields.' },
       { name: 'ref', type: 'Ref<HTMLFormElement>', description: 'Native form element.' },
@@ -345,6 +370,50 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     api: [
       { name: 'children', type: 'ReactNode', description: 'Short text or other inline content displayed inside the box.' },
       { name: 'className', type: 'string', description: 'Additional CSS class for positioning or local styling.' },
+    ],
+  },
+  {
+    slug: 'switch',
+    name: 'Switch',
+    summary: 'A binary toggle for a setting that takes effect immediately.',
+    whenToUse: 'Use for on/off settings that apply as soon as they are changed. Use checkboxes or radios when the choice is submitted with a form.',
+    howItWorks: 'The toggle is a button with role switch and an aria-checked state. A string child becomes a visually hidden label, while checkedChildren and unCheckedChildren render inside the track. Loading shows a spinner in the handle and blocks interaction.',
+    code: `<Switch defaultChecked checkedChildren="On" unCheckedChildren="Off" onChange={(checked) => save(checked)}>
+  Email notifications
+</Switch>`,
+    example: () => <SwitchExample />,
+    api: [
+      { name: 'checked', type: 'boolean', description: 'Controlled checked state.' },
+      { name: 'defaultChecked', type: 'boolean', defaultValue: 'false', description: 'Initial checked state.' },
+      { name: 'onChange', type: '(checked: boolean) => void', description: 'Called with the new state when the toggle is pressed.' },
+      { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Prevent interaction.' },
+      { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show a spinner in the handle and block interaction.' },
+      { name: 'size', type: "'s' | 'm' | 'l'", defaultValue: 'm', description: 'Toggle size.' },
+      { name: 'checkedChildren', type: 'ReactNode', description: 'Content shown in the track while checked.' },
+      { name: 'unCheckedChildren', type: 'ReactNode', description: 'Content shown in the track while unchecked.' },
+      { name: 'children', type: 'ReactNode', description: 'A string becomes a visually hidden label; other content renders beside the toggle.' },
+      { name: 'aria-label', type: 'string', description: 'Accessible name when children are not a plain string.' },
+      { name: 'ref', type: 'Ref<HTMLButtonElement>', description: 'Native toggle button.' },
+    ],
+  },
+  {
+    slug: 'tooltip',
+    name: 'Tooltip',
+    summary: 'A short label that appears next to an element to explain it.',
+    whenToUse: 'Use for brief explanations of icons, buttons or status text. Do not hide information users must read to complete a task; use visible hint text instead.',
+    howItWorks: 'The single child element is cloned and given the trigger handlers. With plain text or number content, the trigger receives aria-describedby while the popup is open, and the popup itself has role tooltip.',
+    code: `<Tooltip title="Copy to clipboard" placement="right">
+  <Button type="secondary">Copy</Button>
+</Tooltip>`,
+    example: () => <TooltipExample />,
+    api: [
+      { name: 'title', type: 'ReactNode', description: 'Content of the tooltip.' },
+      { name: 'children', type: 'ReactElement', description: 'Single element that triggers the tooltip.' },
+      { name: 'placement', type: "'top' | 'bottom' | 'left' | 'right'", defaultValue: 'top', description: 'Where the tooltip appears relative to the trigger.' },
+      { name: 'trigger', type: "'hover' | 'focus' | 'click'", defaultValue: 'hover', description: 'Interaction that shows the tooltip.' },
+      { name: 'open / defaultOpen', type: 'boolean', description: 'Controlled or initial open state.' },
+      { name: 'onOpenChange', type: '(open: boolean) => void', description: 'Called when the tooltip requests a state change.' },
+      { name: 'ref', type: 'Ref<HTMLSpanElement>', description: 'Tooltip wrapper element.' },
     ],
   },
 ]

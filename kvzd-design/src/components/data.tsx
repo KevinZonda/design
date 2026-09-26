@@ -62,8 +62,8 @@ export const TaskList = forwardRef<HTMLUListElement, TaskListProps>(function Tas
   </ul>
 })
 
-export interface TabItem { key: string; label: ReactNode; children: ReactNode }
-export interface TabsProps extends SemanticStyling<'root' | 'title' | 'list' | 'tab' | 'panel'> { items: TabItem[]; activeKey?: string; defaultActiveKey?: string; onChange?: (key: string) => void; style?: CSSProperties }
+export interface TabItem { key: string; label: ReactNode; children: ReactNode; disabled?: boolean }
+export interface TabsProps extends SemanticStyling<'root' | 'title' | 'list' | 'tab' | 'panel'> { items: TabItem[]; activeKey?: string; defaultActiveKey?: string; onChange?: (key: string) => void; destroyOnInactive?: boolean; style?: CSSProperties }
 
 function useTabsEnhanced() {
   const query = '(min-width: 40.0625em)'
@@ -80,14 +80,21 @@ function useTabsEnhanced() {
   return enhanced
 }
 
-export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs({ items, activeKey, defaultActiveKey, onChange, style, styles, classNames }, ref) {
+export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs({ items, activeKey, defaultActiveKey, onChange, destroyOnInactive = false, style, styles, classNames }, ref) {
   const enhanced = useTabsEnhanced()
   const [inner, setInner] = useState(defaultActiveKey ?? items[0]?.key)
   const current = activeKey ?? inner
   const id = useId().replaceAll(':', '')
   const tabRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
-  const select = (key: string) => { if (activeKey === undefined) setInner(key); onChange?.(key) }
+  const select = (key: string) => { const item = items.find((entry) => entry.key === key); if (item?.disabled) return; if (activeKey === undefined) setInner(key); onChange?.(key) }
   const move = (key: string) => { select(key); tabRefs.current[key]?.focus() }
+  const step = (index: number, offset: number) => {
+    for (let next = (index + offset + items.length) % items.length; next !== index; next = (next + offset + items.length) % items.length) {
+      const nextItem = items[next]
+      if (nextItem && !nextItem.disabled) return nextItem
+    }
+    return undefined
+  }
   return <div className={`govuk-tabs ${classNames?.root ?? ''}`.trim()} style={{ ...styles?.root, ...style }} ref={ref}>
     <h2 className={`govuk-tabs__title ${classNames?.title ?? ''}`.trim()} style={styles?.title}>Contents</h2>
     <ul className={`govuk-tabs__list ${classNames?.list ?? ''}`.trim()} style={styles?.list} role={enhanced ? 'tablist' : undefined}>
@@ -97,22 +104,21 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs({ items,
         const selected = item.key === current
         return <li className={`govuk-tabs__list-item ${enhanced && selected ? 'govuk-tabs__list-item--selected' : ''}`.trim()} role={enhanced ? 'presentation' : undefined} key={item.key}>
           <a
-            className={`govuk-tabs__tab ${classNames?.tab ?? ''}`.trim()}
+            className={`govuk-tabs__tab ${item.disabled ? 'govuk-tabs__tab--disabled' : ''} ${classNames?.tab ?? ''}`.trim()}
             style={styles?.tab}
-            href={`#${panelId}`}
+            href={item.disabled ? undefined : `#${panelId}`}
             role={enhanced ? 'tab' : undefined}
             id={enhanced ? tabId : undefined}
             aria-controls={enhanced ? panelId : undefined}
             aria-selected={enhanced ? selected : undefined}
-            tabIndex={enhanced ? (selected ? 0 : -1) : undefined}
+            aria-disabled={item.disabled || undefined}
+            tabIndex={enhanced ? (selected && !item.disabled ? 0 : -1) : item.disabled ? -1 : undefined}
             ref={(node) => { tabRefs.current[item.key] = node }}
-            onClick={enhanced ? (event) => { event.preventDefault(); select(item.key) } : undefined}
+            onClick={enhanced || item.disabled ? (event) => { event.preventDefault(); select(item.key) } : undefined}
             onKeyDown={enhanced ? (event) => {
               if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
               event.preventDefault()
-              const offset = event.key === 'ArrowRight' ? 1 : -1
-              const next = (index + offset + items.length) % items.length
-              const nextItem = items[next]
+              const nextItem = step(index, event.key === 'ArrowRight' ? 1 : -1)
               if (nextItem) move(nextItem.key)
             } : undefined}
           >{item.label}</a>
@@ -121,6 +127,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(function Tabs({ items,
     </ul>
     {items.map((item) => {
       const selected = item.key === current
+      if (destroyOnInactive && !selected) return null
       const panelId = `${id}-panel-${item.key}`
       return <section
         className={`govuk-tabs__panel ${enhanced && !selected ? 'govuk-tabs__panel--hidden' : ''} ${classNames?.panel ?? ''}`.trim()}

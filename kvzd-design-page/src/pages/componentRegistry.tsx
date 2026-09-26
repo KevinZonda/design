@@ -119,7 +119,7 @@ export const componentDocs: ComponentDoc[] = [
     slug: 'button', name: 'Button',
     summary: 'Help users carry out an action such as saving information or starting a service.',
     whenToUse: 'Use one clear primary action per page. Use a start button on a service start page, and group related actions together. Avoid disabled buttons unless user research supports them.',
-    howItWorks: 'Supply href for navigation or htmlType for a native form button. Start buttons include the GOV.UK arrow. ButtonGroup aligns buttons and links, and disabled form buttons receive both disabled and aria-disabled.',
+    howItWorks: 'Supply href for navigation or htmlType for a native form button. Start buttons include the GOV.UK arrow. ButtonGroup aligns buttons and links. Disabled form buttons receive both disabled and aria-disabled; a loading button shows a spinner, blocks clicks and sets aria-busy.',
     code: `<Button href="/start" isStartButton>Start now</Button>
 
 <ButtonGroup>
@@ -130,7 +130,7 @@ export const componentDocs: ComponentDoc[] = [
 
 <Button disabled>Disabled button</Button>`,
     example: () => <div className="button-examples"><Button href="#start" isStartButton>Start now</Button><ButtonGroup><Button htmlType="submit">Save and continue</Button><Button type="secondary">Save as draft</Button><a className="govuk-link" href="#cancel">Cancel</a></ButtonGroup><div className="button-examples__variants"><Button disabled>Disabled button</Button><Button danger>Delete account</Button><div className="button-examples__inverse"><Button type="inverse">Create an account</Button></div></div></div>,
-    api: [text('children', 'Button label.'), { name: 'type', type: `'primary' | 'secondary' | 'warning' | 'inverse'`, defaultValue: 'primary', description: 'Visual hierarchy.' }, { name: 'href', type: 'string', description: 'Renders a link styled as a button.' }, { name: 'htmlType', type: `'button' | 'submit' | 'reset'`, defaultValue: 'button', description: 'Native button type when href is not supplied.' }, { name: 'isStartButton', type: 'boolean', defaultValue: 'false', description: 'Use start button styling and the arrow icon.' }, { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disables a native button and adds aria-disabled. Not available for links.' }, { name: 'preventDoubleClick', type: 'boolean', defaultValue: 'false', description: 'Ignore another button click within one second. Not applied to links.' }, { name: 'danger', type: 'boolean', defaultValue: 'false', description: 'Shortcut for the warning treatment.' }],
+    api: [text('children', 'Button label.'), { name: 'type', type: `'primary' | 'secondary' | 'warning' | 'inverse'`, defaultValue: 'primary', description: 'Visual hierarchy.' }, { name: 'href', type: 'string', description: 'Renders a link styled as a button.' }, { name: 'htmlType', type: `'button' | 'submit' | 'reset'`, defaultValue: 'button', description: 'Native button type when href is not supplied.' }, { name: 'isStartButton', type: 'boolean', defaultValue: 'false', description: 'Use start button styling and the arrow icon.' }, { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show a spinner, block clicks and set aria-busy while work is in progress.' }, { name: 'icon', type: 'ReactNode', description: 'Icon rendered inside the button; replaced by the spinner while loading.' }, { name: 'iconPosition', type: `'left' | 'right'`, defaultValue: 'left', description: 'Side of the label where the icon appears.' }, { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disables the button and adds aria-disabled. Links render inert and ignore clicks.' }, { name: 'preventDoubleClick', type: 'boolean', defaultValue: 'false', description: 'Ignore another button click within one second. Not applied to links.' }, { name: 'danger', type: 'boolean', defaultValue: 'false', description: 'Shortcut for the warning treatment.' }],
   },
   {
     slug: 'character-count', name: 'Character count',
@@ -342,7 +342,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'The native search input keeps keyboard and browser behaviour. The icon is decorative and can sit on either side, be replaced or be hidden.',
     code: `<SearchInput label="Search services" name="query" />\n<SearchInput label="Filter results" iconPosition="right" />`,
     example: () => <div className="search-input-examples"><SearchInput label="Search services" name="query" placeholder="Enter a service" /><SearchInput label="Filter results" iconPosition="right" placeholder="Filter by keyword" /></div>,
-    api: [text('label', 'Accessible search field label.'), { name: 'iconPosition', type: `'left' | 'right'`, defaultValue: 'left', description: 'Side of the input containing the icon.' }, { name: 'icon', type: 'ReactNode', defaultValue: 'Search icon', description: 'Decorative icon. Pass null to hide it.' }, { name: 'visuallyHiddenLabel', type: 'boolean', defaultValue: 'false', description: 'Hide the label visually while keeping it available to assistive technology.' }, text('hint', 'Optional supporting guidance.'), text('error', 'Validation error.'), { name: 'value / onChange', type: 'native input props', description: 'Use controlled or uncontrolled search input behaviour.' }],
+    api: [text('label', 'Accessible search field label.'), { name: 'iconPosition', type: `'left' | 'right'`, defaultValue: 'left', description: 'Side of the input containing the icon.' }, { name: 'icon', type: 'ReactNode', defaultValue: 'Search icon', description: 'Decorative icon. Pass null to hide it.' }, { name: 'visuallyHiddenLabel', type: 'boolean', defaultValue: 'false', description: 'Hide the label visually while keeping it available to assistive technology.' }, text('hint', 'Optional supporting guidance.'), text('error', 'Validation error.'), { name: 'value / onChange', type: 'native input props', description: 'Use controlled or uncontrolled search input behaviour.' }, { name: 'onSearch', type: '(value: string) => void', description: 'Called with the current value when Enter is pressed or the search button is clicked.' }, { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show a spinner in place of the icon.' }, { name: 'enterButton', type: 'ReactNode', description: 'Content of a dedicated search button shown beside the field; pressing it triggers onSearch.' }],
   },
   {
     slug: 'select', name: 'Select',
@@ -351,7 +351,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'The native select keeps platform keyboard, touch and assistive technology behaviour.',
     code: `<Select label="Sort by" name="sort" options={[{ label: 'Recently updated', value: 'updated' }]} />`,
     example: () => <Select label="Sort by" name="sort" options={[{ label: 'Recently updated', value: 'updated' }, { label: 'Most viewed', value: 'viewed' }, { label: 'Most commented', value: 'commented' }]} />,
-    api: [text('label', 'Select label.'), { name: 'options', type: 'Option[]', description: 'Labels and values.' }, text('error', 'Validation error.'), value()],
+    api: [text('label', 'Select label.'), { name: 'options', type: 'Option[]', description: 'Labels and values.' }, text('error', 'Validation error.'), value(), { name: 'multiple', type: 'boolean', defaultValue: 'false', description: 'Render a multi-select listbox; value and onChange use arrays of selected values.' }, { name: 'showSearch', type: 'boolean', defaultValue: 'false', description: 'Filter the options with a search field. Multiple mode only.' }, { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show a loading state in place of the options. Multiple mode only.' }],
   },
   {
     slug: 'service-navigation', name: 'Service navigation',
@@ -402,7 +402,7 @@ export const componentDocs: ComponentDoc[] = [
       { key: 'past-month', label: 'Past month', children: caseTable('Past month', [{ manager: 'David Francis', opened: 98, closed: 95 }, { manager: 'Paul Farmer', opened: 122, closed: 131 }, { manager: 'Rita Patel', opened: 126, closed: 142 }]) },
       { key: 'past-year', label: 'Past year', children: <><h2 className="govuk-heading-l">Past year</h2><p className="govuk-body">There is no data for this year yet, check back later</p></> },
     ]} />,
-    api: [items('Tab keys, labels and panel content.'), { name: 'activeKey', type: 'string', description: 'Controlled active tab.' }, { name: 'defaultActiveKey', type: 'string', description: 'Initial active tab.' }, onChange('Called with the selected tab key.')],
+    api: [items('Tab keys, labels and panel content. Items can be disabled to make their tab non-interactive.'), { name: 'activeKey', type: 'string', description: 'Controlled active tab.' }, { name: 'defaultActiveKey', type: 'string', description: 'Initial active tab.' }, onChange('Called with the selected tab key.'), { name: 'destroyOnInactive', type: 'boolean', defaultValue: 'false', description: 'Remove inactive panel content from the DOM instead of hiding it.' }],
     wide: true,
   },
   {
@@ -412,7 +412,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'Short text and optional colour variants convey state while retaining high contrast.',
     code: `<Tag color="green">Completed</Tag>`,
     example: () => <div className="example-tag-row"><Tag>Alpha</Tag><Tag color="green">Completed</Tag><Tag color="yellow">Waiting</Tag><Tag color="red">Rejected</Tag><Tag color="orange">Trial</Tag></div>,
-    api: [text('children', 'Short status text.'), { name: 'color', type: `'grey' | 'green' | 'teal' | 'turquoise' | 'blue' | 'purple' | 'magenta' | 'pink' | 'red' | 'orange' | 'yellow'`, description: 'Status colour treatment.' }],
+    api: [text('children', 'Short status text.'), { name: 'color', type: `'grey' | 'green' | 'teal' | 'turquoise' | 'blue' | 'purple' | 'magenta' | 'pink' | 'red' | 'orange' | 'yellow'`, description: 'Status colour treatment.' }, { name: 'closable', type: 'boolean', defaultValue: 'false', description: 'Add a close button to the tag.' }, { name: 'onClose', type: '() => void', description: 'Called when the close button is pressed.' }],
   },
   {
     slug: 'task-list', name: 'Task list',
@@ -430,7 +430,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'The label, hint and error IDs are wired automatically through aria-describedby. Native input attributes remain available.',
     code: `<Input label="What is the name of the event?" name="eventName" labelSize="l" />`,
     example: () => <Input label="What is the name of the event?" name="eventName" labelSize="l" />,
-    api: [text('label', 'Visible and accessible input label.'), text('hint', 'Optional supporting guidance.'), text('error', 'Validation error.'), { name: 'width', type: '2 | 3 | 4 | 5 | 10 | 20 | 30', description: 'Expected-answer width.' }, { name: 'status', type: `'error'`, description: 'Visual and semantic error state.' }],
+    api: [text('label', 'Visible and accessible input label.'), text('hint', 'Optional supporting guidance.'), text('error', 'Validation error.'), { name: 'width', type: '2 | 3 | 4 | 5 | 10 | 20 | 30', description: 'Expected-answer width.' }, { name: 'status', type: `'error'`, description: 'Visual and semantic error state.' }, { name: 'prefix', type: 'ReactNode', description: 'Content shown before the input, such as a currency symbol.' }, { name: 'suffix', type: 'ReactNode', description: 'Content shown after the input.' }, { name: 'allowClear', type: 'boolean', defaultValue: 'false', description: 'Show a clear button while the input has a value.' }],
   },
   {
     slug: 'textarea', name: 'Textarea',
@@ -439,7 +439,7 @@ export const componentDocs: ComponentDoc[] = [
     howItWorks: 'The native textarea retains resize and platform input behaviour while sharing label, hint and error handling with other fields.',
     code: `<Textarea label="Can you provide more detail?" name="moreDetail" rows={5} />`,
     example: () => <Textarea label="Can you provide more detail?" hint="Do not include personal or financial information." name="moreDetail" rows={5} />,
-    api: [text('label', 'Textarea label.'), { name: 'rows', type: 'number', defaultValue: '5', description: 'Initial visible height.' }, text('hint', 'Optional guidance.'), text('error', 'Validation error.')],
+    api: [text('label', 'Textarea label.'), { name: 'rows', type: 'number', defaultValue: '5', description: 'Initial visible height.' }, { name: 'autoSize', type: 'boolean | { minRows?: number; maxRows?: number }', description: 'Grow the height to fit the content, optionally between minRows and maxRows.' }, text('hint', 'Optional guidance.'), text('error', 'Validation error.')],
   },
   {
     slug: 'warning-text', name: 'Warning text',
