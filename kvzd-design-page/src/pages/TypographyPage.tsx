@@ -12,7 +12,7 @@ const highlightedBySlug = highlightedCode as Record<string, string>
 function Sample({ sampleKey, children }: { sampleKey: string; children: ReactNode }) {
   const locale = useLocale()
   return <section className="component-example" aria-labelledby={`${sampleKey}-title`}>
-    <h2 className="govuk-heading-l" id={`${sampleKey}-title`}>{message(locale, 'example')}</h2>
+    <Typography.Title level={2} variant="l" id={`${sampleKey}-title`}>{message(locale, 'example')}</Typography.Title>
     <div className="example-canvas">{children}</div>
     <CodeBox code={typographyCodeSamples[sampleKey]} highlightedHtml={highlightedBySlug[sampleKey]} />
   </section>
@@ -40,8 +40,8 @@ function ApiSection() {
     apiRow('Title, Text, Paragraph', 'ref', 'Ref', undefined, 'Forwarded to the heading, span or paragraph.', '透传到标题、span 或段落元素。'),
   ]
   return <section className="component-api" aria-labelledby="api">
-    <h2 className="govuk-heading-l" id="api">{message(locale, 'reactApi')}</h2>
-    <p className="govuk-body">{message(locale, 'apiIntro')}</p>
+    <Typography.Title level={2} variant="l" id="api">{message(locale, 'reactApi')}</Typography.Title>
+    <Typography.Paragraph>{message(locale, 'apiIntro')}</Typography.Paragraph>
     <div className="api-table-scroll"><Table rowKey={(row) => `${row.component}-${row.name}`} columns={[
       { title: message(locale, 'property'), dataIndex: 'name', rowHeader: true, render: (value) => <code>{String(value)}</code> },
       { title: message(locale, 'type'), dataIndex: 'type', render: (value) => <code>{String(value)}</code> },
@@ -56,11 +56,11 @@ export function TypographyPage() {
   const locale = useLocale()
   useEffect(() => { document.title = pageTitle(message(locale, 'typography'), locale) }, [locale])
   return <article className="component-doc">
-    <h1 className="govuk-heading-xl">Typography</h1>
-    <p className="govuk-body-l component-summary">{message(locale, 'typographyIntro')}</p>
-    <p className="govuk-body">{message(locale, 'typographyDetail')}</p>
+    <Typography.Title level={1} variant="xl">Typography</Typography.Title>
+    <Typography.Paragraph variant="l" className="component-summary">{message(locale, 'typographyIntro')}</Typography.Paragraph>
+    <Typography.Paragraph>{message(locale, 'typographyDetail')}</Typography.Paragraph>
 
-    <section className="guidance-section"><h2 className="govuk-heading-l" id="headings">{message(locale, 'typographyHeadings')}</h2><p className="govuk-body">{message(locale, 'typographyHeadingsDetail')}</p></section>
+    <section className="guidance-section"><Typography.Title level={2} variant="l" id="headings">{message(locale, 'typographyHeadings')}</Typography.Title><Typography.Paragraph>{message(locale, 'typographyHeadingsDetail')}</Typography.Paragraph></section>
     <Sample sampleKey="typography-headings">
       <Typography.Title level={1} variant="xl">Apply for a licence</Typography.Title>
       <Typography.Title level={2} variant="l">Your personal details</Typography.Title>
@@ -68,21 +68,21 @@ export function TypographyPage() {
       <Typography.Title level={4} variant="s">Get help with this question</Typography.Title>
     </Sample>
 
-    <section className="guidance-section"><h2 className="govuk-heading-l" id="captions">{message(locale, 'typographyCaptions')}</h2><p className="govuk-body">{message(locale, 'typographyCaptionsDetail')}</p></section>
+    <section className="guidance-section"><Typography.Title level={2} variant="l" id="captions">{message(locale, 'typographyCaptions')}</Typography.Title><Typography.Paragraph>{message(locale, 'typographyCaptionsDetail')}</Typography.Paragraph></section>
     <Sample sampleKey="typography-captions">
       <Typography.Title level={2} variant="l" caption="Section 2 of 5">Check your answers</Typography.Title>
       <Typography.Title level={3} variant="m" caption="About your vehicle">Vehicle details</Typography.Title>
       <Typography.Title level={1} variant="l" caption="Section 1 of 5" captionInHeading>Your account</Typography.Title>
     </Sample>
 
-    <section className="guidance-section"><h2 className="govuk-heading-l" id="inline-text">{message(locale, 'typographyInlineText')}</h2><p className="govuk-body">{message(locale, 'typographyInlineTextDetail')}</p></section>
+    <section className="guidance-section"><Typography.Title level={2} variant="l" id="inline-text">{message(locale, 'typographyInlineText')}</Typography.Title><Typography.Paragraph>{message(locale, 'typographyInlineTextDetail')}</Typography.Paragraph></section>
     <Sample sampleKey="typography-text">
       <Typography.Paragraph>Total due: <Typography.Text bold tabular>£1,234.56</Typography.Text></Typography.Paragraph>
       <Typography.Text variant="s">Last updated 27 September 2026</Typography.Text>
       <Typography.Text size={48}>Over 2 million people use this service</Typography.Text>
     </Sample>
 
-    <section className="guidance-section"><h2 className="govuk-heading-l" id="paragraphs">{message(locale, 'typographyParagraphs')}</h2><p className="govuk-body">{message(locale, 'typographyParagraphsDetail')}</p></section>
+    <section className="guidance-section"><Typography.Title level={2} variant="l" id="paragraphs">{message(locale, 'typographyParagraphs')}</Typography.Title><Typography.Paragraph>{message(locale, 'typographyParagraphsDetail')}</Typography.Paragraph></section>
     <Sample sampleKey="typography-paragraph">
       <Typography.Paragraph variant="l">Use this service to apply for a licence, renew an existing one, or update your details.</Typography.Paragraph>
       <Typography.Paragraph>It usually takes about 10 minutes to complete the application. You will need your reference number.</Typography.Paragraph>

@@ -1,4 +1,5 @@
 import { useState, type Key } from 'react'
+import { Typography } from '@kevinzonda/design'
 import { Button, Input } from '@kevinzonda/design/components'
 import { Alert, Avatar, Dropdown, FancyTable, Form, Menu, Modal, Progress, Result, Steps, Switch, Tooltip } from '@kevinzonda/design/extraComponents'
 
@@ -14,7 +15,7 @@ export function FormExample() {
       </Form.Item>
       <Button htmlType="submit">Continue</Button>
     </Form>
-    {submitted && <p className="govuk-body" role="status">{submitted}</p>}
+    {submitted && <Typography.Paragraph role="status">{submitted}</Typography.Paragraph>}
   </>
 }
 
@@ -29,7 +30,7 @@ export function ModalExample() {
         setConfirming(true)
         setTimeout(() => { setConfirming(false); setOpen(false) }, 1200)
       }}>
-      <p className="govuk-body">Check the details before continuing. The built-in footer confirm button shows a loading state while the request runs.</p>
+      <Typography.Paragraph>Check the details before continuing. The built-in footer confirm button shows a loading state while the request runs.</Typography.Paragraph>
     </Modal>
   </>
 }
@@ -40,19 +41,19 @@ export function SwitchExample() {
   return <div className="switch-example">
     <div className="switch-example__row">
       <Switch aria-label="Small email notifications switch" size="s" checked={email} onChange={setEmail} />
-      <span className="govuk-body">Small</span>
+      <Typography.Text>Small</Typography.Text>
     </div>
     <div className="switch-example__row">
       <Switch aria-label="Medium SMS notifications switch" checked={sms} onChange={setSms} checkedChildren="On" unCheckedChildren="Off">SMS notifications</Switch>
-      <span className="govuk-body">Medium with checked and unchecked text</span>
+      <Typography.Text>Medium with checked and unchecked text</Typography.Text>
     </div>
     <div className="switch-example__row">
       <Switch aria-label="Large loading switch" size="l" loading />
-      <span className="govuk-body">Large and loading</span>
+      <Typography.Text>Large and loading</Typography.Text>
     </div>
     <div className="switch-example__row">
       <Switch aria-label="Disabled switch" disabled />
-      <span className="govuk-body">Disabled</span>
+      <Typography.Text>Disabled</Typography.Text>
     </div>
   </div>
 }
@@ -72,7 +73,7 @@ export function MenuExample() {
     { key: 'view', label: 'View record', onClick: () => setSelected('View record selected') },
     { key: 'edit', label: 'Edit record', onClick: () => setSelected('Edit record selected') },
     { key: 'delete', label: 'Delete record', disabled: true },
-  ]} /><p className="govuk-body govuk-!-margin-top-4" aria-live="polite">{selected}</p></>
+  ]} /><Typography.Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected}</Typography.Paragraph></>
 }
 
 export function DropdownExample() {
@@ -81,7 +82,7 @@ export function DropdownExample() {
     { key: 'view', label: 'View application' },
     { key: 'download', label: 'Download details' },
   ]} onAction={(key) => setSelected(key === 'view' ? 'View application selected' : 'Download details selected')} />
-    <p className="govuk-body govuk-!-margin-top-4" aria-live="polite">{selected}</p></>
+    <Typography.Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected}</Typography.Paragraph></>
 }
 
 const exampleRows = [
@@ -103,7 +104,7 @@ export function FancyTableExample() {
     onSelectionChange={setSelected}
     pageSize={3}
     expandable={{
-      expandedRowRender: (record) => <span className="govuk-body">Application {record.id} is currently <strong>{record.status.toLowerCase()}</strong>.</span>,
+      expandedRowRender: (record) => <Typography.Text>Application {record.id} is currently <strong>{record.status.toLowerCase()}</strong>.</Typography.Text>,
     }}
     columns={[
       { key: 'id', title: 'Reference', dataIndex: 'id', rowHeader: true, sorter: (a, b) => a.id.localeCompare(b.id) },
@@ -114,7 +115,7 @@ export function FancyTableExample() {
         { label: 'Approved', value: 'Approved' },
       ], onFilter: (value, row) => row.status === value },
     ]}
-  /><p className="govuk-body govuk-!-margin-top-4" aria-live="polite">{selected.length} selected</p></>
+  /><Typography.Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected.length} selected</Typography.Paragraph></>
 }
 
 export function AlertExample() {
@@ -189,6 +190,6 @@ export function AvatarExample() {
     <Avatar size="l" bgColor="#1d70b8">AK</Avatar>
     <Avatar shape="square" size="l" />
     <Avatar size="s" />
-    <span className="govuk-body">Image, initials, square fallback and small sizes</span>
+    <Typography.Text>Image, initials, square fallback and small sizes</Typography.Text>
   </div>
 }

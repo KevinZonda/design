@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { Typography } from '@kevinzonda/design'
 import { Divider, Empty, FancyTabs, Loading, Note, ShowcaseBox, Sidebar, TagBox, CodeBox } from '@kevinzonda/design/extraComponents'
 import type { ApiProp } from './componentRegistry'
 import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample, AlertExample, ProgressExample, ResultExample, AvatarExample, StepsExample, SwitchExample, TooltipExample } from './extraExamples'
@@ -20,16 +21,16 @@ const fancyTabsCode = `<FancyTabs items={[
   {
     key: 'summary',
     label: 'Summary',
-    children: <p className="govuk-body govuk-!-margin-top-4">Review the application before continuing.</p>,
+    children: <Typography.Paragraph className="govuk-!-margin-top-4">Review the application before continuing.</Typography.Paragraph>,
   },
   {
     key: 'details',
     label: 'Details',
-    children: <p className="govuk-body govuk-!-margin-top-4">The application contains 3 sections.</p>,
+    children: <Typography.Paragraph className="govuk-!-margin-top-4">The application contains 3 sections.</Typography.Paragraph>,
   },
 ]} />`
 
-const sidebarCode = `<p className="govuk-body"><strong>Nested navigation</strong></p>
+const sidebarCode = `<Typography.Paragraph><strong>Nested navigation</strong></Typography.Paragraph>
 <div className="sidebar-example">
   <Sidebar
     heading="Pages in this section"
@@ -43,7 +44,7 @@ const sidebarCode = `<p className="govuk-body"><strong>Nested navigation</strong
   />
 </div>
 
-<p className="govuk-body"><strong>Collapsible navigation</strong></p>
+<Typography.Paragraph><strong>Collapsible navigation</strong></Typography.Paragraph>
 <div className="sidebar-example">
   <Sidebar
     heading="Documentation"
@@ -80,7 +81,7 @@ return <>
       setConfirming(true)
       setTimeout(() => { setConfirming(false); setOpen(false) }, 1200)
     }}>
-    <p className="govuk-body">Check the details before continuing. The built-in footer confirm button shows a loading state while the request runs.</p>
+    <Typography.Paragraph>Check the details before continuing. The built-in footer confirm button shows a loading state while the request runs.</Typography.Paragraph>
   </Modal>
 </>`,
     example: () => <ModalExample />,
@@ -150,8 +151,8 @@ return <>
     summary: 'Separate sections of content with the GOV.UK section break style.',
     whenToUse: 'Use between distinct content sections when spacing alone is not enough. Avoid adding a line between every field or paragraph.',
     howItWorks: 'Renders a semantic hr with GOV.UK section break spacing. Set visible to false for a spacing-only break.',
-    code: `<p className="govuk-body">First section</p>\n<Divider size="m" />\n<p className="govuk-body">Second section</p>`,
-    example: () => <div><p className="govuk-body">First section</p><Divider size="m" /><p className="govuk-body">Second section</p></div>,
+    code: `<Typography.Paragraph>First section</Typography.Paragraph>\n<Divider size="m" />\n<Typography.Paragraph>Second section</Typography.Paragraph>`,
+    example: () => <div><Typography.Paragraph>First section</Typography.Paragraph><Divider size="m" /><Typography.Paragraph>Second section</Typography.Paragraph></div>,
     api: [
       { name: 'size', type: "'m' | 'l' | 'xl'", defaultValue: 'm', description: 'GOV.UK spacing around the section break.' },
       { name: 'visible', type: 'boolean', defaultValue: 'true', description: 'Show the divider line; false leaves a spacing-only break.' },
@@ -171,7 +172,7 @@ return <>
     { key: 'edit', label: 'Edit record', onClick: () => setSelected('Edit record selected') },
     { key: 'delete', label: 'Delete record', disabled: true },
   ]} />
-  <p className="govuk-body govuk-!-margin-top-4" aria-live="polite">{selected}</p>
+  <Typography.Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected}</Typography.Paragraph>
 </>`,
     example: () => <MenuExample />,
     api: [
@@ -195,7 +196,7 @@ return <>
     { key: 'view', label: 'View application' },
     { key: 'download', label: 'Download details' },
   ]} onAction={(key) => setSelected(key === 'view' ? 'View application selected' : 'Download details selected')} />
-  <p className="govuk-body govuk-!-margin-top-4" aria-live="polite">{selected}</p>
+  <Typography.Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected}</Typography.Paragraph>
 </>`,
     example: () => <DropdownExample />,
     api: [
@@ -234,7 +235,7 @@ return <>
     onSelectionChange={setSelected}
     pageSize={3}
     expandable={{
-      expandedRowRender: (record) => <span className="govuk-body">Application {record.id} is currently <strong>{record.status.toLowerCase()}</strong>.</span>,
+      expandedRowRender: (record) => <Typography.Text>Application {record.id} is currently <strong>{record.status.toLowerCase()}</strong>.</Typography.Text>,
     }}
     columns={[
       { key: 'id', title: 'Reference', dataIndex: 'id', rowHeader: true, sorter: (a, b) => a.id.localeCompare(b.id) },
@@ -246,7 +247,7 @@ return <>
       ], onFilter: (value, row) => row.status === value },
     ]}
   />
-  <p className="govuk-body govuk-!-margin-top-4" aria-live="polite">{selected.length} selected</p>
+  <Typography.Paragraph className="govuk-!-margin-top-4" aria-live="polite">{selected.length} selected</Typography.Paragraph>
 </>`,
     example: () => <FancyTableExample />,
     wide: true,
@@ -284,8 +285,8 @@ return <>
     howItWorks: 'It shares the standard Tabs props and manages the selected panel in React. Arrow keys move between tabs.',
     code: fancyTabsCode,
     example: () => <FancyTabs items={[
-      { key: 'summary', label: 'Summary', children: <p className="govuk-body govuk-!-margin-top-4">Review the application before continuing.</p> },
-      { key: 'details', label: 'Details', children: <p className="govuk-body govuk-!-margin-top-4">The application contains 3 sections.</p> },
+      { key: 'summary', label: 'Summary', children: <Typography.Paragraph className="govuk-!-margin-top-4">Review the application before continuing.</Typography.Paragraph> },
+      { key: 'details', label: 'Details', children: <Typography.Paragraph className="govuk-!-margin-top-4">The application contains 3 sections.</Typography.Paragraph> },
     ]} />,
     api: [
       { name: 'items', type: 'TabItem[]', description: 'Tab keys, labels and panel content. Items can be disabled to make their tab non-interactive.' },
@@ -312,7 +313,7 @@ return <>
     </Form.Item>
     <Button htmlType="submit">Continue</Button>
   </Form>
-  {submitted && <p className="govuk-body" role="status">{submitted}</p>}
+  {submitted && <Typography.Paragraph role="status">{submitted}</Typography.Paragraph>}
 </>`,
     example: () => <FormExample />,
     api: [
@@ -364,7 +365,7 @@ return <>
     howItWorks: 'Links render as anchors by default. Groups can contain nested children; renderLink can supply a client-side router link. The active branch is highlighted.',
     code: sidebarCode,
     example: () => <>
-      <p className="govuk-body"><strong>Nested navigation</strong></p>
+      <Typography.Paragraph><strong>Nested navigation</strong></Typography.Paragraph>
       <div className="sidebar-example">
         <Sidebar heading="Pages in this section" activeKey="history" items={[
           { key: 'accordion', label: 'Accordion', href: '#example-title', children: [
@@ -373,7 +374,7 @@ return <>
           { key: 'fancy-tabs', label: 'FancyTabs', href: '#guidance-title' },
         ]} />
       </div>
-      <p className="govuk-body"><strong>Collapsible navigation</strong></p>
+      <Typography.Paragraph><strong>Collapsible navigation</strong></Typography.Paragraph>
       <div className="sidebar-example">
         <Sidebar heading="Documentation" collapsible activeKey="sidebar-api" items={[
           { key: 'examples', label: 'Examples', children: [
@@ -454,19 +455,19 @@ const [sms, setSms] = useState(false)
 return <div className="switch-example">
   <div className="switch-example__row">
     <Switch aria-label="Small email notifications switch" size="s" checked={email} onChange={setEmail} />
-    <span className="govuk-body">Small</span>
+    <Typography.Text>Small</Typography.Text>
   </div>
   <div className="switch-example__row">
     <Switch aria-label="Medium SMS notifications switch" checked={sms} onChange={setSms} checkedChildren="On" unCheckedChildren="Off">SMS notifications</Switch>
-    <span className="govuk-body">Medium with checked and unchecked text</span>
+    <Typography.Text>Medium with checked and unchecked text</Typography.Text>
   </div>
   <div className="switch-example__row">
     <Switch aria-label="Large loading switch" size="l" loading />
-    <span className="govuk-body">Large and loading</span>
+    <Typography.Text>Large and loading</Typography.Text>
   </div>
   <div className="switch-example__row">
     <Switch aria-label="Disabled switch" disabled />
-    <span className="govuk-body">Disabled</span>
+    <Typography.Text>Disabled</Typography.Text>
   </div>
 </div>`,
     example: () => <SwitchExample />,
@@ -648,7 +649,7 @@ return <div className="steps-example">
   <Avatar size="l" bgColor="#1d70b8">AK</Avatar>
   <Avatar shape="square" size="l" />
   <Avatar size="s" />
-  <span className="govuk-body">Image, initials, square fallback and small sizes</span>
+  <Typography.Text>Image, initials, square fallback and small sizes</Typography.Text>
 </div>`,
     example: () => <AvatarExample />,
     api: [
