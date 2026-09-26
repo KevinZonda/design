@@ -1,4 +1,4 @@
-import { forwardRef, Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type HTMLAttributes, type Key, type ReactElement, type ReactNode, type Ref, type RefAttributes, type TdHTMLAttributes } from 'react'
+import { forwardRef, Fragment, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type HTMLAttributes, type Key, type ReactElement, type ReactNode, type Ref, type RefAttributes, type TdHTMLAttributes } from 'react'
 import type { SemanticStyling } from '../components/index'
 import { Empty } from './Empty'
 import { Loading } from './Loading'
@@ -62,6 +62,23 @@ export interface FancyTableProps<T> extends SemanticStyling<'root' | 'scroll' | 
   style?: CSSProperties
 }
 
+interface SmallCheckboxProps {
+  id: string
+  checked: boolean
+  disabled?: boolean
+  label: ReactNode
+  onChange: (checked: boolean) => void
+}
+
+function SmallCheckbox({ id, checked, disabled, label, onChange }: SmallCheckboxProps) {
+  return <div className="govuk-checkboxes govuk-checkboxes--small">
+    <div className="govuk-checkboxes__item">
+      <input className="govuk-checkboxes__input" id={id} type="checkbox" checked={checked} disabled={disabled} onChange={(event) => onChange(event.target.checked)} />
+      <label className="govuk-label govuk-checkboxes__label" htmlFor={id}>{label}</label>
+    </div>
+  </div>
+}
+
 const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
   columns, dataSource, rowKey, caption, loading = false, selectable = false, selectedRowKeys, defaultSelectedRowKeys = [], onSelectionChange,
   sort, defaultSort = null, onSortChange, filterValues, defaultFilterValues = {}, onFilterChange,
@@ -69,6 +86,7 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
   pageSize, currentPage, onPageChange, showTotal = false, showSizeChanger = false, pageSizeOptions = [10, 20, 50], onPageSizeChange,
   onChange, emptyContent, className = '', classNames, style, styles,
 }: FancyTableProps<T>, ref: Ref<HTMLTableElement>) {
+  const uid = useId().replace(/:/g, '')
   const [innerSelected, setInnerSelected] = useState<Key[]>(defaultSelectedRowKeys)
   const [innerSort, setInnerSort] = useState<FancyTableSort | null>(defaultSort)
   const [innerFilters, setInnerFilters] = useState<FancyTableFilterValues>(defaultFilterValues)
@@ -176,7 +194,7 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
       {caption && <caption className="govuk-table__caption govuk-table__caption--m">{caption}</caption>}
       <thead className="govuk-table__head"><tr className="govuk-table__row">
         {expandableColumn && <th className="govuk-table__header kvzd-design-fancy-table__expand" scope="col" />}
-        {selectable && <th className="govuk-table__header kvzd-design-fancy-table__select" scope="col"><input type="checkbox" aria-label="Select all rows on this page" checked={allVisibleSelected} disabled={!visibleKeys.length || loading} onChange={() => updateSelection(allVisibleSelected ? selected.filter((key) => !visibleKeys.includes(key)) : [...new Set([...selected, ...visibleKeys])])} /></th>}
+        {selectable && <th className="govuk-table__header kvzd-design-fancy-table__select" scope="col"><SmallCheckbox id={`${uid}-select-all`} checked={allVisibleSelected} disabled={!visibleKeys.length || loading} label={<span className="govuk-visually-hidden">Select all rows on this page</span>} onChange={() => updateSelection(allVisibleSelected ? selected.filter((key) => !visibleKeys.includes(key)) : [...new Set([...selected, ...visibleKeys])])} /></th>}
         {columns.map((column) => {
           const filterLabel = column.filterLabel ?? `Filter ${typeof column.title === 'string' ? column.title : column.key}`
           return <th className={`govuk-table__header ${column.numeric ? 'govuk-table__header--numeric' : ''}`} scope="col" key={column.key} aria-sort={activeSort?.columnKey === column.key ? (activeSort.order === 'ascend' ? 'ascending' : 'descending') : undefined}>
@@ -193,13 +211,11 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
                 <svg className="kvzd-design-fancy-table__filter-icon" viewBox="0 0 12 16" aria-hidden="true" focusable="false"><polygon points="2,6 10,6 6,11" /></svg>
               </button>
               {openFilter === column.key && <div className="kvzd-design-fancy-table__filter-panel" role="group" aria-label={filterLabel}>
-                {column.filters.map((filter) => {
+                {column.filters.map((filter, filterIndex) => {
                   const current = activeFilters[column.key]
                   const values = Array.isArray(current) ? current : current ? [current] : []
-                  return <label className="kvzd-design-fancy-table__filter-option" key={filter.value}>
-                    <input type="checkbox" checked={values.includes(filter.value)} onChange={(event) => toggleMultiFilter(column.key, filter.value, event.target.checked)} />
-                    {filter.label}
-                  </label>
+                  const filterId = `${uid}-filter-${column.key}-${filterIndex}`
+                  return <SmallCheckbox key={filter.value} id={filterId} checked={values.includes(filter.value)} label={filter.label} onChange={(checked) => toggleMultiFilter(column.key, filter.value, checked)} />
                 })}
               </div>}
             </span> : <select className="govuk-select kvzd-design-fancy-table__filter" aria-label={filterLabel} value={typeof activeFilters[column.key] === 'string' ? activeFilters[column.key] as string : ''} onChange={(event) => updateFilter(column.key, event.target.value)}><option value="">All</option>{column.filters.map((filter) => <option key={filter.value} value={filter.value}>{filter.label}</option>)}</select>)}
@@ -218,7 +234,7 @@ const FancyTableWithRef = forwardRef(function FancyTable<T extends object>({
               {expandableColumn && <td className="govuk-table__cell kvzd-design-fancy-table__expand">{expandableRow && <button className="kvzd-design-fancy-table__expand-trigger" type="button" aria-expanded={isExpanded} aria-label={isExpanded ? 'Collapse row' : 'Expand row'} onClick={() => updateExpanded(key, !isExpanded)}>
                 <svg className="kvzd-design-fancy-table__expand-icon" data-expanded={isExpanded} viewBox="0 0 16 16" aria-hidden="true" focusable="false"><polygon points="5,3 11,8 5,13" /></svg>
               </button>}</td>}
-              {selectable && <td className="govuk-table__cell kvzd-design-fancy-table__select"><input type="checkbox" aria-label={`Select row ${String(key)}`} checked={selected.includes(key)} onChange={() => updateSelection(selected.includes(key) ? selected.filter((item) => item !== key) : [...selected, key])} /></td>}
+              {selectable && <td className="govuk-table__cell kvzd-design-fancy-table__select"><SmallCheckbox id={`${uid}-row-${String(key)}`} checked={selected.includes(key)} label={<span className="govuk-visually-hidden">Select row {String(key)}</span>} onChange={() => updateSelection(selected.includes(key) ? selected.filter((item) => item !== key) : [...selected, key])} /></td>}
               {columns.map((column) => {
                 const value = record[column.dataIndex]
                 const content = column.render ? column.render(value, record, rowIndex) : String(value ?? '')

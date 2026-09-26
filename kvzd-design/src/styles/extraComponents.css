@@ -343,9 +343,12 @@
 .kvzd-design-fancy-table__table th,
 .kvzd-design-fancy-table__table td { overflow-wrap: anywhere; }
 .kvzd-design-fancy-table__table thead th { vertical-align: middle; }
-.kvzd-design-fancy-table__select { width: 40px; text-align: center; vertical-align: middle; }
-.kvzd-design-fancy-table__select input { display: block; width: 20px; height: 20px; margin: 0 auto; accent-color: var(--govuk-brand-colour); cursor: pointer; }
-.kvzd-design-fancy-table__select input:focus-visible { outline: 3px solid var(--govuk-focus-colour); box-shadow: 0 0 0 5px var(--govuk-focus-text-colour); }
+.kvzd-design-fancy-table__select { width: 44px; text-align: center; vertical-align: middle; }
+.kvzd-design-fancy-table__select .govuk-checkboxes--small .govuk-checkboxes__item { position: relative; width: 24px; height: 24px; margin: 0 auto; }
+.kvzd-design-fancy-table__select .govuk-checkboxes--small .govuk-checkboxes__input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.kvzd-design-fancy-table__select .govuk-checkboxes--small .govuk-checkboxes__label { padding: 0; max-width: none; cursor: pointer; }
+.kvzd-design-fancy-table__select .govuk-checkboxes--small .govuk-checkboxes__label::before { top: 0; left: 0; margin: 0; }
+.kvzd-design-fancy-table__select .govuk-checkboxes--small .govuk-checkboxes__label::after { top: 7px; left: 6px; margin: 0; }
 .kvzd-design-fancy-table__sort { display: inline-flex; align-items: center; vertical-align: middle; gap: 6px; padding: 4px 0; border: 0; color: var(--govuk-link-colour); background: transparent; font: inherit; font-weight: 700; text-align: inherit; cursor: pointer; }
 .kvzd-design-fancy-table__sort-icon { flex: none; width: 12px; height: 16px; fill: var(--govuk-secondary-text-colour); }
 .kvzd-design-fancy-table__sort-icon[data-order='ascend'] .kvzd-design-fancy-table__sort-up,
@@ -434,8 +437,6 @@
 .kvzd-design-fancy-table__filter-trigger:focus-visible { outline: 3px solid var(--govuk-focus-colour); box-shadow: 0 0 0 5px var(--govuk-focus-text-colour); }
 .kvzd-design-fancy-table__filter-icon { width: 10px; height: 12px; fill: currentColor; }
 .kvzd-design-fancy-table__filter-panel { position: absolute; top: calc(100% + 4px); left: 0; z-index: 10; display: flex; flex-direction: column; gap: 8px; min-width: 180px; padding: 12px; border: 1px solid var(--govuk-border-colour, #b1b4b6); background: #ffffff; box-shadow: 0 2px 8px rgba(11, 12, 12, 0.2); }
-.kvzd-design-fancy-table__filter-option { display: flex; align-items: center; gap: 8px; white-space: nowrap; font-weight: 400; }
-.kvzd-design-fancy-table__filter-option input { width: 18px; height: 18px; margin: 0; accent-color: var(--govuk-brand-colour); cursor: pointer; }
 .kvzd-design-fancy-table__total { margin-right: auto; }
 .kvzd-design-fancy-table__pages { display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .kvzd-design-fancy-table__page-button { margin-bottom: 0; padding: 6px 10px; }
@@ -497,9 +498,10 @@
 .kvzd-design-steps--vertical .kvzd-design-steps__item { flex: none; flex-direction: row; align-items: flex-start; padding-bottom: 16px; }
 .kvzd-design-steps__tail { position: absolute; top: 11px; left: 24px; right: 4px; height: 2px; background: var(--govuk-border-colour, #b1b4b6); }
 .kvzd-design-steps__item:last-child .kvzd-design-steps__tail { display: none; }
-.kvzd-design-steps--vertical .kvzd-design-steps__tail { top: 26px; left: 11px; right: auto; width: 2px; height: calc(100% - 30px); }
+.kvzd-design-steps--vertical .kvzd-design-steps__tail { top: 26px; bottom: 2px; left: 11px; right: auto; width: 2px; height: auto; }
 .kvzd-design-steps--s .kvzd-design-steps__icon { width: 20px; height: 20px; font-size: 0.75rem; }
 .kvzd-design-steps--s .kvzd-design-steps__tail { top: 9px; left: 20px; }
+.kvzd-design-steps--s.kvzd-design-steps--vertical .kvzd-design-steps__tail { top: 22px; bottom: 2px; left: 9px; width: 2px; height: auto; }
 .kvzd-design-steps--s .kvzd-design-steps__title { font-size: 0.875rem; }
 .kvzd-design-steps--s .kvzd-design-steps__description { font-size: 0.75rem; }
 .kvzd-design-steps__icon { position: relative; z-index: 1; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: 2px solid var(--govuk-border-colour, #b1b4b6); border-radius: 50%; background: #ffffff; font-size: 0.875rem; font-weight: 700; line-height: 1; color: var(--govuk-secondary-text-colour, #505a5f); }
