@@ -18,7 +18,7 @@ export interface StepsProps extends Omit<HTMLAttributes<HTMLOListElement>, 'onCh
   defaultCurrent?: number
   onChange?: (index: number) => void
   direction?: 'horizontal' | 'vertical'
-  size?: 's' | 'm'
+  size?: 's' | 'm' | 'l'
   /** Render dot indicators instead of numbered circles; finished steps keep a check. */
   progressDot?: boolean
 }

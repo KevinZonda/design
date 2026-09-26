@@ -136,7 +136,7 @@ import { Alert } from '@kevinzonda/design/extraComponents'
 </Alert>
 ```
 
-`Steps` is an antd-style step bar. Pass `items` with `key`, `title`, optional `description`, `status`, `disabled` and `icon`. It supports controlled (`current`) and uncontrolled (`defaultCurrent`, default `0`) usage; clicking a step calls `onChange` with its index and disabled steps are not clickable. Steps before the current one render as finished unless they set an explicit `status`. The current step carries `aria-current="step"`. Use `direction` (`'horizontal' | 'vertical'`) and `size` (`'s' | 'm'`) to change the layout.
+`Steps` is an antd-style step bar. Pass `items` with `key`, `title`, optional `description`, `status`, `disabled` and `icon`. It supports controlled (`current`) and uncontrolled (`defaultCurrent`, default `0`) usage; clicking a step calls `onChange` with its index and disabled steps are not clickable. Steps before the current one render as finished unless they set an explicit `status`. The current step carries `aria-current="step"`. Use `direction` (`'horizontal' | 'vertical'`) and `size` (`'s' | 'm' | 'l'`) to change the layout.
 
 ```tsx
 import { Steps } from '@kevinzonda/design/extraComponents'

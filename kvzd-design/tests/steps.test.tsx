@@ -71,3 +71,8 @@ test('steps renders direction and size classes', () => {
   expect(list.className).toContain('kvzd-design-steps--vertical')
   expect(list.className).toContain('kvzd-design-steps--s')
 })
+
+test('steps supports the large size', () => {
+  render(<Steps items={ITEMS} size="l" />)
+  expect(screen.getByRole('list').className).toContain('kvzd-design-steps--l')
+})

@@ -491,6 +491,12 @@
 .kvzd-design-steps--s.kvzd-design-steps--vertical .kvzd-design-steps__tail { top: 22px; bottom: 2px; left: 9px; width: 2px; height: auto; }
 .kvzd-design-steps--s .kvzd-design-steps__title { font-size: 0.875rem; }
 .kvzd-design-steps--s .kvzd-design-steps__description { font-size: 0.75rem; }
+/* Steps large size */
+.kvzd-design-steps--l .kvzd-design-steps__icon { width: 32px; height: 32px; font-size: 1.125rem; }
+.kvzd-design-steps--l .kvzd-design-steps__tail { top: 15px; left: 32px; }
+.kvzd-design-steps--l.kvzd-design-steps--vertical .kvzd-design-steps__tail { top: 34px; bottom: 2px; left: 15px; width: 2px; height: auto; }
+.kvzd-design-steps--l .kvzd-design-steps__title { font-size: 1.25rem; }
+.kvzd-design-steps--l .kvzd-design-steps__description { font-size: 1rem; }
 .kvzd-design-steps__icon { position: relative; z-index: 1; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: 2px solid var(--govuk-border-colour); border-radius: 50%; background: var(--govuk-body-background-colour); font-size: 0.875rem; font-weight: 700; line-height: 1; color: var(--govuk-secondary-text-colour); }
 .kvzd-design-steps__icon > svg { width: 60%; height: 60%; }
 .kvzd-design-steps__item--finish .kvzd-design-steps__icon { border-color: var(--govuk-brand-colour); color: var(--govuk-brand-colour); }
@@ -546,6 +552,8 @@
 .kvzd-design-steps__item--error .kvzd-design-steps__dot { background: var(--govuk-error-colour); }
 .kvzd-design-steps--dot .kvzd-design-steps__tail { top: 6px; left: 16px; }
 .kvzd-design-steps--dot.kvzd-design-steps--vertical .kvzd-design-steps__tail { top: 18px; bottom: 2px; left: 6px; }
+.kvzd-design-steps--dot.kvzd-design-steps--l .kvzd-design-steps__tail { top: 10px; left: 24px; }
+.kvzd-design-steps--dot.kvzd-design-steps--l.kvzd-design-steps--vertical .kvzd-design-steps__tail { top: 26px; bottom: 2px; left: 10px; }
 
 .kvzd-design-modal--no-mask::backdrop { background: transparent; }
 
