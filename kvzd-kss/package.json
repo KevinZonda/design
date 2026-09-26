@@ -1,0 +1,41 @@
+{
+  "name": "@kevinzonda/kss",
+  "version": "0.1.0",
+  "description": "Typed shorthand for React inline styles: kss('mb0', 'fs19') → { marginBottom: 0, fontSize: 19 }.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KevinZonda/design.git",
+    "directory": "kvzd-kss"
+  },
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "oxlint src",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vitest": "^5.0.1"
+  }
+}

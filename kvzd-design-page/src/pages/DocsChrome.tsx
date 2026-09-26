@@ -1,6 +1,7 @@
 import { useMemo, useState, type MouseEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Footer, Header, LanguageNavigation, SearchInput, ServiceNavigation, SkipLink } from '@kevinzonda/design/components'
+import { kss } from '@kevinzonda/kss'
 import { TagBox } from '@kevinzonda/design/extraComponents'
 import { componentDocs } from './componentRegistry'
 import { DocsLink } from './DocsLink'
@@ -34,7 +35,7 @@ function DocsSearch() {
   }
 
   return <form className="site-search" role="search" onSubmit={(event) => { event.preventDefault(); goToResult() }} onFocus={() => setOpen(true)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false) }}>
-    <SearchInput id="site-search" label={message(locale, 'search')} visuallyHiddenLabel classNames={{ input: 'site-search__input' }} styles={{ root: { margin: 0 } }} style={{ boxSizing: 'border-box', width: '100%', height: 40, margin: 0, border: '2px solid var(--govuk-body-background-colour)', borderRadius: 0, appearance: 'none', color: 'var(--govuk-surface-text-colour)', background: 'var(--govuk-body-background-colour)', font: 'inherit', fontSize: 19 }} placeholder={message(locale, 'search')} autoComplete="off" value={query} role="combobox" aria-autocomplete="list" aria-expanded={showResults} aria-controls="site-search-results" aria-activedescendant={showResults && matches[activeIndex] ? `site-search-result-${matches[activeIndex].resultId}` : undefined} onChange={(event) => { setQuery(event.target.value); setActiveIndex(0); setOpen(true) }} onKeyDown={(event) => {
+    <SearchInput id="site-search" label={message(locale, 'search')} visuallyHiddenLabel classNames={{ input: 'site-search__input' }} styles={{ root: kss('m0') }} style={{ boxSizing: 'border-box', width: '100%', height: 40, margin: 0, border: '2px solid var(--govuk-body-background-colour)', borderRadius: 0, appearance: 'none', color: 'var(--govuk-surface-text-colour)', background: 'var(--govuk-body-background-colour)', font: 'inherit', fontSize: 19 }} placeholder={message(locale, 'search')} autoComplete="off" value={query} role="combobox" aria-autocomplete="list" aria-expanded={showResults} aria-controls="site-search-results" aria-activedescendant={showResults && matches[activeIndex] ? `site-search-result-${matches[activeIndex].resultId}` : undefined} onChange={(event) => { setQuery(event.target.value); setActiveIndex(0); setOpen(true) }} onKeyDown={(event) => {
       if (event.key === 'Escape') { setOpen(false); return }
       if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return
       event.preventDefault()

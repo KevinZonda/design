@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { H1, H2, H3, Paragraph } from '@kevinzonda/design'
+import { kss } from '@kevinzonda/kss'
 import { Link, SearchInput, Tag } from '@kevinzonda/design/components'
 import { ShowcaseBox, Sidebar } from '@kevinzonda/design/extraComponents'
 import './QuickReviewPage.css'
@@ -48,7 +49,7 @@ export function QuickReviewPage() {
           <div className="review-filter">
             <SearchInput
               className="review-filter__search"
-              styles={{ root: { marginBottom: 10 } }}
+              styles={{ root: kss('mb10') }}
               id="component-search"
               label={message(locale, 'filterComponents')}
               labelSize="s"

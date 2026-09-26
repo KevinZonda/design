@@ -1,6 +1,7 @@
 packages:
   - kvzd-design
   - kvzd-design-page
+  - kvzd-kss
 
 allowBuilds:
   '@parcel/watcher': true

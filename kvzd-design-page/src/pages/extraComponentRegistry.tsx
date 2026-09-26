@@ -456,19 +456,19 @@ const [sms, setSms] = useState(false)
 return <div className="switch-example">
   <div className="switch-example__row">
     <Switch aria-label="Small email notifications switch" size="s" checked={email} onChange={setEmail} />
-    <Text style={{ marginBottom: 0 }}>Small</Text>
+    <Text style={kss('mb0')}>Small</Text>
   </div>
   <div className="switch-example__row">
     <Switch aria-label="Medium SMS notifications switch" checked={sms} onChange={setSms} checkedChildren="On" unCheckedChildren="Off">SMS notifications</Switch>
-    <Text style={{ marginBottom: 0 }}>Medium with checked and unchecked text</Text>
+    <Text style={kss('mb0')}>Medium with checked and unchecked text</Text>
   </div>
   <div className="switch-example__row">
     <Switch aria-label="Large loading switch" size="l" loading />
-    <Text style={{ marginBottom: 0 }}>Large and loading</Text>
+    <Text style={kss('mb0')}>Large and loading</Text>
   </div>
   <div className="switch-example__row">
     <Switch aria-label="Disabled switch" disabled />
-    <Text style={{ marginBottom: 0 }}>Disabled</Text>
+    <Text style={kss('mb0')}>Disabled</Text>
   </div>
 </div>`,
     example: () => <SwitchExample />,
@@ -494,10 +494,10 @@ return <div className="switch-example">
     whenToUse: 'Use for brief explanations of icons, buttons or status text. Do not hide information users must read to complete a task; use visible hint text instead.',
     howItWorks: 'The single child element is cloned and given the trigger handlers. With plain text or number content, the trigger receives aria-describedby while the popup is open, and the popup itself has role tooltip.',
     code: `<div className="tooltip-example">
-  <Tooltip title="Opens above the trigger" placement="top"><Button variant="secondary" style={{ marginBottom: 0 }}>Top</Button></Tooltip>
-  <Tooltip title="Opens below the trigger" placement="bottom"><Button variant="secondary" style={{ marginBottom: 0 }}>Bottom</Button></Tooltip>
-  <Tooltip title="Opens to the left" placement="left"><Button variant="secondary" style={{ marginBottom: 0 }}>Left</Button></Tooltip>
-  <Tooltip title="Opens to the right" placement="right"><Button variant="secondary" style={{ marginBottom: 0 }}>Right</Button></Tooltip>
+  <Tooltip title="Opens above the trigger" placement="top"><Button variant="secondary" style={kss('mb0')}>Top</Button></Tooltip>
+  <Tooltip title="Opens below the trigger" placement="bottom"><Button variant="secondary" style={kss('mb0')}>Bottom</Button></Tooltip>
+  <Tooltip title="Opens to the left" placement="left"><Button variant="secondary" style={kss('mb0')}>Left</Button></Tooltip>
+  <Tooltip title="Opens to the right" placement="right"><Button variant="secondary" style={kss('mb0')}>Right</Button></Tooltip>
 </div>`,
     example: () => <TooltipExample />,
     api: [
@@ -650,7 +650,7 @@ return <div className="steps-example">
   <Avatar size="l" bgColor="#1d70b8">AK</Avatar>
   <Avatar shape="square" size="l" />
   <Avatar size="s" />
-  <Text style={{ marginBottom: 0, marginLeft: 8 }}>Image, initials, square fallback and small sizes</Text>
+  <Text style={kss('mb0', 'ml8')}>Image, initials, square fallback and small sizes</Text>
 </div>`,
     example: () => <AvatarExample />,
     api: [

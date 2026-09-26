@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { H1, H2, Paragraph } from '@kevinzonda/design'
+import { kss } from '@kevinzonda/kss'
 import { Breadcrumbs, Button, Link, Pagination, Table, Tag } from '@kevinzonda/design/components'
 import { FancyTabs, Note, Sidebar, CodeBox } from '@kevinzonda/design/extraComponents'
 import { componentBySlug, componentDocs, type ComponentDoc } from './componentRegistry'
@@ -70,10 +71,10 @@ function OverviewPage() {
   useEffect(() => { document.title = pageTitle(message(locale, 'components'), locale) }, [locale])
   return <DocsLayout>
     <div className="component-overview">
-      <H1 variant="xl" style={{ marginBottom: 22 }}>{message(locale, 'components')}</H1>
+      <H1 variant="xl" style={kss('mb22')}>{message(locale, 'components')}</H1>
       <Paragraph variant="l">{message(locale, 'componentsIntro')}</Paragraph>
       <Paragraph>{message(locale, 'componentsDetail')}</Paragraph>
-      <div className="overview-actions"><Button href={sitePath(localizedPath('/quick-review/', locale))} style={{ flex: 'none', margin: 0 }}>{message(locale, 'openQuickReview')}</Button><span>{message(locale, 'quickReviewHint')}</span></div>
+      <div className="overview-actions"><Button href={sitePath(localizedPath('/quick-review/', locale))} style={{ flex: 'none', ...kss('m0') }}>{message(locale, 'openQuickReview')}</Button><span>{message(locale, 'quickReviewHint')}</span></div>
       <ul className="official-component-list">{componentDocs.map((component) => <li key={component.slug}><DocsLink className="govuk-link" to={localizedPath(`/components/${component.slug}/`, locale)}>{component.name}</DocsLink>{component.status === 'trial' && <Tag color="orange" style={{ verticalAlign: 3 }}>{message(locale, 'trial')}</Tag>}<p>{localizedComponent(component, locale).summary}</p></li>)}</ul>
     </div>
   </DocsLayout>
@@ -82,7 +83,7 @@ function OverviewPage() {
 function ExampleBlock({ component, guidanceUrl }: { component: ComponentDoc | ExtraComponentDoc; guidanceUrl?: string }) {
   const locale = useLocale()
   return <section className="component-example" aria-labelledby="example-title">
-    <div className="example-heading"><H2 variant="l" id="example-title" style={{ marginBottom: 18 }}>{message(locale, 'example')}</H2>{guidanceUrl && <Link href={guidanceUrl} anchorProps={{ target: '_blank', rel: 'noreferrer' }}>{message(locale, 'guidance')}</Link>}</div>
+    <div className="example-heading"><H2 variant="l" id="example-title" style={kss('mb18')}>{message(locale, 'example')}</H2>{guidanceUrl && <Link href={guidanceUrl} anchorProps={{ target: '_blank', rel: 'noreferrer' }}>{message(locale, 'guidance')}</Link>}</div>
     <FancyTabs items={[
       { key: 'example', label: message(locale, 'preview'), children: <div className={`example-canvas ${component.wide ? 'example-canvas--wide' : ''}`}>{component.example()}</div> },
       { key: 'react', label: 'React', children: <CodeBlock slug={component.slug} code={component.code} /> },
@@ -114,7 +115,7 @@ function ComponentPage({ component }: { component: ComponentDoc }) {
   return <DocsLayout currentSlug={component.slug}>
     <article className="component-doc">
       <Breadcrumbs className="doc-breadcrumbs" items={[{ label: message(locale, 'components'), href: sitePath(localizedPath('/components/', locale)) }, { label: component.name, current: true }]} />
-      <div className="component-title-row"><H1 variant="xl" style={{ marginBottom: 16 }}>{component.name}</H1>{component.status === 'trial' && <Tag color="orange" style={{ marginBottom: 16 }}>{message(locale, 'trial')}</Tag>}</div>
+      <div className="component-title-row"><H1 variant="xl" style={kss('mb16')}>{component.name}</H1>{component.status === 'trial' && <Tag color="orange" style={kss('mb16')}>{message(locale, 'trial')}</Tag>}</div>
       <Paragraph variant="l" className="component-summary">{doc.summary}</Paragraph>
       <ExampleBlock component={component} guidanceUrl={component.guidanceUrl === null ? undefined : component.guidanceUrl ?? `https://design-system.service.gov.uk/components/${component.slug}/`} />
       <ApiTable component={component} />
