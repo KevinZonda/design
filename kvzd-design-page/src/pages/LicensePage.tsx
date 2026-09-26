@@ -17,7 +17,7 @@ export function LicensePage() {
     <DocsHeader current="license" />
     <main className="site-width license-page" id="main-content">
       <H1 variant="xl">{message(locale, 'govukLicense')}</H1>
-      <Paragraph variant="l">GOV.UK Frontend 6.5.1 · MIT License</Paragraph>
+      <Paragraph variant="l">GOV.UK Frontend 6.5.1 - MIT License</Paragraph>
       <Paragraph>{message(locale, 'licenseIntro')}</Paragraph>
       <Paragraph><Link href="https://github.com/alphagov/govuk-frontend/blob/main/LICENSE.txt">{message(locale, 'licenseSource')}</Link></Paragraph>
       <pre className="license-page__notice">{govukFrontendLicense.trimEnd()}</pre>
