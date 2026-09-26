@@ -3,10 +3,9 @@ import type { SemanticStyling } from '../components/index'
 
 export type ResultStatus = 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'
 
-export interface ResultProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>, SemanticStyling<'root' | 'icon' | 'title' | 'subtitle' | 'extra' | 'content'> {
+export interface ResultProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>, SemanticStyling<'root' | 'icon' | 'title' | 'subtitle' | 'extra'> {
   status?: ResultStatus
   title: ReactNode
-  subTitle?: ReactNode
   /** Override the built-in status icon. */
   icon?: ReactNode
   /** Action area such as primary and secondary buttons. */
@@ -23,7 +22,7 @@ const ICONS: Record<ResultStatus, ReactNode> = {
   '500': <svg viewBox="0 0 72 72" aria-hidden="true"><rect x="8" y="16" width="56" height="34" rx="4" fill="none" stroke="currentColor" strokeWidth="4" /><path d="M24 58h24M36 50v8" stroke="currentColor" strokeWidth="4" strokeLinecap="round" /><path d="M26 26l8 6-8 6M38 38h10" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" /></svg>,
 }
 
-export const Result = forwardRef<HTMLDivElement, ResultProps>(function Result({ status = 'info', title, subTitle, icon, extra, children, className = '', classNames, style, styles, ...props }, ref) {
+export const Result = forwardRef<HTMLDivElement, ResultProps>(function Result({ status = 'info', title, icon, extra, children, className = '', classNames, style, styles, ...props }, ref) {
   return <div
     {...props}
     ref={ref}
@@ -33,8 +32,7 @@ export const Result = forwardRef<HTMLDivElement, ResultProps>(function Result({ 
   >
     <div className={`kvzd-design-result__icon ${classNames?.icon ?? ''}`.trim()} style={styles?.icon}>{icon ?? ICONS[status]}</div>
     <h2 className={`kvzd-design-result__title ${classNames?.title ?? ''}`.trim()} style={styles?.title}>{title}</h2>
-    {subTitle && <div className={`kvzd-design-result__subtitle ${classNames?.subtitle ?? ''}`.trim()} style={styles?.subtitle}>{subTitle}</div>}
+    {children && <div className={`kvzd-design-result__subtitle ${classNames?.subtitle ?? ''}`.trim()} style={styles?.subtitle}>{children}</div>}
     {extra && <div className={`kvzd-design-result__extra ${classNames?.extra ?? ''}`.trim()} style={styles?.extra}>{extra}</div>}
-    {children && <div className={`kvzd-design-result__content ${classNames?.content ?? ''}`.trim()} style={styles?.content}>{children}</div>}
   </div>
 })

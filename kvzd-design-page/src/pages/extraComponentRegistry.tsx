@@ -112,14 +112,16 @@ return <>
     name: 'Empty',
     summary: 'A clear state for a list, table or search with no records to display.',
     whenToUse: 'Show when a view has no data or a filter returns no results. Explain the reason or offer a next step when useful.',
-    howItWorks: 'A visible heading, optional description and action sit inside a neutral surface. The illustration is decorative and can be replaced.',
-    code: `<Empty title="No applications found" description="Try changing your filters." />`,
-    example: () => <Empty title="No applications found" description="Try changing your filters." />,
+    howItWorks: 'A visible heading, main content and optional actions sit inside a neutral surface. Pass the main content as children and actions through the actions prop. The illustration is decorative and can be replaced.',
+    code: `<Empty title="No applications found" actions={<button className="govuk-button" type="button">Clear filters</button>}>
+  Try changing your filters.
+</Empty>`,
+    example: () => <Empty title="No applications found" actions={<button className="govuk-button" type="button">Clear filters</button>}>Try changing your filters.</Empty>,
     api: [
       { name: 'title', type: 'ReactNode', defaultValue: 'No results found', description: 'Short explanation of the empty state.' },
-      { name: 'description', type: 'ReactNode', description: 'Optional guidance beneath the title.' },
+      { name: 'children', type: 'ReactNode', description: 'Main content beneath the title.' },
+      { name: 'actions', type: 'ReactNode', description: 'Optional action area, such as buttons.' },
       { name: 'illustration', type: 'ReactNode', description: 'Optional decorative graphic.' },
-      { name: 'children', type: 'ReactNode', description: 'Optional action area.' },
       { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Empty state root element.' },
     ],
   },
@@ -515,19 +517,19 @@ return <div className="switch-example">
     howItWorks: 'Error and warning alerts use the alert role so they are announced immediately; success and info alerts use the status role. An optional icon matches the type, and a closable alert shows a close button.',
     code: `const [closed, setClosed] = useState(false)
 return <div className="alert-example">
-  <Alert type="success" title="Application sent" description="You will receive a confirmation email." />
-  <Alert type="info" title="New version available" description="Refresh the page to get the latest changes." />
-  <Alert type="warning" title="Session ending soon" description="You will be signed out in 5 minutes." />
+  <Alert type="success" title="Application sent">You will receive a confirmation email.</Alert>
+  <Alert type="info" title="New version available">Refresh the page to get the latest changes.</Alert>
+  <Alert type="warning" title="Session ending soon">You will be signed out in 5 minutes.</Alert>
   {closed
     ? <button className="govuk-button govuk-button--secondary" type="button" onClick={() => setClosed(false)}>Restore error alert</button>
-    : <Alert type="error" title="There is a problem" description="Check the details you entered and try again." closable onClose={() => setClosed(true)} />}
+    : <Alert type="error" title="There is a problem" closable onClose={() => setClosed(true)}>Check the details you entered and try again.</Alert>}
 </div>`,
     example: () => <AlertExample />,
     api: [
       { name: 'type', type: "'success' | 'info' | 'warning' | 'error'", defaultValue: 'info', description: 'Semantic alert type.' },
       { name: 'title', type: 'ReactNode', description: 'Bold heading of the alert.' },
-      { name: 'description', type: 'ReactNode', description: 'Supporting text beneath the title.' },
-      { name: 'children', type: 'ReactNode', description: 'Message content shown between the title and description.' },
+      { name: 'children', type: 'ReactNode', description: 'Main message content beneath the title.' },
+      { name: 'description', type: 'ReactNode', description: 'Optional secondary text beneath the message.' },
       { name: 'closable', type: 'boolean', defaultValue: 'false', description: 'Show a close button.' },
       { name: 'onClose', type: '() => void', description: 'Called when the close button is pressed.' },
       { name: 'closeText', type: 'string', description: 'Custom close button text; defaults to a multiplication sign.' },
@@ -609,28 +611,29 @@ return <div className="steps-example">
     name: 'Result',
     summary: 'Present the outcome of a page-level operation such as a submitted application or a failed payment.',
     whenToUse: 'Use after a form submission, payment or async operation resolves to a clear outcome. Keep the message short and offer the most likely next action.',
-    howItWorks: 'Each status renders a matching icon and colour unless you supply your own. Error and warning results use the alert role so they are announced immediately; the extra area holds primary and secondary actions.',
+    howItWorks: 'Each status renders a matching icon and colour unless you supply your own. Pass supporting text as children; the extra area holds primary and secondary actions. Error and warning results use the alert role so they are announced immediately.',
     code: `<div className="result-example">
   <Result
     status="success"
     title="Application submitted"
-    subTitle="Reference KZ-2026-0917. We have emailed a copy of your answers."
     extra={<><button className="govuk-button" type="button">View status</button><button className="govuk-button govuk-button--secondary" type="button">Start another</button></>}
-  />
+  >
+    Reference KZ-2026-0917. We have emailed a copy of your answers.
+  </Result>
   <Result
     status="404"
     title="Page not found"
-    subTitle="Check the web address or return to the service home page."
-  />
+  >
+    Check the web address or return to the service home page.
+  </Result>
 </div>`,
     example: () => <ResultExample />,
     api: [
       { name: 'status', type: "'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'", defaultValue: 'info', description: 'Result status; one of success, error, info, warning, 403, 404 or 500.' },
       { name: 'title', type: 'ReactNode', description: 'Main result heading.' },
-      { name: 'subTitle', type: 'ReactNode', description: 'Optional supporting text beneath the title.' },
+      { name: 'children', type: 'ReactNode', description: 'Supporting text beneath the title.' },
       { name: 'icon', type: 'ReactNode', description: 'Override the built-in status icon.' },
       { name: 'extra', type: 'ReactNode', description: 'Action area such as primary and secondary buttons.' },
-      { name: 'children', type: 'ReactNode', description: 'Optional supporting content beneath the actions.' },
       { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'Result root element.' },
     ],
   },

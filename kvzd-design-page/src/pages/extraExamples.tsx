@@ -120,12 +120,12 @@ export function FancyTableExample() {
 export function AlertExample() {
   const [closed, setClosed] = useState(false)
   return <div className="alert-example">
-    <Alert type="success" title="Application sent" description="You will receive a confirmation email." />
-    <Alert type="info" title="New version available" description="Refresh the page to get the latest changes." />
-    <Alert type="warning" title="Session ending soon" description="You will be signed out in 5 minutes." />
+    <Alert type="success" title="Application sent">You will receive a confirmation email.</Alert>
+    <Alert type="info" title="New version available">Refresh the page to get the latest changes.</Alert>
+    <Alert type="warning" title="Session ending soon">You will be signed out in 5 minutes.</Alert>
     {closed
       ? <button className="govuk-button govuk-button--secondary" type="button" onClick={() => setClosed(false)}>Restore error alert</button>
-      : <Alert type="error" title="There is a problem" description="Check the details you entered and try again." closable onClose={() => setClosed(true)} />}
+      : <Alert type="error" title="There is a problem" closable onClose={() => setClosed(true)}>Check the details you entered and try again.</Alert>}
   </div>
 }
 
@@ -170,14 +170,16 @@ export function ResultExample() {
     <Result
       status="success"
       title="Application submitted"
-      subTitle="Reference KZ-2026-0917. We have emailed a copy of your answers."
       extra={<><button className="govuk-button" type="button">View status</button><button className="govuk-button govuk-button--secondary" type="button">Start another</button></>}
-    />
+    >
+      Reference KZ-2026-0917. We have emailed a copy of your answers.
+    </Result>
     <Result
       status="404"
       title="Page not found"
-      subTitle="Check the web address or return to the service home page."
-    />
+    >
+      Check the web address or return to the service home page.
+    </Result>
   </div>
 }
 

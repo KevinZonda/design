@@ -51,7 +51,7 @@ const componentText: Record<string, DocTranslation> = {
 const extraText: Record<string, DocTranslation> = {
   divider: { summary: '使用 GOV.UK 分隔线样式区分内容区块。', whenToUse: '当仅靠留白不足以区分内容区块时使用。不要在每个字段或段落之间都画线。', howItWorks: '渲染带有 GOV.UK 间距样式的语义化 hr。将 visible 设为 false 可只保留间距。' },
   modal: { summary: '用于在返回页面前完成简短决定或任务的聚焦对话框。', whenToUse: '用于简短确认或聚焦任务。较长的流程应放在普通页面。', howItWorks: '原生 dialog 进入顶层并将键盘焦点限制在其中。Escape、关闭按钮和可选的背景点击通过 onClose 请求关闭；关闭后焦点会回到打开对话框的元素。' },
-  empty: { summary: '用于列表、表格或搜索结果为空时的清晰提示。', whenToUse: '视图无数据或筛选后没有结果时使用。适当说明原因或提供下一步操作。', howItWorks: '中性容器中显示可见标题、可选说明和操作。插图只起装饰作用，可以替换。' },
+  empty: { summary: '用于列表、表格或搜索结果为空时的清晰提示。', whenToUse: '视图无数据或筛选后没有结果时使用。适当说明原因或提供下一步操作。', howItWorks: '中性容器中显示可见标题、正文和操作；正文通过 children 传入，操作通过 actions 属性传入。插图只起装饰作用，可以替换。' },
   loading: { summary: '内容加载期间使用的旋转指示器和骨架屏。', whenToUse: '短暂等待使用旋转指示器；已知待加载内容的结构时使用骨架屏。', howItWorks: '两种样式都向辅助技术公开状态标签；用户要求减少动态效果时会停止动画。' },
   menu: { summary: '支持键盘导航的紧凑操作列表。', whenToUse: '用于一组简短的相关操作。主要页面导航应使用普通导航链接。', howItWorks: '方向键和 Home／End 可在可用操作间移动焦点。条目可使用 href 或 onClick；同时提供时，onClick 优先。' },
   dropdown: { summary: '点击按钮后展开紧凑的操作菜单。', whenToUse: '工具栏或记录行中有多个次要操作，需要共用一个入口时使用。', howItWorks: '触发按钮公开展开状态。菜单打开后焦点移至第一个操作；选中条目、按 Escape 或点击外部可关闭菜单。' },
@@ -64,10 +64,10 @@ const extraText: Record<string, DocTranslation> = {
   'tag-box': { summary: '用于版本号等简短元信息的中性描边标签。', whenToUse: '用于不表示状态的元信息。表示状态时请使用标准 Tag 组件。', howItWorks: '它渲染 span，接受标准 span 属性以及可选的 className。' },
   switch: { summary: '用于立即生效设置的二元开关。', whenToUse: '用于更改后立即生效的开关设置。选项需要随表单提交时，请使用复选框或单选按钮。', howItWorks: '开关是带 role switch 和 aria-checked 状态的按钮。字符串子元素会成为视觉隐藏的标签。轨道内默认显示 On/Off 文字，可通过 checkedChildren 和 unCheckedChildren 自定义。加载状态会在滑块中显示旋转指示器并阻止交互。' },
   tooltip: { summary: '在元素旁边显示用于解释的简短标签。', whenToUse: '用于对图标、按钮或状态文字做简短说明。不要隐藏用户完成任务必须阅读的信息，表单字段请使用可见的提示文字。', howItWorks: '唯一的子元素会被克隆并附加触发事件处理器。内容为纯文本或数字时，弹层打开期间触发器会获得 aria-describedby，弹层本身带 role tooltip。' },
-  alert: { summary: '显示操作后的成功、信息、警告或错误消息。', whenToUse: '用于页面上某个操作的结果，例如保存完成或请求失败。表单校验错误请使用错误摘要组件。', howItWorks: '错误和警告使用 alert 角色以便立即播报；成功和信息使用 status 角色。可选图标与类型对应；可关闭的警告会显示关闭按钮。' },
+  alert: { summary: '显示操作后的成功、信息、警告或错误消息。', whenToUse: '用于页面上某个操作的结果，例如保存完成或请求失败。表单校验错误请使用错误摘要组件。', howItWorks: '错误和警告使用 alert 角色以便立即播报；成功和信息使用 status 角色。正文通过 children 传入，description 提供次要文本。可选图标与类型对应；可关闭的警告会显示关闭按钮。' },
   steps: { summary: '向用户展示其在简短线性步骤序列中的位置。', whenToUse: '用于设置或提交流程等简短的线性步骤。较长或非线性的流程应拆分为多个页面。', howItWorks: '当前索引之前的步骤视为完成，之后的视为等待，除非条目显式指定状态。点击步骤会调用 onChange 并传入其索引；当前步骤带 aria-current。' },
   progress: { summary: '显示任务、上传或加载操作的进度。', whenToUse: '用于可测量的进度，例如文件上传或多步保存。等待时间未知百分比时使用 Loading 组件。', howItWorks: '进度条带 role progressbar，aria-valuenow 为截断到 0-100 的百分比。达到 100 及以上时自动使用成功样式。' },
-  result: { summary: '展示页面级操作的结果，例如已提交的申请或失败的付款。', whenToUse: '表单提交、付款或异步操作得到明确结果后使用。文案保持简短，并提供最可能的下一步操作。', howItWorks: '每种状态渲染对应的图标和颜色，也可传入自定义图标。错误和警告使用 alert 角色以便立即播报；extra 区域放置主要和次要操作。' },
+  result: { summary: '展示页面级操作的结果，例如已提交的申请或失败的付款。', whenToUse: '表单提交、付款或异步操作得到明确结果后使用。文案保持简短，并提供最可能的下一步操作。', howItWorks: '每种状态渲染对应的图标和颜色，也可传入自定义图标。正文通过 children 传入；extra 区域放置主要和次要操作。错误和警告使用 alert 角色以便立即播报。' },
   avatar: { summary: '以图片、首字母或备用图标显示用户或实体。', whenToUse: '用于页眉、记录行或评论列表中标识个人或组织。对象不确定时优先使用首字母或文字而非图片。', howItWorks: '图片 src 优先，其次是首字母等文字内容，最后是通用人物图标。形状支持圆形或方形，尺寸支持命名档位或像素值。' },
   'code-box': { summary: '渲染带语法高亮的带边框代码块。', whenToUse: '在文档和工具页面中展示配置或用法片段。片段为静态内容时，可在构建期传入预高亮 HTML。', howItWorks: '未提供 highlightedHtml 时，组件懒加载 Shiki 在客户端高亮，期间先显示转义的纯文本。配色采用 GitHub Light 调色板，白底，契合 GOV.UK 页面风格。' },
 }

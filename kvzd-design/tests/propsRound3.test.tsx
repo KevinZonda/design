@@ -134,15 +134,14 @@ test('Result renders status icon, title, subtitle and extra actions', () => {
     <Result
       status="success"
       title="Application submitted"
-      subTitle="Reference KZ-2026-0917"
       extra={<button type="button">View status</button>}
     >
-      <p>We have emailed a copy of your answers.</p>
+      Reference KZ-2026-0917. We have emailed a copy of your answers.
     </Result>,
   )
   expect(screen.getByRole('status')).toBeTruthy()
   expect(screen.getByText('Application submitted')).toBeTruthy()
-  expect(screen.getByText('Reference KZ-2026-0917')).toBeTruthy()
+  expect(screen.getByText(/Reference KZ-2026-0917/)).toBeTruthy()
   expect(screen.getByText('View status')).toBeTruthy()
   expect(document.querySelector('.kvzd-design-result--success svg')).toBeTruthy()
 })

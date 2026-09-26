@@ -295,7 +295,7 @@
 .kvzd-design-empty__illustration { margin-bottom: 12px; color: var(--govuk-secondary-text-colour); }
 .kvzd-design-empty__symbol { display: inline-grid; width: 54px; height: 54px; place-items: center; border-radius: 50%; color: var(--govuk-inverse-text-colour); background: var(--govuk-text-colour); font-size: 36px; font-weight: 700; line-height: 1; }
 .kvzd-design-empty__title { margin-bottom: 10px; }
-.kvzd-design-empty__description { margin-bottom: 0; }
+.kvzd-design-empty__content { margin-bottom: 0; }
 .kvzd-design-empty__actions { margin-top: 20px; }
 .kvzd-design-empty__actions .govuk-button { margin-bottom: 0; }
 
