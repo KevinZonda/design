@@ -1,5 +1,6 @@
 .kvzd-design-slider {
   --kvzd-design-slider-thumb-size: 24px;
+  --kvzd-design-slider-thumb-half: calc(var(--kvzd-design-slider-thumb-size) / 2);
   --kvzd-design-slider-track-height: 6px;
   position: relative;
   display: flex;
@@ -86,30 +87,31 @@
 .kvzd-design-slider__input:focus,
 .kvzd-design-slider__input:active { z-index: 1; }
 
-/* Hover feedback. */
-.kvzd-design-slider__input:not(:disabled)::-webkit-slider-thumb:hover { background: var(--govuk-text-colour); }
-.kvzd-design-slider__input:not(:disabled)::-moz-range-thumb:hover { background: var(--govuk-text-colour); }
+/* Hover, focus and pressed feedback. Disabled inputs are never hit-testable,
+   so no :disabled guard is needed; all three rules keep equal specificity and
+   rely on source order: focus beats hover, pressed beats both. */
+.kvzd-design-slider__input::-webkit-slider-thumb:hover { background: var(--govuk-text-colour); }
+.kvzd-design-slider__input::-moz-range-thumb:hover { background: var(--govuk-text-colour); }
 
-/* Focused handle (keyboard tab or click): GOV.UK focus colours. */
-.kvzd-design-slider__input:not(:disabled):focus::-webkit-slider-thumb {
+.kvzd-design-slider__input:focus::-webkit-slider-thumb {
   border-color: var(--govuk-focus-text-colour);
   background: var(--govuk-focus-colour);
   box-shadow: 0 0 0 3px var(--govuk-focus-colour);
 }
 
-.kvzd-design-slider__input:not(:disabled):focus::-moz-range-thumb {
+.kvzd-design-slider__input:focus::-moz-range-thumb {
   border-color: var(--govuk-focus-text-colour);
   background: var(--govuk-focus-colour);
   box-shadow: 0 0 0 3px var(--govuk-focus-colour);
 }
 
 /* While pressed, darken the thumb; after release the focus colours above stay
-   as the clicked-state cue. Kept last so it wins during the press. The pressed
-   state is driven by pointer handlers in Slider.tsx, not :active: the input
-   has pointer-events:none, so neither element-level nor thumb-level :active
-   ever matches in Blink. */
-.kvzd-design-slider__input--pressed:not(:disabled)::-webkit-slider-thumb,
-.kvzd-design-slider__input--pressed:not(:disabled)::-moz-range-thumb {
+   as the clicked-state cue. The pressed state is driven by pointer handlers in
+   Slider.tsx, not :active: the input has pointer-events:none, so neither
+   element-level nor thumb-level :active ever matches in Blink. The doubled
+   class keeps specificity above the :focus rule. */
+.kvzd-design-slider__input.kvzd-design-slider__input--pressed::-webkit-slider-thumb,
+.kvzd-design-slider__input.kvzd-design-slider__input--pressed::-moz-range-thumb {
   background: var(--govuk-text-colour);
   cursor: grabbing;
 }

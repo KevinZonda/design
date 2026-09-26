@@ -68,6 +68,18 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider({
   const span = max - min || 1
   const percent = (v: number) => ((clampTo(v, min, max) - min) / span) * 100
 
+  /* The native thumb travels between half-thumb insets at each end of the
+     track, so thumb-centre (and everything aligned to it: fill end, tooltip,
+     marks) is half + (100% - thumb-size) * fraction — never just fraction%. */
+  const along = (p: number) => {
+    const f = (clampTo(p, 0, 100) / 100).toFixed(4)
+    return `calc(var(--kvzd-design-slider-thumb-half) + (100% - var(--kvzd-design-slider-thumb-size)) * ${f})`
+  }
+  const spanLength = (from: number, to: number) => {
+    const f = ((clampTo(to, 0, 100) - clampTo(from, 0, 100)) / 100).toFixed(4)
+    return `calc((100% - var(--kvzd-design-slider-thumb-size)) * ${f})`
+  }
+
   const handleSingle = (event: ChangeEvent<HTMLInputElement>) => {
     const next = clampTo(Number(event.target.value), min, max)
     if (value === undefined) setInner(next)
@@ -85,20 +97,22 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider({
   }
 
   // The input has pointer-events:none (only the thumb receives events), so CSS
-  // :active never matches; track the pressed state with pointer handlers. The
-  // class is added imperatively to survive re-renders while dragging.
+  // :active never matches; track the pressed state with pointer handlers
+  // instead. The class is added imperatively to survive re-renders while
+  // dragging, and the release listener goes on window: during a native drag the
+  // pointerup targets the slider root, not the input.
   const handlePointerDown = (event: PointerEvent<HTMLInputElement>) => {
-    event.currentTarget.setPointerCapture?.(event.pointerId)
-    event.currentTarget.classList.add('kvzd-design-slider__input--pressed')
+    const input = event.currentTarget
+    input.classList.add('kvzd-design-slider__input--pressed')
+    const release = () => {
+      input.classList.remove('kvzd-design-slider__input--pressed')
+      window.removeEventListener('pointerup', release)
+      window.removeEventListener('pointercancel', release)
+    }
+    window.addEventListener('pointerup', release)
+    window.addEventListener('pointercancel', release)
   }
-  const handlePointerEnd = (event: PointerEvent<HTMLInputElement>) => {
-    event.currentTarget.classList.remove('kvzd-design-slider__input--pressed')
-  }
-  const pressProps = {
-    onPointerDown: handlePointerDown,
-    onPointerUp: handlePointerEnd,
-    onPointerCancel: handlePointerEnd,
-  }
+  const pressProps = { onPointerDown: handlePointerDown }
 
   // The native inputs span the full min/max so handle positions match the
   // fill and marks; crossing is prevented by clamping in the change handlers.
@@ -108,7 +122,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider({
       key={key}
       aria-hidden="true"
       className={`kvzd-design-slider__tooltip ${raised ? 'kvzd-design-slider__tooltip--raised' : ''} ${classNames?.tooltip ?? ''}`.trim()}
-      style={{ left: `${percent(v)}%`, ...styles?.tooltip }}
+      style={{ left: along(percent(v)), ...styles?.tooltip }}
     >
       {formatValue(v)}
     </span>
@@ -129,7 +143,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider({
         <div
           className={`kvzd-design-slider__fill ${classNames?.fill ?? ''}`.trim()}
           aria-hidden="true"
-          style={{ left: `${percent(range ? lo : min)}%`, width: `${percent(range ? hi : lo) - percent(range ? lo : min)}%`, ...styles?.fill }}
+          style={{ left: along(percent(range ? lo : min)), width: spanLength(percent(range ? lo : min), percent(range ? hi : lo)), ...styles?.fill }}
         />
         {range ? (
           <>
@@ -190,7 +204,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider({
             <div
               key={index}
               className={`kvzd-design-slider__mark ${shownMarks.length > 1 && index === 0 ? 'kvzd-design-slider__mark--first' : ''} ${shownMarks.length > 1 && index === shownMarks.length - 1 ? 'kvzd-design-slider__mark--last' : ''} ${classNames?.mark ?? ''}`.trim()}
-              style={{ left: `${percent(mark.value)}%`, ...styles?.mark }}
+              style={{ left: along(percent(mark.value)), ...styles?.mark }}
             >
               <span className="kvzd-design-slider__mark-dot" aria-hidden="true" />
               {mark.label !== undefined && <span className="kvzd-design-slider__mark-label">{mark.label}</span>}
