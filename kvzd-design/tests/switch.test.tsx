@@ -48,13 +48,11 @@ test('disabled and loading switches do not toggle', () => {
   expect(loading.querySelector('svg')).toBeTruthy()
 })
 
-test('switch renders checked and unchecked children and size class', () => {
-  render(<Switch size="l" checkedChildren="On" unCheckedChildren="Off" defaultChecked aria-label="Enable" />)
+test('switch renders size and checked class', () => {
+  render(<Switch size="l" defaultChecked aria-label="Enable" />)
   const sw = screen.getByRole('switch')
   expect(sw.className).toContain('kvzd-design-switch--l')
   expect(sw.className).toContain('kvzd-design-switch--checked')
-  expect(sw.textContent).toContain('On')
-  expect(sw.textContent).toContain('Off')
 })
 
 test('switch uses string children as accessible label', () => {

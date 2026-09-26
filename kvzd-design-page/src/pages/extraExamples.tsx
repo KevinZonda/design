@@ -43,8 +43,8 @@ export function SwitchExample() {
       <span className="govuk-body">Small</span>
     </div>
     <div className="switch-example__row">
-      <Switch aria-label="Medium SMS notifications switch" checked={sms} onChange={setSms} checkedChildren="On" unCheckedChildren="Off">SMS notifications</Switch>
-      <span className="govuk-body">Medium with checked and unchecked content</span>
+      <Switch aria-label="Medium SMS notifications switch" checked={sms} onChange={setSms}>SMS notifications</Switch>
+      <span className="govuk-body">Medium</span>
     </div>
     <div className="switch-example__row">
       <Switch aria-label="Large loading switch" size="l" loading />

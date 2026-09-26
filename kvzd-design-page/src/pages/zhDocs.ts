@@ -62,7 +62,7 @@ const extraText: Record<string, DocTranslation> = {
   sidebar: { summary: '为相关页面或区块提供嵌套导航，并可选择展开和收起。', whenToUse: '用于一组相关文档页面。导航树较大时可启用折叠分组。', howItWorks: '链接默认渲染为锚点；分组可以包含多级子项。renderLink 可提供客户端路由链接，当前分支会高亮。' },
   'showcase-box': { summary: '用统一的标题、说明、实时示例和相关链接展示组件或设计模式。', whenToUse: '在设计系统总览或文档页面中，需要以一致容器展示多个组件时使用。', howItWorks: '标题层级可配置，页眉和页脚插槽可接收任意 React 内容，顶部强调条跟随当前品牌色 token。' },
   'tag-box': { summary: '用于版本号等简短元信息的中性描边标签。', whenToUse: '用于不表示状态的元信息。表示状态时请使用标准 Tag 组件。', howItWorks: '它渲染 span，接受标准 span 属性以及可选的 className。' },
-  switch: { summary: '用于立即生效设置的二元开关。', whenToUse: '用于更改后立即生效的开关设置。选项需要随表单提交时，请使用复选框或单选按钮。', howItWorks: '开关是带 role switch 和 aria-checked 状态的按钮。字符串子元素会成为视觉隐藏的标签；checkedChildren 和 unCheckedChildren 渲染在轨道内。加载状态会在滑块中显示旋转指示器并阻止交互。' },
+  switch: { summary: '用于立即生效设置的二元开关。', whenToUse: '用于更改后立即生效的开关设置。选项需要随表单提交时，请使用复选框或单选按钮。', howItWorks: '开关是带 role switch 和 aria-checked 状态的按钮。字符串子元素会成为视觉隐藏的标签。加载状态会在滑块中显示旋转指示器并阻止交互。' },
   tooltip: { summary: '在元素旁边显示用于解释的简短标签。', whenToUse: '用于对图标、按钮或状态文字做简短说明。不要隐藏用户完成任务必须阅读的信息，表单字段请使用可见的提示文字。', howItWorks: '唯一的子元素会被克隆并附加触发事件处理器。内容为纯文本或数字时，弹层打开期间触发器会获得 aria-describedby，弹层本身带 role tooltip。' },
   alert: { summary: '显示操作后的成功、信息、警告或错误消息。', whenToUse: '用于页面上某个操作的结果，例如保存完成或请求失败。表单校验错误请使用错误摘要组件。', howItWorks: '错误和警告使用 alert 角色以便立即播报；成功和信息使用 status 角色。可选图标与类型对应；可关闭的警告会显示关闭按钮。' },
   steps: { summary: '向用户展示其在简短线性步骤序列中的位置。', whenToUse: '用于设置或提交流程等简短的线性步骤。较长或非线性的流程应拆分为多个页面。', howItWorks: '当前索引之前的步骤视为完成，之后的视为等待，除非条目显式指定状态。点击步骤会调用 onChange 并传入其索引；当前步骤带 aria-current。' },

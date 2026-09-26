@@ -9,15 +9,13 @@ export interface SwitchProps extends SemanticStyling<'root' | 'handle'> {
   disabled?: boolean
   loading?: boolean
   size?: 's' | 'm' | 'l'
-  checkedChildren?: ReactNode
-  unCheckedChildren?: ReactNode
   children?: ReactNode
   'aria-label'?: string
   className?: string
   style?: ButtonHTMLAttributes<HTMLButtonElement>['style']
 }
 
-export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch({ checked, defaultChecked = false, onChange, name, disabled = false, loading = false, size = 'm', checkedChildren, unCheckedChildren, children, className = '', classNames, style, styles, ...props }, ref) {
+export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch({ checked, defaultChecked = false, onChange, name, disabled = false, loading = false, size = 'm', children, className = '', classNames, style, styles, ...props }, ref) {
   const [inner, setInner] = useState(defaultChecked)
   const isChecked = checked ?? inner
   const blocked = disabled || loading
@@ -42,10 +40,6 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
     onClick={toggle}
   >
     {name !== undefined && <input type="hidden" name={name} value={isChecked ? 'true' : 'false'} />}
-    <span className="kvzd-design-switch__inner" aria-hidden="true">
-      <span className="kvzd-design-switch__text kvzd-design-switch__text--checked">{checkedChildren}</span>
-      <span className="kvzd-design-switch__text kvzd-design-switch__text--unchecked">{unCheckedChildren}</span>
-    </span>
     <span className={`kvzd-design-switch__handle ${classNames?.handle ?? ''}`.trim()} style={styles?.handle}>
       {loading && <svg className="kvzd-design-switch__spinner kvzd-design-spinner" viewBox="0 0 20 20" aria-hidden="true">
         <circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="32 12" />

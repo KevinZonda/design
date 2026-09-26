@@ -105,12 +105,12 @@ import { Form } from '@kevinzonda/design/extraComponents'
 
 Use `multiple` on `Form.Item` for checkbox groups and `focusId` to point error summary links to the first choice. Form-level `validate` handles checks involving more than one field. Validation runs on submit so entered answers stay in place when a user needs to correct them.
 
-`Switch` is an antd-style toggle. It supports controlled (`checked`) and uncontrolled (`defaultChecked`) usage with `onChange`, plus `disabled`, `loading` (shows a spinner and blocks toggling), `size` (`'s' | 'm' | 'l'`), and `checkedChildren` / `unCheckedChildren` text inside the track. Pass a string via `aria-label` or `children` to label it; children are visually hidden.
+`Switch` is a binary toggle. It supports controlled (`checked`) and uncontrolled (`defaultChecked`) usage with `onChange`, plus `disabled`, `loading` (shows a spinner and blocks toggling), and `size` (`'s' | 'm' | 'l'`). Pass a string via `aria-label` or `children` to label it; children are visually hidden.
 
 ```tsx
 import { Switch } from '@kevinzonda/design/extraComponents'
 
-<Switch defaultChecked checkedChildren="On" unCheckedChildren="Off" onChange={(checked) => console.log(checked)}>
+<Switch defaultChecked onChange={(checked) => console.log(checked)}>
   Enable notifications
 </Switch>
 ```
