@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { Divider, Empty, FancyTabs, Loading, Note, ShowcaseBox, Sidebar, TagBox } from '@kevinzonda/design/extraComponents'
+import { Divider, Empty, FancyTabs, Loading, Note, ShowcaseBox, Sidebar, TagBox, CodeBox } from '@kevinzonda/design/extraComponents'
 import type { ApiProp } from './componentRegistry'
 import { DropdownExample, FancyTableExample, FormExample, MenuExample, ModalExample, AlertExample, ProgressExample, ResultExample, AvatarExample, StepsExample, SwitchExample, TooltipExample } from './extraExamples'
 
@@ -70,10 +70,19 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'A focused dialog for a short decision or task that must be completed before returning to the page.',
     whenToUse: 'Use for a brief confirmation or focused task. Keep longer journeys on normal pages.',
     howItWorks: 'A native dialog enters the top layer and keeps keyboard focus inside it. Escape, the close button and optional backdrop clicks request closure through onClose, and focus returns to the element that opened the dialog.',
-    code: `<Modal open={open} title="Confirm your action" onClose={() => setOpen(false)}
-  okText="Confirm" cancelText="Cancel" onOk={confirm}>
-  <p>Check the details before continuing.</p>
-</Modal>`,
+    code: `const [open, setOpen] = useState(false)
+const [confirming, setConfirming] = useState(false)
+return <>
+  <button className="govuk-button" type="button" onClick={() => setOpen(true)}>Open modal</button>
+  <Modal open={open} title="Confirm your action" onClose={() => setOpen(false)}
+    okText="Confirm" cancelText="Cancel" confirmLoading={confirming}
+    onOk={() => {
+      setConfirming(true)
+      setTimeout(() => { setConfirming(false); setOpen(false) }, 1200)
+    }}>
+    <p className="govuk-body">Check the details before continuing. The built-in footer confirm button shows a loading state while the request runs.</p>
+  </Modal>
+</>`,
     example: () => <ModalExample />,
     api: [
       { name: 'open', type: 'boolean', description: 'Controls whether the dialog is shown.' },
@@ -153,11 +162,15 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'A compact list of actions with keyboard navigation.',
     whenToUse: 'Use for a short group of related actions. Use ordinary navigation links for primary page navigation.',
     howItWorks: 'Arrow keys and Home/End move focus among enabled actions. Items can use href or onClick; when both are supplied, onClick takes precedence.',
-    code: `<Menu ariaLabel="Record actions" items={[
-  { key: 'view', label: 'View record', onClick: viewRecord },
-  { key: 'edit', label: 'Edit record', onClick: editRecord },
-  { key: 'delete', label: 'Delete record', disabled: true },
-]} />`,
+    code: `const [selected, setSelected] = useState('No action selected')
+return <>
+  <Menu ariaLabel="Record actions" items={[
+    { key: 'view', label: 'View record', onClick: () => setSelected('View record selected') },
+    { key: 'edit', label: 'Edit record', onClick: () => setSelected('Edit record selected') },
+    { key: 'delete', label: 'Delete record', disabled: true },
+  ]} />
+  <p className="govuk-body govuk-!-margin-top-4" aria-live="polite">{selected}</p>
+</>`,
     example: () => <MenuExample />,
     api: [
       { name: 'items', type: 'MenuItem[]', description: 'Actions with key, label, optional href, onClick, icon, danger styling or disabled; set type to divider for a separator.' },
@@ -174,13 +187,14 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'A button that opens a compact action menu.',
     whenToUse: 'Use when several secondary actions share a single place in a toolbar or record row.',
     howItWorks: 'The trigger exposes its expanded state. The menu opens with focus on its first action and closes on selection, Escape or an outside click.',
-    code: `<Dropdown label="Actions" menuLabel="Application actions"
-  items={[
+    code: `const [selected, setSelected] = useState('Choose an action')
+return <>
+  <Dropdown label="Actions" menuLabel="Application actions" items={[
     { key: 'view', label: 'View application' },
     { key: 'download', label: 'Download details' },
-  ]}
-  onAction={(key) => handleAction(key)}
-/>`,
+  ]} onAction={(key) => setSelected(key === 'view' ? 'View application selected' : 'Download details selected')} />
+  <p className="govuk-body govuk-!-margin-top-4" aria-live="polite">{selected}</p>
+</>`,
     example: () => <DropdownExample />,
     api: [
       { name: 'label', type: 'ReactNode', description: 'Trigger button content.' },
@@ -200,15 +214,38 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'A data table with optional sorting, filtering, row selection and client-side pagination.',
     whenToUse: 'Use for records that need comparison and direct interaction. Keep the standard Table for simple read-only data.',
     howItWorks: 'Column comparators and filter functions process the supplied data locally. Selection can be controlled or internal; Select all applies to the current page.',
-    code: `<FancyTable rowKey="id" dataSource={rows} selectable pageSize={10}
-  columns={[
-    { key: 'name', title: 'Name', dataIndex: 'name',
-      sorter: (a, b) => a.name.localeCompare(b.name) },
-    { key: 'status', title: 'Status', dataIndex: 'status',
-      filters: [{ label: 'Submitted', value: 'Submitted' }],
-      onFilter: (value, row) => row.status === value },
-  ]}
-/>`,
+    code: `const [selected, setSelected] = useState([])
+const exampleRows = [
+  { id: 'A-101', applicant: 'Amira Khan', status: 'In review' },
+  { id: 'A-102', applicant: 'Ben Carter', status: 'Submitted' },
+  { id: 'A-103', applicant: 'Chen Li', status: 'Approved' },
+  { id: 'A-104', applicant: 'Dana Morgan', status: 'In review' },
+  { id: 'A-105', applicant: 'Eli Taylor', status: 'Submitted' },
+]
+return <>
+  <FancyTable
+    caption="Applications"
+    rowKey="id"
+    dataSource={exampleRows}
+    selectable
+    selectedRowKeys={selected}
+    onSelectionChange={setSelected}
+    pageSize={3}
+    expandable={{
+      expandedRowRender: (record) => <span className="govuk-body">Application {record.id} is currently <strong>{record.status.toLowerCase()}</strong>.</span>,
+    }}
+    columns={[
+      { key: 'id', title: 'Reference', dataIndex: 'id', rowHeader: true, sorter: (a, b) => a.id.localeCompare(b.id) },
+      { key: 'applicant', title: 'Applicant', dataIndex: 'applicant', sorter: (a, b) => a.applicant.localeCompare(b.applicant) },
+      { key: 'status', title: 'Status', dataIndex: 'status', filters: [
+        { label: 'Submitted', value: 'Submitted' },
+        { label: 'In review', value: 'In review' },
+        { label: 'Approved', value: 'Approved' },
+      ], onFilter: (value, row) => row.status === value },
+    ]}
+  />
+  <p className="govuk-body govuk-!-margin-top-4" aria-live="polite">{selected.length} selected</p>
+</>`,
     example: () => <FancyTableExample />,
     wide: true,
     api: [
@@ -262,12 +299,19 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'Collect and validate related answers with GOV.UK field errors and an error summary.',
     whenToUse: 'Use when a page has several answers that must be validated together on submission.',
     howItWorks: 'Form.Item connects a field to a native form. On submission, Form reads FormData, validates registered rules, preserves entered answers, displays inline errors and focuses the error summary.',
-    code: `<Form onFinish={(values) => save(values)}>
-  <Form.Item name="fullName" rules={[{ required: true, message: 'Enter your full name' }]}>
-    <Input label="Full name" />
-  </Form.Item>
-  <Button htmlType="submit">Continue</Button>
-</Form>`,
+    code: `const [submitted, setSubmitted] = useState('')
+return <>
+  <Form onFinish={(values) => setSubmitted('Submitted for ' + values.fullName)} onFinishFailed={() => setSubmitted('')}>
+    <Form.Item name="fullName" rules={[{ required: true, message: 'Enter your full name' }]}>
+      <Input label="Full name" />
+    </Form.Item>
+    <Form.Item name="email" rules={[{ required: true, message: 'Enter your email address' }, { pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Enter a valid email address' }]}>
+      <Input label="Email address" type="email" />
+    </Form.Item>
+    <Button htmlType="submit">Continue</Button>
+  </Form>
+  {submitted && <p className="govuk-body" role="status">{submitted}</p>}
+</>`,
     example: () => <FormExample />,
     api: [
       { name: 'initialValues', type: 'Record<string, string | string[]>', description: 'Initial values for registered fields.' },
@@ -403,9 +447,26 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'A binary toggle for a setting that takes effect immediately.',
     whenToUse: 'Use for on/off settings that apply as soon as they are changed. Use checkboxes or radios when the choice is submitted with a form.',
     howItWorks: 'The toggle is a button with role switch and an aria-checked state. A string child becomes a visually hidden label. The track shows On and Off text beside the knob by default; customise it with checkedChildren and unCheckedChildren. Loading shows a spinner in the handle and blocks interaction.',
-    code: `<Switch defaultChecked onChange={(checked) => save(checked)}>
-  Email notifications
-</Switch>`,
+    code: `const [email, setEmail] = useState(true)
+const [sms, setSms] = useState(false)
+return <div className="switch-example">
+  <div className="switch-example__row">
+    <Switch aria-label="Small email notifications switch" size="s" checked={email} onChange={setEmail} />
+    <span className="govuk-body">Small</span>
+  </div>
+  <div className="switch-example__row">
+    <Switch aria-label="Medium SMS notifications switch" checked={sms} onChange={setSms} checkedChildren="On" unCheckedChildren="Off">SMS notifications</Switch>
+    <span className="govuk-body">Medium with checked and unchecked text</span>
+  </div>
+  <div className="switch-example__row">
+    <Switch aria-label="Large loading switch" size="l" loading />
+    <span className="govuk-body">Large and loading</span>
+  </div>
+  <div className="switch-example__row">
+    <Switch aria-label="Disabled switch" disabled />
+    <span className="govuk-body">Disabled</span>
+  </div>
+</div>`,
     example: () => <SwitchExample />,
     api: [
       { name: 'checked', type: 'boolean', description: 'Controlled checked state.' },
@@ -429,18 +490,10 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     whenToUse: 'Use for brief explanations of icons, buttons or status text. Do not hide information users must read to complete a task; use visible hint text instead.',
     howItWorks: 'The single child element is cloned and given the trigger handlers. With plain text or number content, the trigger receives aria-describedby while the popup is open, and the popup itself has role tooltip.',
     code: `<div className="tooltip-example">
-  <Tooltip title="Opens above the trigger" placement="top">
-    <button className="govuk-button govuk-button--secondary" type="button">Top</button>
-  </Tooltip>
-  <Tooltip title="Opens below the trigger" placement="bottom">
-    <button className="govuk-button govuk-button--secondary" type="button">Bottom</button>
-  </Tooltip>
-  <Tooltip title="Opens to the left" placement="left">
-    <button className="govuk-button govuk-button--secondary" type="button">Left</button>
-  </Tooltip>
-  <Tooltip title="Opens to the right" placement="right">
-    <button className="govuk-button govuk-button--secondary" type="button">Right</button>
-  </Tooltip>
+  <Tooltip title="Opens above the trigger" placement="top"><button className="govuk-button govuk-button--secondary" type="button">Top</button></Tooltip>
+  <Tooltip title="Opens below the trigger" placement="bottom"><button className="govuk-button govuk-button--secondary" type="button">Bottom</button></Tooltip>
+  <Tooltip title="Opens to the left" placement="left"><button className="govuk-button govuk-button--secondary" type="button">Left</button></Tooltip>
+  <Tooltip title="Opens to the right" placement="right"><button className="govuk-button govuk-button--secondary" type="button">Right</button></Tooltip>
 </div>`,
     example: () => <TooltipExample />,
     api: [
@@ -460,7 +513,15 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'Show a short success, informational, warning or error message about a recent action.',
     whenToUse: 'Use for the outcome of an action on the page, such as a save completing or a request failing. Use the error summary for form validation errors.',
     howItWorks: 'Error and warning alerts use the alert role so they are announced immediately; success and info alerts use the status role. An optional icon matches the type, and a closable alert shows a close button.',
-    code: `<Alert type="success" title="Application sent" description="You will receive a confirmation email." />`,
+    code: `const [closed, setClosed] = useState(false)
+return <div className="alert-example">
+  <Alert type="success" title="Application sent" description="You will receive a confirmation email." />
+  <Alert type="info" title="New version available" description="Refresh the page to get the latest changes." />
+  <Alert type="warning" title="Session ending soon" description="You will be signed out in 5 minutes." />
+  {closed
+    ? <button className="govuk-button govuk-button--secondary" type="button" onClick={() => setClosed(false)}>Restore error alert</button>
+    : <Alert type="error" title="There is a problem" description="Check the details you entered and try again." closable onClose={() => setClosed(true)} />}
+</div>`,
     example: () => <AlertExample />,
     api: [
       { name: 'type', type: "'success' | 'info' | 'warning' | 'error'", defaultValue: 'info', description: 'Semantic alert type.' },
@@ -481,11 +542,29 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'Show users where they are in a short linear sequence of steps.',
     whenToUse: 'Use for a short, linear sequence such as setup or a submission flow. Keep longer or non-linear journeys on separate pages.',
     howItWorks: 'Steps before the current index are finished and later steps are waiting, unless an item overrides its status. Clicking a step calls onChange with its index, and the active step carries aria-current.',
-    code: `<Steps current={1} onChange={setStep} items={[
-  { key: 'details', title: 'Your details' },
-  { key: 'upload', title: 'Upload evidence' },
-  { key: 'submit', title: 'Submit' },
-]} />`,
+    code: `const [current, setCurrent] = useState(1)
+return <div className="steps-example">
+  <Steps
+    current={current}
+    onChange={setCurrent}
+    items={[
+      { key: 'details', title: 'Your details', description: 'Name and address' },
+      { key: 'upload', title: 'Upload evidence' },
+      { key: 'check', title: 'Check answers', disabled: true },
+      { key: 'submit', title: 'Submit' },
+    ]}
+  />
+  <Steps
+    direction="vertical"
+    size="s"
+    defaultCurrent={1}
+    items={[
+      { key: 'account', title: 'Create account' },
+      { key: 'verify', title: 'Verify email', status: 'error', description: 'The link has expired' },
+      { key: 'start', title: 'Start application' },
+    ]}
+  />
+</div>`,
     example: () => <StepsExample />,
     api: [
       { name: 'items', type: 'StepItem[]', description: 'Steps with key, title, optional description, status, disabled and icon.' },
@@ -504,7 +583,13 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'Show how far along a task, upload or loading operation is.',
     whenToUse: 'Use for measurable progress such as a file upload or a multi-step save. Use Loading for waits without a known percentage.',
     howItWorks: 'The bar exposes role progressbar with aria-valuenow set to the clamped percentage. A value of 100 or more automatically uses the success treatment.',
-    code: `<Progress percent={60} status="active" />`,
+    code: `<div className="progress-example">
+  <Progress percent={30} />
+  <Progress percent={60} status="active" />
+  <Progress percent={100} />
+  <Progress percent={45} status="exception" />
+  <Progress percent={75} strokeColor="#1d70b8" size="s" />
+</div>`,
     example: () => <ProgressExample />,
     api: [
       { name: 'percent', type: 'number', description: 'Progress value between 0 and 100; values outside the range are clamped.' },
@@ -525,9 +610,19 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'Present the outcome of a page-level operation such as a submitted application or a failed payment.',
     whenToUse: 'Use after a form submission, payment or async operation resolves to a clear outcome. Keep the message short and offer the most likely next action.',
     howItWorks: 'Each status renders a matching icon and colour unless you supply your own. Error and warning results use the alert role so they are announced immediately; the extra area holds primary and secondary actions.',
-    code: `<Result status="success" title="Application submitted"
-  subTitle="Reference KZ-2026-0917"
-  extra={<Button onClick={viewStatus}>View status</Button>} />`,
+    code: `<div className="result-example">
+  <Result
+    status="success"
+    title="Application submitted"
+    subTitle="Reference KZ-2026-0917. We have emailed a copy of your answers."
+    extra={<><button className="govuk-button" type="button">View status</button><button className="govuk-button govuk-button--secondary" type="button">Start another</button></>}
+  />
+  <Result
+    status="404"
+    title="Page not found"
+    subTitle="Check the web address or return to the service home page."
+  />
+</div>`,
     example: () => <ResultExample />,
     api: [
       { name: 'status', type: "'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'", defaultValue: 'info', description: 'Result status; one of success, error, info, warning, 403, 404 or 500.' },
@@ -545,8 +640,13 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'Display a user or entity as an image, initials or a fallback icon.',
     whenToUse: 'Use in headers, record rows or comment lists to identify a person or organisation. Prefer initials or text over images alone when the audience is unknown.',
     howItWorks: 'An image src takes precedence, then text children such as initials, then a generic person icon. The shape accepts circle or square, and size accepts a named token or a pixel value.',
-    code: `<Avatar src="/team/ada.png" alt="Ada Lovelace" size="l" />
-<Avatar shape="square" bgColor="#000000">AK</Avatar>`,
+    code: `<div className="avatar-example">
+  <Avatar src="/team/ada.png" alt="Ada Lovelace" size="l" />
+  <Avatar size="l" bgColor="#1d70b8">AK</Avatar>
+  <Avatar shape="square" size="l" />
+  <Avatar size="s" />
+  <span className="govuk-body">Image, initials, square fallback and small sizes</span>
+</div>`,
     example: () => <AvatarExample />,
     api: [
       { name: 'src', type: 'string', description: 'Image source; initials or a fallback icon are shown otherwise.' },
@@ -558,6 +658,26 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
       { name: 'bgColor', type: 'string', description: 'Background colour for text or icon avatars.' },
       { name: 'color', type: 'string', description: 'Text and icon colour for text or icon avatars.' },
       { name: 'ref', type: 'Ref<HTMLSpanElement>', description: 'Avatar root element.' },
+    ],
+  },
+  {
+    slug: 'code-box',
+    name: 'CodeBox',
+    summary: 'Render a bordered code block with syntax highlighting.',
+    whenToUse: 'Use to show configuration or usage snippets inside documentation and tool pages. Pass pre-highlighted HTML at build time when the snippet is static.',
+    howItWorks: 'Without highlightedHtml the component lazily loads Shiki and highlights on the client, rendering escaped plain text first. Token colours follow the GitHub Light palette on a white background.',
+    code: `<CodeBox code={\`<Button onClick={save}>Save and continue</Button>\`} lang="tsx" />`,
+    example: () => <CodeBox code={`<FancyTable
+  columns={[{ key: 'name', title: 'Name', dataIndex: 'name' }]}
+  dataSource={[{ name: 'Amira Khan' }, { name: 'Chen Li' }]}
+  rowKey="name"
+/>`} lang="tsx" />,
+    api: [
+      { name: 'code', type: 'string', description: 'Raw source to display and highlight.' },
+      { name: 'lang', type: "'tsx' | 'typescript' | 'javascript' | 'json' | 'css' | 'html' | 'shellscript'", defaultValue: "'tsx'", description: 'Language used for client-side highlighting.' },
+      { name: 'highlightedHtml', type: 'string', description: 'Pre-highlighted HTML; skips the runtime highlighter when provided.' },
+      { name: 'className / style', type: 'string / CSSProperties', description: 'Root element overrides.' },
+      { name: 'ref', type: 'Ref<HTMLDivElement>', description: 'CodeBox root element.' },
     ],
   },
 ]

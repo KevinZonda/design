@@ -102,7 +102,7 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Help users return to the previous step in a multi-page service.',
     whenToUse: 'Use on question pages and other linear flows. Place it at the top of the main content and do not combine it with breadcrumbs.',
     howItWorks: 'The component renders a conventional link so browser behaviours such as opening in a new tab remain available.',
-    code: `<BackLink href="/previous-step">Back</BackLink>`,
+    code: `<BackLink href="#back-link">Back</BackLink>`,
     example: () => <BackLink href="#back-link">Back</BackLink>,
     api: [{ name: 'href', type: 'string', description: 'Destination for the previous step.' }, text('children', 'Link label.')],
   },
@@ -120,7 +120,8 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Help users carry out an action such as saving information or starting a service.',
     whenToUse: 'Use one clear primary action per page. Use a start button on a service start page, and group related actions together. Avoid disabled buttons unless user research supports them.',
     howItWorks: 'Supply href for navigation or htmlType for a native form button. Start buttons include the GOV.UK arrow. ButtonGroup aligns buttons and links. Disabled form buttons receive both disabled and aria-disabled; a loading button shows a spinner, blocks clicks and sets aria-busy.',
-    code: `<Button href="#start" isStartButton>Start now</Button>
+    code: `<div className="button-examples">
+<Button href="#start" isStartButton>Start now</Button>
 
 <ButtonGroup>
   <Button htmlType="submit">Save and continue</Button>
@@ -134,6 +135,7 @@ export const componentDocs: ComponentDoc[] = [
   <div className="button-examples__inverse">
     <Button type="inverse">Create an account</Button>
   </div>
+</div>
 </div>`,
     example: () => <div className="button-examples"><Button href="#start" isStartButton>Start now</Button><ButtonGroup><Button htmlType="submit">Save and continue</Button><Button type="secondary">Save as draft</Button><a className="govuk-link" href="#cancel">Cancel</a></ButtonGroup><div className="button-examples__variants"><Button disabled>Disabled button</Button><Button danger>Delete account</Button><div className="button-examples__inverse"><Button type="inverse">Create an account</Button></div></div></div>,
     api: [text('children', 'Button label.'), { name: 'type', type: `'primary' | 'secondary' | 'warning' | 'inverse'`, defaultValue: 'primary', description: 'Visual hierarchy.' }, { name: 'href', type: 'string', description: 'Renders a link styled as a button.' }, { name: 'htmlType', type: `'button' | 'submit' | 'reset'`, defaultValue: 'button', description: 'Native button type when href is not supplied.' }, { name: 'isStartButton', type: 'boolean', defaultValue: 'false', description: 'Use start button styling and the arrow icon.' }, { name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show a spinner, block clicks and set aria-busy while work is in progress.' }, { name: 'icon', type: 'ReactNode', description: 'Icon rendered inside the button; replaced by the spinner while loading.' }, { name: 'iconPosition', type: `'left' | 'right'`, defaultValue: 'left', description: 'Side of the label where the icon appears.' }, { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disables the button and adds aria-disabled. Links render inert and ignore clicks.' }, { name: 'preventDoubleClick', type: 'boolean', defaultValue: 'false', description: 'Ignore another button click within one second. Not applied to links.' }, { name: 'danger', type: 'boolean', defaultValue: 'false', description: 'Shortcut for the warning treatment.' }],
@@ -306,11 +308,13 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Highlight important information on confirmation or interruption pages.',
     whenToUse: 'Use the confirmation variant after a completed transaction, or the interruption variant to pause a journey for important information.',
     howItWorks: 'The title is the main heading. Interruption panels can include actions to let users resume or change their journey.',
-    code: `<Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel>
+    code: `<div style={{ display: 'grid', gap: 30 }}>
+<Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel>
 
 <Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" type="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}>
   <p className="govuk-body">You entered your age as <strong>109</strong>.</p>
-</Panel>`,
+</Panel>
+</div>`,
     example: () => <div style={{ display: 'grid', gap: 30 }}><Panel title="Application complete">Your reference number<br /><strong>HDJ2123F</strong></Panel><Panel variant="interruption" title="Is your age correct?" actions={<ButtonGroup><Button href="#continue" type="inverse">Yes, this is correct</Button><a className="govuk-link govuk-link--inverse" href="#change">No, change my age</a></ButtonGroup>}><p className="govuk-body">You entered your age as <strong>109</strong>.</p></Panel></div>,
     api: [text('title', 'Panel heading.'), { name: 'variant', type: `'confirmation' | 'interruption'`, defaultValue: 'confirmation', description: 'Panel style and purpose.' }, { name: 'headingLevel', type: '1 | 2 | 3 | 4 | 5 | 6', defaultValue: '1', description: 'Semantic heading level.' }, text('children', 'Supporting panel content.'), { name: 'actions', type: 'ReactNode', description: 'Buttons or links shown in the panel actions area; use inverse styles for interruption panels.' }],
   },
@@ -392,7 +396,16 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Present information in rows and columns for direct comparison.',
     whenToUse: 'Use when relationships between values are easier to understand in a grid. Do not use a table solely to lay out a page.',
     howItWorks: 'Column definitions map record fields to semantic headers and may format numeric values or identify row headers.',
-    code: `<Table caption="Dates and amounts" columns={columns} dataSource={rows} />`,
+    code: `<Table caption="Dates and amounts"
+  columns={[
+    { title: 'Date', dataIndex: 'date' },
+    { title: 'Amount', dataIndex: 'amount', numeric: true },
+  ]}
+  dataSource={[
+    { date: 'First 6 weeks', amount: '£109.80 per week' },
+    { date: 'Next 33 weeks', amount: '£109.80 per week' },
+    { date: 'Total estimated pay', amount: '£4,282.20' },
+  ]} />`,
     example: () => <Table caption="Dates and amounts" columns={[{ title: 'Date', dataIndex: 'date' }, { title: 'Amount', dataIndex: 'amount', numeric: true }]} dataSource={[{ date: 'First 6 weeks', amount: '£109.80 per week' }, { date: 'Next 33 weeks', amount: '£109.80 per week' }, { date: 'Total estimated pay', amount: '£4,282.20' }]} />,
     api: [{ name: 'columns', type: 'TableColumn<T>[]', description: 'Column titles, record keys, rowHeader flags and render functions.' }, { name: 'dataSource', type: 'T[]', description: 'Rows to render.' }, text('caption', 'Accessible table title.'), { name: 'styles', type: "TableProps<T>['styles']", description: 'Inline styles for root, caption, head, body, row, header and cell.' }, { name: 'classNames', type: "TableProps<T>['classNames']", description: 'CSS classes for root, caption, head, body, row, header and cell.' }],
   },
@@ -401,7 +414,31 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Let users switch between related sections of content.',
     whenToUse: 'Use when users benefit from comparing a small number of peer sections. Avoid tabs for sequential steps.',
     howItWorks: 'At tablet widths and above, the selected tab controls a labelled panel. On smaller screens the component becomes a table of contents and shows every panel in order.',
-    code: `<Tabs items={[{ key: 'past-day', label: 'Past day', children: <Table ... /> }]} />`,
+    code: `const caseTable = (title, rows) => <>
+  <h2 className="govuk-heading-l">{title}</h2>
+  <Table columns={[
+    { title: 'Case manager', dataIndex: 'manager' },
+    { title: 'Cases opened', dataIndex: 'opened' },
+    { title: 'Cases closed', dataIndex: 'closed' },
+  ]} dataSource={rows} />
+</>
+
+<Tabs items={[
+  { key: 'past-day', label: 'Past day', children: caseTable('Past day', [
+    { manager: 'David Francis', opened: 3, closed: 0 },
+    { manager: 'Paul Farmer', opened: 1, closed: 0 },
+    { manager: 'Rita Patel', opened: 2, closed: 0 },
+  ]) },
+  { key: 'past-week', label: 'Past week', children: caseTable('Past week', [
+    { manager: 'David Francis', opened: 24, closed: 18 },
+    { manager: 'Paul Farmer', opened: 16, closed: 20 },
+    { manager: 'Rita Patel', opened: 24, closed: 27 },
+  ]) },
+  { key: 'past-year', label: 'Past year', children: <>
+    <h2 className="govuk-heading-l">Past year</h2>
+    <p className="govuk-body">There is no data for this year yet, check back later</p>
+  </> },
+]} />`,
     example: () => <Tabs items={[
       { key: 'past-day', label: 'Past day', children: caseTable('Past day', [{ manager: 'David Francis', opened: 3, closed: 0 }, { manager: 'Paul Farmer', opened: 1, closed: 0 }, { manager: 'Rita Patel', opened: 2, closed: 0 }]) },
       { key: 'past-week', label: 'Past week', children: caseTable('Past week', [{ manager: 'David Francis', opened: 24, closed: 18 }, { manager: 'Paul Farmer', opened: 16, closed: 20 }, { manager: 'Rita Patel', opened: 24, closed: 27 }]) },
