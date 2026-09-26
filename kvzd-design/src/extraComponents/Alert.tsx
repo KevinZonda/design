@@ -1,4 +1,4 @@
-import { forwardRef, type HTMLAttributes, type ReactNode } from 'react'
+import { forwardRef, useId, type HTMLAttributes, type ReactNode } from 'react'
 import type { SemanticStyling } from '../components/index'
 
 export type AlertType = 'success' | 'info' | 'warning' | 'error'
@@ -15,14 +15,50 @@ export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
   showIcon?: boolean
 }
 
-const ICONS: Record<AlertType, ReactNode> = {
-  success: <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-  info: <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M10 9v5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /><circle cx="10" cy="6" r="1.4" fill="currentColor" /></svg>,
-  warning: <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2L19 18H1z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" /><path d="M10 8v5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /><circle cx="10" cy="15.4" r="1.3" fill="currentColor" /></svg>,
-  error: <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /></svg>,
+// Mask-based knockouts: the glyph is cut out of a solid shape, so the icon
+// background stays transparent instead of painting a fill colour.
+const renderIcon = (type: AlertType, maskId: string): ReactNode => {
+  const mask = `url(#${maskId})`
+  switch (type) {
+    case 'success':
+      return <svg viewBox="0 0 20 20" aria-hidden="true">
+        <mask id={maskId}>
+          <rect width="20" height="20" fill="#fff" />
+          <path d="M5.6 10.4l2.9 2.9 6-6.6" fill="none" stroke="#000" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        </mask>
+        <circle cx="10" cy="10" r="9" fill="currentColor" mask={mask} />
+      </svg>
+    case 'info':
+      return <svg viewBox="0 0 20 20" aria-hidden="true">
+        <mask id={maskId}>
+          <rect width="20" height="20" fill="#fff" />
+          <path d="M10 9.3V15" fill="none" stroke="#000" strokeWidth="2.4" strokeLinecap="round" />
+          <circle cx="10" cy="6.3" r="1.5" fill="#000" />
+        </mask>
+        <circle cx="10" cy="10" r="9" fill="currentColor" mask={mask} />
+      </svg>
+    case 'warning':
+      return <svg viewBox="0 0 20 20" aria-hidden="true">
+        <mask id={maskId}>
+          <rect width="20" height="20" fill="#fff" />
+          <path d="M10 8.2v4.6" fill="none" stroke="#000" strokeWidth="2.4" strokeLinecap="round" />
+          <circle cx="10" cy="15.3" r="1.4" fill="#000" />
+        </mask>
+        <path d="M10 2.2L18.4 17.5H1.6z" fill="currentColor" mask={mask} />
+      </svg>
+    case 'error':
+      return <svg viewBox="0 0 20 20" aria-hidden="true">
+        <mask id={maskId}>
+          <rect width="20" height="20" fill="#fff" />
+          <path d="M7.2 7.2l5.6 5.6M12.8 7.2l-5.6 5.6" fill="none" stroke="#000" strokeWidth="2.4" strokeLinecap="round" />
+        </mask>
+        <circle cx="10" cy="10" r="9" fill="currentColor" mask={mask} />
+      </svg>
+  }
 }
 
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert({ type = 'info', title, description, action, closable = false, onClose, closeText, showIcon = true, children, className = '', classNames, style, styles, ...props }, ref) {
+  const iconMaskId = `kvzd-alert-icon-${useId().replaceAll(':', '')}`
   return <div
     {...props}
     ref={ref}
@@ -30,7 +66,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert({ typ
     className={`kvzd-design-alert kvzd-design-alert--${type} ${classNames?.root ?? ''} ${className}`.trim()}
     style={{ ...styles?.root, ...style }}
   >
-    {showIcon && <span className={`kvzd-design-alert__icon ${classNames?.icon ?? ''}`.trim()} style={styles?.icon}>{ICONS[type]}</span>}
+    {showIcon && <span className={`kvzd-design-alert__icon ${classNames?.icon ?? ''}`.trim()} style={styles?.icon}>{renderIcon(type, iconMaskId)}</span>}
     <div className="kvzd-design-alert__body">
       {title && <p className={`kvzd-design-alert__title ${classNames?.title ?? ''}`.trim()} style={styles?.title}>{title}</p>}
       {children && <div className={`kvzd-design-alert__message ${classNames?.message ?? ''}`.trim()} style={styles?.message}>{children}</div>}
