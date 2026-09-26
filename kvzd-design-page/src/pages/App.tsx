@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { Link, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { Breadcrumbs, Button, Pagination, Table, Tag } from '@kevinzonda/design/components'
-import { FancyTabs, Note, Sidebar } from '@kevinzonda/design/extraComponents'
+import { FancyTabs, Note, Sidebar, CodeBox } from '@kevinzonda/design/extraComponents'
 import { componentBySlug, componentDocs, type ComponentDoc } from './componentRegistry'
 import { extraComponentBySlug, extraComponentDocs, type ExtraComponentDoc } from './extraComponentRegistry'
 import { DocsFooter, DocsHeader } from './DocsChrome'
@@ -11,8 +11,15 @@ import { localeFromPath, localizedPath, message, pageTitle, useLocale, type Loca
 import { localizedComponent, localizedExtraComponent } from './zhDocs'
 import { chineseApiDescription } from './zhApi'
 import { sitePath } from './sitePath'
+import highlightedCode from '../generated/highlightedCode.json'
 import './DocsLayout.css'
 import './ComponentDocs.css'
+
+const highlightedBySlug = highlightedCode as Record<string, string>
+
+function CodeBlock({ slug, code }: { slug: string; code: string }) {
+  return <CodeBox code={code} highlightedHtml={highlightedBySlug[slug]} />
+}
 
 function pathFor(slug: string, locale: Locale) {
   return sitePath(localizedPath(`/components/${slug}/`, locale))
@@ -61,7 +68,7 @@ function ExampleBlock({ component, guidanceUrl }: { component: ComponentDoc | Ex
     <div className="example-heading"><h2 className="govuk-heading-l" id="example-title">{message(locale, 'example')}</h2>{guidanceUrl && <a className="govuk-link" href={guidanceUrl} target="_blank" rel="noreferrer">{message(locale, 'guidance')}</a>}</div>
     <FancyTabs items={[
       { key: 'example', label: message(locale, 'preview'), children: <div className={`example-canvas ${component.wide ? 'example-canvas--wide' : ''}`}>{component.example()}</div> },
-      { key: 'react', label: 'React', children: <pre className="code-block"><code>{component.code}</code></pre> },
+      { key: 'react', label: 'React', children: <CodeBlock slug={component.slug} code={component.code} /> },
     ]} />
   </section>
 }
