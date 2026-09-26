@@ -108,8 +108,8 @@
    state is driven by pointer handlers in Slider.tsx, not :active: the input
    has pointer-events:none, so neither element-level nor thumb-level :active
    ever matches in Blink. */
-.kvzd-design-slider__input--pressed::-webkit-slider-thumb,
-.kvzd-design-slider__input--pressed::-moz-range-thumb {
+.kvzd-design-slider__input--pressed:not(:disabled)::-webkit-slider-thumb,
+.kvzd-design-slider__input--pressed:not(:disabled)::-moz-range-thumb {
   background: var(--govuk-text-colour);
   cursor: grabbing;
 }
