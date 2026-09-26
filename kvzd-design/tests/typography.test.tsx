@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, expect, test } from 'vitest'
-import { Paragraph, Text, Title, Typography } from '../src/typography'
+import { Paragraph, Text, Title, Typography, H1, H2, H3, H4, H5, H6 } from '../src/typography'
 
 afterEach(cleanup)
 
@@ -77,4 +77,28 @@ test('Typography exposes Title, Text and Paragraph', () => {
   expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('T')
   expect(screen.getByText('tx').tagName).toBe('SPAN')
   expect(screen.getByText('pg').tagName).toBe('P')
+})
+
+test('H1-H6 render the matching heading level with the default variant', () => {
+  render(<>
+    <H1>One</H1>
+    <H2>Two</H2>
+    <H3>Three</H3>
+    <H4>Four</H4>
+    <H5>Five</H5>
+    <H6>Six</H6>
+  </>)
+  expect(screen.getByRole('heading', { level: 1 }).className).toContain('govuk-heading-l')
+  expect(screen.getByRole('heading', { level: 2 }).className).toContain('govuk-heading-m')
+  expect(screen.getByRole('heading', { level: 3 }).className).toContain('govuk-heading-s')
+  expect(screen.getByRole('heading', { level: 4 }).className).toContain('govuk-heading-s')
+  expect(screen.getByRole('heading', { level: 5 }).className).toContain('govuk-heading-s')
+  expect(screen.getByRole('heading', { level: 6 }).className).toContain('govuk-heading-s')
+})
+
+test('H1-H6 accept variant overrides and forward refs', () => {
+  let node: HTMLHeadingElement | null = null
+  render(<H2 variant="xl" ref={(value) => { node = value }}>Big section</H2>)
+  expect(node?.tagName).toBe('H2')
+  expect(node?.className).toContain('govuk-heading-xl')
 })

@@ -63,6 +63,17 @@ with `href`, a button with only `onClick`, or plain text with neither. Flags
 such as `noVisitedState`, `muted` and `inverse` map to the GOV.UK link
 variants.
 
+`H1` through `H6` are shorthand for `Title` with a fixed level, and `Title`,
+`Text`, `Paragraph` and `Link` are also exported directly:
+
+```tsx
+import { H1, H2, Paragraph } from '@kevinzonda/design'
+
+<H1 variant="xl">Apply for a licence</H1>
+<H2>Your personal details</H2>
+<Paragraph>Use body text for most content.</Paragraph>
+```
+
 ## API principles
 
 - Ant Design-style props such as `items`, `options`, `value`, `onChange`, `status` and `type`.

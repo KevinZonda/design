@@ -78,3 +78,18 @@ export const Paragraph = forwardRef<HTMLParagraphElement, ParagraphProps>(functi
 })
 
 export const Typography = { Link, Paragraph, Text, Title }
+
+type HeadingHelperProps = Omit<TitleProps, 'level'>
+
+/** Title fixed to level 1. Shorthand for `<Typography.Title level={1}>`. */
+export const H1 = forwardRef<HTMLHeadingElement, HeadingHelperProps>(function H1(props, ref) { return <Title ref={ref} level={1} {...props} /> })
+/** Title fixed to level 2. Shorthand for `<Typography.Title level={2}>`. */
+export const H2 = forwardRef<HTMLHeadingElement, HeadingHelperProps>(function H2(props, ref) { return <Title ref={ref} level={2} {...props} /> })
+/** Title fixed to level 3. Shorthand for `<Typography.Title level={3}>`. */
+export const H3 = forwardRef<HTMLHeadingElement, HeadingHelperProps>(function H3(props, ref) { return <Title ref={ref} level={3} {...props} /> })
+/** Title fixed to level 4. Shorthand for `<Typography.Title level={4}>`. */
+export const H4 = forwardRef<HTMLHeadingElement, HeadingHelperProps>(function H4(props, ref) { return <Title ref={ref} level={4} {...props} /> })
+/** Title fixed to level 5. Shorthand for `<Typography.Title level={5}>`. */
+export const H5 = forwardRef<HTMLHeadingElement, HeadingHelperProps>(function H5(props, ref) { return <Title ref={ref} level={5} {...props} /> })
+/** Title fixed to level 6. Shorthand for `<Typography.Title level={6}>`. */
+export const H6 = forwardRef<HTMLHeadingElement, HeadingHelperProps>(function H6(props, ref) { return <Title ref={ref} level={6} {...props} /> })
