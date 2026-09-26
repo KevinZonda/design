@@ -20,38 +20,48 @@ const fancyTabsCode = `<FancyTabs items={[
   {
     key: 'summary',
     label: 'Summary',
-    children: <p>Review the application before continuing.</p>,
+    children: <p className="govuk-body govuk-!-margin-top-4">Review the application before continuing.</p>,
   },
   {
     key: 'details',
     label: 'Details',
-    children: <p>The application contains 3 sections.</p>,
+    children: <p className="govuk-body govuk-!-margin-top-4">The application contains 3 sections.</p>,
   },
 ]} />`
 
-const sidebarCode = `<Sidebar
-  heading="Pages in this section"
-  currentKey="history"
-  items={[
-    { key: 'accordion', label: 'Accordion', href: '/accordion/', children: [
-      { key: 'history', label: 'History', href: '/accordion/history/' },
-    ] },
-    { key: 'fancy-tabs', label: 'FancyTabs', href: '/fancy-tabs/' },
-  ]}
-/>
-
-<Sidebar
-  heading="Documentation"
-  collapsible
-  currentKey="sidebar-api"
-  items={[
-    { key: 'examples', label: 'Examples', children: [
-      { key: 'sidebar', label: 'Sidebar', href: '/sidebar/', children: [
-        { key: 'sidebar-api', label: 'React API', href: '/sidebar/#api-title' },
+const sidebarCode = `<p className="govuk-body"><strong>Nested navigation</strong></p>
+<div className="sidebar-example">
+  <Sidebar
+    heading="Pages in this section"
+    currentKey="history"
+    items={[
+      { key: 'accordion', label: 'Accordion', href: '#example-title', children: [
+        { key: 'history', label: 'History', href: '#api-title' },
       ] },
-    ] },
-  ]}
-/>`
+      { key: 'fancy-tabs', label: 'FancyTabs', href: '#guidance-title' },
+    ]}
+  />
+</div>
+
+<p className="govuk-body"><strong>Collapsible navigation</strong></p>
+<div className="sidebar-example">
+  <Sidebar
+    heading="Documentation"
+    collapsible
+    currentKey="sidebar-api"
+    items={[
+      { key: 'examples', label: 'Examples', children: [
+        { key: 'fancy-tabs', label: 'FancyTabs', href: '#example-title' },
+        { key: 'sidebar', label: 'Sidebar', href: '#example-title', children: [
+          { key: 'sidebar-api', label: 'React API', href: '#api-title' },
+        ] },
+      ] },
+      { key: 'reference', label: 'Reference', children: [
+        { key: 'guidance', label: 'When to use', href: '#guidance-title' },
+      ] },
+    ]}
+  />
+</div>`
 
 export const extraComponentDocs: ExtraComponentDoc[] = [
   {
@@ -91,9 +101,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'A clear state for a list, table or search with no records to display.',
     whenToUse: 'Show when a view has no data or a filter returns no results. Explain the reason or offer a next step when useful.',
     howItWorks: 'A visible heading, optional description and action sit inside a neutral surface. The illustration is decorative and can be replaced.',
-    code: `<Empty title="No applications found" description="Try changing your filters.">
-  <button type="button">Clear filters</button>
-</Empty>`,
+    code: `<Empty title="No applications found" description="Try changing your filters." />`,
     example: () => <Empty title="No applications found" description="Try changing your filters." />,
     api: [
       { name: 'title', type: 'ReactNode', defaultValue: 'No results found', description: 'Short explanation of the empty state.' },
@@ -275,7 +283,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     whenToUse: 'Use for supporting guidance that needs more emphasis than ordinary body text without implying a warning or success state.',
     howItWorks: 'The optional title appears above the content. Note accepts normal div attributes, so a page can add a class for local spacing.',
     code: `<Note title="React implementation">
-  <p>State changes stay inside React.</p>
+  <p>State changes stay inside React. The rendered markup uses GOV.UK classes and semantic HTML.</p>
 </Note>`,
     example: () => <Note title="React implementation"><p>State changes stay inside React. The rendered markup uses GOV.UK classes and semantic HTML.</p></Note>,
     api: [
@@ -337,11 +345,11 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
   title="Back link"
   description="Help users return to the previous step in a multi-page service."
   footer={<>
-    <a href="/components/back-link/">View documentation</a>
-    <a href="#top">Back to top</a>
+    <a className="govuk-link" href="#example-title">View documentation</a>
+    <a className="govuk-link" href="#top">Back to top</a>
   </>}
 >
-  <BackLink href="#previous">Back</BackLink>
+  <a className="govuk-back-link" href="#example-title">Back</a>
 </ShowcaseBox>`,
     example: () => <ShowcaseBox
       title="Back link"
@@ -365,7 +373,7 @@ export const extraComponentDocs: ExtraComponentDoc[] = [
     summary: 'A neutral outlined label for short metadata such as a version number.',
     whenToUse: <>Use for metadata that does not communicate a status. Use the standard <Link className="govuk-link" to="/en/components/tag/">Tag</Link> when the label communicates a status.</>,
     howItWorks: 'It renders a span and accepts standard span attributes and an optional className.',
-    code: '<TagBox>6.5.1</TagBox>',
+    code: `<div className="tag-box-example">\n  <TagBox>6.5.1</TagBox>\n  <TagBox>Release candidate</TagBox>\n</div>`,
     example: () => <div className="tag-box-example"><TagBox>6.5.1</TagBox><TagBox>Release candidate</TagBox></div>,
     api: [
       { name: 'children', type: 'ReactNode', description: 'Short text or other inline content displayed inside the box.' },
