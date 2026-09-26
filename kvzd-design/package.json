@@ -31,6 +31,10 @@
       "types": "./dist-lib/extraComponents/index.d.ts",
       "import": "./dist-lib/extraComponents.js"
     },
+    "./kss": {
+      "types": "./dist-lib/kss/index.d.ts",
+      "import": "./dist-lib/kss.js"
+    },
     "./style.css": "./dist-lib/style.css"
   },
   "publishConfig": {

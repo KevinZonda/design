@@ -4,9 +4,8 @@ This repository is a pnpm workspace containing the `@kevinzonda/design` React co
 
 ## Packages
 
-- `kvzd-design` — publishable `@kevinzonda/design` package. Its `src/components` and `src/extraComponents` directories provide the two component groups.
+- `kvzd-design` — publishable `@kevinzonda/design` package. Its `src/components` and `src/extraComponents` directories provide the two component groups. The `src/kss` directory provides the `@kevinzonda/design/kss` inline-style shorthand (`kss('mb0', 'fs19')`).
 - `kvzd-design-page` — private Vite documentation website that consumes the library through the workspace.
-- `kvzd-kss` — publishable `@kevinzonda/kss` package: typed shorthand for React inline styles (`kss('mb0', 'fs19')` → `{ marginBottom: 0, fontSize: 19 }`).
 
 ## Development
 

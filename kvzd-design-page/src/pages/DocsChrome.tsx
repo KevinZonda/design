@@ -1,7 +1,7 @@
 import { useMemo, useState, type MouseEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Footer, Header, LanguageNavigation, SearchInput, ServiceNavigation, SkipLink } from '@kevinzonda/design/components'
-import { kss } from '@kevinzonda/kss'
+import { kss } from '@kevinzonda/design/kss'
 import { TagBox } from '@kevinzonda/design/extraComponents'
 import { componentDocs } from './componentRegistry'
 import { DocsLink } from './DocsLink'

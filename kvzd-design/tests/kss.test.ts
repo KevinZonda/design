@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { kss } from '../src/index'
+import { kss } from '../src/kss'
 
 describe('kss', () => {
   it('maps margin tokens to pixel values', () => {

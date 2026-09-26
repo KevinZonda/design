@@ -18,6 +18,7 @@ export default defineConfig({
         index: 'src/index.ts',
         components: 'src/components/index.ts',
         extraComponents: 'src/extraComponents/index.ts',
+        kss: 'src/kss/index.ts',
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,

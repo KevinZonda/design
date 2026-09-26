@@ -121,6 +121,27 @@ being customised. `style` takes precedence over `styles.root`.
 Use CSS classes for responsive and interaction states; inline styles are best
 for values that depend on runtime data.
 
+### Style shorthand
+
+`@kevinzonda/design/kss` exports `kss()`, a typed shorthand for the `style`
+objects accepted by every component:
+
+```tsx
+import { kss } from '@kevinzonda/design/kss'
+
+<Text style={kss('mb0')}>Small</Text>
+// → { marginBottom: 0 }
+
+<Button style={kss('mb0', loading && 'fs19')}>Save</Button>
+// → { marginBottom: 0, fontSize: 19 } while loading, else { marginBottom: 0 }
+```
+
+Numbers are pixel values. Spacing tokens cover `m` and `p` with the optional
+side `t`/`b`/`l`/`r`/`x`/`y` (`mb0`, `mx12`, `py16`, negative margins such as
+`mt-20`), plus `fs` (fontSize), `w` (width) and `h` (height). Falsy arguments
+are skipped, which enables conditional tokens. Merge handwritten properties
+with the spread operator: `style={{ ...kss('m0'), flex: 'none' }}`.
+
 Library-specific CSS classes and custom properties use the `kvzd-design-`
 prefix. GOV.UK classes and colour variables keep their `govuk-` names.
 

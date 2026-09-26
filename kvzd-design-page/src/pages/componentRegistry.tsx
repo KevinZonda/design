@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { H2, Paragraph } from '@kevinzonda/design'
-import { kss } from '@kevinzonda/kss'
+import { kss } from '@kevinzonda/design/kss'
 import { Link } from '@kevinzonda/design/components'
 import {
   Accordion,

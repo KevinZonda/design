@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { H1, H2, Paragraph } from '@kevinzonda/design'
-import { kss } from '@kevinzonda/kss'
+import { kss } from '@kevinzonda/design/kss'
 import { Breadcrumbs, Button, Link, Pagination, Table, Tag } from '@kevinzonda/design/components'
 import { FancyTabs, Note, Sidebar, CodeBox } from '@kevinzonda/design/extraComponents'
 import { componentBySlug, componentDocs, type ComponentDoc } from './componentRegistry'

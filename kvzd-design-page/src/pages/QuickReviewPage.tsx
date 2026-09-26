@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { H1, H2, H3, Paragraph } from '@kevinzonda/design'
-import { kss } from '@kevinzonda/kss'
+import { kss } from '@kevinzonda/design/kss'
 import { Link, SearchInput, Tag } from '@kevinzonda/design/components'
 import { ShowcaseBox, Sidebar } from '@kevinzonda/design/extraComponents'
 import './QuickReviewPage.css'

@@ -2,10 +2,10 @@
   "name": "@kevinzonda/design-workspace",
   "private": true,
   "scripts": {
-    "build": "pnpm --filter @kevinzonda/design build && pnpm --filter @kevinzonda/kss build && pnpm --filter @kevinzonda/design-page build",
-    "build:lib": "pnpm --filter @kevinzonda/design build && pnpm --filter @kevinzonda/kss build",
-    "build:pages": "pnpm --filter @kevinzonda/design build && pnpm --filter @kevinzonda/kss build && pnpm --filter @kevinzonda/design-page build",
-    "dev": "pnpm --filter @kevinzonda/design build && pnpm --filter @kevinzonda/kss build && pnpm --filter @kevinzonda/design-page dev",
+    "build": "pnpm --filter @kevinzonda/design build && pnpm --filter @kevinzonda/design-page build",
+    "build:lib": "pnpm --filter @kevinzonda/design build",
+    "build:pages": "pnpm --filter @kevinzonda/design build && pnpm --filter @kevinzonda/design-page build",
+    "dev": "pnpm --filter @kevinzonda/design build && pnpm --filter @kevinzonda/design-page dev",
     "lint": "pnpm -r lint"
   },
   "devDependencies": {

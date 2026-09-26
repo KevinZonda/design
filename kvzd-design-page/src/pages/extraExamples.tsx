@@ -1,6 +1,6 @@
 import { useState, type Key } from 'react'
 import { Paragraph, Text } from '@kevinzonda/design'
-import { kss } from '@kevinzonda/kss'
+import { kss } from '@kevinzonda/design/kss'
 import { Button, Input } from '@kevinzonda/design/components'
 import { Alert, Avatar, Dropdown, FancyTable, Form, Menu, Modal, Progress, Result, Steps, Switch, Tooltip } from '@kevinzonda/design/extraComponents'
 
