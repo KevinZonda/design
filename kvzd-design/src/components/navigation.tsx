@@ -118,7 +118,9 @@ function PaginationBlockLink({ direction, link, fallbackText }: { direction: 'pr
   const title = link.text ?? fallbackText
   // Block-style icons always precede the title (GOV.UK template): the CSS
   // floats them into the link's left padding, so trailing icons drop a line.
-  return <div className={`govuk-pagination__${direction}`}><ClickTarget className="govuk-link govuk-pagination__link" href={link.href} onClick={link.onClick} anchorProps={{ rel: direction, 'aria-label': typeof link.label === 'string' ? link.label : undefined }}><PaginationArrow direction={direction} /><span className="govuk-pagination__link-title">{title}</span></ClickTarget></div>
+  // The optional label renders visibly below the title (GOV.UK link-label),
+  // and the title keeps its decorative underline only when no label follows.
+  return <div className={`govuk-pagination__${direction}`}><ClickTarget className="govuk-link govuk-pagination__link" href={link.href} onClick={link.onClick} anchorProps={{ rel: direction }}><PaginationArrow direction={direction} /><span className={`govuk-pagination__link-title ${link.label ? '' : 'govuk-pagination__link-title--decorated'}`.trim()}>{title}</span>{link.label && <><span className="govuk-visually-hidden">:</span><span className="govuk-pagination__link-label">{link.label}</span></>}</ClickTarget></div>
 }
 /** Window the page numbers: first/last page, the current page and its neighbours, joined by ellipses. */
 function pageWindow(current: number, total: number): Array<number | 'ellipsis'> {
