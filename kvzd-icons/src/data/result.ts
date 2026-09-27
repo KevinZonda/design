@@ -25,12 +25,6 @@ export const resultWarning: IconData = {
   body: '<path d="M12 2.67L22.67 20.67H1.33z" stroke-width="1.5"/><path d="M12 9.33V14" stroke-width="2.25"/><circle cx="12" cy="16.67" r="1.13" fill="currentColor" stroke="none"/>',
 }
 
-export const lock: IconData = {
-  strokeWidth: RESULT_STROKE_WIDTH,
-  // The 403 lock from Result.tsx.
-  body: '<rect x="4.67" y="10" width="14.67" height="10" rx="1.33" stroke-width="1.5"/><path d="M8 10V6.67a4 4 0 0 1 8 0V10" stroke-width="1.5"/><circle cx="12" cy="14.67" r="1.33" fill="currentColor" stroke="none"/><path d="M12 16v2" stroke-width="1.5"/>',
-}
-
 export const result404: IconData = {
   strokeWidth: RESULT_STROKE_WIDTH,
   // Two ghost eyes with a clear gap, and the original 45° slash passing

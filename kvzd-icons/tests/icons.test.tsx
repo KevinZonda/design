@@ -2,9 +2,12 @@
 import { cleanup, render } from '@testing-library/react'
 import { afterEach, expect, test } from 'vitest'
 import {
+  ArrowDownIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
+  ArrowUpIcon,
   CaretDownIcon,
+  CaretLeftIcon,
   CaretRightIcon,
   CaretUpIcon,
   CheckCircleIcon,
@@ -12,6 +15,7 @@ import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  ChevronUpIcon,
   ClockIcon,
   CloseIcon,
   ErrorCircleIcon,
@@ -30,6 +34,7 @@ import {
   ServiceLogoIcon,
   SpinnerIcon,
   StartArrowIcon,
+  UserFilledIcon,
   UserIcon,
   WarningTriangleIcon,
   iconPaths,
@@ -38,20 +43,21 @@ import {
 afterEach(cleanup)
 
 const STROKE_ICONS = [
-  ['SearchIcon', SearchIcon],
-  ['ClockIcon', ClockIcon],
   ['CloseIcon', CloseIcon],
   ['CheckIcon', CheckIcon],
+  ['SpinnerIcon', SpinnerIcon],
+  ['SearchIcon', SearchIcon],
+  ['ClockIcon', ClockIcon],
+  ['UserIcon', UserIcon],
+  ['ChevronDownIcon', ChevronDownIcon],
+  ['ChevronUpIcon', ChevronUpIcon],
   ['ChevronLeftIcon', ChevronLeftIcon],
   ['ChevronRightIcon', ChevronRightIcon],
-  ['ChevronDownIcon', ChevronDownIcon],
-  ['SpinnerIcon', SpinnerIcon],
-  ['UserIcon', UserIcon],
+  ['LockIcon', LockIcon],
   ['ResultSuccessIcon', ResultSuccessIcon],
   ['ResultErrorIcon', ResultErrorIcon],
   ['ResultInfoIcon', ResultInfoIcon],
   ['ResultWarningIcon', ResultWarningIcon],
-  ['LockIcon', LockIcon],
   ['Result404Icon', Result404Icon],
   ['Result500Icon', Result500Icon],
 ] as const
@@ -60,9 +66,13 @@ const FILLED_ICONS = [
   ['CaretUpIcon', CaretUpIcon],
   ['CaretDownIcon', CaretDownIcon],
   ['CaretRightIcon', CaretRightIcon],
+  ['CaretLeftIcon', CaretLeftIcon],
   ['FilterIcon', FilterIcon],
-  ['ArrowLeftIcon', ArrowLeftIcon],
+  ['UserFilledIcon', UserFilledIcon],
   ['ArrowRightIcon', ArrowRightIcon],
+  ['ArrowLeftIcon', ArrowLeftIcon],
+  ['ArrowDownIcon', ArrowDownIcon],
+  ['ArrowUpIcon', ArrowUpIcon],
   ['StartArrowIcon', StartArrowIcon],
   ['PaginationArrowPrevIcon', PaginationArrowPrevIcon],
   ['PaginationArrowNextIcon', PaginationArrowNextIcon],
@@ -91,7 +101,7 @@ test.each(STROKE_ICONS)('%s uses stroke="currentColor" with round caps', (_name,
 })
 
 test('core stroke icons default to stroke-width 2', () => {
-  for (const [name, Icon] of STROKE_ICONS.slice(0, 9)) {
+  for (const [name, Icon] of STROKE_ICONS.slice(0, 10)) {
     const { container, unmount } = render(<Icon />)
     expect(container.querySelector('svg')!.getAttribute('stroke-width'), name).toBe('2')
     unmount()
@@ -142,10 +152,18 @@ test('filled status icons knock the glyph out with evenodd', () => {
   expect(container.querySelector('path')!.getAttribute('fill-rule')).toBe('evenodd')
 })
 
-test('iconPaths covers all 30 icons with matching metadata', () => {
+test('rotated direction icons wrap the glyph in a rotate transform', () => {
+  const { container } = render(<PaginationArrowNextIcon />)
+  const group = container.querySelector('g')!
+  expect(group.getAttribute('transform')).toBe('rotate(180 12 12)')
+  // The canonical path is rendered untouched inside the group.
+  expect(group.querySelector('path')!.getAttribute('d')).toContain('m10.55 1.5')
+})
+
+test('iconPaths covers all 35 icons with matching metadata', () => {
   const components = [...STROKE_ICONS, ...FILLED_ICONS].map(([name]) => name)
-  expect(components).toHaveLength(30)
-  expect(Object.keys(iconPaths)).toHaveLength(30)
+  expect(components).toHaveLength(35)
+  expect(Object.keys(iconPaths)).toHaveLength(35)
   for (const [name] of [...STROKE_ICONS, ...FILLED_ICONS]) {
     const key = name.slice(0, -'Icon'.length).replace(/^[A-Z]/, (c) => c.toLowerCase())
     const entry = iconPaths[key]
@@ -154,4 +172,10 @@ test('iconPaths covers all 30 icons with matching metadata', () => {
     expect(entry.body.length).toBeGreaterThan(0)
     expect(entry.filled).toBe(FILLED_ICONS.some(([n]) => n === name))
   }
+})
+
+test('iconPaths bakes the rotation into derived direction icons', () => {
+  expect(iconPaths.paginationArrowNext.body).toContain('rotate(180 12 12)')
+  expect(iconPaths.paginationArrowPrev.body).not.toContain('rotate(')
+  expect(iconPaths.chevronLeft.body).toContain('rotate(90 12 12)')
 })

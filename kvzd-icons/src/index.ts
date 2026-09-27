@@ -1,4 +1,5 @@
 export * from './icons/actions'
+export * from './icons/forms'
 export * from './icons/arrows'
 export * from './icons/status'
 export * from './icons/result'

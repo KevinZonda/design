@@ -59,7 +59,7 @@ function SideNavigation({ currentSlug, section }: { currentSlug?: string; sectio
       items={([
         ['usage', 'iconsUsage'],
         ['actions', 'iconGroupActions'],
-        ['table', 'iconGroupTable'],
+        ['forms', 'iconGroupForms'],
         ['arrows', 'iconGroupArrows'],
         ['status', 'iconGroupStatus'],
         ['result', 'iconGroupResult'],

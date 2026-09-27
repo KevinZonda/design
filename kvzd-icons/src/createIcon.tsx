@@ -9,6 +9,21 @@ export interface IconData {
   viewBox?: string
   /** Default stroke width for stroke-based icons. Defaults to 2. */
   strokeWidth?: number
+  /** Rotate the glyph around the viewBox centre; used to derive icon directions
+   * (e.g. prev/next arrows) from a single canonical path. Lossless for both
+   * fill and stroke icons. */
+  rotate?: 90 | 180 | 270
+}
+
+/** Derive a rotated variant of an icon without duplicating its path data. */
+export function rotateIcon(data: IconData, rotate: 90 | 180 | 270): IconData {
+  return { ...data, rotate }
+}
+
+/** Centre point "cx cy" of a viewBox string, for rotate() transforms. */
+export function viewBoxCenter(viewBox: string): string {
+  const [x, y, width, height] = viewBox.split(' ').map(Number)
+  return `${x + width / 2} ${y + height / 2}`
 }
 
 const TAG_PATTERN = /<(circle|path|polygon|rect)\s+([^/>]*?)\/?>(?:<\/\1>)?/g
@@ -41,7 +56,7 @@ function parseBody(body: string): ReactNode[] {
 }
 
 export function createIcon(displayName: string, data: IconData): FC<IconProps> {
-  const { body, filled = false, viewBox = '0 0 24 24' } = data
+  const { body, filled = false, viewBox = '0 0 24 24', rotate } = data
   const content = parseBody(body)
   const defaultStrokeWidth = data.strokeWidth ?? 2
   const Icon: FC<IconProps> = ({ size = 24, strokeWidth = defaultStrokeWidth, ...rest }) => (
@@ -57,7 +72,7 @@ export function createIcon(displayName: string, data: IconData): FC<IconProps> {
       aria-hidden="true"
       {...rest}
     >
-      {content}
+      {rotate ? <g transform={`rotate(${rotate} ${viewBoxCenter(viewBox)})`}>{content}</g> : content}
     </svg>
   )
   Icon.displayName = displayName

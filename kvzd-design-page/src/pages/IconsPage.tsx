@@ -3,11 +3,12 @@ import { H1, H2, Paragraph } from '@kevinzonda/design'
 import { Table } from '@kevinzonda/design/components'
 import { CodeBox } from '@kevinzonda/design/extraComponents'
 import {
-  ArrowLeftIcon, ArrowRightIcon, CaretDownIcon, CaretRightIcon, CaretUpIcon, CheckCircleIcon, CheckIcon,
-  ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, CloseIcon, ErrorCircleIcon, FilterIcon,
-  InfoCircleIcon, LockIcon, PaginationArrowNextIcon, PaginationArrowPrevIcon, Result404Icon, Result500Icon,
-  ResultErrorIcon, ResultInfoIcon, ResultSuccessIcon, ResultWarningIcon, SearchIcon, ServiceLogoIcon,
-  SpinnerIcon, StartArrowIcon, UserIcon, WarningTriangleIcon,
+  ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon, CaretDownIcon, CaretLeftIcon, CaretRightIcon,
+  CaretUpIcon, CheckCircleIcon, CheckIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon,
+  ClockIcon, CloseIcon, ErrorCircleIcon, FilterIcon, InfoCircleIcon, LockIcon, PaginationArrowNextIcon,
+  PaginationArrowPrevIcon, Result404Icon, Result500Icon, ResultErrorIcon, ResultInfoIcon, ResultSuccessIcon,
+  ResultWarningIcon, SearchIcon, ServiceLogoIcon, SpinnerIcon, StartArrowIcon, UserFilledIcon, UserIcon,
+  WarningTriangleIcon,
   type IconProps,
 } from '@kevinzonda/icons'
 import { message, pageTitle, useLocale, type MessageKey } from './i18n'
@@ -32,27 +33,33 @@ const entry = (name: string, pathKey: string, Component: IconComponent): IconEnt
 const iconGroups: IconGroup[] = [
   {
     id: 'actions', labelKey: 'iconGroupActions', icons: [
-      entry('SearchIcon', 'search', SearchIcon),
-      entry('ClockIcon', 'clock', ClockIcon),
-      entry('CloseIcon', 'close', CloseIcon),
       entry('CheckIcon', 'check', CheckIcon),
-      entry('ChevronLeftIcon', 'chevronLeft', ChevronLeftIcon),
-      entry('ChevronRightIcon', 'chevronRight', ChevronRightIcon),
-      entry('ChevronDownIcon', 'chevronDown', ChevronDownIcon),
+      entry('CloseIcon', 'close', CloseIcon),
       entry('SpinnerIcon', 'spinner', SpinnerIcon),
-      entry('UserIcon', 'user', UserIcon),
     ],
   },
   {
-    id: 'table', labelKey: 'iconGroupTable', icons: [
-      entry('CaretUpIcon', 'caretUp', CaretUpIcon),
-      entry('CaretDownIcon', 'caretDown', CaretDownIcon),
-      entry('CaretRightIcon', 'caretRight', CaretRightIcon),
+    id: 'forms', labelKey: 'iconGroupForms', icons: [
+      entry('SearchIcon', 'search', SearchIcon),
       entry('FilterIcon', 'filter', FilterIcon),
+      entry('ClockIcon', 'clock', ClockIcon),
+      entry('UserIcon', 'user', UserIcon),
+      entry('UserFilledIcon', 'userFilled', UserFilledIcon),
+      entry('LockIcon', 'lock', LockIcon),
     ],
   },
   {
     id: 'arrows', labelKey: 'iconGroupArrows', icons: [
+      entry('CaretUpIcon', 'caretUp', CaretUpIcon),
+      entry('CaretDownIcon', 'caretDown', CaretDownIcon),
+      entry('CaretLeftIcon', 'caretLeft', CaretLeftIcon),
+      entry('CaretRightIcon', 'caretRight', CaretRightIcon),
+      entry('ChevronUpIcon', 'chevronUp', ChevronUpIcon),
+      entry('ChevronDownIcon', 'chevronDown', ChevronDownIcon),
+      entry('ChevronLeftIcon', 'chevronLeft', ChevronLeftIcon),
+      entry('ChevronRightIcon', 'chevronRight', ChevronRightIcon),
+      entry('ArrowUpIcon', 'arrowUp', ArrowUpIcon),
+      entry('ArrowDownIcon', 'arrowDown', ArrowDownIcon),
       entry('ArrowLeftIcon', 'arrowLeft', ArrowLeftIcon),
       entry('ArrowRightIcon', 'arrowRight', ArrowRightIcon),
       entry('StartArrowIcon', 'startArrow', StartArrowIcon),
@@ -74,7 +81,6 @@ const iconGroups: IconGroup[] = [
       entry('ResultErrorIcon', 'resultError', ResultErrorIcon),
       entry('ResultInfoIcon', 'resultInfo', ResultInfoIcon),
       entry('ResultWarningIcon', 'resultWarning', ResultWarningIcon),
-      entry('LockIcon', 'lock', LockIcon),
       entry('Result404Icon', 'result404', Result404Icon),
       entry('Result500Icon', 'result500', Result500Icon),
     ],
