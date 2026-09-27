@@ -61,6 +61,8 @@ function SideNavigation({ currentSlug, section }: { currentSlug?: string; sectio
         ['actions', 'iconGroupActions'],
         ['forms', 'iconGroupForms'],
         ['arrows', 'iconGroupArrows'],
+        ['navigation', 'iconGroupNavigation'],
+        ['feedback', 'iconGroupFeedback'],
         ['status', 'iconGroupStatus'],
         ['result', 'iconGroupResult'],
         ['brand', 'iconGroupBrand'],

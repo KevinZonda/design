@@ -4,8 +4,10 @@ SVG icon library for the KevinZonda Design System, built for React. Every icon r
 
 Two visual families:
 
-- **Stroke-based** (actions, forms, chevrons, result pages): `fill="none" stroke="currentColor"`, round line caps and joins, default stroke width 2.
+- **Stroke-based** (actions, forms, chevrons, navigation, feedback, result pages): `fill="none" stroke="currentColor"`, round line caps and joins, default stroke width 2.
 - **Filled** (carets, arrows, status, brand): `fill="currentColor"`; knock-outs use `fillRule="evenodd"`.
+
+The navigation group covers app chrome (home, menu, more, back-to-top, link, logout); the feedback group covers notices and attachments (question/exclamation, bell, mail, phone, file variants, paperclip, shield, image).
 
 Direction families (carets, chevrons, arrows, pagination) keep a single canonical path per family — the other directions are derived by rotation, never duplicated.
 
