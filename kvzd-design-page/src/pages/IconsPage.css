@@ -1,0 +1,82 @@
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.icon-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 8px 12px;
+  border: 1px solid var(--govuk-border-colour);
+  border-radius: 4px;
+  background: var(--govuk-body-background-colour);
+  color: var(--govuk-text-colour);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.icon-tile:hover {
+  border-color: var(--govuk-link-colour);
+  color: var(--govuk-link-colour);
+}
+
+.icon-tile:focus-visible {
+  outline: 3px solid var(--govuk-focus-colour);
+  outline-offset: 0;
+}
+
+.icon-tile__glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  color: var(--govuk-text-colour);
+}
+
+.icon-tile:hover .icon-tile__glyph {
+  color: var(--govuk-link-colour);
+}
+
+.icon-tile__name {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.icon-tile__key {
+  font-size: 12px;
+  color: var(--govuk-secondary-text-colour);
+}
+
+.icon-scale-demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+.icon-scale-demo__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-scale-demo__glyphs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+}
+
+.icon-scale-demo__label {
+  font-size: 14px;
+  color: var(--govuk-secondary-text-colour);
+}

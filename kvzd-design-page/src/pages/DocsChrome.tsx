@@ -13,6 +13,7 @@ import './DocsChrome.css'
 
 const searchItems = [
   { name: 'Typography', summary: 'Semantic headings, body text and captions on the GOV.UK type scale.', zhSummary: '基于 GOV.UK 字体比例尺的语义化标题、正文与说明文字。', path: '/typography/', resultId: 'typography' },
+  { name: 'Icons', summary: 'Thirty SVG icons as React components on a 24×24 grid, plus raw path data for CSS masks.', zhSummary: '30 个基于 24×24 网格的 React SVG 图标组件，附带可用于 CSS mask 的原始 path 数据。', path: '/icons/', resultId: 'icons' },
   ...componentDocs.map((component) => ({ ...component, zhSummary: localizedComponent(component, 'zh').summary, path: `/components/${component.slug}/`, resultId: `component-${component.slug}` })),
   ...extraComponentDocs.map((component) => ({ ...component, zhSummary: localizedExtraComponent(component, 'zh').summary, path: `/extra-components/${component.slug}/`, resultId: `extra-component-${component.slug}` })),
 ]
@@ -50,7 +51,7 @@ function DocsSearch() {
   </form>
 }
 
-export function DocsHeader({ current = 'components' }: { current?: 'components' | 'extra-components' | 'quick-review' | 'license' | 'typography' }) {
+export function DocsHeader({ current = 'components' }: { current?: 'components' | 'extra-components' | 'quick-review' | 'license' | 'typography' | 'icons' }) {
   const locale = useLocale()
   const location = useLocation()
   const navigate = useNavigate()
@@ -81,6 +82,7 @@ export function DocsHeader({ current = 'components' }: { current?: 'components' 
         { label: message(locale, 'components'), href: sitePath(localizedPath('/components/', locale)), onClick: navigateOnClick(localizedPath('/components/', locale)), current: current === 'components' },
         { label: message(locale, 'extraComponents'), href: sitePath(localizedPath('/extra-components/', locale)), onClick: navigateOnClick(localizedPath('/extra-components/', locale)), current: current === 'extra-components' },
         { label: message(locale, 'typography'), href: sitePath(localizedPath('/typography/', locale)), onClick: navigateOnClick(localizedPath('/typography/', locale)), current: current === 'typography' },
+        { label: message(locale, 'icons'), href: sitePath(localizedPath('/icons/', locale)), onClick: navigateOnClick(localizedPath('/icons/', locale)), current: current === 'icons' },
         { label: message(locale, 'source'), href: 'https://github.com/KevinZonda/design' },
         { label: message(locale, 'govukLicense'), href: sitePath(localizedPath('/license/', locale)), onClick: navigateOnClick(localizedPath('/license/', locale)), current: current === 'license' },
       ]}

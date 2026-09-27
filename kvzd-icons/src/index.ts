@@ -1,0 +1,8 @@
+export * from './icons/actions'
+export * from './icons/arrows'
+export * from './icons/status'
+export * from './icons/result'
+export * from './icons/brand'
+export { iconPaths } from './paths'
+export type { IconPathEntry } from './paths'
+export type { IconProps } from './types'

@@ -45,6 +45,7 @@ async function createEntry(path, title, language = 'en') {
 
 await createEntry('components', 'Components – KevinZonda Design System')
 await createEntry('typography', 'Typography – KevinZonda Design System')
+await createEntry('icons', 'Icons – KevinZonda Design System')
 await createEntry('quick-review', 'Quick Review – KevinZonda Design System')
 await createEntry('license', 'License – KevinZonda Design System')
 await Promise.all(slugs.map((slug) => createEntry(`components/${slug}`, `${displayName(slug)} – KevinZonda Design System`)))
@@ -54,6 +55,7 @@ await Promise.all(extraSlugs.map((slug) => createEntry(`extra-components/${slug}
 await createEntry('en', 'Quick Review – KevinZonda Design System')
 await createEntry('en/components', 'Components – KevinZonda Design System')
 await createEntry('en/typography', 'Typography – KevinZonda Design System')
+await createEntry('en/icons', 'Icons – KevinZonda Design System')
 await createEntry('en/quick-review', 'Quick Review – KevinZonda Design System')
 await createEntry('en/license', 'License – KevinZonda Design System')
 await Promise.all(slugs.map((slug) => createEntry(`en/components/${slug}`, `${displayName(slug)} – KevinZonda Design System`)))

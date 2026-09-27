@@ -4,7 +4,7 @@ export type Locale = 'en' | 'zh'
 
 const english = {
   brand: 'KevinZonda Design System', basedOn: 'Based On GOV.UK D.S.',
-  components: 'Components', extraComponents: 'Extra Components', quickReview: 'Quick Review', source: 'Source', typography: 'Typography',
+  components: 'Components', extraComponents: 'Extra Components', quickReview: 'Quick Review', source: 'Source', typography: 'Typography', icons: 'Icons',
   documentation: 'Documentation', chooseLanguage: 'Choose language', skipToContent: 'Skip to main content', menu: 'Menu', serviceInformation: 'Service information',
   search: 'Search KevinZonda Design System', noComponents: 'No components found',
   componentsIntro: 'Reusable React components for building consistent, accessible public services.',
@@ -32,11 +32,19 @@ const english = {
   filterComponents: 'Filter components', showing: 'Showing', of: 'of', componentIndex: 'Component index',
   allComponents: 'All components', shown: 'shown', viewDocumentation: 'View documentation',
   backToTop: 'Back to top', tryDifferent: 'Try a different component name or description.',
+  iconsIntro: 'Thirty SVG icons as React components, drawn on a 24×24 grid and coloured with currentColor.',
+  iconsDetail: 'Action icons use a 2px rounded stroke; table, arrow, status and brand icons are filled. Every icon takes a size prop and scales from the same 24-grid path. Click an icon to copy its component name.',
+  iconGroupActions: 'Actions', iconGroupTable: 'Table', iconGroupArrows: 'Arrows', iconGroupStatus: 'Status', iconGroupResult: 'Result pages', iconGroupBrand: 'Brand',
+  iconsUsage: 'Usage', iconsSizes: 'Sizes', iconsStroke: 'Stroke width', iconsRaw: 'Raw paths (CSS mask)',
+  iconsClickToCopy: 'Click to copy the component name', iconsCopied: 'Copied',
+  iconsRawDetail: 'Besides the React components, the package exports iconPaths: each entry carries the viewBox, the raw inner SVG markup (body) and whether the icon is filled, so you can build CSS masks or data URIs without rendering React.',
+  iconsApiSize: 'Icon edge length in pixels, or any CSS length.', iconsApiStroke: 'Stroke weight; stroke-based icons only.',
+  iconsApiRest: 'All other SVG props (className, style, aria-*, data-*) are forwarded to the <svg> element.',
 } as const
 
 const chinese: Record<keyof typeof english, string> = {
   brand: 'KevinZonda 设计系统', basedOn: '基于 GOV.UK 设计系统',
-  components: '组件', extraComponents: '扩展组件', quickReview: '快速总览', source: '源码', typography: '排版',
+  components: '组件', extraComponents: '扩展组件', quickReview: '快速总览', source: '源码', typography: '排版', icons: '图标',
   documentation: '文档', chooseLanguage: '选择语言', skipToContent: '跳转到主要内容', menu: '菜单', serviceInformation: '服务信息',
   search: '搜索 KevinZonda 设计系统', noComponents: '未找到组件',
   componentsIntro: '用于构建一致、易用的公共服务的可复用 React 组件。',
@@ -64,6 +72,14 @@ const chinese: Record<keyof typeof english, string> = {
   filterComponents: '筛选组件', showing: '显示', of: '共', componentIndex: '组件目录',
   allComponents: '所有组件', shown: '个结果', viewDocumentation: '查看文档',
   backToTop: '返回顶部', tryDifferent: '请尝试其他组件名称或说明。',
+  iconsIntro: '30 个 SVG 图标以 React 组件形式提供，统一基于 24×24 网格绘制，颜色跟随 currentColor。',
+  iconsDetail: '操作类图标使用 2px 圆头描边；表格、箭头、状态和品牌类图标为填充风格。所有图标接受 size 属性，共享同一套 24 网格 path。点击图标可复制组件名。',
+  iconGroupActions: '操作', iconGroupTable: '表格', iconGroupArrows: '箭头', iconGroupStatus: '状态', iconGroupResult: '结果页', iconGroupBrand: '品牌',
+  iconsUsage: '用法', iconsSizes: '尺寸', iconsStroke: '描边粗细', iconsRaw: '原始 path（CSS mask）',
+  iconsClickToCopy: '点击复制组件名', iconsCopied: '已复制',
+  iconsRawDetail: '除了 React 组件外，包还导出 iconPaths：每条记录包含 viewBox、原始 SVG 内容（body）和是否为填充图标（filled），无需渲染 React 即可生成 CSS mask 或 data URI。',
+  iconsApiSize: '图标边长，单位为像素，也可以是任意 CSS 长度。', iconsApiStroke: '描边粗细，仅描边类图标生效。',
+  iconsApiRest: '其余 SVG 属性（className、style、aria-*、data-*）都会透传到 <svg> 元素。',
 }
 
 export type MessageKey = keyof typeof english

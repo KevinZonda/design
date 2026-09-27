@@ -11,6 +11,7 @@ import { DocsLink } from './DocsLink'
 import { QuickReviewPage } from './QuickReviewPage'
 import { LicensePage } from './LicensePage'
 import { TypographyPage } from './TypographyPage'
+import { IconsPage } from './IconsPage'
 import { localeFromPath, localizedPath, message, pageTitle, useLocale, type Locale } from './i18n'
 import { localizedComponent, localizedExtraComponent } from './zhDocs'
 import { chineseApiDescription } from './zhApi'
@@ -35,7 +36,7 @@ function extraPathFor(slug: string, locale: Locale) {
 
 type DocsSection = 'components' | 'extra-components'
 
-function SideNavigation({ currentSlug, section }: { currentSlug?: string; section: DocsSection | 'typography' }) {
+function SideNavigation({ currentSlug, section }: { currentSlug?: string; section: DocsSection | 'typography' | 'icons' }) {
   const locale = useLocale()
   if (section === 'typography') {
     return <Sidebar
@@ -46,6 +47,26 @@ function SideNavigation({ currentSlug, section }: { currentSlug?: string; sectio
         ['captions', 'typographyCaptions'],
         ['inline-text', 'typographyInlineText'],
         ['paragraphs', 'typographyParagraphs'],
+        ['api', 'reactApi'],
+      ] as const).map(([key, labelKey]) => ({ key, label: message(locale, labelKey), href: `#${key}` }))}
+      renderLink={(item, { className }) => <DocsLink className={className} to={item.href ?? '#'}>{item.label}</DocsLink>}
+    />
+  }
+  if (section === 'icons') {
+    return <Sidebar
+      className="docs-sidebar"
+      heading={message(locale, 'icons')}
+      items={([
+        ['usage', 'iconsUsage'],
+        ['actions', 'iconGroupActions'],
+        ['table', 'iconGroupTable'],
+        ['arrows', 'iconGroupArrows'],
+        ['status', 'iconGroupStatus'],
+        ['result', 'iconGroupResult'],
+        ['brand', 'iconGroupBrand'],
+        ['sizes', 'iconsSizes'],
+        ['stroke', 'iconsStroke'],
+        ['raw', 'iconsRaw'],
         ['api', 'reactApi'],
       ] as const).map(([key, labelKey]) => ({ key, label: message(locale, labelKey), href: `#${key}` }))}
       renderLink={(item, { className }) => <DocsLink className={className} to={item.href ?? '#'}>{item.label}</DocsLink>}
@@ -163,7 +184,7 @@ function ExtraComponentPage({ component }: { component: ExtraComponentDoc }) {
   </DocsLayout>
 }
 
-function DocsLayout({ children, currentSlug, currentSection = 'components' }: { children: ReactNode; currentSlug?: string; currentSection?: DocsSection | 'typography' }) {
+function DocsLayout({ children, currentSlug, currentSection = 'components' }: { children: ReactNode; currentSlug?: string; currentSection?: DocsSection | 'typography' | 'icons' }) {
   return <div className="app-shell govuk-frontend-supported"><DocsHeader current={currentSection} /><div className="site-width page-layout" id="top"><SideNavigation currentSlug={currentSlug} section={currentSection} /><main className="main-content" id="main-content">{children}</main></div><DocsFooter /></div>
 }
 
@@ -202,7 +223,7 @@ function RouteScroll() {
 
 function LocaleRedirect() {
   const { pathname, search, hash } = useLocation()
-  const legacyEnglish = /^\/(?:components|extra-components|quick-review|license|typography)(?:\/|$)/.test(pathname)
+  const legacyEnglish = /^\/(?:components|extra-components|quick-review|license|typography|icons)(?:\/|$)/.test(pathname)
   return <Navigate to={`${localizedPath(pathname, legacyEnglish ? 'en' : 'zh')}${search}${hash}`} replace />
 }
 
@@ -216,6 +237,7 @@ export default function App() {
         <Route key={`${prefix}-components`} path={`${prefix}/components`} element={<OverviewPage />} />,
         <Route key={`${prefix}-component`} path={`${prefix}/components/:slug`} element={<ComponentRoute />} />,
         <Route key={`${prefix}-typography`} path={`${prefix}/typography`} element={<DocsLayout currentSection="typography"><TypographyPage /></DocsLayout>} />,
+        <Route key={`${prefix}-icons`} path={`${prefix}/icons`} element={<DocsLayout currentSection="icons"><IconsPage /></DocsLayout>} />,
         <Route key={`${prefix}-extras`} path={`${prefix}/extra-components`} element={<ExtraOverviewPage />} />,
         <Route key={`${prefix}-extra`} path={`${prefix}/extra-components/:slug`} element={<ExtraComponentRoute />} />,
         <Route key={`${prefix}-review`} path={`${prefix}/quick-review`} element={<QuickReviewPage />} />,
