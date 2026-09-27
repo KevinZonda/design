@@ -3,12 +3,16 @@ import { H1, H2, Paragraph } from '@kevinzonda/design'
 import { Table } from '@kevinzonda/design/components'
 import { CodeBox } from '@kevinzonda/design/extraComponents'
 import {
-  ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon, CaretDownIcon, CaretLeftIcon, CaretRightIcon,
-  CaretUpIcon, CheckCircleIcon, CheckIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon,
-  ClockIcon, CloseIcon, ErrorCircleIcon, FilterIcon, InfoCircleIcon, LockIcon, PaginationArrowNextIcon,
-  PaginationArrowPrevIcon, Result404Icon, Result500Icon, ResultErrorIcon, ResultInfoIcon, ResultSuccessIcon,
-  ResultWarningIcon, SearchIcon, ServiceLogoIcon, SpinnerIcon, StartArrowIcon, UserFilledIcon, UserIcon,
-  WarningTriangleIcon,
+  ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon, BellIcon, CalendarIcon, CaretDownIcon,
+  CaretLeftIcon, CaretRightIcon, CaretUpIcon, CheckCircleIcon, CheckIcon, ChevronDownIcon,
+  ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, ClearCircleIcon, ClockIcon, CloseIcon, CopyIcon,
+  DeleteIcon, DownloadIcon, DragIcon, EditIcon, ErrorCircleIcon, ExclamationIcon, EyeIcon,
+  EyeInvisibleIcon, FileIcon, FileTextIcon, FilterIcon, HomeIcon, ImageIcon, InfoCircleIcon, KeyIcon,
+  LinkIcon, LockIcon, LogoutIcon, MailIcon, MenuIcon, MinusIcon, MoreIcon, PaperClipIcon,
+  PaginationArrowNextIcon, PaginationArrowPrevIcon, PhoneIcon, PlusIcon, QuestionCircleIcon,
+  ReloadIcon, Result404Icon, Result500Icon, ResultErrorIcon, ResultInfoIcon, ResultSuccessIcon,
+  ResultWarningIcon, SafetyIcon, SearchIcon, ServiceLogoIcon, SettingIcon, SpinnerIcon,
+  StartArrowIcon, ToTopIcon, UploadIcon, UserFilledIcon, UserIcon, WarningTriangleIcon,
   type IconProps,
 } from '@kevinzonda/icons'
 import { message, pageTitle, useLocale, type MessageKey } from './i18n'
@@ -36,6 +40,16 @@ const iconGroups: IconGroup[] = [
       entry('CheckIcon', 'check', CheckIcon),
       entry('CloseIcon', 'close', CloseIcon),
       entry('SpinnerIcon', 'spinner', SpinnerIcon),
+      entry('PlusIcon', 'plus', PlusIcon),
+      entry('MinusIcon', 'minus', MinusIcon),
+      entry('EditIcon', 'edit', EditIcon),
+      entry('CopyIcon', 'copy', CopyIcon),
+      entry('DeleteIcon', 'delete', DeleteIcon),
+      entry('UploadIcon', 'upload', UploadIcon),
+      entry('DownloadIcon', 'download', DownloadIcon),
+      entry('ReloadIcon', 'reload', ReloadIcon),
+      entry('SettingIcon', 'setting', SettingIcon),
+      entry('DragIcon', 'drag', DragIcon),
     ],
   },
   {
@@ -46,6 +60,11 @@ const iconGroups: IconGroup[] = [
       entry('UserIcon', 'user', UserIcon),
       entry('UserFilledIcon', 'userFilled', UserFilledIcon),
       entry('LockIcon', 'lock', LockIcon),
+      entry('EyeIcon', 'eye', EyeIcon),
+      entry('EyeInvisibleIcon', 'eyeInvisible', EyeInvisibleIcon),
+      entry('CalendarIcon', 'calendar', CalendarIcon),
+      entry('KeyIcon', 'key', KeyIcon),
+      entry('ClearCircleIcon', 'clearCircle', ClearCircleIcon),
     ],
   },
   {
@@ -65,6 +84,30 @@ const iconGroups: IconGroup[] = [
       entry('StartArrowIcon', 'startArrow', StartArrowIcon),
       entry('PaginationArrowPrevIcon', 'paginationArrowPrev', PaginationArrowPrevIcon),
       entry('PaginationArrowNextIcon', 'paginationArrowNext', PaginationArrowNextIcon),
+    ],
+  },
+  {
+    id: 'navigation', labelKey: 'iconGroupNavigation', icons: [
+      entry('HomeIcon', 'home', HomeIcon),
+      entry('MenuIcon', 'menu', MenuIcon),
+      entry('MoreIcon', 'more', MoreIcon),
+      entry('ToTopIcon', 'toTop', ToTopIcon),
+      entry('LinkIcon', 'link', LinkIcon),
+      entry('LogoutIcon', 'logout', LogoutIcon),
+    ],
+  },
+  {
+    id: 'feedback', labelKey: 'iconGroupFeedback', icons: [
+      entry('QuestionCircleIcon', 'questionCircle', QuestionCircleIcon),
+      entry('ExclamationIcon', 'exclamation', ExclamationIcon),
+      entry('BellIcon', 'bell', BellIcon),
+      entry('MailIcon', 'mail', MailIcon),
+      entry('PhoneIcon', 'phone', PhoneIcon),
+      entry('FileIcon', 'file', FileIcon),
+      entry('FileTextIcon', 'fileText', FileTextIcon),
+      entry('PaperClipIcon', 'paperClip', PaperClipIcon),
+      entry('SafetyIcon', 'safety', SafetyIcon),
+      entry('ImageIcon', 'image', ImageIcon),
     ],
   },
   {

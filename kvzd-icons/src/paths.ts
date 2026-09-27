@@ -5,6 +5,8 @@ import * as status from './data/status'
 import * as result from './data/result'
 import * as brand from './data/brand'
 import * as forms from './data/forms'
+import * as navigation from './data/navigation'
+import * as feedback from './data/feedback'
 
 export interface IconPathEntry {
   viewBox: string
@@ -13,7 +15,10 @@ export interface IconPathEntry {
   filled: boolean
 }
 
-const entries = { ...actions, ...forms, ...arrows, ...status, ...result, ...brand }
+// `delete` is a reserved word, so the data module exports it as `trash`;
+// re-key it here so iconPaths stays aligned with the DeleteIcon name.
+const { trash, ...actionEntries } = actions
+const entries = { ...actionEntries, delete: trash, ...forms, ...arrows, ...navigation, ...feedback, ...status, ...result, ...brand }
 
 /** Raw path data for every icon, keyed by icon name without the `Icon` suffix. */
 export const iconPaths: Record<string, IconPathEntry> = Object.fromEntries(
