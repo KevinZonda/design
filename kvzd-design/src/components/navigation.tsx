@@ -116,7 +116,9 @@ function PaginationArrow({ direction }: { direction: 'prev' | 'next' }) {
 }
 function PaginationBlockLink({ direction, link, fallbackText }: { direction: 'prev' | 'next'; link: PaginationLink; fallbackText: ReactNode }) {
   const title = link.text ?? fallbackText
-  return <div className={`govuk-pagination__${direction}`}><ClickTarget className="govuk-link govuk-pagination__link" href={link.href} onClick={link.onClick} anchorProps={{ rel: direction, 'aria-label': typeof link.label === 'string' ? link.label : undefined }}>{direction === 'prev' && <PaginationArrow direction="prev" />}<span className="govuk-pagination__link-title">{title}</span>{direction === 'next' && <PaginationArrow direction="next" />}</ClickTarget></div>
+  // Block-style icons always precede the title (GOV.UK template): the CSS
+  // floats them into the link's left padding, so trailing icons drop a line.
+  return <div className={`govuk-pagination__${direction}`}><ClickTarget className="govuk-link govuk-pagination__link" href={link.href} onClick={link.onClick} anchorProps={{ rel: direction, 'aria-label': typeof link.label === 'string' ? link.label : undefined }}><PaginationArrow direction={direction} /><span className="govuk-pagination__link-title">{title}</span></ClickTarget></div>
 }
 /** Window the page numbers: first/last page, the current page and its neighbours, joined by ellipses. */
 function pageWindow(current: number, total: number): Array<number | 'ellipsis'> {
